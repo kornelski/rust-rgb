@@ -1,11 +1,11 @@
 use std;
 
 #[repr(C)]
-#[derive(Copy, Clone)]
-pub struct RGB<T> {
-    pub r:T,
-    pub g:T,
-    pub b:T,
+#[derive(Copy, Clone, Debug)]
+pub struct RGB<ComponentType> {
+    pub r:ComponentType,
+    pub g:ComponentType,
+    pub b:ComponentType,
 }
 
 impl<T: Copy> RGB<T> {
