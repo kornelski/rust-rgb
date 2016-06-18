@@ -15,7 +15,10 @@ impl<T: Copy> RGB<T> {
         RGB{r:r,g:g,b:b}
     }
 
-    pub fn map<B, F>(&self, mut f: F) -> RGB<B>
+}
+
+impl<T: Copy, B> ComponentMap<RGB<B>, T, B> for RGB<T> {
+    fn map<F>(&self, mut f: F) -> RGB<B>
         where F: FnMut(T) -> B {
         RGB{
             r:f(self.r),

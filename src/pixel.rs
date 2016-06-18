@@ -12,3 +12,7 @@ pub trait ComponentBytes<T> {
     }
 }
 
+pub trait ComponentMap<DestPixel, SrcComponent, DestComponent> {
+    fn map<Callback>(&self, mut f: Callback) -> DestPixel
+        where Callback: FnMut(SrcComponent) -> DestComponent;
+}

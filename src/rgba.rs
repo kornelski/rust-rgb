@@ -15,8 +15,10 @@ impl<T: Copy> RGBA<T> {
     pub fn new(r: T, g: T, b: T, a: T) -> RGBA<T> {
         RGBA{r:r,g:g,b:b,a:a}
     }
+}
 
-    pub fn map<B, F>(&self, mut f: F) -> RGBA<B>
+impl<T: Copy, B> ComponentMap<RGBA<B>, T, B> for RGBA<T> {
+    fn map<F>(&self, mut f: F) -> RGBA<B>
         where F: FnMut(T) -> B {
         RGBA{
             r:f(self.r),
