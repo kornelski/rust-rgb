@@ -43,6 +43,13 @@ impl<T> ComponentBytes<T> for RGBA<T> {
     }
 }
 
+impl<T> std::iter::FromIterator<T> for RGBA<T> {
+    fn from_iter<I: IntoIterator<Item = T>>(into_iter: I) -> RGBA<T> {
+        let mut iter = into_iter.into_iter();
+        RGBA{r:iter.next().unwrap(), g:iter.next().unwrap(), b:iter.next().unwrap(), a:iter.next().unwrap()}
+    }
+}
+
 impl<T: fmt::Display> fmt::Display for RGBA<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f,"rgba({},{},{},{})", self.r,self.g,self.b,self.a)
@@ -56,6 +63,7 @@ fn rgba_test() {
     assert_eq!(neg.g, -2);
     assert_eq!(neg.b, -3);
     assert_eq!(neg.a, -1000);
+    assert_eq!(neg, neg.as_slice().iter().cloned().collect());
     assert!(neg < RGBA::new(0,0,0,0));
 
     let mut px = RGBA{r:1,g:2,b:3,a:4};

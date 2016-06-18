@@ -42,6 +42,13 @@ impl<T> ComponentBytes<T> for RGB<T> {
     }
 }
 
+impl<T> std::iter::FromIterator<T> for RGB<T> {
+    fn from_iter<I: IntoIterator<Item = T>>(into_iter: I) -> RGB<T> {
+        let mut iter = into_iter.into_iter();
+        RGB{r:iter.next().unwrap(), g:iter.next().unwrap(), b:iter.next().unwrap()}
+    }
+}
+
 impl<T: fmt::Display> fmt::Display for RGB<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f,"rgb({},{},{})", self.r,self.g,self.b)
