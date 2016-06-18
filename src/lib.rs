@@ -1,9 +1,11 @@
 
 mod rgb;
 mod rgba;
+mod pixel;
 
 pub use rgb::*;
 pub use rgba::*;
+pub use pixel::*;
 
 pub type RGB8 = RGB<u8>;
 pub type RGB16 = RGB<u16>;
@@ -21,6 +23,7 @@ fn rgb_works() {
 
     let rgb = RGB16{r:0u16,g:0x7F7F,b:65535};
     assert_eq!(rgb.b, 65535);
+    assert_eq!(rgb.as_slice()[1], 0x7F7F);
 
     assert_eq!(0, rgb.as_bytes()[0]);
     assert_eq!(0, rgb.as_bytes()[1]);

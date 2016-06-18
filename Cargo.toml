@@ -1,8 +1,8 @@
 [package]
 name = "rgb"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
-include = ["src/**/*", "Cargo.toml"]
+include = ["src/**/*", "Cargo.toml", "README.md"]
 description = "struct RGB for sharing pixels between crates"
 repository = "https://github.com/pornel/rust-rgb"
 readme = "README.md"

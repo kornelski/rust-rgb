@@ -1,5 +1,6 @@
 use std;
 use std::fmt;
+use pixel::*;
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
@@ -26,10 +27,16 @@ impl<T: Copy> RGBA<T> {
     }
 }
 
-impl<T> RGBA<T> {
-    pub fn as_bytes(&self) -> &[u8] {
+impl<T> ComponentBytes<T> for RGBA<T> {
+    fn as_slice(&self) -> &[T] {
         unsafe {
-            std::slice::from_raw_parts(std::mem::transmute(self), 4 * std::mem::size_of::<T>())
+            std::slice::from_raw_parts(std::mem::transmute(self), 4)
+        }
+    }
+
+    fn as_mut_slice(&mut self) -> &mut [T] {
+        unsafe {
+            std::slice::from_raw_parts_mut(std::mem::transmute(self), 4)
         }
     }
 }
@@ -41,12 +48,15 @@ impl<T: fmt::Display> fmt::Display for RGBA<T> {
 }
 
 #[test]
-fn rgba_map_test() {
+fn rgba_test() {
     let neg = RGBA::new(1,2,3i32,1000).map(|x| -x);
     assert_eq!(neg.r, -1);
     assert_eq!(neg.g, -2);
     assert_eq!(neg.b, -3);
     assert_eq!(neg.a, -1000);
-    assert_eq!(neg, RGBA::from_slice(neg.as_slice()));
     assert!(neg < RGBA::new(0,0,0,0));
+
+    let mut px = RGBA{r:1,g:2,b:3,a:4};
+    px.as_mut_slice()[3] = 100;
+    assert_eq!(100, px.a);
 }
