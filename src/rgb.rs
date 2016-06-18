@@ -10,11 +10,14 @@ pub struct RGB<ComponentType> {
     pub b:ComponentType,
 }
 
-impl<T: Copy> RGB<T> {
+impl<T: Clone> RGB<T> {
     pub fn new(r: T, g: T, b: T) -> RGB<T> {
         RGB{r:r,g:g,b:b}
     }
 
+    pub fn iter(&self) -> std::iter::Cloned<std::slice::Iter<T>> {
+        self.as_slice().iter().cloned()
+    }
 }
 
 impl<T: Copy, B> ComponentMap<RGB<B>, T, B> for RGB<T> {

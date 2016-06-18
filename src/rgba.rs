@@ -11,9 +11,13 @@ pub struct RGBA<ComponentType> {
     pub a:ComponentType,
 }
 
-impl<T: Copy> RGBA<T> {
+impl<T: Clone> RGBA<T> {
     pub fn new(r: T, g: T, b: T, a: T) -> RGBA<T> {
         RGBA{r:r,g:g,b:b,a:a}
+    }
+
+    pub fn iter(&self) -> std::iter::Cloned<std::slice::Iter<T>> {
+        self.as_slice().iter().cloned()
     }
 }
 
