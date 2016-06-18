@@ -8,12 +8,12 @@ So let's all use mine :P
 extern crate rgb;
 
 let px = RGB{r:255_u8,g:0,b:100};
-assert_eq(px.as_bytes()[0], 255);
+assert_eq!(px.as_bytes()[0], 255);
 
 let px = RGB8::new(255,0,255);
 let inverted = px.map(|ch| 255 - ch);
 
-println!("{}", px); // rgb(0,255,0)
+println!("{}", inverted); // rgb(0,255,0)
 ```
 
 [![xkcd standards](https://imgs.xkcd.com/comics/standards.png)](https://xkcd.com/927/)
