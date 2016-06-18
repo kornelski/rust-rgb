@@ -2,7 +2,7 @@ use std;
 use std::fmt;
 
 #[repr(C)]
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct RGB<ComponentType> {
     pub r:ComponentType,
     pub g:ComponentType,
@@ -44,4 +44,7 @@ fn rgb_map_test() {
     assert_eq!(neg.r, -1);
     assert_eq!(neg.g, -2);
     assert_eq!(neg.b, -3);
+
+    assert_eq!(RGB{r:1u8,g:2,b:3}, RGB::new(1u8,2,3));
+    assert!(RGB{r:1u8,g:1,b:2} < RGB::new(2,1,1));
 }

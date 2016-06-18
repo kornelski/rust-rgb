@@ -2,7 +2,7 @@ use std;
 use std::fmt;
 
 #[repr(C)]
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct RGBA<ComponentType> {
     pub r:ComponentType,
     pub g:ComponentType,
@@ -47,4 +47,6 @@ fn rgba_map_test() {
     assert_eq!(neg.g, -2);
     assert_eq!(neg.b, -3);
     assert_eq!(neg.a, -1000);
+    assert_eq!(neg, RGBA::from_slice(neg.as_slice()));
+    assert!(neg < RGBA::new(0,0,0,0));
 }
