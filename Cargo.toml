@@ -2,5 +2,11 @@
 name = "rgb"
 version = "0.1.0"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
+include = ["src/**/*", "Cargo.toml"]
+description = "struct RGB for sharing pixels between crates"
+repository = "https://github.com/pornel/rust-rgb"
+readme = "README.md"
+keywords = ["rgb", "rgba", "pixel", "interoperability"]
+license = "MIT"
 
 [dependencies]

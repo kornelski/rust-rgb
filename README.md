@@ -16,4 +16,4 @@ let inverted = px.map(|ch| 255 - ch);
 println!("{}", px); // rgb(0,255,0)
 ```
 
-![xkcd standards](https://imgs.xkcd.com/comics/standards.png)
+[![xkcd standards](https://imgs.xkcd.com/comics/standards.png)](https://xkcd.com/927/)
