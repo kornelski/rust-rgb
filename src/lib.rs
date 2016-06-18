@@ -2,10 +2,12 @@
 mod rgb;
 mod rgba;
 mod pixel;
+mod ops;
 
 pub use rgb::*;
 pub use rgba::*;
 pub use pixel::*;
+pub use ops::*;
 
 pub type RGB8 = RGB<u8>;
 pub type RGB16 = RGB<u16>;
