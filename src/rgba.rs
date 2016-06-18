@@ -1,4 +1,5 @@
 use std;
+use std::fmt;
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
@@ -30,6 +31,12 @@ impl<T> RGBA<T> {
         unsafe {
             std::slice::from_raw_parts(std::mem::transmute(self), 4 * std::mem::size_of::<T>())
         }
+    }
+}
+
+impl<T: fmt::Display> fmt::Display for RGBA<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f,"rgba({},{},{},{})", self.r,self.g,self.b,self.a)
     }
 }
 
