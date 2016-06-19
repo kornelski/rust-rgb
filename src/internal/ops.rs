@@ -1,8 +1,8 @@
 use std::ops::*;
 use std::iter::FromIterator;
-use pixel::*;
-use rgb::RGB;
-use rgba::RGBA;
+use super::pixel::*;
+use super::rgb::RGB;
+use super::rgba::RGBA;
 
 impl<T: Clone + Add> Add for RGB<T>
     where RGB<T>: FromIterator<<T as Add>::Output> {

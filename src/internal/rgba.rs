@@ -1,6 +1,6 @@
 use std;
 use std::fmt;
-use pixel::*;
+use super::pixel::*;
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]

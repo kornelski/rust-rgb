@@ -1,13 +1,15 @@
 
-mod rgb;
-mod rgba;
-mod pixel;
-mod ops;
+mod internal {
+    pub mod rgb;
+    pub mod rgba;
+    pub mod pixel;
+    pub mod ops;
+}
 
-pub use rgb::*;
-pub use rgba::*;
-pub use pixel::*;
-pub use ops::*;
+pub use internal::rgb::*;
+pub use internal::rgba::*;
+pub use internal::pixel::*;
+pub use internal::ops::*;
 
 pub type RGB8 = RGB<u8>;
 pub type RGB16 = RGB<u16>;
