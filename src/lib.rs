@@ -42,6 +42,11 @@ fn rgb_works() {
 }
 
 #[test]
+fn sub_floats() {
+    assert_eq!(RGBA{r:2.5_f64, g:-1.5, b:0., a:5.}, RGBA{r:3.5_f64, g:-0.5, b:-2., a:0.} - RGBA{r:1.0_f64, g:1., b:-2., a:-5.});
+}
+
+#[test]
 fn rgba_works() {
     let rgba = RGBA{r:0u8,g:128,b:255,a:33}.clone();
     assert_eq!(rgba.b, 255);

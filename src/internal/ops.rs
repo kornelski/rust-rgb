@@ -21,6 +21,23 @@ impl<T: Clone + Add> Add<RGBA<T>> for RGBA<T>
     }
 }
 
+impl<T: Clone + Sub> Sub for RGB<T>
+    where RGB<T>: FromIterator<<T as Sub>::Output> {
+    type Output = RGB<T>;
+    fn sub(self, other: RGB<T>) -> Self::Output {
+        self.iter().zip(other.iter()).map(|(l,r)| l-r).collect()
+    }
+}
+
+impl<T: Clone + Sub> Sub<RGBA<T>> for RGBA<T>
+    where RGBA<T>: FromIterator<<T as Sub>::Output>,
+        T: From<<T as Sub>::Output> {
+    type Output = RGBA<T>;
+    fn sub(self, other: RGBA<T>) -> Self::Output {
+        self.iter().zip(other.iter()).map(|(l,r)| l-r).collect()
+    }
+}
+
 impl<T: Clone + Copy + Add> Add<T> for RGB<T>
     where T: Add<Output=T> {
     type Output = RGB<T>;
