@@ -4,12 +4,14 @@ mod internal {
     pub mod rgba;
     pub mod pixel;
     pub mod ops;
+    pub mod convert;
 }
 
 pub use internal::rgb::*;
 pub use internal::rgba::*;
 pub use internal::pixel::*;
 pub use internal::ops::*;
+pub use internal::convert::*;
 
 pub type RGB8 = RGB<u8>;
 pub type RGB16 = RGB<u16>;
@@ -44,6 +46,15 @@ fn rgb_works() {
 #[test]
 fn sub_floats() {
     assert_eq!(RGBA{r:2.5_f64, g:-1.5, b:0., a:5.}, RGBA{r:3.5_f64, g:-0.5, b:-2., a:0.} - RGBA{r:1.0_f64, g:1., b:-2., a:-5.});
+}
+
+#[test]
+fn into() {
+    let a:RGB8 = RGB{r:0,g:1,b:2};
+    let b:RGB<i16> = a.into();
+    let c:RGB<f32> = b.into();
+    let d:RGB<f32> = a.into();
+    assert_eq!(c, d);
 }
 
 #[test]
