@@ -1,3 +1,11 @@
+//! Basic struct for `RGB` and `RGBA` pixels. Packed, with red first, alpha last.
+//!
+//! This crate is intended to be the lowest common denominator for sharing `RGB`/`RGBA` bitmaps between other crates.
+//!
+//! The crate includes convenience functions for converting between the struct and bytes,
+//! and overloaded operators that work on all channels at once.
+//!
+//! This crate intentionally doesn't implement color management and other colorspaces.
 
 mod internal {
     pub mod rgb;
@@ -13,9 +21,15 @@ pub use internal::pixel::*;
 pub use internal::ops::*;
 pub use internal::convert::*;
 
+/// 8-bit RGB. The colorspace is techincally undefined, but generally sRGB is assumed.
 pub type RGB8 = RGB<u8>;
+
+/// 16-bit RGB in machine's native endian. Be careful to perform byte-swapping when reading from files.
 pub type RGB16 = RGB<u16>;
+
+/// Alpha is last. The crate doesn't impose which value represents transparency, but usually it's 0 = transparent, 255 = opaque.
 pub type RGBA8 = RGBA<u8>;
+
 pub type RGBA16 = RGBA<u16>;
 
 #[test]

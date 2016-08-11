@@ -11,10 +11,12 @@ pub struct RGB<ComponentType> {
 }
 
 impl<T: Clone> RGB<T> {
+    /// Convenience function for creating a new pixel
     pub fn new(r: T, g: T, b: T) -> RGB<T> {
         RGB{r:r,g:g,b:b}
     }
 
+    /// Iterate over color components (R, G, and B)
     pub fn iter(&self) -> std::iter::Cloned<std::slice::Iter<T>> {
         self.as_slice().iter().cloned()
     }
@@ -46,6 +48,8 @@ impl<T> ComponentBytes<T> for RGB<T> {
 }
 
 impl<T> std::iter::FromIterator<T> for RGB<T> {
+    /// Takes exactly 3 elements from the iterator and creates a new instance.
+    /// Panics if there are fewer elements in the iterator.
     fn from_iter<I: IntoIterator<Item = T>>(into_iter: I) -> RGB<T> {
         let mut iter = into_iter.into_iter();
         RGB{r:iter.next().unwrap(), g:iter.next().unwrap(), b:iter.next().unwrap()}
