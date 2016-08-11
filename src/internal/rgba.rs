@@ -1,6 +1,7 @@
 use std;
 use std::fmt;
 use super::pixel::*;
+use super::rgb::RGB;
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
@@ -18,6 +19,18 @@ impl<T: Clone> RGBA<T> {
 
     pub fn iter(&self) -> std::iter::Cloned<std::slice::Iter<T>> {
         self.as_slice().iter().cloned()
+    }
+
+    /// Copy RGB components of of the RGBA struct
+    pub fn rgb(&self) -> RGB<T> {
+        RGB{r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+    }
+
+    /// Provide a mutable view of only RGB components (leaving out alpha). Useful to change color without changing opacity.
+    pub fn rgb_mut(&mut self) -> &mut RGB<T> {
+        unsafe {
+            std::mem::transmute(self)
+        }
     }
 }
 
@@ -64,13 +77,20 @@ impl<T: fmt::Display> fmt::Display for RGBA<T> {
 fn rgba_test() {
     let neg = RGBA::new(1,2,3i32,1000).map(|x| -x);
     assert_eq!(neg.r, -1);
+    assert_eq!(neg.rgb().r, -1);
     assert_eq!(neg.g, -2);
+    assert_eq!(neg.rgb().g, -2);
     assert_eq!(neg.b, -3);
+    assert_eq!(neg.rgb().b, -3);
     assert_eq!(neg.a, -1000);
     assert_eq!(neg, neg.as_slice().iter().cloned().collect());
     assert!(neg < RGBA::new(0,0,0,0));
 
     let mut px = RGBA{r:1,g:2,b:3,a:4};
     px.as_mut_slice()[3] = 100;
+    assert_eq!(1, px.rgb_mut().r);
+    assert_eq!(2, px.rgb_mut().g);
+    px.rgb_mut().b = 4;
+    assert_eq!(4, px.rgb_mut().b);
     assert_eq!(100, px.a);
 }
