@@ -1,6 +1,6 @@
 [package]
 name = "rgb"
-version = "0.4.0"
+version = "0.5.0"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 include = ["src/**/*", "Cargo.toml", "README.md"]
 description = "struct RGB for sharing pixels between crates"
