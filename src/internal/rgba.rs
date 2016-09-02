@@ -49,13 +49,13 @@ impl<T: Copy, B> ComponentMap<RGBA<B>, T, B> for RGBA<T> {
 impl<T> ComponentBytes<T> for RGBA<T> {
     fn as_slice(&self) -> &[T] {
         unsafe {
-            std::slice::from_raw_parts(std::mem::transmute(self), 4)
+            std::slice::from_raw_parts(self as *const RGBA<T> as *const T, 4)
         }
     }
 
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
-            std::slice::from_raw_parts_mut(std::mem::transmute(self), 4)
+            std::slice::from_raw_parts_mut(self as *mut RGBA<T> as *mut T, 4)
         }
     }
 }
