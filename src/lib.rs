@@ -80,4 +80,6 @@ fn rgba_works() {
     assert_eq!(rgba, rgba.iter().map(|ch| ch).collect());
 
     assert_eq!("rgba(1,2,3,4)", format!("{}", RGBA::new(1,2,3,4)));
+
+    assert_eq!(rgba - rgba, RGBA::new(0,0,0,0));
 }
