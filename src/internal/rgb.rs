@@ -3,7 +3,7 @@ use std::fmt;
 use super::pixel::*;
 
 #[repr(C)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct RGB<ComponentType> {
     pub r:ComponentType,
     pub g:ComponentType,
@@ -75,4 +75,9 @@ fn rgb_test() {
 
     assert_eq!(RGB{r:1u8,g:2,b:3}, RGB::new(1u8,2,3));
     assert!(RGB{r:1u8,g:1,b:2} < RGB::new(2,1,1));
+
+    let mut h = std::collections::HashSet::new();
+    h.insert(px);
+    assert!(h.contains(&RGB::new(3,111,5)));
+    assert!(!h.contains(&RGB::new(111,5,3)));
 }

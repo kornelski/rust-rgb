@@ -4,7 +4,7 @@ use super::pixel::*;
 use super::rgb::RGB;
 
 #[repr(C)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct RGBA<ComponentType> {
     pub r:ComponentType,
     pub g:ComponentType,
