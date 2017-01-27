@@ -18,7 +18,6 @@ pub trait ComponentBytes<T> {
 /// Applying operation to every component
 pub trait ComponentMap<DestPixel, SrcComponent, DestComponent> {
     /// Convenience function (equivalent of `self.iter().map().collect()`) for applying same formula to every component
-    fn map<Callback>(&self, mut f: Callback) -> DestPixel
+    fn map<Callback>(&self, f: Callback) -> DestPixel
         where Callback: FnMut(SrcComponent) -> DestComponent;
 }
-
