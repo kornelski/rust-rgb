@@ -1,6 +1,7 @@
 use std;
 use std::fmt;
 use super::pixel::*;
+use super::rgba::RGBA;
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
@@ -19,6 +20,16 @@ impl<T: Clone> RGB<T> {
     /// Iterate over color components (R, G, and B)
     pub fn iter(&self) -> std::iter::Cloned<std::slice::Iter<T>> {
         self.as_slice().iter().cloned()
+    }
+
+    // Convenience function for converting to RGBA
+    pub fn alpha(&self, a: T) -> RGBA<T> {
+        RGBA {
+            r:self.r.clone(),
+            g:self.g.clone(),
+            b:self.b.clone(),
+            a:a,
+        }
     }
 }
 
@@ -72,6 +83,8 @@ fn rgb_test() {
     let mut px = RGB::new(3,4,5);
     px.as_mut_slice()[1] = 111;
     assert_eq!(111, px.g);
+
+    assert_eq!(RGBA::new(250,251,252,253), RGB::new(250,251,252).alpha(253));
 
     assert_eq!(RGB{r:1u8,g:2,b:3}, RGB::new(1u8,2,3));
     assert!(RGB{r:1u8,g:1,b:2} < RGB::new(2,1,1));
