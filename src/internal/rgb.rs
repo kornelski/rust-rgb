@@ -13,6 +13,7 @@ pub struct RGB<ComponentType> {
 
 impl<T: Clone> RGB<T> {
     /// Convenience function for creating a new pixel
+    #[must_use]
     pub fn new(r: T, g: T, b: T) -> RGB<T> {
         RGB{r:r,g:g,b:b}
     }

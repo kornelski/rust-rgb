@@ -13,6 +13,7 @@ pub struct RGBA<ComponentType> {
 }
 
 impl<T: Clone> RGBA<T> {
+    #[must_use]
     pub fn new(r: T, g: T, b: T, a: T) -> RGBA<T> {
         RGBA{r:r,g:g,b:b,a:a}
     }
