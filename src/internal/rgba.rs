@@ -1,16 +1,8 @@
 use std;
 use std::fmt;
 use super::pixel::*;
-use super::rgb::RGB;
-
-#[repr(C)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-pub struct RGBA<ComponentType> {
-    pub r:ComponentType,
-    pub g:ComponentType,
-    pub b:ComponentType,
-    pub a:ComponentType,
-}
+use ::RGB;
+use ::RGBA;
 
 impl<T: Clone> RGBA<T> {
     #[must_use] #[inline(always)]

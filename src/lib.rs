@@ -21,6 +21,23 @@ pub use internal::pixel::*;
 pub use internal::ops::*;
 pub use internal::convert::*;
 
+#[repr(C)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub struct RGB<ComponentType> {
+    pub r:ComponentType,
+    pub g:ComponentType,
+    pub b:ComponentType,
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub struct RGBA<ComponentType> {
+    pub r:ComponentType,
+    pub g:ComponentType,
+    pub b:ComponentType,
+    pub a:ComponentType,
+}
+
 /// 8-bit RGB. The colorspace is techincally undefined, but generally sRGB is assumed.
 pub type RGB8 = RGB<u8>;
 

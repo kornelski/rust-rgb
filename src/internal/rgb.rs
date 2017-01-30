@@ -1,15 +1,8 @@
 use std;
 use std::fmt;
 use super::pixel::*;
-use super::rgba::RGBA;
-
-#[repr(C)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-pub struct RGB<ComponentType> {
-    pub r:ComponentType,
-    pub g:ComponentType,
-    pub b:ComponentType,
-}
+use ::RGB;
+use ::RGBA;
 
 impl<T: Clone> RGB<T> {
     /// Convenience function for creating a new pixel

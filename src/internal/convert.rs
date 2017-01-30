@@ -1,7 +1,7 @@
 use std::convert::*;
 use super::pixel::*;
-use super::rgb::RGB;
-use super::rgba::RGBA;
+use ::RGB;
+use ::RGBA;
 
 macro_rules! rgb_impl_from {
     ($typename:ident, $from:ty, $to:ty) => {
