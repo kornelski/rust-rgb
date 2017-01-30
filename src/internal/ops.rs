@@ -1,48 +1,59 @@
 use std::ops::*;
-use std::iter::FromIterator;
 use super::pixel::*;
 use super::rgb::RGB;
 use super::rgba::RGBA;
 
-impl<T: Clone + Add> Add for RGB<T>
-    where RGB<T>: FromIterator<<T as Add>::Output> {
-    type Output = RGB<T>;
+impl<T: Add> Add for RGB<T> {
+    type Output = RGB<<T as Add>::Output>;
 
     #[inline(always)]
     fn add(self, other: RGB<T>) -> Self::Output {
-        self.iter().zip(other.iter()).map(|(l,r)| l+r).collect()
+        RGB {
+            r: self.r + other.r,
+            g: self.g + other.g,
+            b: self.b + other.b,
+        }
     }
 }
 
-impl<T: Clone + Add> Add<RGBA<T>> for RGBA<T>
-    where RGBA<T>: FromIterator<<T as Add>::Output>,
-        T: From<<T as Add>::Output> {
-    type Output = RGBA<T>;
+impl<T: Add> Add<RGBA<T>> for RGBA<T> {
+    type Output = RGBA<<T as Add>::Output>;
 
     #[inline(always)]
     fn add(self, other: RGBA<T>) -> Self::Output {
-        self.iter().zip(other.iter()).map(|(l,r)| l+r).collect()
+        RGBA {
+            r: self.r + other.r,
+            g: self.g + other.g,
+            b: self.b + other.b,
+            a: self.a + other.a,
+        }
     }
 }
 
-impl<T: Clone + Sub> Sub for RGB<T>
-    where RGB<T>: FromIterator<<T as Sub>::Output> {
-    type Output = RGB<T>;
+impl<T: Sub> Sub for RGB<T> {
+    type Output = RGB<<T as Sub>::Output>;
 
     #[inline(always)]
     fn sub(self, other: RGB<T>) -> Self::Output {
-        self.iter().zip(other.iter()).map(|(l,r)| l-r).collect()
+        RGB {
+            r: self.r - other.r,
+            g: self.g - other.g,
+            b: self.b - other.b,
+        }
     }
 }
 
-impl<T: Clone + Sub> Sub<RGBA<T>> for RGBA<T>
-    where RGBA<T>: FromIterator<<T as Sub>::Output>,
-        T: From<<T as Sub>::Output> {
-    type Output = RGBA<T>;
+impl<T: Sub> Sub<RGBA<T>> for RGBA<T> {
+    type Output = RGBA<<T as Sub>::Output>;
 
     #[inline(always)]
     fn sub(self, other: RGBA<T>) -> Self::Output {
-        self.iter().zip(other.iter()).map(|(l,r)| l-r).collect()
+        RGBA {
+            r: self.r - other.r,
+            g: self.g - other.g,
+            b: self.b - other.b,
+            a: self.a - other.a,
+        }
     }
 }
 
