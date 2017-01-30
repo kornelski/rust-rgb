@@ -16,8 +16,18 @@ pub trait ComponentBytes<T> {
 }
 
 /// Applying operation to every component
+///
+/// ```rust,ignore
+/// let inverted = pixel.map(|c| 255 - c);
+///
+/// For simple math there are Add/Sub/Mul implementations:
+/// let halved = pixel.map(|c| c / 2);
+/// let halved = pixel / 2;
+/// ```
 pub trait ComponentMap<DestPixel, SrcComponent, DestComponent> {
-    /// Convenience function (equivalent of `self.iter().map().collect()`) for applying same formula to every component
+    /// Convenience function (equivalent of `self.iter().map().collect()`) for applying the same formula to every component.
+    ///
+    /// Note that it returns the pixel directly, not an Interator.
     fn map<Callback>(&self, f: Callback) -> DestPixel
         where Callback: FnMut(SrcComponent) -> DestComponent;
 }

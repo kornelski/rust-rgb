@@ -23,18 +23,27 @@ pub use internal::convert::*;
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+// This is it. The component type can be `u8` (aliased as `RGB8`), `u16` (aliased as `RGB16`), or any other type (but simple copyable types are recommended.)
 pub struct RGB<ComponentType> {
+    /// Red
     pub r:ComponentType,
+    /// Green
     pub g:ComponentType,
+    /// Blue
     pub b:ComponentType,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+// This is it. The component type can be `u8` (aliased as `RGBA8`), `u16` (aliased as `RGBA16`), or any other type (but simple copyable types are recommended.)
 pub struct RGBA<ComponentType> {
+    /// Red
     pub r:ComponentType,
+    /// Green
     pub g:ComponentType,
+    /// Blue
     pub b:ComponentType,
+    /// Alpha
     pub a:ComponentType,
 }
 
@@ -47,6 +56,7 @@ pub type RGB16 = RGB<u16>;
 /// Alpha is last. The crate doesn't impose which value represents transparency, but usually it's 0 = transparent, 255 = opaque.
 pub type RGBA8 = RGBA<u8>;
 
+/// 16-bit RGB in machine's native endian. Alpha is last.
 pub type RGBA16 = RGBA<u16>;
 
 #[test]
