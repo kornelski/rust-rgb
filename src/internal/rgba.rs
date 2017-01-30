@@ -13,7 +13,7 @@ pub struct RGBA<ComponentType> {
 }
 
 impl<T: Clone> RGBA<T> {
-    #[must_use]
+    #[must_use] #[inline(always)]
     pub fn new(r: T, g: T, b: T, a: T) -> RGBA<T> {
         RGBA{r:r,g:g,b:b,a:a}
     }
@@ -22,12 +22,14 @@ impl<T: Clone> RGBA<T> {
         self.as_slice().iter().cloned()
     }
 
-    /// Copy RGB components of of the RGBA struct
+    /// Copy RGB components out of the RGBA struct
+    #[inline(always)]
     pub fn rgb(&self) -> RGB<T> {
         RGB{r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
     }
 
     /// Provide a mutable view of only RGB components (leaving out alpha). Useful to change color without changing opacity.
+    #[inline]
     pub fn rgb_mut(&mut self) -> &mut RGB<T> {
         unsafe {
             std::mem::transmute(self)
@@ -48,12 +50,14 @@ impl<T: Copy, B> ComponentMap<RGBA<B>, T, B> for RGBA<T> {
 }
 
 impl<T> ComponentBytes<T> for RGBA<T> {
+    #[inline]
     fn as_slice(&self) -> &[T] {
         unsafe {
             std::slice::from_raw_parts(self as *const RGBA<T> as *const T, 4)
         }
     }
 
+    #[inline]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
             std::slice::from_raw_parts_mut(self as *mut RGBA<T> as *mut T, 4)

@@ -7,6 +7,8 @@ use super::rgba::RGBA;
 impl<T: Clone + Add> Add for RGB<T>
     where RGB<T>: FromIterator<<T as Add>::Output> {
     type Output = RGB<T>;
+
+    #[inline(always)]
     fn add(self, other: RGB<T>) -> Self::Output {
         self.iter().zip(other.iter()).map(|(l,r)| l+r).collect()
     }
@@ -16,6 +18,8 @@ impl<T: Clone + Add> Add<RGBA<T>> for RGBA<T>
     where RGBA<T>: FromIterator<<T as Add>::Output>,
         T: From<<T as Add>::Output> {
     type Output = RGBA<T>;
+
+    #[inline(always)]
     fn add(self, other: RGBA<T>) -> Self::Output {
         self.iter().zip(other.iter()).map(|(l,r)| l+r).collect()
     }
@@ -24,6 +28,8 @@ impl<T: Clone + Add> Add<RGBA<T>> for RGBA<T>
 impl<T: Clone + Sub> Sub for RGB<T>
     where RGB<T>: FromIterator<<T as Sub>::Output> {
     type Output = RGB<T>;
+
+    #[inline(always)]
     fn sub(self, other: RGB<T>) -> Self::Output {
         self.iter().zip(other.iter()).map(|(l,r)| l-r).collect()
     }
@@ -33,6 +39,8 @@ impl<T: Clone + Sub> Sub<RGBA<T>> for RGBA<T>
     where RGBA<T>: FromIterator<<T as Sub>::Output>,
         T: From<<T as Sub>::Output> {
     type Output = RGBA<T>;
+
+    #[inline(always)]
     fn sub(self, other: RGBA<T>) -> Self::Output {
         self.iter().zip(other.iter()).map(|(l,r)| l-r).collect()
     }
@@ -41,6 +49,8 @@ impl<T: Clone + Sub> Sub<RGBA<T>> for RGBA<T>
 impl<T: Clone + Copy + Add> Add<T> for RGB<T>
     where T: Add<Output=T> {
     type Output = RGB<T>;
+
+    #[inline(always)]
     fn add(self, r: T) -> Self::Output {
         self.map(|l|l+r)
     }
@@ -49,6 +59,8 @@ impl<T: Clone + Copy + Add> Add<T> for RGB<T>
 impl<T: Clone + Copy + Add> Add<T> for RGBA<T>
     where T: Add<Output=T> {
     type Output = RGBA<T>;
+
+    #[inline(always)]
     fn add(self, r: T) -> Self::Output {
         self.map(|l|l+r)
     }
@@ -57,6 +69,8 @@ impl<T: Clone + Copy + Add> Add<T> for RGBA<T>
 impl<T: Clone + Copy + Mul> Mul<T> for RGB<T>
     where T: Mul<Output=T> {
     type Output = RGB<T>;
+
+    #[inline(always)]
     fn mul(self, r: T) -> Self::Output {
         self.map(|l|l*r)
     }
@@ -65,6 +79,8 @@ impl<T: Clone + Copy + Mul> Mul<T> for RGB<T>
 impl<T: Clone + Copy + Mul> Mul<T> for RGBA<T>
     where T: Mul<Output=T> {
     type Output = RGBA<T>;
+
+    #[inline(always)]
     fn mul(self, r: T) -> Self::Output {
         self.map(|l|l*r)
     }

@@ -13,7 +13,7 @@ pub struct RGB<ComponentType> {
 
 impl<T: Clone> RGB<T> {
     /// Convenience function for creating a new pixel
-    #[must_use]
+    #[must_use] #[inline(always)]
     pub fn new(r: T, g: T, b: T) -> RGB<T> {
         RGB{r:r,g:g,b:b}
     }
@@ -24,6 +24,7 @@ impl<T: Clone> RGB<T> {
     }
 
     // Convenience function for converting to RGBA
+    #[inline(always)]
     pub fn alpha(&self, a: T) -> RGBA<T> {
         RGBA {
             r:self.r.clone(),
@@ -46,12 +47,14 @@ impl<T: Copy, B> ComponentMap<RGB<B>, T, B> for RGB<T> {
 }
 
 impl<T> ComponentBytes<T> for RGB<T> {
+    #[inline]
     fn as_slice(&self) -> &[T] {
         unsafe {
             std::slice::from_raw_parts(self as *const RGB<T> as *const T, 3)
         }
     }
 
+    #[inline]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
             std::slice::from_raw_parts_mut(self as *mut RGB<T> as *mut T, 3)

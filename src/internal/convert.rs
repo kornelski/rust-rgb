@@ -6,6 +6,8 @@ use super::rgba::RGBA;
 macro_rules! rgb_impl_from {
     ($typename:ident, $from:ty, $to:ty) => {
         impl From<$typename<$from>> for $typename<$to> {
+
+            #[inline(always)]
             fn from(other: $typename<$from>) -> Self {
                 other.map(|c|c.into())
             }
