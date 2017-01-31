@@ -29,6 +29,7 @@ impl<T: Clone> RGB<T> {
 }
 
 impl<T: Copy, B> ComponentMap<RGB<B>, T, B> for RGB<T> {
+    #[inline(always)]
     fn map<F>(&self, mut f: F) -> RGB<B>
         where F: FnMut(T) -> B {
         RGB{
@@ -40,14 +41,14 @@ impl<T: Copy, B> ComponentMap<RGB<B>, T, B> for RGB<T> {
 }
 
 impl<T> ComponentBytes<T> for RGB<T> {
-    #[inline]
+    #[inline(always)]
     fn as_slice(&self) -> &[T] {
         unsafe {
             std::slice::from_raw_parts(self as *const RGB<T> as *const T, 3)
         }
     }
 
-    #[inline]
+    #[inline(always)]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
             std::slice::from_raw_parts_mut(self as *mut RGB<T> as *mut T, 3)

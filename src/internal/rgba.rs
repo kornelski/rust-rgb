@@ -21,7 +21,7 @@ impl<T: Clone> RGBA<T> {
     }
 
     /// Provide a mutable view of only RGB components (leaving out alpha). Useful to change color without changing opacity.
-    #[inline]
+    #[inline(always)]
     pub fn rgb_mut(&mut self) -> &mut RGB<T> {
         unsafe {
             std::mem::transmute(self)
@@ -30,6 +30,7 @@ impl<T: Clone> RGBA<T> {
 }
 
 impl<T: Copy, B> ComponentMap<RGBA<B>, T, B> for RGBA<T> {
+    #[inline(always)]
     fn map<F>(&self, mut f: F) -> RGBA<B>
         where F: FnMut(T) -> B {
         RGBA{
@@ -42,14 +43,14 @@ impl<T: Copy, B> ComponentMap<RGBA<B>, T, B> for RGBA<T> {
 }
 
 impl<T> ComponentBytes<T> for RGBA<T> {
-    #[inline]
+    #[inline(always)]
     fn as_slice(&self) -> &[T] {
         unsafe {
             std::slice::from_raw_parts(self as *const RGBA<T> as *const T, 4)
         }
     }
 
-    #[inline]
+    #[inline(always)]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
             std::slice::from_raw_parts_mut(self as *mut RGBA<T> as *mut T, 4)
