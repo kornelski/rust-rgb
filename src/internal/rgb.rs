@@ -56,6 +56,19 @@ impl<T> ComponentBytes<T> for RGB<T> {
     }
 }
 
+impl ByteSlice for [RGB<u8>] {
+    fn as_bytes(&self) -> &[u8] {
+        unsafe {
+            std::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * std::mem::size_of::<RGB<u8>>())
+        }
+    }
+    fn as_bytes_mut(&mut self) -> &mut [u8] {
+        unsafe {
+            std::slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * std::mem::size_of::<RGB<u8>>())
+        }
+    }
+}
+
 impl<T> std::iter::FromIterator<T> for RGB<T> {
     /// Takes exactly 3 elements from the iterator and creates a new instance.
     /// Panics if there are fewer elements in the iterator.
@@ -91,4 +104,7 @@ fn rgb_test() {
     h.insert(px);
     assert!(h.contains(&RGB::new(3,111,5)));
     assert!(!h.contains(&RGB::new(111,5,3)));
+
+    let v = vec![RGB::new(1u8,2,3), RGB::new(4,5,6)];
+    assert_eq!(&[1,2,3,4,5,6], v.as_bytes());
 }

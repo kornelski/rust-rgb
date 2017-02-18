@@ -58,6 +58,19 @@ impl<T> ComponentBytes<T> for RGBA<T> {
     }
 }
 
+impl ByteSlice for [RGBA<u8>] {
+    fn as_bytes(&self) -> &[u8] {
+        unsafe {
+            std::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * std::mem::size_of::<RGBA<u8>>())
+        }
+    }
+    fn as_bytes_mut(&mut self) -> &mut [u8] {
+        unsafe {
+            std::slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * std::mem::size_of::<RGBA<u8>>())
+        }
+    }
+}
+
 impl<T> std::iter::FromIterator<T> for RGBA<T> {
     fn from_iter<I: IntoIterator<Item = T>>(into_iter: I) -> RGBA<T> {
         let mut iter = into_iter.into_iter();
@@ -91,4 +104,7 @@ fn rgba_test() {
     px.rgb_mut().b = 4;
     assert_eq!(4, px.rgb_mut().b);
     assert_eq!(100, px.a);
+
+    let v = vec![RGBA::new(1u8,2,3,4), RGBA::new(5,6,7,8)];
+    assert_eq!(&[1,2,3,4,5,6,7,8], v.as_bytes());
 }

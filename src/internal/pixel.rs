@@ -15,6 +15,11 @@ pub trait ComponentBytes<T> {
     }
 }
 
+pub trait ByteSlice {
+    fn as_bytes(&self) -> &[u8];
+    fn as_bytes_mut(&mut self) -> &mut [u8];
+}
+
 /// Applying operation to every component
 ///
 /// ```rust,ignore
