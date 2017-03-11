@@ -107,4 +107,6 @@ fn rgb_test() {
 
     let v = vec![RGB::new(1u8,2,3), RGB::new(4,5,6)];
     assert_eq!(&[1,2,3,4,5,6], v.as_bytes());
+
+    assert_eq!(RGB::new(0u8,0,0), Default::default());
 }
