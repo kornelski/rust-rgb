@@ -12,6 +12,7 @@ impl<T: Clone> RGB<T> {
     }
 
     /// Iterate over color components (R, G, and B)
+    #[inline(always)]
     pub fn iter(&self) -> std::iter::Cloned<std::slice::Iter<T>> {
         self.as_slice().iter().cloned()
     }
@@ -57,11 +58,13 @@ impl<T> ComponentBytes<T> for RGB<T> {
 }
 
 impl ByteSlice for [RGB<u8>] {
+    #[inline]
     fn as_bytes(&self) -> &[u8] {
         unsafe {
             std::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * std::mem::size_of::<RGB<u8>>())
         }
     }
+    #[inline]
     fn as_bytes_mut(&mut self) -> &mut [u8] {
         unsafe {
             std::slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * std::mem::size_of::<RGB<u8>>())
@@ -72,6 +75,7 @@ impl ByteSlice for [RGB<u8>] {
 impl<T> std::iter::FromIterator<T> for RGB<T> {
     /// Takes exactly 3 elements from the iterator and creates a new instance.
     /// Panics if there are fewer elements in the iterator.
+    #[inline(always)]
     fn from_iter<I: IntoIterator<Item = T>>(into_iter: I) -> RGB<T> {
         let mut iter = into_iter.into_iter();
         RGB{r:iter.next().unwrap(), g:iter.next().unwrap(), b:iter.next().unwrap()}

@@ -98,12 +98,14 @@ impl<T: Clone + Copy + Mul> Mul<T> for RGBA<T>
 }
 
 impl<T: Default + Clone> Default for RGBA<T> {
+    #[inline]
     fn default() -> Self {
         Self::new(Default::default(),Default::default(),Default::default(),Default::default())
     }
 }
 
 impl<T: Default + Clone> Default for RGB<T> {
+    #[inline]
     fn default() -> Self {
         Self::new(Default::default(),Default::default(),Default::default())
     }

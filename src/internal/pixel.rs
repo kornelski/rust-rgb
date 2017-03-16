@@ -7,6 +7,7 @@ pub trait ComponentBytes<T> {
     fn as_mut_slice(&mut self) -> &mut [T];
 
     /// The components interpreted as raw bytes, in machine's native endian. Bytes of the red component are first.
+    #[inline]
     fn as_bytes(&self) -> &[u8] {
         let slice = self.as_slice();
         unsafe {

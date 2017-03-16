@@ -10,6 +10,7 @@ impl<T: Clone> RGBA<T> {
         RGBA{r:r,g:g,b:b,a:a}
     }
 
+    #[inline(always)]
     pub fn iter(&self) -> std::iter::Cloned<std::slice::Iter<T>> {
         self.as_slice().iter().cloned()
     }
@@ -59,11 +60,13 @@ impl<T> ComponentBytes<T> for RGBA<T> {
 }
 
 impl ByteSlice for [RGBA<u8>] {
+    #[inline]
     fn as_bytes(&self) -> &[u8] {
         unsafe {
             std::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * std::mem::size_of::<RGBA<u8>>())
         }
     }
+    #[inline]
     fn as_bytes_mut(&mut self) -> &mut [u8] {
         unsafe {
             std::slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * std::mem::size_of::<RGBA<u8>>())
@@ -72,6 +75,7 @@ impl ByteSlice for [RGBA<u8>] {
 }
 
 impl<T> std::iter::FromIterator<T> for RGBA<T> {
+    #[inline(always)]
     fn from_iter<I: IntoIterator<Item = T>>(into_iter: I) -> RGBA<T> {
         let mut iter = into_iter.into_iter();
         RGBA{r:iter.next().unwrap(), g:iter.next().unwrap(), b:iter.next().unwrap(), a:iter.next().unwrap()}
