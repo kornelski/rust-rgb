@@ -30,6 +30,15 @@ impl<T: Clone> RGBA<T> {
     }
 }
 
+impl<T: Copy> RGBA<T> {
+    /// Create new RGBA with the same alpha value, but different RGB values
+    #[inline(always)]
+    pub fn map_rgb<F, B>(&self, f: F) -> RGBA<B>
+        where F: FnMut(T) -> B, B: From<T> + Clone {
+        self.rgb().map(f).alpha(self.a.into())
+    }
+}
+
 impl<T: Copy, B> ComponentMap<RGBA<B>, T, B> for RGBA<T> {
     #[inline(always)]
     fn map<F>(&self, mut f: F) -> RGBA<B>
@@ -100,6 +109,10 @@ fn rgba_test() {
     assert_eq!(neg.a, -1000);
     assert_eq!(neg, neg.as_slice().iter().cloned().collect());
     assert!(neg < RGBA::new(0,0,0,0));
+
+    let neg = RGBA::new(1u8,2,3,4).map_rgb(|c| -(c as i16));
+    assert_eq!(-1i16, neg.r);
+    assert_eq!(4i16, neg.a);
 
     let mut px = RGBA{r:1,g:2,b:3,a:4};
     px.as_mut_slice()[3] = 100;
