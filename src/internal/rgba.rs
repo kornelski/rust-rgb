@@ -6,7 +6,7 @@ use ::RGBA;
 
 impl<T: Clone> RGBA<T> {
     #[must_use] #[inline(always)]
-    pub fn new(r: T, g: T, b: T, a: T) -> RGBA<T> {
+    pub fn new(r: T, g: T, b: T, a: T) -> Self {
         RGBA{r:r,g:g,b:b,a:a}
     }
 
@@ -76,7 +76,7 @@ impl ByteSlice for [RGBA<u8>] {
 
 impl<T> std::iter::FromIterator<T> for RGBA<T> {
     #[inline(always)]
-    fn from_iter<I: IntoIterator<Item = T>>(into_iter: I) -> RGBA<T> {
+    fn from_iter<I: IntoIterator<Item = T>>(into_iter: I) -> Self {
         let mut iter = into_iter.into_iter();
         RGBA{r:iter.next().unwrap(), g:iter.next().unwrap(), b:iter.next().unwrap(), a:iter.next().unwrap()}
     }

@@ -7,7 +7,7 @@ use ::RGBA;
 impl<T: Clone> RGB<T> {
     /// Convenience function for creating a new pixel
     #[must_use] #[inline(always)]
-    pub fn new(r: T, g: T, b: T) -> RGB<T> {
+    pub fn new(r: T, g: T, b: T) -> Self {
         RGB{r:r,g:g,b:b}
     }
 
@@ -76,7 +76,7 @@ impl<T> std::iter::FromIterator<T> for RGB<T> {
     /// Takes exactly 3 elements from the iterator and creates a new instance.
     /// Panics if there are fewer elements in the iterator.
     #[inline(always)]
-    fn from_iter<I: IntoIterator<Item = T>>(into_iter: I) -> RGB<T> {
+    fn from_iter<I: IntoIterator<Item = T>>(into_iter: I) -> Self {
         let mut iter = into_iter.into_iter();
         RGB{r:iter.next().unwrap(), g:iter.next().unwrap(), b:iter.next().unwrap()}
     }
