@@ -9,6 +9,7 @@
 
     <title>rgb - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
     
@@ -16,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc mod">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -42,78 +43,88 @@
         </form>
     </nav>
 
-    <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>rgb</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Crate <a class="mod" href=''>rgb</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-0' class='srclink' href='../src/rgb/src/lib.rs.html#1-83' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/rgb/lib.rs.html#1-112' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Basic struct for <code>RGB</code> and <code>RGBA</code> pixels. Packed, with red first, alpha last.</p>
-
 <p>This crate is intended to be the lowest common denominator for sharing <code>RGB</code>/<code>RGBA</code> bitmaps between other crates.</p>
-
 <p>The crate includes convenience functions for converting between the struct and bytes,
 and overloaded operators that work on all channels at once.</p>
-
-<p>This crate intentionally doesn&#39;t implement color management and other colorspaces.</p>
+<p>This crate intentionally doesn't implement color management and other colorspaces.</p>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.RGB.html'
-                                  title='rgb::RGB'>RGB</a></td>
-                           <td class='docblock short'>
+                           <td><a class="struct" href="struct.RGB.html"
+                                  title='struct rgb::RGB'>RGB</a></td>
+                           <td class='docblock-short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.RGBA.html'
-                                  title='rgb::RGBA'>RGBA</a></td>
-                           <td class='docblock short'>
+                           <td><a class="struct" href="struct.RGBA.html"
+                                  title='struct rgb::RGBA'>RGBA</a></td>
+                           <td class='docblock-short'>
                                 
                            </td>
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='trait' href='trait.ComponentBytes.html'
-                                  title='rgb::ComponentBytes'>ComponentBytes</a></td>
-                           <td class='docblock short'>
-                                <p>Casting the struct to slices/bytes of its components</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='trait' href='trait.ComponentMap.html'
-                                  title='rgb::ComponentMap'>ComponentMap</a></td>
-                           <td class='docblock short'>
-                                <p>Applying operation to every component</p>
-                           </td>
-                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class='type' href='type.RGB16.html'
-                                  title='rgb::RGB16'>RGB16</a></td>
-                           <td class='docblock short'>
-                                <p>16-bit RGB in machine&#39;s native endian. Be careful to perform byte-swapping when reading from files.</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='type' href='type.RGB8.html'
-                                  title='rgb::RGB8'>RGB8</a></td>
-                           <td class='docblock short'>
-                                <p>8-bit RGB. The colorspace is techincally undefined, but generally sRGB is assumed.</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='type' href='type.RGBA16.html'
-                                  title='rgb::RGBA16'>RGBA16</a></td>
-                           <td class='docblock short'>
+                           <td><a class="trait" href="trait.ByteSlice.html"
+                                  title='trait rgb::ByteSlice'>ByteSlice</a></td>
+                           <td class='docblock-short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='type' href='type.RGBA8.html'
-                                  title='rgb::RGBA8'>RGBA8</a></td>
-                           <td class='docblock short'>
-                                <p>Alpha is last. The crate doesn&#39;t impose which value represents transparency, but usually it&#39;s 0 = transparent, 255 = opaque.</p>
+                           <td><a class="trait" href="trait.ComponentBytes.html"
+                                  title='trait rgb::ComponentBytes'>ComponentBytes</a></td>
+                           <td class='docblock-short'>
+                                <p>Casting the struct to slices/bytes of its components</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="trait" href="trait.ComponentMap.html"
+                                  title='trait rgb::ComponentMap'>ComponentMap</a></td>
+                           <td class='docblock-short'>
+                                <p>Applying operation to every component</p>
+
+                           </td>
+                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="type" href="type.RGB8.html"
+                                  title='type rgb::RGB8'>RGB8</a></td>
+                           <td class='docblock-short'>
+                                <p>8-bit RGB. The colorspace is techincally undefined, but generally sRGB is assumed.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="type" href="type.RGB16.html"
+                                  title='type rgb::RGB16'>RGB16</a></td>
+                           <td class='docblock-short'>
+                                <p>16-bit RGB in machine's native endian. Be careful to perform byte-swapping when reading from files.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="type" href="type.RGBA8.html"
+                                  title='type rgb::RGBA8'>RGBA8</a></td>
+                           <td class='docblock-short'>
+                                <p>Alpha is last. The crate doesn't impose which value represents transparency, but usually it's 0 = transparent, 255 = opaque.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="type" href="type.RGBA16.html"
+                                  title='type rgb::RGBA16'>RGBA16</a></td>
+                           <td class='docblock-short'>
+                                <p>16-bit RGB in machine's native endian. Alpha is last.</p>
+
                            </td>
                        </tr></table></section>
     <section id='search' class="content hidden"></section>
@@ -171,11 +182,9 @@ and overloaded operators that work on all channels at once.</p>
     <script>
         window.rootPath = "../";
         window.currentCrate = "rgb";
-        window.playgroundUrl = "";
     </script>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
-    
     <script defer src="../search-index.js"></script>
 </body>
 </html>
