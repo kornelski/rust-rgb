@@ -27,6 +27,17 @@ impl<T: Clone> RGB<T> {
             a:a,
         }
     }
+
+    // Convenience function for converting to RGBA with alpha channel of a different type than type of the pixels
+    #[inline(always)]
+    pub fn new_alpha<A>(&self, a: A) -> RGBA<T,A> {
+        RGBA {
+            r:self.r.clone(),
+            g:self.g.clone(),
+            b:self.b.clone(),
+            a:a,
+        }
+    }
 }
 
 impl<T: Copy, B> ComponentMap<RGB<B>, T, B> for RGB<T> {

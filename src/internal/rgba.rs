@@ -10,17 +10,22 @@ impl<T: Clone> RGBA<T> {
         RGBA{r:r,g:g,b:b,a:a}
     }
 
+    /// Iterate over all components (length=4)
     #[inline(always)]
     pub fn iter(&self) -> std::iter::Cloned<std::slice::Iter<T>> {
         self.as_slice().iter().cloned()
     }
+}
 
+impl<T: Clone, A> RGBA<T,A> {
     /// Copy RGB components out of the RGBA struct
     #[inline(always)]
     pub fn rgb(&self) -> RGB<T> {
         RGB{r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
     }
+}
 
+impl<T, A> RGBA<T,A> {
     /// Provide a mutable view of only RGB components (leaving out alpha). Useful to change color without changing opacity.
     #[inline(always)]
     pub fn rgb_mut(&mut self) -> &mut RGB<T> {
@@ -30,12 +35,12 @@ impl<T: Clone> RGBA<T> {
     }
 }
 
-impl<T: Copy> RGBA<T> {
+impl<T: Copy, A: Clone> RGBA<T, A> {
     /// Create new RGBA with the same alpha value, but different RGB values
     #[inline(always)]
-    pub fn map_rgb<F, B>(&self, f: F) -> RGBA<B>
-        where F: FnMut(T) -> B, B: From<T> + Clone {
-        self.rgb().map(f).alpha(self.a.into())
+    pub fn map_rgb<F, U, B>(&self, f: F) -> RGBA<U, B>
+        where F: FnMut(T) -> U, U: Clone, B: From<A> + Clone {
+        self.rgb().map(f).new_alpha(self.a.clone().into())
     }
 }
 
@@ -91,7 +96,7 @@ impl<T> std::iter::FromIterator<T> for RGBA<T> {
     }
 }
 
-impl<T: fmt::Display> fmt::Display for RGBA<T> {
+impl<T: fmt::Display, A: fmt::Display> fmt::Display for RGBA<T,A> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f,"rgba({},{},{},{})", self.r,self.g,self.b,self.a)
     }

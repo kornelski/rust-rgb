@@ -36,7 +36,9 @@ pub struct RGB<ComponentType> {
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// This is it. The component type can be `u8` (aliased as `RGBA8`), `u16` (aliased as `RGBA16`), or any other type (but simple copyable types are recommended.)
-pub struct RGBA<ComponentType> {
+///
+/// You can specify a different type for alpha, but it's only for special cases (e.g. if you use a newtype like RGBA<LinearLight<u16>, u16>).
+pub struct RGBA<ComponentType, AlphaComponentType=ComponentType> {
     /// Red
     pub r:ComponentType,
     /// Green
@@ -44,7 +46,7 @@ pub struct RGBA<ComponentType> {
     /// Blue
     pub b:ComponentType,
     /// Alpha
-    pub a:ComponentType,
+    pub a:AlphaComponentType,
 }
 
 /// 8-bit RGB. The colorspace is techincally undefined, but generally sRGB is assumed.
