@@ -8,16 +8,23 @@ Operating on pixels as weakly-typed vectors of `u8` is error-prone and inconveni
 
 ### `RGB` and `RGBA` structs
 
+The structs implement common Rust traits and a few convenience functions, e.g. `map` that repeats an operation on every subpixel:
+
 ```rust
 extern crate rgb;
+use rgb::*; // Laziest way to use traits which add extra methods to the structs
 
-let px = RGB{r:255_u8, g:0, b:100};
-assert_eq!(px.as_bytes()[0], 255);
-
-let px = RGB8::new(255, 0, 255);
+let px = RGB {
+    r:255_u8,
+    g:0,
+    b:255,
+};
 let inverted = px.map(|ch| 255 - ch);
 
-println!("{}", inverted); // rgb(0,255,0)
+println!("{}", inverted); // Display: rgb(0,255,0)
+assert_eq!(RGB8::new(0, 255, 0), inverted);
+```
+
 ### Byte slices to pixel slices
 
 For interoperability with functions operating on generic arrays of bytes there are functinos for safe casting to and from pixel slices.
@@ -34,3 +41,11 @@ let raw_again = pixels.as_bytes();
 ## About colorspaces
 
 This crate is intentionally ignorant about flavors of RGB color spaces. *Correct* color management is a complex problem, and this crate aims to be the lowest common denominator.
+
+However, it supports any subpixel type for `RGB<T>`, and `RGBA<RGBType, AlphaType>`, so you can use them with a newtype, e.g.:
+
+```rust
+struct LinearLight(u16);
+type LinearRGB = RGB<LinearLight>;
+```
+
