@@ -22,7 +22,7 @@ pub use internal::ops::*;
 pub use internal::convert::*;
 
 #[repr(C)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// This is it. The component type can be `u8` (aliased as `RGB8`), `u16` (aliased as `RGB16`), or any other type (but simple copyable types are recommended.)
 pub struct RGB<ComponentType> {
     /// Red
@@ -34,7 +34,7 @@ pub struct RGB<ComponentType> {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// This is it. The component type can be `u8` (aliased as `RGBA8`), `u16` (aliased as `RGBA16`), or any other type (but simple copyable types are recommended.)
 ///
 /// You can specify a different type for alpha, but it's only for special cases (e.g. if you use a newtype like RGBA<LinearLight<u16>, u16>).

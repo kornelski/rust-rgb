@@ -97,20 +97,6 @@ impl<T: Clone + Copy + Mul> Mul<T> for RGBA<T>
     }
 }
 
-impl<T: Default + Clone> Default for RGBA<T> {
-    #[inline]
-    fn default() -> Self {
-        Self::new(Default::default(),Default::default(),Default::default(),Default::default())
-    }
-}
-
-impl<T: Default + Clone> Default for RGB<T> {
-    #[inline]
-    fn default() -> Self {
-        Self::new(Default::default(),Default::default(),Default::default())
-    }
-}
-
 #[test]
 fn test_math() {
     assert_eq!(RGB::new(2,4,6), RGB::new(1,2,3) + RGB{r:1,g:2,b:3});
