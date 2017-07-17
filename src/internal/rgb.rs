@@ -59,7 +59,6 @@ impl<T> ComponentBytes<T> for RGB<T> {
             std::slice::from_raw_parts(self as *const RGB<T> as *const T, 3)
         }
     }
-
     #[inline(always)]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
@@ -68,17 +67,17 @@ impl<T> ComponentBytes<T> for RGB<T> {
     }
 }
 
-impl ByteSlice for [RGB<u8>] {
+impl<T: Copy> ComponentBytes<T> for [RGB<T>] {
     #[inline]
-    fn as_bytes(&self) -> &[u8] {
+    fn as_slice(&self) -> &[T] {
         unsafe {
-            std::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * std::mem::size_of::<RGB<u8>>())
+            std::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 3)
         }
     }
     #[inline]
-    fn as_bytes_mut(&mut self) -> &mut [u8] {
+    fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
-            std::slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * std::mem::size_of::<RGB<u8>>())
+            std::slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * 3)
         }
     }
 }

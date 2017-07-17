@@ -16,16 +16,6 @@ pub trait ComponentBytes<T> {
     }
 }
 
-/// Cast array of structs into array of raw bytes (so that `[0]` is R, `[1]` is G, `[2]` is B, etc.)
-///
-/// Escape hatch for interoperability with C and non-type-safe libraries.
-pub trait ByteSlice {
-    /// Read-only view of bytes. `[0]` is R, `[1]` is G, `[2]` is B, etc.
-    fn as_bytes(&self) -> &[u8];
-    /// Read-write view of bytes.
-    fn as_bytes_mut(&mut self) -> &mut [u8];
-}
-
 /// Applying operation to every component
 ///
 /// ```rust,ignore
