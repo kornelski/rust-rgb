@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='index.html'>rgb</a></p><script>window.sidebarCurrent = {name: 'ComponentMap', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Trait ComponentMap</p><div class="block items"><ul><li><a href="#required-methods">Required Methods</a></li><li><a href="#implementors">Implementors</a></li></ul></div><p class='location'><a href='index.html'>rgb</a></p><script>window.sidebarCurrent = {name: 'ComponentMap', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -48,9 +48,9 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/rgb/internal/pixel.rs.html#38-44' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/rgb/internal/pixel.rs.html#28-34' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait ComponentMap&lt;DestPixel, SrcComponent, DestComponent&gt; {
-    fn <a href='#tymethod.map' class='fnname'>map</a>&lt;Callback&gt;(&amp;self, f: Callback) -&gt; DestPixel <span class="where fmt-newline">where Callback: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html" title="trait core::ops::FnMut">FnMut</a>(SrcComponent) -&gt; DestComponent</span>;
+    fn <a href='#tymethod.map' class='fnname'>map</a>&lt;Callback&gt;(&amp;self, f: Callback) -&gt; DestPixel<br>&nbsp;&nbsp;&nbsp; <span class="where">where<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Callback: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnMut.html" title="trait core::ops::function::FnMut">FnMut</a>(SrcComponent) -&gt; DestComponent</span>;
 }</pre><div class='docblock'><p>Applying operation to every component</p>
 
 <pre class="rust rust-example-rendered">
@@ -60,12 +60,17 @@
 <span class="kw">let</span> <span class="ident">halved</span> <span class="op">=</span> <span class="ident">pixel</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span> <span class="op">/</span> <span class="number">2</span>);
 <span class="kw">let</span> <span class="ident">halved</span> <span class="op">=</span> <span class="ident">pixel</span> <span class="op">/</span> <span class="number">2</span>;</pre>
 </div>
-            <h2 id='required-methods'>Required Methods</h2>
+            <h2 id='required-methods' class='section-header'>
+              <a href='#required-methods'>Required Methods</a>
+            </h2>
             <div class='methods'>
-        <h3 id='tymethod.map' class='method'><span id='map.v' class='invisible'><code>fn <a href='#tymethod.map' class='fnname'>map</a>&lt;Callback&gt;(&amp;self, f: Callback) -&gt; DestPixel <span class="where fmt-newline">where Callback: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html" title="trait core::ops::FnMut">FnMut</a>(SrcComponent) -&gt; DestComponent</span></code></span></h3><div class='docblock'><p>Convenience function (equivalent of <code>self.iter().map().collect()</code>) for applying the same formula to every component.</p>
+        <h3 id='tymethod.map' class='method'><span id='map.v' class='invisible'><code>fn <a href='#tymethod.map' class='fnname'>map</a>&lt;Callback&gt;(&amp;self, f: Callback) -&gt; DestPixel <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;Callback: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnMut.html" title="trait core::ops::function::FnMut">FnMut</a>(SrcComponent) -&gt; DestComponent,&nbsp;</span></code></span></h3><div class='docblock'><p>Convenience function (equivalent of <code>self.iter().map().collect()</code>) for applying the same formula to every component.</p>
+
 <p>Note that it returns the pixel directly, not an Interator.</p>
 </div></div>
-        <h2 id='implementors'>Implementors</h2>
+        <h2 id='implementors' class='section-header'>
+          <a href='#implementors'>Implementors</a>
+        </h2>
         <ul class='item-list' id='implementors-list'>
     <li><code>impl&lt;T:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>, B&gt; ComponentMap&lt;<a class="struct" href="../rgb/struct.RGB.html" title="struct rgb::RGB">RGB</a>&lt;B&gt;, T, B&gt; for <a class="struct" href="../rgb/struct.RGB.html" title="struct rgb::RGB">RGB</a>&lt;T&gt;</code></li>
 <li><code>impl&lt;T:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>, B&gt; ComponentMap&lt;<a class="struct" href="../rgb/struct.RGBA.html" title="struct rgb::RGBA">RGBA</a>&lt;B&gt;, T, B&gt; for <a class="struct" href="../rgb/struct.RGBA.html" title="struct rgb::RGBA">RGBA</a>&lt;T&gt;</code></li>
@@ -128,7 +133,6 @@
         window.rootPath = "../";
         window.currentCrate = "rgb";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
 </body>

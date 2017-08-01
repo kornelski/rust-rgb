@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='index.html'>rgb</a></p><script>window.sidebarCurrent = {name: 'ComponentBytes', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Trait ComponentBytes</p><div class="block items"><ul><li><a href="#required-methods">Required Methods</a></li><li><a href="#provided-methods">Provided Methods</a></li><li><a href="#implementors">Implementors</a></li></ul></div><p class='location'><a href='index.html'>rgb</a></p><script>window.sidebarCurrent = {name: 'ComponentBytes', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -51,23 +51,31 @@
                </span><a class='srclink' href='../src/rgb/internal/pixel.rs.html#4-17' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait ComponentBytes&lt;T&gt; {
     fn <a href='#tymethod.as_slice' class='fnname'>as_slice</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a>T<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>;
-    fn <a href='#tymethod.as_mut_slice' class='fnname'>as_mut_slice</a>(&amp;mut self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a>T<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>;
+<div class='item-spacer'></div>    fn <a href='#tymethod.as_mut_slice' class='fnname'>as_mut_slice</a>(&amp;mut self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a>T<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>;
 
     fn <a href='#method.as_bytes' class='fnname'>as_bytes</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a> { ... }
 }</pre><div class='docblock'><p>Casting the struct to slices/bytes of its components</p>
 </div>
-            <h2 id='required-methods'>Required Methods</h2>
+            <h2 id='required-methods' class='section-header'>
+              <a href='#required-methods'>Required Methods</a>
+            </h2>
             <div class='methods'>
         <h3 id='tymethod.as_slice' class='method'><span id='as_slice.v' class='invisible'><code>fn <a href='#tymethod.as_slice' class='fnname'>as_slice</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a>T<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h3><div class='docblock'><p>The components interpreted as an array, e.g. RGB gives 3-element slice. The red component is first.</p>
 </div><h3 id='tymethod.as_mut_slice' class='method'><span id='as_mut_slice.v' class='invisible'><code>fn <a href='#tymethod.as_mut_slice' class='fnname'>as_mut_slice</a>(&amp;mut self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a>T<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h3></div>
-            <h2 id='provided-methods'>Provided Methods</h2>
+            <h2 id='provided-methods' class='section-header'>
+              <a href='#provided-methods'>Provided Methods</a>
+            </h2>
             <div class='methods'>
-        <h3 id='method.as_bytes' class='method'><span id='as_bytes.v' class='invisible'><code>fn <a href='#method.as_bytes' class='fnname'>as_bytes</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h3><div class='docblock'><p>The components interpreted as raw bytes, in machine's native endian. Bytes of the red component are first.</p>
+        <h3 id='method.as_bytes' class='method'><span id='as_bytes.v' class='invisible'><code>fn <a href='#method.as_bytes' class='fnname'>as_bytes</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h3><div class='docblock'><p>The components interpreted as raw bytes, in machine&#39;s native endian. Bytes of the red component are first.</p>
 </div></div>
-        <h2 id='implementors'>Implementors</h2>
+        <h2 id='implementors' class='section-header'>
+          <a href='#implementors'>Implementors</a>
+        </h2>
         <ul class='item-list' id='implementors-list'>
     <li><code>impl&lt;T&gt; ComponentBytes&lt;T&gt; for <a class="struct" href="../rgb/struct.RGB.html" title="struct rgb::RGB">RGB</a>&lt;T&gt;</code></li>
+<li><code>impl&lt;T:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>&gt; ComponentBytes&lt;T&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">[</a><a class="struct" href="../rgb/struct.RGB.html" title="struct rgb::RGB">RGB</a>&lt;T&gt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></li>
 <li><code>impl&lt;T&gt; ComponentBytes&lt;T&gt; for <a class="struct" href="../rgb/struct.RGBA.html" title="struct rgb::RGBA">RGBA</a>&lt;T&gt;</code></li>
+<li><code>impl&lt;T:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>&gt; ComponentBytes&lt;T&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">[</a><a class="struct" href="../rgb/struct.RGBA.html" title="struct rgb::RGBA">RGBA</a>&lt;T&gt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></li>
 </ul><script type="text/javascript" async
                          src="../implementors/rgb/trait.ComponentBytes.js">
                  </script></section>
@@ -127,7 +135,6 @@
         window.rootPath = "../";
         window.currentCrate = "rgb";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
 </body>
