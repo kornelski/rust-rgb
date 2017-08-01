@@ -5,7 +5,23 @@
 //! The crate includes convenience functions for converting between the struct and bytes,
 //! and overloaded operators that work on all channels at once.
 //!
-//! This crate intentionally doesn't implement color management and other colorspaces.
+//! This crate intentionally doesn't implement color management (due to complexity of the problem),
+//! but the structs can be parametrized to implement this if necessary. Other colorspaces are out of scope.
+//!
+//! ```rust
+//! # use rgb::*;
+//! let pixel = RGB8 {r:0, g:100, b:255};
+//!
+//! let pixel_rgba = pixel.alpha(255);
+//! let pixel = pixel_rgba.rgb();
+//!
+//! let pixels = vec![pixel; 100];
+//! let bytes = pixels.as_bytes();
+//!
+//! let half_bright = pixel.map(|channel| channel / 2);
+//! let doubled = half_bright * 2;
+//! # let _ = doubled;
+//! ```
 
 mod internal {
     pub mod rgb;
