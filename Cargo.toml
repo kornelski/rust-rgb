@@ -12,3 +12,7 @@ license = "MIT"
 categories = ["rust-patterns", "multimedia::images"]
 
 [dependencies]
+serde = { version = "1.0", optional = true, features = ["derive"] }
+
+[dev-dependencies]
+serde_json = "1.0"
