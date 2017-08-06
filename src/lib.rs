@@ -23,6 +23,9 @@
 //! # let _ = doubled;
 //! ```
 
+#[cfg(feature = "serde")]
+#[macro_use] extern crate serde;
+
 mod internal {
     pub mod rgb;
     pub mod rgba;
@@ -38,6 +41,7 @@ pub use internal::ops::*;
 pub use internal::convert::*;
 
 #[repr(C)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// This is it. The component type can be `u8` (aliased as `RGB8`), `u16` (aliased as `RGB16`), or any other type (but simple copyable types are recommended.)
 pub struct RGB<ComponentType> {
@@ -50,6 +54,7 @@ pub struct RGB<ComponentType> {
 }
 
 #[repr(C)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// This is it. The component type can be `u8` (aliased as `RGBA8`), `u16` (aliased as `RGBA16`), or any other type (but simple copyable types are recommended.)
 ///
