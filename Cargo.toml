@@ -11,8 +11,12 @@ keywords = ["rgb", "rgba", "pixel", "interoperability"]
 license = "MIT"
 categories = ["rust-patterns", "multimedia::images"]
 
+[badges]
+travis-ci = { repository = "pornel/rust-rgb" }
+
 [dependencies]
 serde = { version = "1.0", optional = true, features = ["derive"] }
 
 [dev-dependencies]
 serde_json = "1.0"
+
