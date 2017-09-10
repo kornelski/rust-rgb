@@ -1,6 +1,4 @@
-# `struct RGB` for [Rust](https://www.rust-lang.org)
-
-[![Version](https://img.shields.io/crates/v/rgb.svg)](https://crates.io/crates/rgb)
+# `struct RGB` for [Rust](https://www.rust-lang.org)  [![v](https://img.shields.io/crates/v/rgb.svg)](https://crates.io/crates/rgb)
 
 Operating on pixels as weakly-typed vectors of `u8` is error-prone and inconvenient. It's better to use vectors of pixel structs. However, Rust is so strongly typed that *your* RGB pixel struct is not compatible with *my* RGB pixel struct. So let's all use mine :P
 
