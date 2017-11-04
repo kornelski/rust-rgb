@@ -57,7 +57,7 @@ impl<T: Copy, B> ComponentMap<RGBA<B>, T, B> for RGBA<T> {
     }
 }
 
-impl<T> ComponentBytes<T> for RGBA<T> {
+impl<T> ComponentSlice<T> for RGBA<T> {
     #[inline(always)]
     fn as_slice(&self) -> &[T] {
         unsafe {
@@ -73,7 +73,7 @@ impl<T> ComponentBytes<T> for RGBA<T> {
     }
 }
 
-impl<T: Copy> ComponentBytes<T> for [RGBA<T>] {
+impl<T> ComponentSlice<T> for [RGBA<T>] {
     #[inline]
     fn as_slice(&self) -> &[T] {
         unsafe {
@@ -87,6 +87,8 @@ impl<T: Copy> ComponentBytes<T> for [RGBA<T>] {
         }
     }
 }
+
+impl<T: Copy> ComponentBytes<T> for [RGBA<T>] {}
 
 impl<T> std::iter::FromIterator<T> for RGBA<T> {
     #[inline(always)]

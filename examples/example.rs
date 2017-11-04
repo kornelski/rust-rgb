@@ -4,7 +4,7 @@ use rgb::*;
 fn main() {
 
     let px = RGB{r:255_u8,g:0,b:100};
-    assert_eq!(px.as_bytes()[0], 255);
+    assert_eq!([px].as_bytes()[0], 255);
 
     let bigpx = RGB16{r:65535_u16,g:0,b:0};
     assert_eq!(bigpx.as_slice()[0], 65535);

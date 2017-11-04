@@ -1,17 +1,28 @@
 use std;
 
-/// Casting the struct to slices/bytes of its components
-pub trait ComponentBytes<T> {
+/// Casting the struct to slices of its components
+pub trait ComponentSlice<T> {
     /// The components interpreted as an array, e.g. RGB gives 3-element slice. The red component is first.
     fn as_slice(&self) -> &[T];
     fn as_mut_slice(&mut self) -> &mut [T];
+}
 
+/// Casting a slice of `RGB/A` values to a slice of `u8`
+pub trait ComponentBytes<T: Copy> where Self: ComponentSlice<T> {
     /// The components interpreted as raw bytes, in machine's native endian. Bytes of the red component are first.
     #[inline]
     fn as_bytes(&self) -> &[u8] {
         let slice = self.as_slice();
         unsafe {
-            std::slice::from_raw_parts(std::mem::transmute(slice.as_ptr()), slice.len() * std::mem::size_of::<T>())
+            std::slice::from_raw_parts(slice.as_ptr() as *const u8, slice.len() * std::mem::size_of::<T>())
+        }
+    }
+
+    #[inline]
+    fn as_bytes_mut(&mut self) -> &[u8] {
+        let slice = self.as_mut_slice();
+        unsafe {
+            std::slice::from_raw_parts_mut(slice.as_ptr() as *mut u8, slice.len() * std::mem::size_of::<T>())
         }
     }
 }

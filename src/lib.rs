@@ -89,20 +89,20 @@ fn rgb_works() {
 
     assert_eq!(rgb, rgb.iter().map(|ch| ch).collect());
 
-    assert_eq!(0, rgb.as_bytes()[0]);
-    assert_eq!(128, rgb.as_bytes()[1]);
-    assert_eq!(255, rgb.as_bytes()[2]);
+    assert_eq!(0, [rgb].as_bytes()[0]);
+    assert_eq!(128, [rgb].as_bytes()[1]);
+    assert_eq!(255, [rgb].as_bytes()[2]);
 
     let rgb = RGB16{r:0u16,g:0x7F7F,b:65535};
     assert_eq!(rgb.b, 65535);
     assert_eq!(rgb.as_slice()[1], 0x7F7F);
 
-    assert_eq!(0, rgb.as_bytes()[0]);
-    assert_eq!(0, rgb.as_bytes()[1]);
-    assert_eq!(0x7F, rgb.as_bytes()[2]);
-    assert_eq!(0x7F, rgb.as_bytes()[3]);
-    assert_eq!(0xFF, rgb.as_bytes()[4]);
-    assert_eq!(0xFF, rgb.as_bytes()[5]);
+    assert_eq!(0, [rgb].as_bytes()[0]);
+    assert_eq!(0, [rgb].as_bytes()[1]);
+    assert_eq!(0x7F, [rgb].as_bytes()[2]);
+    assert_eq!(0x7F, [rgb].as_bytes()[3]);
+    assert_eq!(0xFF, [rgb].as_bytes()[4]);
+    assert_eq!(0xFF, [rgb].as_bytes()[5]);
 
     assert_eq!("rgb(1,2,3)", format!("{}", RGB::new(1,2,3)));
 }
@@ -137,7 +137,8 @@ fn rgba_works() {
 #[test]
 fn bytes() {
     let rgb = RGB8::new(1,2,3);
-    let rgb_bytes = rgb.as_bytes();
+    let rgb_arr = [rgb];
+    let rgb_bytes = rgb_arr.as_bytes();
     assert_eq!(&[1,2,3], rgb_bytes);
     assert_eq!(rgb_bytes.as_rgba().len(), 0);
     assert_eq!(rgb, rgb_bytes.into_iter().cloned().collect());
@@ -146,7 +147,8 @@ fn bytes() {
     assert_eq!(rgb2.as_mut_slice().as_rgb_mut(), &mut [rgb]);
 
     let rgba = RGBA8::new(1,2,3,4);
-    let rgba_bytes = rgba.as_bytes();
+    let mut rgba_arr = [rgba];
+    let rgba_bytes = rgba_arr.as_bytes_mut();
     assert_eq!(&[1,2,3,4], rgba_bytes);
     assert_eq!(&[rgba], rgba_bytes.as_rgba());
     assert_eq!(rgba, rgba_bytes.into_iter().cloned().collect());

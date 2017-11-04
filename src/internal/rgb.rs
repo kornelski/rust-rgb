@@ -52,13 +52,14 @@ impl<T: Copy, B> ComponentMap<RGB<B>, T, B> for RGB<T> {
     }
 }
 
-impl<T> ComponentBytes<T> for RGB<T> {
+impl<T> ComponentSlice<T> for RGB<T> {
     #[inline(always)]
     fn as_slice(&self) -> &[T] {
         unsafe {
             std::slice::from_raw_parts(self as *const RGB<T> as *const T, 3)
         }
     }
+
     #[inline(always)]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
@@ -67,13 +68,14 @@ impl<T> ComponentBytes<T> for RGB<T> {
     }
 }
 
-impl<T: Copy> ComponentBytes<T> for [RGB<T>] {
+impl<T> ComponentSlice<T> for [RGB<T>] {
     #[inline]
     fn as_slice(&self) -> &[T] {
         unsafe {
             std::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 3)
         }
     }
+
     #[inline]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
@@ -81,6 +83,8 @@ impl<T: Copy> ComponentBytes<T> for [RGB<T>] {
         }
     }
 }
+
+impl<T: Copy> ComponentBytes<T> for [RGB<T>] {}
 
 impl<T> std::iter::FromIterator<T> for RGB<T> {
     /// Takes exactly 3 elements from the iterator and creates a new instance.
