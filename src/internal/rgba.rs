@@ -5,7 +5,7 @@ use ::RGB;
 use ::RGBA;
 
 impl<T: Clone> RGBA<T> {
-    #[must_use] #[inline(always)]
+    #[inline(always)]
     pub fn new(r: T, g: T, b: T, a: T) -> Self {
         RGBA{r:r,g:g,b:b,a:a}
     }
