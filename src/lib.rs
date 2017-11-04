@@ -148,10 +148,13 @@ fn bytes() {
 
     let rgba = RGBA8::new(1,2,3,4);
     let mut rgba_arr = [rgba];
-    let rgba_bytes = rgba_arr.as_bytes_mut();
-    assert_eq!(&[1,2,3,4], rgba_bytes);
-    assert_eq!(&[rgba], rgba_bytes.as_rgba());
-    assert_eq!(rgba, rgba_bytes.into_iter().cloned().collect());
+    {
+        let rgba_bytes = rgba_arr.as_bytes_mut();
+        assert_eq!(&[1,2,3,4], rgba_bytes);
+        assert_eq!(&[rgba], rgba_bytes.as_rgba());
+        rgba_bytes[3] = 99;
+    }
+    assert_eq!(RGBA8::new(1,2,3,99), rgba_arr.as_bytes().into_iter().cloned().collect());
 
     let rgb = RGB16::new(1,2,3);
     let rgb_slice = rgb.as_slice();

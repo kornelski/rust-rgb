@@ -14,15 +14,16 @@ pub trait ComponentBytes<T: Copy> where Self: ComponentSlice<T> {
     fn as_bytes(&self) -> &[u8] {
         let slice = self.as_slice();
         unsafe {
-            std::slice::from_raw_parts(slice.as_ptr() as *const u8, slice.len() * std::mem::size_of::<T>())
+            std::slice::from_raw_parts(slice.as_ptr() as *const _, slice.len() * std::mem::size_of::<T>())
         }
     }
 
     #[inline]
-    fn as_bytes_mut(&mut self) -> &[u8] {
+    /// The components interpreted as raw bytes, in machine's native endian. Bytes of the red component are first.
+    fn as_bytes_mut(&mut self) -> &mut [u8] {
         let slice = self.as_mut_slice();
         unsafe {
-            std::slice::from_raw_parts_mut(slice.as_ptr() as *mut u8, slice.len() * std::mem::size_of::<T>())
+            std::slice::from_raw_parts_mut(slice.as_mut_ptr() as *mut _, slice.len() * std::mem::size_of::<T>())
         }
     }
 }
