@@ -84,7 +84,7 @@ impl<T> ComponentSlice<T> for [RGB<T>] {
     }
 }
 
-impl<T: Copy> ComponentBytes<T> for [RGB<T>] {}
+impl<T: Copy + Send + Sync + 'static> ComponentBytes<T> for [RGB<T>] {}
 
 impl<T> std::iter::FromIterator<T> for RGB<T> {
     /// Takes exactly 3 elements from the iterator and creates a new instance.

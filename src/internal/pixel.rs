@@ -8,7 +8,7 @@ pub trait ComponentSlice<T> {
 }
 
 /// Casting a slice of `RGB/A` values to a slice of `u8`
-pub trait ComponentBytes<T: Copy> where Self: ComponentSlice<T> {
+pub trait ComponentBytes<T: Copy + Send + Sync + 'static> where Self: ComponentSlice<T> {
     /// The components interpreted as raw bytes, in machine's native endian. Bytes of the red component are first.
     #[inline]
     fn as_bytes(&self) -> &[u8] {

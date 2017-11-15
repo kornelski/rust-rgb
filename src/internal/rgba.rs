@@ -88,7 +88,7 @@ impl<T> ComponentSlice<T> for [RGBA<T>] {
     }
 }
 
-impl<T: Copy> ComponentBytes<T> for [RGBA<T>] {}
+impl<T: Copy + Send + Sync + 'static> ComponentBytes<T> for [RGBA<T>] {}
 
 impl<T> std::iter::FromIterator<T> for RGBA<T> {
     #[inline(always)]
