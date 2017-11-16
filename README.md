@@ -10,7 +10,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rgb = "0.7"
+rgb = "0.8"
 ```
 
 ## Usage
