@@ -1,8 +1,8 @@
 [package]
 name = "rgb"
-version = "0.8.2"
+version = "0.8.3"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
-include = ["src/**/*", "Cargo.toml", "README.md"]
+include = ["src/**/*", "Cargo.toml", "README.md", "examples/*.rs"]
 description = "`struct RGB` for sharing pixels between crates.\nAllows no-copy high-level interoperability. Also adds common convenience methods and implements standard Rust traits to make RGB/RGBA pixels first-class Rust objects."
 documentation = "https://pornel.github.io/rust-rgb/rgb/"
 repository = "https://github.com/pornel/rust-rgb"
