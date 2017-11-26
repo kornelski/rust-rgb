@@ -1,7 +1,7 @@
 use std::ops::*;
 use super::pixel::*;
-use ::RGB;
-use ::RGBA;
+use RGB;
+use RGBA;
 
 impl<T: Add> Add for RGB<T> {
     type Output = RGB<<T as Add>::Output>;

@@ -2,8 +2,8 @@ use std::convert::*;
 use super::pixel::*;
 use std::slice;
 use std::mem;
-use ::RGB;
-use ::RGBA;
+use RGB;
+use RGBA;
 
 /// Cast a slice of component values (bytes) as a slice of RGB/RGBA pixels
 ///

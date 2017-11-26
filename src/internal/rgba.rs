@@ -1,13 +1,13 @@
 use std;
 use std::fmt;
 use super::pixel::*;
-use ::RGB;
-use ::RGBA;
+use RGB;
+use RGBA;
 
 impl<T: Clone> RGBA<T> {
     #[inline(always)]
     pub fn new(r: T, g: T, b: T, a: T) -> Self {
-        RGBA{r:r,g:g,b:b,a:a}
+        RGBA {r,g,b,a}
     }
 
     /// Iterate over all components (length=4)
@@ -17,11 +17,11 @@ impl<T: Clone> RGBA<T> {
     }
 }
 
-impl<T: Clone, A> RGBA<T,A> {
+impl<T: Clone, A> RGBA<T, A> {
     /// Copy RGB components out of the RGBA struct
     #[inline(always)]
     pub fn rgb(&self) -> RGB<T> {
-        RGB{r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+        RGB {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
     }
 }
 
@@ -47,12 +47,14 @@ impl<T: Copy, A: Clone> RGBA<T, A> {
 impl<T: Copy, B> ComponentMap<RGBA<B>, T, B> for RGBA<T> {
     #[inline(always)]
     fn map<F>(&self, mut f: F) -> RGBA<B>
-        where F: FnMut(T) -> B {
-        RGBA{
-            r:f(self.r),
-            g:f(self.g),
-            b:f(self.b),
-            a:f(self.a),
+    where
+        F: FnMut(T) -> B,
+    {
+        RGBA {
+            r: f(self.r),
+            g: f(self.g),
+            b: f(self.b),
+            a: f(self.a),
         }
     }
 }
@@ -94,13 +96,18 @@ impl<T> std::iter::FromIterator<T> for RGBA<T> {
     #[inline(always)]
     fn from_iter<I: IntoIterator<Item = T>>(into_iter: I) -> Self {
         let mut iter = into_iter.into_iter();
-        RGBA{r:iter.next().unwrap(), g:iter.next().unwrap(), b:iter.next().unwrap(), a:iter.next().unwrap()}
+        RGBA {
+            r: iter.next().unwrap(),
+            g: iter.next().unwrap(),
+            b: iter.next().unwrap(),
+            a: iter.next().unwrap(),
+        }
     }
 }
 
-impl<T: fmt::Display, A: fmt::Display> fmt::Display for RGBA<T,A> {
+impl<T: fmt::Display, A: fmt::Display> fmt::Display for RGBA<T, A> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f,"rgba({},{},{},{})", self.r,self.g,self.b,self.a)
+        write!(f, "rgba({},{},{},{})", self.r, self.g, self.b, self.a)
     }
 }
 

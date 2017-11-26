@@ -1,14 +1,14 @@
 use std;
 use std::fmt;
 use super::pixel::*;
-use ::RGB;
-use ::RGBA;
+use RGB;
+use RGBA;
 
 impl<T: Clone> RGB<T> {
     /// Convenience function for creating a new pixel
     #[inline(always)]
     pub fn new(r: T, g: T, b: T) -> Self {
-        RGB{r:r,g:g,b:b}
+        RGB {r,g,b}
     }
 
     /// Iterate over color components (R, G, and B)
@@ -21,21 +21,21 @@ impl<T: Clone> RGB<T> {
     #[inline(always)]
     pub fn alpha(&self, a: T) -> RGBA<T> {
         RGBA {
-            r:self.r.clone(),
-            g:self.g.clone(),
-            b:self.b.clone(),
-            a:a,
+            r: self.r.clone(),
+            g: self.g.clone(),
+            b: self.b.clone(),
+            a,
         }
     }
 
     // Convenience function for converting to RGBA with alpha channel of a different type than type of the pixels
     #[inline(always)]
-    pub fn new_alpha<A>(&self, a: A) -> RGBA<T,A> {
+    pub fn new_alpha<A>(&self, a: A) -> RGBA<T, A> {
         RGBA {
-            r:self.r.clone(),
-            g:self.g.clone(),
-            b:self.b.clone(),
-            a:a,
+            r: self.r.clone(),
+            g: self.g.clone(),
+            b: self.b.clone(),
+            a,
         }
     }
 }
@@ -92,7 +92,11 @@ impl<T> std::iter::FromIterator<T> for RGB<T> {
     #[inline(always)]
     fn from_iter<I: IntoIterator<Item = T>>(into_iter: I) -> Self {
         let mut iter = into_iter.into_iter();
-        RGB{r:iter.next().unwrap(), g:iter.next().unwrap(), b:iter.next().unwrap()}
+        RGB {
+            r: iter.next().unwrap(),
+            g: iter.next().unwrap(),
+            b: iter.next().unwrap(),
+        }
     }
 }
 
