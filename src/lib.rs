@@ -34,6 +34,11 @@ mod internal {
     pub mod convert;
 }
 
+/// BGR/BGRA alernative layouts
+///
+/// Might be seful for some Windows or OpenGL APIs
+pub mod alt;
+
 pub use internal::rgb::*;
 pub use internal::rgba::*;
 pub use internal::pixel::*;
