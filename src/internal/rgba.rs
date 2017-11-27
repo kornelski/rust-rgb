@@ -14,7 +14,7 @@ impl<T: Clone> RGBA<T> {
 }
 
 macro_rules! impl_rgba {
-    ($RGBA:ident, $RGB:ident) => {
+    ($RGBA:ident, $RGB:ident, $BGRA:ident) => {
         impl<T: Clone> $RGBA<T> {
             /// Iterate over all components (length=4)
             #[inline(always)]
@@ -109,6 +109,18 @@ macro_rules! impl_rgba {
                 }
             }
         }
+
+        /// Assumes 255 is opaque
+        impl<T: Copy> From<$RGB<T>> for $BGRA<T, u8> {
+            fn from(other: $RGB<T>) -> Self {
+                Self {
+                    r: other.r,
+                    g: other.g,
+                    b: other.b,
+                    a: 255,
+                }
+            }
+        }
     }
 }
 
@@ -127,8 +139,8 @@ impl<T> std::iter::FromIterator<T> for RGBA<T> {
     }
 }
 
-impl_rgba! {RGBA, RGB}
-impl_rgba! {BGRA, BGR}
+impl_rgba! {RGBA, RGB, BGRA}
+impl_rgba! {BGRA, BGR, RGBA}
 
 impl<T: fmt::Display, A: fmt::Display> fmt::Display for RGBA<T, A> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
