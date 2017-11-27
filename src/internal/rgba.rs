@@ -97,6 +97,18 @@ macro_rules! impl_rgba {
         }
 
         impl<T: Copy + Send + Sync + 'static> ComponentBytes<T> for [$RGBA<T>] {}
+
+        /// Assumes 255 is opaque
+        impl<T: Copy> From<$RGB<T>> for $RGBA<T, u8> {
+            fn from(other: $RGB<T>) -> Self {
+                Self {
+                    r: other.r,
+                    g: other.g,
+                    b: other.b,
+                    a: 255,
+                }
+            }
+        }
     }
 }
 
