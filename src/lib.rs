@@ -22,6 +22,7 @@
 //! let doubled = half_bright * 2;
 //! # let _ = doubled;
 //! ```
+#![doc(html_logo_url = "https://kornel.ski/rgb-logo.png")]
 
 #[cfg(feature = "serde")]
 #[macro_use] extern crate serde;
@@ -48,7 +49,9 @@ pub use internal::convert::*;
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// This is it. The component type can be `u8` (aliased as `RGB8`), `u16` (aliased as `RGB16`),
+/// The RGB pixel
+///
+/// The component type can be `u8` (aliased as `RGB8`), `u16` (aliased as `RGB16`),
 /// or any other type (but simple copyable types are recommended.)
 pub struct RGB<ComponentType> {
     /// Red
@@ -62,11 +65,13 @@ pub struct RGB<ComponentType> {
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// This is it. The component type can be `u8` (aliased as `RGBA8`), `u16` (aliased as `RGBA16`),
+/// The RGBA pixel
+///
+/// The component type can be `u8` (aliased as `RGBA8`), `u16` (aliased as `RGBA16`),
 /// or any other type (but simple copyable types are recommended.)
 ///
 /// You can specify a different type for alpha, but it's only for special cases
-/// (e.g. if you use a newtype like RGBA<LinearLight<u16>, u16>).
+/// (e.g. if you use a newtype like `RGBA<LinearLight<u16>, u16>`).
 pub struct RGBA<ComponentType, AlphaComponentType = ComponentType> {
     /// Red
     pub r: ComponentType,
@@ -78,17 +83,25 @@ pub struct RGBA<ComponentType, AlphaComponentType = ComponentType> {
     pub a: AlphaComponentType,
 }
 
-/// 8-bit RGB. The colorspace is techincally undefined, but generally sRGB is assumed.
+/// 8-bit RGB
+///
+/// The colorspace is techincally undefined, but generally sRGB is assumed.
 pub type RGB8 = RGB<u8>;
 
-/// 16-bit RGB in machine's native endian. Be careful to perform byte-swapping when reading from files.
+/// 16-bit RGB in machine's native endian
+///
+/// Be careful to perform byte-swapping when reading from files.
 pub type RGB16 = RGB<u16>;
 
-/// Alpha is last. The crate doesn't impose which value represents transparency,
+/// 8-bit RGBA, alpha is last
+///
+/// The crate doesn't impose which value represents transparency,
 /// but usually it's 0 = transparent, 255 = opaque.
 pub type RGBA8 = RGBA<u8>;
 
-/// 16-bit RGB in machine's native endian. Alpha is last.
+/// 16-bit RGB in machine's native endian
+///
+/// Alpha is last.
 pub type RGBA16 = RGBA<u16>;
 
 #[test]
