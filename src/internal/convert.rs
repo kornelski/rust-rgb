@@ -1,7 +1,7 @@
-use std::convert::*;
+use core::convert::*;
 use super::pixel::*;
-use std::slice;
-use std::mem;
+use core::slice;
+use core::mem;
 use RGB;
 use RGBA;
 use alt::BGR;
