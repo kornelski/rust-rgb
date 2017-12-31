@@ -1,5 +1,5 @@
-use std;
-use std::fmt;
+use core;
+use core::fmt;
 use super::pixel::*;
 use RGB;
 use RGBA;
@@ -18,7 +18,7 @@ macro_rules! impl_rgba {
         impl<T: Clone> $RGBA<T> {
             /// Iterate over all components (length=4)
             #[inline(always)]
-            pub fn iter(&self) -> std::iter::Cloned<std::slice::Iter<T>> {
+            pub fn iter(&self) -> core::iter::Cloned<core::slice::Iter<T>> {
                 self.as_slice().iter().cloned()
             }
         }
@@ -36,7 +36,7 @@ macro_rules! impl_rgba {
             #[inline(always)]
             pub fn rgb_mut(&mut self) -> &mut $RGB<T> {
                 unsafe {
-                    std::mem::transmute(self)
+                    core::mem::transmute(self)
                 }
             }
         }
@@ -69,14 +69,14 @@ macro_rules! impl_rgba {
             #[inline(always)]
             fn as_slice(&self) -> &[T] {
                 unsafe {
-                    std::slice::from_raw_parts(self as *const Self as *const T, 4)
+                    core::slice::from_raw_parts(self as *const Self as *const T, 4)
                 }
             }
 
             #[inline(always)]
             fn as_mut_slice(&mut self) -> &mut [T] {
                 unsafe {
-                    std::slice::from_raw_parts_mut(self as *mut Self as *mut T, 4)
+                    core::slice::from_raw_parts_mut(self as *mut Self as *mut T, 4)
                 }
             }
         }
@@ -85,13 +85,13 @@ macro_rules! impl_rgba {
             #[inline]
             fn as_slice(&self) -> &[T] {
                 unsafe {
-                    std::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 4)
+                    core::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 4)
                 }
             }
             #[inline]
             fn as_mut_slice(&mut self) -> &mut [T] {
                 unsafe {
-                    std::slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * 4)
+                    core::slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * 4)
                 }
             }
         }
@@ -124,7 +124,7 @@ macro_rules! impl_rgba {
     }
 }
 
-impl<T> std::iter::FromIterator<T> for RGBA<T> {
+impl<T> core::iter::FromIterator<T> for RGBA<T> {
     #[inline(always)]
     /// Takes exactly 4 elements from the iterator and creates a new instance.
     /// Panics if there are fewer elements in the iterator.

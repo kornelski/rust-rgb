@@ -1,5 +1,5 @@
-use std;
-use std::fmt;
+use core;
+use core::fmt;
 use super::pixel::*;
 use RGB;
 use RGBA;
@@ -17,7 +17,7 @@ macro_rules! impl_rgb {
 
             /// Iterate over color components (R, G, and B)
             #[inline(always)]
-            pub fn iter(&self) -> std::iter::Cloned<std::slice::Iter<T>> {
+            pub fn iter(&self) -> core::iter::Cloned<core::slice::Iter<T>> {
                 self.as_slice().iter().cloned()
             }
 
@@ -60,14 +60,14 @@ macro_rules! impl_rgb {
             #[inline(always)]
             fn as_slice(&self) -> &[T] {
                 unsafe {
-                    std::slice::from_raw_parts(self as *const Self as *const T, 3)
+                    core::slice::from_raw_parts(self as *const Self as *const T, 3)
                 }
             }
 
             #[inline(always)]
             fn as_mut_slice(&mut self) -> &mut [T] {
                 unsafe {
-                    std::slice::from_raw_parts_mut(self as *mut Self as *mut T, 3)
+                    core::slice::from_raw_parts_mut(self as *mut Self as *mut T, 3)
                 }
             }
         }
@@ -76,14 +76,14 @@ macro_rules! impl_rgb {
             #[inline]
             fn as_slice(&self) -> &[T] {
                 unsafe {
-                    std::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 3)
+                    core::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 3)
                 }
             }
 
             #[inline]
             fn as_mut_slice(&mut self) -> &mut [T] {
                 unsafe {
-                    std::slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * 3)
+                    core::slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * 3)
                 }
             }
         }
@@ -92,7 +92,7 @@ macro_rules! impl_rgb {
     }
 }
 
-impl<T> std::iter::FromIterator<T> for RGB<T> {
+impl<T> core::iter::FromIterator<T> for RGB<T> {
     /// Takes exactly 3 elements from the iterator and creates a new instance.
     /// Panics if there are fewer elements in the iterator.
     #[inline(always)]
@@ -121,29 +121,34 @@ impl<T: fmt::Display> fmt::Display for BGR<T> {
     }
 }
 
-#[test]
-fn rgb_test() {
-    let neg = RGB::new(1,2,3i32).map(|x| -x);
-    assert_eq!(neg.r, -1);
-    assert_eq!(neg.g, -2);
-    assert_eq!(neg.b, -3);
+#[cfg(test)]
+mod rgb_test {
+    use super::*;
+    use std;
+    #[test]
+    fn sanity_check() {
+        let neg = RGB::new(1,2,3i32).map(|x| -x);
+        assert_eq!(neg.r, -1);
+        assert_eq!(neg.g, -2);
+        assert_eq!(neg.b, -3);
 
-    let mut px = RGB::new(3,4,5);
-    px.as_mut_slice()[1] = 111;
-    assert_eq!(111, px.g);
+        let mut px = RGB::new(3,4,5);
+        px.as_mut_slice()[1] = 111;
+        assert_eq!(111, px.g);
 
-    assert_eq!(RGBA::new(250,251,252,253), RGB::new(250,251,252).alpha(253));
+        assert_eq!(RGBA::new(250,251,252,253), RGB::new(250,251,252).alpha(253));
 
-    assert_eq!(RGB{r:1u8,g:2,b:3}, RGB::new(1u8,2,3));
-    assert!(RGB{r:1u8,g:1,b:2} < RGB::new(2,1,1));
+        assert_eq!(RGB{r:1u8,g:2,b:3}, RGB::new(1u8,2,3));
+        assert!(RGB{r:1u8,g:1,b:2} < RGB::new(2,1,1));
 
-    let mut h = std::collections::HashSet::new();
-    h.insert(px);
-    assert!(h.contains(&RGB::new(3,111,5)));
-    assert!(!h.contains(&RGB::new(111,5,3)));
+        let mut h = std::collections::HashSet::new();
+        h.insert(px);
+        assert!(h.contains(&RGB::new(3,111,5)));
+        assert!(!h.contains(&RGB::new(111,5,3)));
 
-    let v = vec![RGB::new(1u8,2,3), RGB::new(4,5,6)];
-    assert_eq!(&[1,2,3,4,5,6], v.as_bytes());
+        let v = vec![RGB::new(1u8,2,3), RGB::new(4,5,6)];
+        assert_eq!(&[1,2,3,4,5,6], v.as_bytes());
 
-    assert_eq!(RGB::new(0u8,0,0), Default::default());
+        assert_eq!(RGB::new(0u8,0,0), Default::default());
+    }
 }
