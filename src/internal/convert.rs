@@ -187,6 +187,56 @@ impl<T> From<BGRA<T>> for RGBA<T> {
     }
 }
 
+impl<T> AsRef<T> for Gray<T> {
+    fn as_ref(&self) -> &T {
+        &self.0
+    }
+}
+
+impl<T> AsRef<[T]> for RGB<T> {
+    fn as_ref(&self) -> &[T] {
+        self.as_slice()
+    }
+}
+
+impl<T> AsRef<[T]> for RGBA<T> {
+    fn as_ref(&self) -> &[T] {
+        self.as_slice()
+    }
+}
+
+impl<T> AsRef<T> for GrayAlpha<T> {
+    fn as_ref(&self) -> &T {
+        &self.0
+    }
+}
+
+
+impl<T> AsMut<T> for Gray<T> {
+    fn as_mut(&mut self) -> &mut T {
+        &mut self.0
+    }
+}
+
+impl<T> AsMut<[T]> for RGB<T> {
+    fn as_mut(&mut self) -> &mut [T] {
+        self.as_mut_slice()
+    }
+}
+
+impl<T> AsMut<[T]> for RGBA<T> {
+    fn as_mut(&mut self) -> &mut [T] {
+        self.as_mut_slice()
+    }
+}
+
+impl<T> AsMut<T> for GrayAlpha<T> {
+    fn as_mut(&mut self) -> &mut T {
+        &mut self.0
+    }
+}
+
+
 #[test]
 fn converts() {
     assert_eq!(RGBA::new(1u8,2,3,255), RGB::new(1u8,2,3).into());
@@ -196,5 +246,13 @@ fn converts() {
     assert_eq!(BGR {r:1u8,g:2,b:3u8}, RGB {r:1u8,g:2,b:3u8}.into());
     assert_eq!(RGB {r:1u16,g:0x5678,b:0xABCDu16}, BGR {r:1u16,g:0x5678,b:0xABCDu16}.into());
     assert_eq!(BGR {r:0x1234567u32,g:2,b:3u32}, RGB {r:0x1234567u32,g:2,b:3u32}.into());
+
+    assert_eq!(&[1u8,2,3,4], RGBA {r:1u8,g:2,b:3,a:4u8}.as_slice());
+    assert_eq!(&[1u8,2,3,4], RGBA {r:1u8,g:2,b:3,a:4u8}.as_ref());
+    assert_eq!(&[1u8,2,3], RGB {r:1u8,g:2,b:3}.as_slice());
+    assert_eq!(&[1u8,2,3], RGB {r:1u8,g:2,b:3}.as_ref());
+
+    assert_eq!(&[1u8,2,3], RGB {r:1u8,g:2,b:3}.as_mut_slice());
+    assert_eq!(&[1u8,2,3], RGB {r:1u8,g:2,b:3}.as_mut());
 }
 
