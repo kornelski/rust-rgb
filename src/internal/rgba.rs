@@ -105,7 +105,7 @@ macro_rules! impl_rgba {
                     r: other.r,
                     g: other.g,
                     b: other.b,
-                    a: 255,
+                    a: 0xFF,
                 }
             }
         }
@@ -117,7 +117,31 @@ macro_rules! impl_rgba {
                     r: other.r,
                     g: other.g,
                     b: other.b,
-                    a: 255,
+                    a: 0xFF,
+                }
+            }
+        }
+
+        /// Assumes 65535 is opaque
+        impl<T: Copy> From<$RGB<T>> for $RGBA<T, u16> {
+            fn from(other: $RGB<T>) -> Self {
+                Self {
+                    r: other.r,
+                    g: other.g,
+                    b: other.b,
+                    a: 0xFFFF,
+                }
+            }
+        }
+
+        /// Assumes 255 is opaque
+        impl<T: Copy> From<$RGB<T>> for $BGRA<T, u16> {
+            fn from(other: $RGB<T>) -> Self {
+                Self {
+                    r: other.r,
+                    g: other.g,
+                    b: other.b,
+                    a: 0xFFFF,
                 }
             }
         }

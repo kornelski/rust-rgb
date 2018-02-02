@@ -99,13 +99,10 @@ pub type RGB8 = RGB<u8>;
 /// Be careful to perform byte-swapping when reading from files.
 pub type RGB16 = RGB<u16>;
 
-/// 8-bit RGBA, alpha is last
-///
-/// The crate doesn't impose which value represents transparency,
-/// but usually it's 0 = transparent, 255 = opaque.
+/// 8-bit RGBA, alpha is last. 0 = transparent, 255 = opaque.
 pub type RGBA8 = RGBA<u8>;
 
-/// 16-bit RGB in machine's native endian
+/// 16-bit RGB in machine's native endian. 0 = transparent, 65535 = opaque.
 ///
 /// Alpha is last.
 pub type RGBA16 = RGBA<u16>;
