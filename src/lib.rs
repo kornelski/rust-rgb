@@ -39,6 +39,7 @@ mod internal {
     pub mod pixel;
     pub mod ops;
     pub mod convert;
+    pub mod tuple;
 }
 
 /// BGR/BGRA alernative layouts & grayscale
