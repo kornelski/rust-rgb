@@ -9,6 +9,8 @@ use alt::BGRA;
 use alt::Gray;
 use alt::GrayAlpha;
 
+mod tuple;
+
 /// Cast a slice of component values (bytes) as a slice of RGB/RGBA pixels
 ///
 /// If there's any incomplete pixel at the end of the slice it is ignored.
