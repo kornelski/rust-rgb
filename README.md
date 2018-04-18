@@ -36,7 +36,7 @@ assert_eq!(RGB8::new(0, 255, 0), inverted);
 
 ### Byte slices to pixel slices
 
-For interoperability with functions operating on generic arrays of bytes there are functinos for safe casting to and from pixel slices.
+For interoperability with functions operating on generic arrays of bytes there are functions for safe casting to and from pixel slices.
 
 ```rust
 let raw = vec![0u8; width*height*3];
