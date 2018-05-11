@@ -6,9 +6,16 @@ use RGBA;
 use alt::BGR;
 use alt::BGRA;
 
-impl<T: Clone> RGBA<T> {
+impl<T> RGBA<T> {
     #[inline(always)]
     pub fn new(r: T, g: T, b: T, a: T) -> Self {
+        Self {r,g,b,a}
+    }
+}
+
+impl<T, A> RGBA<T,A> {
+    #[inline(always)]
+    pub fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
         Self {r,g,b,a}
     }
 }
