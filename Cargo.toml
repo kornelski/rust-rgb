@@ -6,6 +6,7 @@ include = ["src/**/*", "Cargo.toml", "README.md", "examples/*.rs"]
 description = "`struct RGB` (etc.) for sharing pixels between crates.\nAllows no-copy high-level interoperability. Also adds common convenience methods and implements standard Rust traits to make RGB/RGBA pixels first-class Rust objects."
 documentation = "https://kornelski.github.io/rust-rgb/rgb/"
 repository = "https://github.com/kornelski/rust-rgb"
+homepage = "https://crates.rs/crates/rgb"
 readme = "README.md"
 keywords = ["rgb", "rgba", "bgra", "pixel", "interoperability"]
 license = "MIT"
