@@ -63,10 +63,10 @@ pub type GRAY8 = Gray<u8>;
 /// 16-bit gray in machine's native endian
 pub type GRAY16 = Gray<u16>;
 
-pub type GRAYA8 = Gray<u8>;
+pub type GRAYA8 = GrayAlpha<u8>;
 
 /// 16-bit gray in machine's native endian
-pub type GRAYA16 = Gray<u16>;
+pub type GRAYA16 = GrayAlpha<u16>;
 
 impl<T> ops::Deref for Gray<T> {
     type Target = T;
@@ -82,12 +82,22 @@ fn gray() {
     assert_eq!(rgb.g, 1);
     assert_eq!(rgb.b, 1);
 
-    assert_eq!(110, *Gray(100) + 10);
+    let g: GRAY8 = Gray(100);
+    assert_eq!(110, *g + 10);
     assert_eq!(110, 10 + Gray(100).as_ref());
 
-    let rgba: ::RGBA<_> = GrayAlpha(1,2).into();
+    let ga: GRAYA8 = GrayAlpha(1,2);
+    let rgba: ::RGBA<_> = ga.into();
+    assert_eq!(rgba.r, 1);
+    assert_eq!(rgba.g, 1);
+    assert_eq!(rgba.b, 1);
+    assert_eq!(rgba.a, 2);
+
+    let ga: GRAYA16 = GrayAlpha(1,2);
+    let rgba: ::RGBA<u16, u16> = ga.into();
     assert_eq!(rgba.r, 1);
     assert_eq!(rgba.g, 1);
     assert_eq!(rgba.b, 1);
     assert_eq!(rgba.a, 2);
 }
+
