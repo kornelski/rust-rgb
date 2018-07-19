@@ -9,6 +9,7 @@ use alt::BGRA;
 use alt::Gray;
 use alt::GrayAlpha;
 
+mod array;
 mod tuple;
 
 /// Cast a slice of component values (bytes) as a slice of RGB/RGBA pixels
