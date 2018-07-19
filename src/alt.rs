@@ -1,4 +1,7 @@
 use core::ops;
+use core::mem;
+use core::slice;
+use internal::pixel::*;
 
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -75,6 +78,130 @@ impl<T> ops::Deref for Gray<T> {
     }
 }
 
+impl<T: Copy> From<T> for Gray<T> {
+    fn from(component: T) -> Self {
+        Gray(component)
+    }
+}
+
+
+impl<T: Clone, A> GrayAlpha<T, A> {
+    /// Copy `Gray` component out of the `GrayAlpha` struct
+    #[inline(always)]
+    pub fn gray(&self) -> Gray<T> {
+        Gray(self.0.clone())
+    }
+}
+
+impl<T, A> GrayAlpha<T, A> {
+    /// Provide a mutable view of only `Gray` component (leaving out alpha).
+    #[inline(always)]
+    pub fn gray_mut(&mut self) -> &mut Gray<T> {
+        unsafe {
+            mem::transmute(self)
+        }
+    }
+}
+
+impl<T: Copy, A: Clone> GrayAlpha<T, A> {
+    /// Create new `GrayAlpha` with the same alpha value, but different `Gray` value
+    #[inline(always)]
+    pub fn map_gray<F, U, B>(&self, f: F) -> GrayAlpha<U, B>
+        where F: FnOnce(T) -> U, U: Clone, B: From<A> + Clone {
+        GrayAlpha(f(self.0.clone()), self.1.clone().into())
+    }
+}
+
+impl<T: Copy, B> ComponentMap<GrayAlpha<B>, T, B> for GrayAlpha<T> {
+    #[inline(always)]
+    fn map<F>(&self, mut f: F) -> GrayAlpha<B>
+    where
+        F: FnMut(T) -> B,
+    {
+        GrayAlpha(f(self.0), f(self.1))
+    }
+}
+
+impl<T> ComponentSlice<T> for GrayAlpha<T> {
+    #[inline(always)]
+    fn as_slice(&self) -> &[T] {
+        unsafe {
+            slice::from_raw_parts(self as *const Self as *const T, 2)
+        }
+    }
+
+    #[inline(always)]
+    fn as_mut_slice(&mut self) -> &mut [T] {
+        unsafe {
+            slice::from_raw_parts_mut(self as *mut Self as *mut T, 2)
+        }
+    }
+}
+
+impl<T> ComponentSlice<T> for [GrayAlpha<T>] {
+    #[inline]
+    fn as_slice(&self) -> &[T] {
+        unsafe {
+            slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 2)
+        }
+    }
+    #[inline]
+    fn as_mut_slice(&mut self) -> &mut [T] {
+        unsafe {
+            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * 2)
+        }
+    }
+}
+
+impl<T: Copy + Send + Sync + 'static> ComponentBytes<T> for [GrayAlpha<T>] {}
+
+impl<T> ComponentSlice<T> for Gray<T> {
+    #[inline(always)]
+    fn as_slice(&self) -> &[T] {
+        unsafe {
+            slice::from_raw_parts(self as *const Self as *const T, 1)
+        }
+    }
+
+    #[inline(always)]
+    fn as_mut_slice(&mut self) -> &mut [T] {
+        unsafe {
+            slice::from_raw_parts_mut(self as *mut Self as *mut T, 1)
+        }
+    }
+}
+
+impl<T> ComponentSlice<T> for [Gray<T>] {
+    #[inline]
+    fn as_slice(&self) -> &[T] {
+        unsafe {
+            slice::from_raw_parts(self.as_ptr() as *const _, self.len())
+        }
+    }
+    #[inline]
+    fn as_mut_slice(&mut self) -> &mut [T] {
+        unsafe {
+            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len())
+        }
+    }
+}
+
+impl<T: Copy + Send + Sync + 'static> ComponentBytes<T> for [Gray<T>] {}
+
+/// Assumes 255 is opaque
+impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u8> {
+    fn from(other: Gray<T>) -> Self {
+        GrayAlpha(other.0, 0xFF)
+    }
+}
+
+/// Assumes 65535 is opaque
+impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u16> {
+    fn from(other: Gray<T>) -> Self {
+        GrayAlpha(other.0, 0xFFFF)
+    }
+}
+
 #[test]
 fn gray() {
     let rgb: ::RGB<_> = Gray(1).into();
@@ -82,11 +209,23 @@ fn gray() {
     assert_eq!(rgb.g, 1);
     assert_eq!(rgb.b, 1);
 
-    let g: GRAY8 = Gray(100);
+    let g: GRAY8 = 100.into();
     assert_eq!(110, *g + 10);
     assert_eq!(110, 10 + Gray(100).as_ref());
 
-    let ga: GRAYA8 = GrayAlpha(1,2);
+    let ga: GRAYA8 = GrayAlpha(1, 2);
+    assert_eq!(ga.gray(), Gray(1));
+    let mut g2 = ga.clone();
+    *g2.gray_mut() = Gray(3);
+    assert_eq!(g2.map_gray(|g| g+1), GrayAlpha(4, 2));
+    assert_eq!(g2.map(|g| g+1), GrayAlpha(4, 3));
+    assert_eq!(g2.0, 3);
+    assert_eq!(g2.as_slice(), &[3, 2]);
+    assert_eq!(g2.as_mut_slice(), &[3, 2]);
+
+    assert_eq!((&[Gray(1u16), Gray(2)][..]).as_slice(), &[1, 2]);
+    assert_eq!((&[GrayAlpha(1u16, 2), GrayAlpha(3, 4)][..]).as_slice(), &[1, 2, 3, 4]);
+
     let rgba: ::RGBA<_> = ga.into();
     assert_eq!(rgba.r, 1);
     assert_eq!(rgba.g, 1);
