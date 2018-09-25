@@ -80,12 +80,12 @@ fn convert_array() {
     use alt::{BGR8, BGRA8};
     use {RGB8, RGBA8};
 
-    assert!(RGB8::from([1, 2, 3]) == RGB8::new(1, 2, 3));
-    assert!(Into::<[u8; 3]>::into(RGB8::new(1, 2, 3)) == [1, 2, 3]);
-    assert!(RGBA8::from([1, 2, 3, 4]) == RGBA8::new(1, 2, 3, 4));
-    assert!(Into::<[u8; 4]>::into(RGBA8::new(1, 2, 3, 4)) == [1, 2, 3, 4]);
-    assert!(BGR8::from([3, 2, 1]) == BGR8::new(1, 2, 3));
-    assert!(Into::<[u8; 3]>::into(BGR8::new(1, 2, 3)) == [3, 2, 1]);
-    assert!(BGRA8::from([3, 2, 1, 4]) == BGRA8 { r: 1, g: 2, b: 3, a: 4 });
-    assert!(Into::<[u8; 4]>::into(BGRA8 { r: 1, g: 2, b: 3, a: 4 }) == [3, 2, 1, 4]);
+    assert_eq!(RGB8::from([1, 2, 3]), RGB8::new(1, 2, 3));
+    assert_eq!(Into::<[u8; 3]>::into(RGB8::new(1, 2, 3)), [1, 2, 3]);
+    assert_eq!(RGBA8::from([1, 2, 3, 4]), RGBA8::new(1, 2, 3, 4));
+    assert_eq!(Into::<[u8; 4]>::into(RGBA8::new(1, 2, 3, 4)), [1, 2, 3, 4]);
+    assert_eq!(BGR8::from([3, 2, 1]), BGR8::new(1, 2, 3));
+    assert_eq!(Into::<[u8; 3]>::into(BGR8::new(1, 2, 3)), [3, 2, 1]);
+    assert_eq!(BGRA8::from([3, 2, 1, 4]), BGRA8::new(1, 2, 3, 4));
+    assert_eq!(Into::<[u8; 4]>::into(BGRA8::new(1, 2, 3, 4)), [3, 2, 1, 4]);
 }

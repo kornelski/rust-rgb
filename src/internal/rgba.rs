@@ -6,22 +6,22 @@ use RGBA;
 use alt::BGR;
 use alt::BGRA;
 
-impl<T> RGBA<T> {
-    #[inline(always)]
-    pub fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self {r,g,b,a}
-    }
-}
-
-impl<T, A> RGBA<T,A> {
-    #[inline(always)]
-    pub fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-        Self {r,g,b,a}
-    }
-}
-
 macro_rules! impl_rgba {
     ($RGBA:ident, $RGB:ident, $BGRA:ident) => {
+        impl<T> $RGBA<T> {
+            #[inline(always)]
+            pub fn new(r: T, g: T, b: T, a: T) -> Self {
+                Self {r,g,b,a}
+            }
+        }
+
+        impl<T, A> $RGBA<T,A> {
+            #[inline(always)]
+            pub fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
+                Self {r,g,b,a}
+            }
+        }
+
         impl<T: Clone> $RGBA<T> {
             /// Iterate over all components (length=4)
             #[inline(always)]
@@ -216,7 +216,7 @@ fn rgba_test() {
 
 #[test]
 fn bgra_test() {
-    let neg = BGRA{r:1,g:2,b:3i32,a:1000}.map(|x| -x);
+    let neg = BGRA::new(1, 2, 3i32, 1000).map(|x| -x);
     assert_eq!(neg.r, -1);
     assert_eq!(neg.rgb().r, -1);
     assert_eq!(neg.g, -2);
@@ -225,9 +225,9 @@ fn bgra_test() {
     assert_eq!(neg.rgb().b, -3);
     assert_eq!(neg.a, -1000);
     assert_eq!(&[-3,-2,-1,-1000], neg.as_slice());
-    assert!(neg < BGRA{r:0,g:0,b:0,a:0});
+    assert!(neg < BGRA::new(0, 0, 0, 0));
 
-    let neg = BGRA{r:1u8,g:2u8,b:3u8,a:4u8}.map_rgb(|c| -(c as i16));
+    let neg = BGRA::new(1u8, 2u8, 3u8, 4u8).map_rgb(|c| -(c as i16));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4i16, neg.a);
 
@@ -239,6 +239,6 @@ fn bgra_test() {
     assert_eq!(4, px.rgb_mut().b);
     assert_eq!(100, px.a);
 
-    let v = vec![BGRA{b:1u8,g:2,r:3,a:4}, BGRA{b:5,g:6,r:7,a:8}];
+    let v = vec![BGRA::new(3u8, 2, 1, 4), BGRA::new(7, 6, 5, 8)];
     assert_eq!(&[1,2,3,4,5,6,7,8], v.as_bytes());
 }
