@@ -166,10 +166,13 @@ fn bytes() {
     let rgb_bytes = rgb_arr.as_bytes();
     assert_eq!(&[1,2,3], rgb_bytes);
     assert_eq!(rgb_bytes.as_rgba().len(), 0);
+    assert_eq!({let t: &[RGBA8] = rgb_bytes.as_pixels(); t}.len(), 0);
     assert_eq!(rgb, rgb_bytes.into_iter().cloned().collect());
     assert_eq!(&[rgb], rgb_bytes.as_rgb());
+    assert_eq!(&[rgb], rgb_bytes.as_pixels());
     let mut rgb2 = [rgb];
     assert_eq!(rgb2.as_mut_slice().as_rgb_mut(), &mut [rgb]);
+    assert_eq!(&mut [rgb], rgb2.as_mut_slice().as_pixels_mut());
 
     let rgba = RGBA8::new(1,2,3,4);
     let mut rgba_arr = [rgba];

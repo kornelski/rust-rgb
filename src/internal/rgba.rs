@@ -10,6 +10,8 @@ macro_rules! impl_rgba {
     ($RGBA:ident, $RGB:ident, $BGRA:ident) => {
         impl<T> $RGBA<T> {
             #[inline(always)]
+            /// Convenience function for creating a new pixel
+            /// The order of arguments is R,G,B,A
             pub fn new(r: T, g: T, b: T, a: T) -> Self {
                 Self {r,g,b,a}
             }
@@ -17,6 +19,8 @@ macro_rules! impl_rgba {
 
         impl<T, A> $RGBA<T,A> {
             #[inline(always)]
+            /// Convenience function for creating a new pixel
+            /// The order of arguments is R,G,B,A
             pub fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
                 Self {r,g,b,a}
             }
@@ -32,6 +36,8 @@ macro_rules! impl_rgba {
 
         impl<T: Clone, A> $RGBA<T, A> {
             /// Copy RGB components out of the RGBA struct
+            ///
+            /// Note: you can use `.into()` to convert between other types
             #[inline(always)]
             pub fn rgb(&self) -> $RGB<T> {
                 $RGB {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
@@ -39,7 +45,8 @@ macro_rules! impl_rgba {
         }
 
         impl<T, A> $RGBA<T, A> {
-            /// Provide a mutable view of only RGB components (leaving out alpha). Useful to change color without changing opacity.
+            /// Provide a mutable view of only RGB components (leaving out alpha).
+            /// Useful to change color without changing opacity.
             #[inline(always)]
             pub fn rgb_mut(&mut self) -> &mut $RGB<T> {
                 unsafe {

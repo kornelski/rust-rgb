@@ -12,6 +12,54 @@ use alt::GrayAlpha;
 mod array;
 mod tuple;
 
+/// Casts a slice of bytes into a slice of pixels, e.g. `[u8]` to `[RGB8]`.
+///
+/// See also `FromSlice`
+pub trait AsPixels<PixelType> {
+    /// Reinterpret the slice as a read-only/shared slice of pixels.
+    /// Multiple consecutive elements in the slice are intepreted as a single pixel
+    /// (depending on format, e.g. 3 for RGB, 4 for RGBA).
+    ///
+    /// Leftover elements are ignored if the slice isn't evenly divisible into pixels.
+    ///
+    /// Use this method only when the type is known from context.
+    /// See also `FromSlice`.
+    fn as_pixels(&self) -> &[PixelType];
+    /// Reinterpret the slice as a mutable/exclusive slice of pixels.
+    /// Multiple consecutive elements in the slice are intepreted as a single pixel
+    /// (depending on format, e.g. 3 for RGB, 4 for RGBA).
+    ///
+    /// Leftover elements are ignored if the slice isn't evenly divisible into pixels.
+    ///
+    /// Use this method only when the type is known from context.
+    /// See also `FromSlice`.
+    fn as_pixels_mut(&mut self) -> &mut [PixelType];
+}
+
+macro_rules! as_pixels_impl {
+    ($typ:ident, $elems:expr) => {
+        impl<T> AsPixels<$typ<T>> for [T] {
+            fn as_pixels(&self) -> &[$typ<T>] {
+                unsafe {
+                    slice::from_raw_parts(self.as_ptr() as *const _, self.len() / $elems)
+                }
+            }
+            fn as_pixels_mut(&mut self) -> &mut [$typ<T>] {
+                unsafe {
+                    slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() / $elems)
+                }
+            }
+        }
+    }
+}
+
+as_pixels_impl!{RGB, 3}
+as_pixels_impl!{RGBA, 4}
+as_pixels_impl!{BGR, 3}
+as_pixels_impl!{BGRA, 3}
+as_pixels_impl!{Gray, 1}
+as_pixels_impl!{GrayAlpha, 2}
+
 /// Cast a slice of component values (bytes) as a slice of RGB/RGBA pixels
 ///
 /// If there's any incomplete pixel at the end of the slice it is ignored.
