@@ -8,13 +8,14 @@ use alt::BGRA;
 
 macro_rules! impl_rgb {
     ($RGB:ident, $RGBA:ident) => {
-        impl<T: Clone> $RGB<T> {
+        impl<T> $RGB<T> {
             /// Convenience function for creating a new pixel
             #[inline(always)]
-            pub fn new(r: T, g: T, b: T) -> Self {
+            pub const fn new(r: T, g: T, b: T) -> Self {
                 Self {r,g,b}
             }
-
+        }
+        impl<T: Clone> $RGB<T> {
             /// Iterate over color components (R, G, and B)
             #[inline(always)]
             pub fn iter(&self) -> core::iter::Cloned<core::slice::Iter<T>> {
