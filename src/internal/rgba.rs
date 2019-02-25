@@ -12,7 +12,7 @@ macro_rules! impl_rgba {
             #[inline(always)]
             /// Convenience function for creating a new pixel
             /// The order of arguments is R,G,B,A
-            pub fn new(r: T, g: T, b: T, a: T) -> Self {
+            pub const fn new(r: T, g: T, b: T, a: T) -> Self {
                 Self {r,g,b,a}
             }
         }
@@ -21,7 +21,7 @@ macro_rules! impl_rgba {
             #[inline(always)]
             /// Convenience function for creating a new pixel
             /// The order of arguments is R,G,B,A
-            pub fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
+            pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
                 Self {r,g,b,a}
             }
         }
