@@ -141,7 +141,7 @@ macro_rules! rgb_impl_from {
 
             #[inline(always)]
             fn from(other: $typename<$from>) -> Self {
-                other.map(|c|c.into())
+                other.map(core::convert::Into::into)
             }
         }
     }
