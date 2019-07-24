@@ -116,9 +116,33 @@ impl<T: fmt::Display> fmt::Display for RGB<T> {
     }
 }
 
+impl<T: fmt::UpperHex> fmt::UpperHex for RGB<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f,"RGB {{ #{:02X}{:02X}{:02X} }}", self.r, self.g, self.b)
+    }
+}
+
+impl<T: fmt::LowerHex> fmt::LowerHex for RGB<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f,"RGB {{ #{:02x}{:02x}{:02x} }}", self.r, self.g, self.b)
+    }
+}
+
 impl<T: fmt::Display> fmt::Display for BGR<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f,"bgr({},{},{})", self.b, self.g, self.r)
+    }
+}
+
+impl<T: fmt::UpperHex> fmt::UpperHex for BGR<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f,"BGR {{ #{:02X}{:02X}{:02X} }}", self.b, self.g, self.r)
+    }
+}
+
+impl<T: fmt::LowerHex> fmt::LowerHex for BGR<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f,"BGR {{ #{:02x}{:02x}{:02x} }}", self.b, self.g, self.r)
     }
 }
 
@@ -151,5 +175,19 @@ mod rgb_test {
         assert_eq!(&[1,2,3,4,5,6], v.as_bytes());
 
         assert_eq!(RGB::new(0u8,0,0), Default::default());
+    }
+
+    #[test]
+    fn test_fmt() {
+        let red_rgb = RGB::new(255, 0, 0);
+        let red_bgr = BGR::new(255, 0, 0);
+        assert_eq!("RGB { #FF0000 }", &format!("{:X}", red_rgb));
+        assert_eq!("BGR { #0000FF }", &format!("{:X}", red_bgr));
+
+        assert_eq!("RGB { #ff0000 }", &format!("{:x}", red_rgb));
+        assert_eq!("BGR { #0000ff }", &format!("{:x}", red_bgr));
+
+        assert_eq!("rgb(255,0,0)", &format!("{}", red_rgb));
+        assert_eq!("bgr(0,0,255)", &format!("{}", red_bgr));
     }
 }
