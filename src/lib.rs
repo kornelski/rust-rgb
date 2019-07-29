@@ -43,7 +43,7 @@ mod internal {
 
 /// BGR/BGRA alernative layouts & grayscale
 ///
-/// BGR might be seful for some Windows or OpenGL APIs.
+/// BGR might be useful for some Windows or OpenGL APIs.
 pub mod alt;
 
 pub use internal::rgb::*;
