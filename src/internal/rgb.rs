@@ -10,6 +10,7 @@ macro_rules! impl_rgb {
     ($RGB:ident, $RGBA:ident) => {
         impl<T> $RGB<T> {
             /// Convenience function for creating a new pixel
+            /// The order of arguments is R,G,B
             #[inline(always)]
             pub const fn new(r: T, g: T, b: T) -> Self {
                 Self {r,g,b}

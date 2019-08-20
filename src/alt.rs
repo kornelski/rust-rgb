@@ -104,6 +104,19 @@ impl<T, A> GrayAlpha<T, A> {
 }
 
 impl<T: Copy, A: Clone> GrayAlpha<T, A> {
+    #[inline(always)]
+    /// Create a new `GrayAlpha` with the new alpha value, but same gray value
+    pub fn alpha(&self, a: A) -> Self {
+        Self (self.0, a)
+    }
+
+    /// Create a new `GrayAlpha` with a new alpha value created by the callback.
+    pub fn map_alpha<F, B>(&self, f: F) -> GrayAlpha<T, B>
+        where F: FnOnce(A) -> B
+    {
+        GrayAlpha (self.0, f(self.1.clone()))
+    }
+
     /// Create new `GrayAlpha` with the same alpha value, but different `Gray` value
     #[inline(always)]
     pub fn map_gray<F, U, B>(&self, f: F) -> GrayAlpha<U, B>
@@ -222,6 +235,8 @@ fn gray() {
     assert_eq!(g2.0, 3);
     assert_eq!(g2.as_slice(), &[3, 2]);
     assert_eq!(g2.as_mut_slice(), &[3, 2]);
+    assert_eq!(g2.alpha(13), GrayAlpha(3, 13));
+    assert_eq!(g2.map_alpha(|x| x+3), GrayAlpha(3, 5));
 
     assert_eq!((&[Gray(1u16), Gray(2)][..]).as_slice(), &[1, 2]);
     assert_eq!((&[GrayAlpha(1u16, 2), GrayAlpha(3, 4)][..]).as_slice(), &[1, 2, 3, 4]);

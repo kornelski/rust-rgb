@@ -59,8 +59,29 @@ macro_rules! impl_rgba {
             /// Create new RGBA with the same alpha value, but different RGB values
             #[inline(always)]
             pub fn map_rgb<F, U, B>(&self, f: F) -> $RGBA<U, B>
-                where F: FnMut(T) -> U, U: Clone, B: From<A> + Clone {
+                where F: FnMut(T) -> U, U: Clone, B: From<A> + Clone
+            {
                 self.rgb().map(f).new_alpha(self.a.clone().into())
+            }
+
+            #[inline(always)]
+            /// Create a new RGBA with the new alpha value, but same RGB values
+            pub fn alpha(&self, a: A) -> Self {
+                Self {
+                    r: self.r, g: self.g, b: self.b, a,
+                }
+            }
+
+            /// Create a new RGBA with a new alpha value created by the callback.
+            /// Allows changing of the type used for the alpha channel.
+            pub fn map_alpha<F, B>(&self, f: F) -> $RGBA<T, B>
+                where F: FnOnce(A) -> B {
+                $RGBA {
+                    r: self.r,
+                    g: self.g,
+                    b: self.b,
+                    a: f(self.a.clone()),
+                }
             }
         }
 
@@ -202,6 +223,7 @@ fn rgba_test() {
     assert_eq!(neg.b, -3);
     assert_eq!(neg.rgb().b, -3);
     assert_eq!(neg.a, -1000);
+    assert_eq!(neg.map_alpha(|x| x+1).a, -999);
     assert_eq!(neg, neg.as_slice().iter().cloned().collect());
     assert!(neg < RGBA::new(0,0,0,0));
 
@@ -238,7 +260,7 @@ fn bgra_test() {
     assert_eq!(-1i16, neg.r);
     assert_eq!(4i16, neg.a);
 
-    let mut px = BGRA{r:1,g:2,b:3,a:4};
+    let mut px = BGRA{r:1,g:2,b:3,a:-9}.alpha(4);
     px.as_mut_slice()[3] = 100;
     assert_eq!(1, px.rgb_mut().r);
     assert_eq!(2, px.rgb_mut().g);
