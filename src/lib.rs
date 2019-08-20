@@ -23,7 +23,6 @@
 //! # let _ = doubled;
 //! ```
 #![doc(html_logo_url = "https://kornel.ski/rgb-logo.png")]
-
 #![no_std]
 
 // std is required to run unit tests
@@ -34,11 +33,11 @@
 #[macro_use] extern crate serde;
 
 mod internal {
+    pub mod convert;
+    pub mod ops;
+    pub mod pixel;
     pub mod rgb;
     pub mod rgba;
-    pub mod pixel;
-    pub mod ops;
-    pub mod convert;
 }
 
 /// BGR/BGRA alernative layouts & grayscale
@@ -46,11 +45,11 @@ mod internal {
 /// BGR might be useful for some Windows or OpenGL APIs.
 pub mod alt;
 
-pub use internal::rgb::*;
-pub use internal::rgba::*;
-pub use internal::pixel::*;
-pub use internal::ops::*;
-pub use internal::convert::*;
+pub use crate::internal::convert::*;
+pub use crate::internal::ops::*;
+pub use crate::internal::pixel::*;
+pub use crate::internal::rgb::*;
+pub use crate::internal::rgba::*;
 
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

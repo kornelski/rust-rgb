@@ -1,7 +1,7 @@
-use core::ops;
+use crate::internal::pixel::*;
 use core::mem;
+use core::ops;
 use core::slice;
-use internal::pixel::*;
 
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -49,7 +49,8 @@ pub type BGRA16 = BGRA<u16>;
 /// Grayscale. Use `.0` or `*` (deref) to access the value.
 pub struct Gray<ComponentType>(
     /// brightness level
-    pub ComponentType);
+    pub ComponentType,
+);
 
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -59,7 +60,8 @@ pub struct GrayAlpha<ComponentType, AlphaComponentType = ComponentType>(
     /// brightness level
     pub ComponentType,
     /// alpha
-    pub AlphaComponentType);
+    pub AlphaComponentType,
+);
 
 pub type GRAY8 = Gray<u8>;
 
@@ -84,7 +86,6 @@ impl<T: Copy> From<T> for Gray<T> {
     }
 }
 
-
 impl<T: Clone, A> GrayAlpha<T, A> {
     /// Copy `Gray` component out of the `GrayAlpha` struct
     #[inline(always)]
@@ -107,7 +108,7 @@ impl<T: Copy, A: Clone> GrayAlpha<T, A> {
     #[inline(always)]
     /// Create a new `GrayAlpha` with the new alpha value, but same gray value
     pub fn alpha(&self, a: A) -> Self {
-        Self (self.0, a)
+        Self(self.0, a)
     }
 
     /// Create a new `GrayAlpha` with a new alpha value created by the callback.
@@ -217,7 +218,7 @@ impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u16> {
 
 #[test]
 fn gray() {
-    let rgb: ::RGB<_> = Gray(1).into();
+    let rgb: crate::RGB<_> = Gray(1).into();
     assert_eq!(rgb.r, 1);
     assert_eq!(rgb.g, 1);
     assert_eq!(rgb.b, 1);
@@ -241,14 +242,14 @@ fn gray() {
     assert_eq!((&[Gray(1u16), Gray(2)][..]).as_slice(), &[1, 2]);
     assert_eq!((&[GrayAlpha(1u16, 2), GrayAlpha(3, 4)][..]).as_slice(), &[1, 2, 3, 4]);
 
-    let rgba: ::RGBA<_> = ga.into();
+    let rgba: crate::RGBA<_> = ga.into();
     assert_eq!(rgba.r, 1);
     assert_eq!(rgba.g, 1);
     assert_eq!(rgba.b, 1);
     assert_eq!(rgba.a, 2);
 
     let ga: GRAYA16 = GrayAlpha(1,2);
-    let rgba: ::RGBA<u16, u16> = ga.into();
+    let rgba: crate::RGBA<u16, u16> = ga.into();
     assert_eq!(rgba.r, 1);
     assert_eq!(rgba.g, 1);
     assert_eq!(rgba.b, 1);

@@ -1,10 +1,10 @@
+use super::pixel::*;
+use crate::alt::BGR;
+use crate::alt::BGRA;
+use crate::RGB;
+use crate::RGBA;
 use core;
 use core::fmt;
-use super::pixel::*;
-use RGB;
-use RGBA;
-use alt::BGR;
-use alt::BGRA;
 
 macro_rules! impl_rgb {
     ($RGB:ident, $RGBA:ident) => {
@@ -13,13 +13,13 @@ macro_rules! impl_rgb {
             /// The order of arguments is R,G,B
             #[inline(always)]
             pub const fn new(r: T, g: T, b: T) -> Self {
-                Self {r,g,b}
+                Self { r, g, b }
             }
         }
         impl<T: Clone> $RGB<T> {
             /// Iterate over color components (R, G, and B)
             #[inline(always)]
-            pub fn iter(&self) -> core::iter::Cloned<core::slice::Iter<T>> {
+            pub fn iter(&self) -> core::iter::Cloned<core::slice::Iter<'_, T>> {
                 self.as_slice().iter().cloned()
             }
 
@@ -112,37 +112,37 @@ impl_rgb!{RGB, RGBA}
 impl_rgb!{BGR, BGRA}
 
 impl<T: fmt::Display> fmt::Display for RGB<T> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f,"rgb({},{},{})", self.r,self.g,self.b)
     }
 }
 
 impl<T: fmt::UpperHex> fmt::UpperHex for RGB<T> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f,"RGB {{ #{:02X}{:02X}{:02X} }}", self.r, self.g, self.b)
     }
 }
 
 impl<T: fmt::LowerHex> fmt::LowerHex for RGB<T> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f,"RGB {{ #{:02x}{:02x}{:02x} }}", self.r, self.g, self.b)
     }
 }
 
 impl<T: fmt::Display> fmt::Display for BGR<T> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f,"bgr({},{},{})", self.b, self.g, self.r)
     }
 }
 
 impl<T: fmt::UpperHex> fmt::UpperHex for BGR<T> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f,"BGR {{ #{:02X}{:02X}{:02X} }}", self.b, self.g, self.r)
     }
 }
 
 impl<T: fmt::LowerHex> fmt::LowerHex for BGR<T> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f,"BGR {{ #{:02x}{:02x}{:02x} }}", self.b, self.g, self.r)
     }
 }

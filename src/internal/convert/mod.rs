@@ -1,13 +1,13 @@
-use core::convert::*;
 use super::pixel::*;
-use core::slice;
+use crate::alt::Gray;
+use crate::alt::GrayAlpha;
+use crate::alt::BGR;
+use crate::alt::BGRA;
+use crate::RGB;
+use crate::RGBA;
+use core::convert::*;
 use core::mem;
-use RGB;
-use RGBA;
-use alt::BGR;
-use alt::BGRA;
-use alt::Gray;
-use alt::GrayAlpha;
+use core::slice;
 
 mod array;
 mod tuple;

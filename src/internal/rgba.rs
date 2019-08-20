@@ -1,10 +1,10 @@
+use super::pixel::*;
+use crate::alt::BGR;
+use crate::alt::BGRA;
+use crate::RGB;
+use crate::RGBA;
 use core;
 use core::fmt;
-use super::pixel::*;
-use RGB;
-use RGBA;
-use alt::BGR;
-use alt::BGRA;
 
 macro_rules! impl_rgba {
     ($RGBA:ident, $RGB:ident, $BGRA:ident) => {
@@ -13,7 +13,7 @@ macro_rules! impl_rgba {
             /// Convenience function for creating a new pixel
             /// The order of arguments is R,G,B,A
             pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-                Self {r,g,b,a}
+                Self { r, g, b, a }
             }
         }
 
@@ -29,7 +29,7 @@ macro_rules! impl_rgba {
         impl<T: Clone> $RGBA<T> {
             /// Iterate over all components (length=4)
             #[inline(always)]
-            pub fn iter(&self) -> core::iter::Cloned<core::slice::Iter<T>> {
+            pub fn iter(&self) -> core::iter::Cloned<core::slice::Iter<'_, T>> {
                 self.as_slice().iter().cloned()
             }
         }
@@ -202,13 +202,13 @@ impl_rgba! {RGBA, RGB, BGRA}
 impl_rgba! {BGRA, BGR, RGBA}
 
 impl<T: fmt::Display, A: fmt::Display> fmt::Display for RGBA<T, A> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "rgba({},{},{},{})", self.r, self.g, self.b, self.a)
     }
 }
 
 impl<T: fmt::Display, A: fmt::Display> fmt::Display for BGRA<T, A> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "bgra({},{},{},{})", self.r, self.g, self.b, self.a)
     }
 }

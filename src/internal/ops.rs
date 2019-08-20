@@ -1,7 +1,7 @@
-use core::ops::*;
 use super::pixel::*;
-use RGB;
-use RGBA;
+use crate::RGB;
+use crate::RGBA;
+use core::ops::*;
 
 /// `px + px`
 impl<T: Add> Add for RGB<T> {
@@ -312,7 +312,7 @@ mod test {
         let mut green_rgba = RGBA::new(0, 255, 0, 0);
         green_rgba += RGBA::new(255, 0, 255, 255);
         assert_eq!(WHITE_RGBA, green_rgba);
-        
+
         let mut black_rgba = RGBA::new(0, 0, 0, 0);
         black_rgba += 255;
         assert_eq!(WHITE_RGBA, black_rgba);
@@ -331,7 +331,7 @@ mod test {
         let mut green_rgba = RGBA::new(0, 255, 0, 0);
         green_rgba -= RGBA::new(0, 255, 0, 0);
         assert_eq!(BLACK_RGBA, green_rgba);
-        
+
         let mut white_rgba = RGBA::new(255, 255, 255, 255);
         white_rgba -= 255;
         assert_eq!(BLACK_RGBA, white_rgba);

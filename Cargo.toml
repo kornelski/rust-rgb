@@ -6,11 +6,12 @@ include = ["src/**/*", "Cargo.toml", "README.md", "examples/*.rs"]
 description = "`struct RGB/RGBA/etc.` for sharing pixels between crates + convenience methods for color manipulation.\nAllows no-copy high-level interoperability. Also adds common convenience methods and implements standard Rust traits to make `RGB`/`RGBA` pixels and slices first-class Rust objects."
 documentation = "https://docs.rs/rgb"
 repository = "https://github.com/kornelski/rust-rgb"
-homepage = "https://crates.rs/crates/rgb"
+homepage = "https://lib.rs/crates/rgb"
 readme = "README.md"
 keywords = ["rgb", "rgba", "bgra", "pixel", "color"]
 license = "MIT"
 categories = ["rust-patterns", "multimedia::images"]
+edition = "2018"
 
 [badges]
 travis-ci = { repository = "kornelski/rust-rgb" }

@@ -1,8 +1,8 @@
+use crate::alt::BGR;
+use crate::alt::BGRA;
+use crate::RGB;
+use crate::RGBA;
 use core::convert::*;
-use RGB;
-use RGBA;
-use alt::BGR;
-use alt::BGRA;
 
 impl<T> From<(T,T,T)> for RGB<T> {
     #[inline]

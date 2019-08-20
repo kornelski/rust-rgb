@@ -1,5 +1,5 @@
-use alt::{BGR, BGRA};
-use {RGB, RGBA};
+use crate::alt::{BGR, BGRA};
+use crate::{RGB, RGBA};
 
 impl<T: Copy> From<[T; 3]> for RGB<T> {
     #[inline]
@@ -77,8 +77,8 @@ impl<T> Into<[T; 4]> for BGRA<T> {
 
 #[test]
 fn convert_array() {
-    use alt::{BGR8, BGRA8};
-    use {RGB8, RGBA8};
+    use crate::alt::{BGR8, BGRA8};
+    use crate::{RGB8, RGBA8};
 
     assert_eq!(RGB8::from([1, 2, 3]), RGB8::new(1, 2, 3));
     assert_eq!(Into::<[u8; 3]>::into(RGB8::new(1, 2, 3)), [1, 2, 3]);
