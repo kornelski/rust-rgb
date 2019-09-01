@@ -60,7 +60,7 @@ impl<T> SubAssign for RGB<T> where
 
 /// `px - 1`
 impl<T> Sub<T> for RGB<T> where
-    T: Copy + Sub<Output=T> 
+    T: Copy + Sub<Output=T>
 {
     type Output = RGB<<T as Sub>::Output>;
 
@@ -72,7 +72,7 @@ impl<T> Sub<T> for RGB<T> where
 
 /// `px - 1`
 impl<T> SubAssign<T> for RGB<T> where
-    T: Copy + Sub<Output=T> 
+    T: Copy + Sub<Output=T>
 {
     #[inline(always)]
     fn sub_assign(&mut self, r: T) {
@@ -94,7 +94,7 @@ impl<T> Add<T> for RGB<T> where
 
 /// `px + 1`
 impl<T> AddAssign<T> for RGB<T> where
-    T: Copy + Add<Output=T> 
+    T: Copy + Add<Output=T>
 {
     #[inline(always)]
     fn add_assign(&mut self, r: T) {
@@ -162,7 +162,7 @@ impl<T, A> SubAssign<RGBA<T, A>> for RGBA<T, A> where
     }
 }
 
-/// `px - 1` 
+/// `px - 1`
 /// Works only if alpha channel has same depth as RGB channels
 impl<T> Sub<T> for RGBA<T> where
     T: Copy + Sub
@@ -175,7 +175,7 @@ impl<T> Sub<T> for RGBA<T> where
     }
 }
 
-/// `px - 1` 
+/// `px - 1`
 /// Works only if alpha channel has same depth as RGB channels
 impl<T> SubAssign<T> for RGBA<T> where
     T: Copy + Sub<Output = T>
@@ -200,7 +200,7 @@ impl<T> Add<T> for RGBA<T> where
 
 /// `px + 1`
 impl<T> AddAssign<T> for RGBA<T> where
-    T: Copy + Add<Output=T> 
+    T: Copy + Add<Output=T>
 {
     #[inline(always)]
     fn add_assign(&mut self, r: T) {
@@ -286,6 +286,7 @@ mod test {
 
     #[test]
     #[should_panic]
+    #[cfg(debug_assertions)]
     fn test_add_overflow() {
         assert_ne!(RGBA::new(255u8, 255, 0, 0), RED_RGBA+BLUE_RGBA);;
     }
