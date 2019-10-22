@@ -1,13 +1,12 @@
-use super::pixel::*;
-use crate::alt::BGR;
-use crate::alt::BGRA;
+use core::fmt;
+use core;
+use crate::alt::*;
 use crate::RGB;
 use crate::RGBA;
-use core;
-use core::fmt;
+use super::pixel::*;
 
 macro_rules! impl_rgba {
-    ($RGBA:ident, $RGB:ident, $BGRA:ident) => {
+    ($RGBA:ident) => {
         impl<T> $RGBA<T> {
             #[inline(always)]
             /// Convenience function for creating a new pixel
@@ -39,29 +38,23 @@ macro_rules! impl_rgba {
             ///
             /// Note: you can use `.into()` to convert between other types
             #[inline(always)]
-            pub fn rgb(&self) -> $RGB<T> {
-                $RGB {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
-            }
-        }
-
-        impl<T, A> $RGBA<T, A> {
-            /// Provide a mutable view of only RGB components (leaving out alpha).
-            /// Useful to change color without changing opacity.
-            #[inline(always)]
-            pub fn rgb_mut(&mut self) -> &mut $RGB<T> {
-                unsafe {
-                    core::mem::transmute(self)
-                }
+            pub fn bgr(&self) -> BGR<T> {
+                BGR {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
             }
         }
 
         impl<T: Copy, A: Clone> $RGBA<T, A> {
             /// Create new RGBA with the same alpha value, but different RGB values
             #[inline(always)]
-            pub fn map_rgb<F, U, B>(&self, f: F) -> $RGBA<U, B>
+            pub fn map_rgb<F, U, B>(&self, mut f: F) -> $RGBA<U, B>
                 where F: FnMut(T) -> U, U: Clone, B: From<A> + Clone
             {
-                self.rgb().map(f).new_alpha(self.a.clone().into())
+                $RGBA {
+                    r: f(self.r),
+                    g: f(self.g),
+                    b: f(self.b),
+                    a: self.a.clone().into(),
+                }
             }
 
             #[inline(always)]
@@ -132,21 +125,14 @@ macro_rules! impl_rgba {
         }
 
         impl<T: Copy + Send + Sync + 'static> ComponentBytes<T> for [$RGBA<T>] {}
+    }
+}
 
+macro_rules! impl_alpha_conv {
+    ($RGB:ident, $RGBA:ident) => {
         /// Assumes 255 is opaque
         impl<T: Copy> From<$RGB<T>> for $RGBA<T, u8> {
-            fn from(other: $RGB<T>) -> Self {
-                Self {
-                    r: other.r,
-                    g: other.g,
-                    b: other.b,
-                    a: 0xFF,
-                }
-            }
-        }
-
-        /// Assumes 255 is opaque
-        impl<T: Copy> From<$RGB<T>> for $BGRA<T, u8> {
+            #[inline(always)]
             fn from(other: $RGB<T>) -> Self {
                 Self {
                     r: other.r,
@@ -159,6 +145,7 @@ macro_rules! impl_rgba {
 
         /// Assumes 65535 is opaque
         impl<T: Copy> From<$RGB<T>> for $RGBA<T, u16> {
+            #[inline(always)]
             fn from(other: $RGB<T>) -> Self {
                 Self {
                     r: other.r,
@@ -168,17 +155,34 @@ macro_rules! impl_rgba {
                 }
             }
         }
+    }
+}
 
-        /// Assumes 255 is opaque
-        impl<T: Copy> From<$RGB<T>> for $BGRA<T, u16> {
-            fn from(other: $RGB<T>) -> Self {
-                Self {
-                    r: other.r,
-                    g: other.g,
-                    b: other.b,
-                    a: 0xFFFF,
-                }
-            }
+impl<T, A> RGBA<T, A> {
+    /// Provide a mutable view of only RGB components (leaving out alpha).
+    /// Useful to change color without changing opacity.
+    #[inline(always)]
+    pub fn rgb_mut(&mut self) -> &mut RGB<T> {
+        unsafe {
+            &mut *(self as *mut _ as *mut RGB<T>)
+        }
+    }
+}
+
+impl<T, A> BGRA<T, A> {
+    /// Provide a mutable view of only RGB components (leaving out alpha).
+    /// Useful to change color without changing opacity.
+    #[inline(always)]
+    #[deprecated(note = "This function will change. Use bgr_mut()")]
+    pub fn rgb_mut(&mut self) -> &mut BGR<T> {
+        unsafe {
+            &mut *(self as *mut _ as *mut BGR<T>)
+        }
+    }
+
+    pub fn bgr_mut(&mut self) -> &mut BGR<T> {
+        unsafe {
+            &mut *(self as *mut _ as *mut BGR<T>)
         }
     }
 }
@@ -198,8 +202,46 @@ impl<T> core::iter::FromIterator<T> for RGBA<T> {
     }
 }
 
-impl_rgba! {RGBA, RGB, BGRA}
-impl_rgba! {BGRA, BGR, RGBA}
+impl<T: Clone, A> RGBA<T, A> {
+    /// Copy RGB components out of the RGBA struct
+    ///
+    /// Note: you can use `.into()` to convert between other types
+    #[inline(always)]
+    pub fn rgb(&self) -> RGB<T> {
+        RGB {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+    }
+}
+
+impl<T: Clone, A> BGRA<T, A> {
+    /// Copy RGB components out of the RGBA struct
+    ///
+    /// Note: you can use `.into()` to convert between other types
+    #[inline(always)]
+    #[deprecated(note = "This function will change. Use bgr()")]
+    pub fn rgb(&self) -> BGR<T> {
+        BGR {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+    }
+}
+
+impl_rgba! {RGBA}
+impl_rgba! {BGRA}
+#[cfg(feature = "argb")]
+impl_rgba! {ARGB}
+#[cfg(feature = "argb")]
+impl_rgba! {ABGR}
+
+impl_alpha_conv! {BGR, BGRA}
+impl_alpha_conv! {RGB, BGRA}
+impl_alpha_conv! {BGR, RGBA}
+impl_alpha_conv! {RGB, RGBA}
+#[cfg(feature = "argb")]
+impl_alpha_conv! {BGR, ABGR}
+#[cfg(feature = "argb")]
+impl_alpha_conv! {RGB, ABGR}
+#[cfg(feature = "argb")]
+impl_alpha_conv! {BGR, ARGB}
+#[cfg(feature = "argb")]
+impl_alpha_conv! {RGB, ARGB}
 
 impl<T: fmt::Display, A: fmt::Display> fmt::Display for RGBA<T, A> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -247,11 +289,11 @@ fn rgba_test() {
 fn bgra_test() {
     let neg = BGRA::new(1, 2, 3i32, 1000).map(|x| -x);
     assert_eq!(neg.r, -1);
-    assert_eq!(neg.rgb().r, -1);
+    assert_eq!(neg.bgr().r, -1);
     assert_eq!(neg.g, -2);
-    assert_eq!(neg.rgb().g, -2);
+    assert_eq!(neg.bgr().g, -2);
     assert_eq!(neg.b, -3);
-    assert_eq!(neg.rgb().b, -3);
+    assert_eq!(neg.bgr().b, -3);
     assert_eq!(neg.a, -1000);
     assert_eq!(&[-3,-2,-1,-1000], neg.as_slice());
     assert!(neg < BGRA::new(0, 0, 0, 0));
@@ -262,10 +304,10 @@ fn bgra_test() {
 
     let mut px = BGRA{r:1,g:2,b:3,a:-9}.alpha(4);
     px.as_mut_slice()[3] = 100;
-    assert_eq!(1, px.rgb_mut().r);
-    assert_eq!(2, px.rgb_mut().g);
-    px.rgb_mut().b = 4;
-    assert_eq!(4, px.rgb_mut().b);
+    assert_eq!(1, px.bgr_mut().r);
+    assert_eq!(2, px.bgr_mut().g);
+    px.bgr_mut().b = 4;
+    assert_eq!(4, px.bgr_mut().b);
     assert_eq!(100, px.a);
 
     let v = vec![BGRA::new(3u8, 2, 1, 4), BGRA::new(7, 6, 5, 8)];

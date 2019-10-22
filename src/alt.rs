@@ -31,15 +31,55 @@ pub struct BGRA<ComponentType, AlphaComponentType = ComponentType> {
     pub a: AlphaComponentType,
 }
 
+#[repr(C)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[cfg(feature = "argb")]
+/// A+BGR
+pub struct ABGR<ComponentType, AlphaComponentType = ComponentType> {
+    /// Alpha first
+    pub a: AlphaComponentType,
+    /// Blue
+    pub b: ComponentType,
+    /// Green
+    pub g: ComponentType,
+    /// Red last
+    pub r: ComponentType,
+}
+
+#[repr(C)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[cfg(feature = "argb")]
+/// A+RGB
+pub struct ARGB<ComponentType, AlphaComponentType = ComponentType> {
+    /// Alpha first
+    pub a: AlphaComponentType,
+    /// Red
+    pub r: ComponentType,
+    /// Green
+    pub g: ComponentType,
+    /// Blue last
+    pub b: ComponentType,
+}
+
 pub type BGR8 = BGR<u8>;
 
 /// 16-bit BGR in machine's native endian
 pub type BGR16 = BGR<u16>;
 
 pub type BGRA8 = BGRA<u8>;
+#[cfg(feature = "argb")]
+pub type ABGR8 = ABGR<u8>;
+#[cfg(feature = "argb")]
+pub type ARGB8 = ARGB<u8>;
 
 /// 16-bit BGR in machine's native endian
 pub type BGRA16 = BGRA<u16>;
+#[cfg(feature = "argb")]
+pub type ABGR16 = ABGR<u16>;
+#[cfg(feature = "argb")]
+pub type ARGB16 = ARGB<u16>;
 
 ////////////////////////////////////////
 
