@@ -175,21 +175,21 @@ rgb_impl_from!{RGBA, i16,f64}
 rgb_impl_from!{RGBA, i32,f64}
 rgb_impl_from!{RGBA, f32,f64}
 
-impl<T: Clone> From<Gray<T>> for RGB<T> {
+impl<T: Copy> From<Gray<T>> for RGB<T> {
     fn from(other: Gray<T>) -> Self {
         Self {
-            r: other.0.clone(),
-            g: other.0.clone(),
+            r: other.0,
+            g: other.0,
             b: other.0,
         }
     }
 }
 
-impl<T: Clone,A> From<GrayAlpha<T,A>> for RGBA<T,A> {
+impl<T: Copy,A> From<GrayAlpha<T,A>> for RGBA<T,A> {
     fn from(other: GrayAlpha<T,A>) -> Self {
         Self {
-            r: other.0.clone(),
-            g: other.0.clone(),
+            r: other.0,
+            g: other.0,
             b: other.0,
             a: other.1,
         }

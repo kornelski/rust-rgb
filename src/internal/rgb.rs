@@ -16,7 +16,7 @@ macro_rules! impl_rgb {
                 Self { r, g, b }
             }
         }
-        impl<T: Clone> $RGB<T> {
+        impl<T: Copy> $RGB<T> {
             /// Iterate over color components (R, G, and B)
             #[inline(always)]
             pub fn iter(&self) -> core::iter::Cloned<core::slice::Iter<'_, T>> {
@@ -27,9 +27,9 @@ macro_rules! impl_rgb {
             #[inline(always)]
             pub fn alpha(&self, a: T) -> $RGBA<T> {
                 $RGBA {
-                    r: self.r.clone(),
-                    g: self.g.clone(),
-                    b: self.b.clone(),
+                    r: self.r,
+                    g: self.g,
+                    b: self.b,
                     a,
                 }
             }
@@ -38,9 +38,9 @@ macro_rules! impl_rgb {
             #[inline(always)]
             pub fn new_alpha<A>(&self, a: A) -> $RGBA<T, A> {
                 $RGBA {
-                    r: self.r.clone(),
-                    g: self.g.clone(),
-                    b: self.b.clone(),
+                    r: self.r,
+                    g: self.g,
+                    b: self.b,
                     a,
                 }
             }

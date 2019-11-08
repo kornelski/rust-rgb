@@ -33,17 +33,17 @@ macro_rules! impl_rgba {
             }
         }
 
-        impl<T: Clone, A> $RGBA<T, A> {
+        impl<T: Copy, A> $RGBA<T, A> {
             /// Copy RGB components out of the RGBA struct
             ///
             /// Note: you can use `.into()` to convert between other types
             #[inline(always)]
             pub fn bgr(&self) -> BGR<T> {
-                BGR {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+                BGR {r:self.r, g:self.g, b:self.b}
             }
         }
 
-        impl<T: Copy, A: Clone> $RGBA<T, A> {
+        impl<T: Copy, A: Copy> $RGBA<T, A> {
             /// Create new RGBA with the same alpha value, but different RGB values
             #[inline(always)]
             pub fn map_rgb<F, U, B>(&self, mut f: F) -> $RGBA<U, B>
@@ -53,7 +53,7 @@ macro_rules! impl_rgba {
                     r: f(self.r),
                     g: f(self.g),
                     b: f(self.b),
-                    a: self.a.clone().into(),
+                    a: self.a.into(),
                 }
             }
 
@@ -73,7 +73,7 @@ macro_rules! impl_rgba {
                     r: self.r,
                     g: self.g,
                     b: self.b,
-                    a: f(self.a.clone()),
+                    a: f(self.a),
                 }
             }
         }
@@ -202,24 +202,24 @@ impl<T> core::iter::FromIterator<T> for RGBA<T> {
     }
 }
 
-impl<T: Clone, A> RGBA<T, A> {
+impl<T: Copy, A> RGBA<T, A> {
     /// Copy RGB components out of the RGBA struct
     ///
     /// Note: you can use `.into()` to convert between other types
     #[inline(always)]
     pub fn rgb(&self) -> RGB<T> {
-        RGB {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+        RGB {r:self.r, g:self.g, b:self.b}
     }
 }
 
-impl<T: Clone, A> BGRA<T, A> {
+impl<T: Copy, A> BGRA<T, A> {
     /// Copy RGB components out of the RGBA struct
     ///
     /// Note: you can use `.into()` to convert between other types
     #[inline(always)]
     #[deprecated(note = "This function will change. Use bgr()")]
     pub fn rgb(&self) -> BGR<T> {
-        BGR {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+        BGR {r:self.r, g:self.g, b:self.b}
     }
 }
 

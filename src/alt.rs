@@ -126,11 +126,11 @@ impl<T: Copy> From<T> for Gray<T> {
     }
 }
 
-impl<T: Clone, A> GrayAlpha<T, A> {
+impl<T: Copy, A> GrayAlpha<T, A> {
     /// Copy `Gray` component out of the `GrayAlpha` struct
     #[inline(always)]
     pub fn gray(&self) -> Gray<T> {
-        Gray(self.0.clone())
+        Gray(self.0)
     }
 }
 
@@ -144,7 +144,7 @@ impl<T, A> GrayAlpha<T, A> {
     }
 }
 
-impl<T: Copy, A: Clone> GrayAlpha<T, A> {
+impl<T: Copy, A: Copy> GrayAlpha<T, A> {
     #[inline(always)]
     /// Create a new `GrayAlpha` with the new alpha value, but same gray value
     pub fn alpha(&self, a: A) -> Self {
@@ -155,14 +155,14 @@ impl<T: Copy, A: Clone> GrayAlpha<T, A> {
     pub fn map_alpha<F, B>(&self, f: F) -> GrayAlpha<T, B>
         where F: FnOnce(A) -> B
     {
-        GrayAlpha (self.0, f(self.1.clone()))
+        GrayAlpha (self.0, f(self.1))
     }
 
     /// Create new `GrayAlpha` with the same alpha value, but different `Gray` value
     #[inline(always)]
     pub fn map_gray<F, U, B>(&self, f: F) -> GrayAlpha<U, B>
         where F: FnOnce(T) -> U, U: Clone, B: From<A> + Clone {
-        GrayAlpha(f(self.0.clone()), self.1.clone().into())
+        GrayAlpha(f(self.0), self.1.into())
     }
 }
 
