@@ -63,21 +63,31 @@ pub struct ARGB<ComponentType, AlphaComponentType = ComponentType> {
     pub b: ComponentType,
 }
 
+/// 8-bit BGR
 pub type BGR8 = BGR<u8>;
 
 /// 16-bit BGR in machine's native endian
 pub type BGR16 = BGR<u16>;
 
+/// 8-bit BGRA
 pub type BGRA8 = BGRA<u8>;
+
+/// 8-bit ABGR, alpha is first. 0 = transparent, 255 = opaque.
 #[cfg(feature = "argb")]
 pub type ABGR8 = ABGR<u8>;
+
+/// 8-bit ARGB, alpha is first. 0 = transparent, 255 = opaque.
 #[cfg(feature = "argb")]
 pub type ARGB8 = ARGB<u8>;
 
 /// 16-bit BGR in machine's native endian
 pub type BGRA16 = BGRA<u16>;
+
+/// 16-bit ABGR in machine's native endian. 0 = transparent, 65535 = opaque.
 #[cfg(feature = "argb")]
 pub type ABGR16 = ABGR<u16>;
+
+/// 16-bit ARGB in machine's native endian. 0 = transparent, 65535 = opaque.
 #[cfg(feature = "argb")]
 pub type ARGB16 = ARGB<u16>;
 
@@ -103,14 +113,16 @@ pub struct GrayAlpha<ComponentType, AlphaComponentType = ComponentType>(
     pub AlphaComponentType,
 );
 
+/// 8-bit gray
 pub type GRAY8 = Gray<u8>;
 
 /// 16-bit gray in machine's native endian
 pub type GRAY16 = Gray<u16>;
 
+/// 8-bit gray with alpha in machine's native endian
 pub type GRAYA8 = GrayAlpha<u8>;
 
-/// 16-bit gray in machine's native endian
+/// 16-bit gray with alpha in machine's native endian
 pub type GRAYA16 = GrayAlpha<u16>;
 
 impl<T> ops::Deref for Gray<T> {

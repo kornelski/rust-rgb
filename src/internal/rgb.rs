@@ -23,7 +23,7 @@ macro_rules! impl_rgb {
                 self.as_slice().iter().cloned()
             }
 
-            // Convenience function for converting to RGBA
+            /// Convenience function for converting to RGBA
             #[inline(always)]
             pub fn alpha(&self, a: T) -> $RGBA<T> {
                 $RGBA {
@@ -34,7 +34,7 @@ macro_rules! impl_rgb {
                 }
             }
 
-            // Convenience function for converting to RGBA with alpha channel of a different type than type of the pixels
+            /// Convenience function for converting to RGBA with alpha channel of a different type than type of the pixels
             #[inline(always)]
             pub fn new_alpha<A>(&self, a: A) -> $RGBA<T, A> {
                 $RGBA {

@@ -180,6 +180,8 @@ impl<T, A> BGRA<T, A> {
         }
     }
 
+    /// Provide a mutable view of only RGB components (leaving out alpha).
+    /// Useful to change color without changing opacity.
     pub fn bgr_mut(&mut self) -> &mut BGR<T> {
         unsafe {
             &mut *(self as *mut _ as *mut BGR<T>)
