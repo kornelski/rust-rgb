@@ -6,6 +6,10 @@ pub trait ComponentSlice<T> {
     ///
     /// It's implemented for individual pixels as well as slices of pixels.
     fn as_slice(&self) -> &[T];
+
+    /// The components interpreted as a mutable array, e.g. one `RGB` expands to 3 elements.
+    ///
+    /// It's implemented for individual pixels as well as slices of pixels.
     fn as_mut_slice(&mut self) -> &mut [T];
 }
 
@@ -20,8 +24,8 @@ pub trait ComponentBytes<T: Copy + Send + Sync + 'static> where Self: ComponentS
         }
     }
 
-    #[inline]
     /// The components interpreted as raw bytes, in machine's native endian. In `RGB` bytes of the red component are first.
+    #[inline]
     fn as_bytes_mut(&mut self) -> &mut [u8] {
         let slice = self.as_mut_slice();
         unsafe {
