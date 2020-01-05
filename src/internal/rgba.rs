@@ -5,26 +5,90 @@ use crate::RGB;
 use crate::RGBA;
 use super::pixel::*;
 
+impl<T> RGBA<T> {
+    #[inline(always)]
+    /// Convenience function for creating a new pixel
+    /// The order of arguments is R,G,B,A
+    pub const fn new(r: T, g: T, b: T, a: T) -> Self {
+        Self {r,g,b,a}
+    }
+}
+
+impl<T, A> RGBA<T,A> {
+    #[inline(always)]
+    /// Convenience function for creating a new pixel
+    /// The order of arguments is R,G,B,A
+    pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
+        Self {r,g,b,a}
+    }
+}
+
+impl<T> BGRA<T> {
+    #[inline(always)]
+    /// Convenience function for creating a new pixel
+    /// Warning: The order of arguments is R,G,B,A
+    #[deprecated(note="This function has a misleading order of arguments. Use BGRA{} literal instead")]
+    pub const fn new(r: T, g: T, b: T, a: T) -> Self {
+        Self {r,g,b,a}
+    }
+}
+
+impl<T, A> BGRA<T,A> {
+    #[inline(always)]
+    /// Convenience function for creating a new pixel
+    /// Warning: The order of arguments is R,G,B,A
+    #[deprecated(note="This function has a misleading order of arguments. Use BGRA{} literal instead")]
+    pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
+        Self {r,g,b,a}
+    }
+}
+
+#[cfg(feature = "argb")]
+impl<T> ARGB<T> {
+    #[inline(always)]
+    /// Convenience function for creating a new pixel
+    /// The order of arguments is R,G,B,A
+    #[deprecated(note="This function has a misleading order of arguments. Use ARGB{} literal instead")]
+    pub const fn new(r: T, g: T, b: T, a: T) -> Self {
+        Self {r,g,b,a}
+    }
+}
+
+#[cfg(feature = "argb")]
+impl<T, A> ARGB<T,A> {
+    #[inline(always)]
+    /// Convenience function for creating a new pixel
+    /// The order of arguments is R,G,B,A
+    #[deprecated(note="This function has a misleading order of arguments. Use ARGB{} literal instead")]
+    pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
+        Self {r,g,b,a}
+    }
+}
+
+#[cfg(feature = "argb")]
+impl<T> ABGR<T> {
+    #[inline(always)]
+    /// Convenience function for creating a new pixel
+    /// The order of arguments is R,G,B,A
+    #[deprecated(note="This function has a misleading order of arguments. Use ABGR{} literal instead")]
+    pub const fn new(r: T, g: T, b: T, a: T) -> Self {
+        Self {r,g,b,a}
+    }
+}
+
+#[cfg(feature = "argb")]
+impl<T, A> ABGR<T,A> {
+    #[inline(always)]
+    /// Convenience function for creating a new pixel
+    /// The order of arguments is R,G,B,A
+    #[deprecated(note="This function has a misleading order of arguments. Use ABGR{} literal instead")]
+    pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
+        Self {r,g,b,a}
+    }
+}
+
 macro_rules! impl_rgba {
     ($RGBA:ident) => {
-        impl<T> $RGBA<T> {
-            #[inline(always)]
-            /// Convenience function for creating a new pixel
-            /// The order of arguments is R,G,B,A
-            pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-                Self { r, g, b, a }
-            }
-        }
-
-        impl<T, A> $RGBA<T,A> {
-            #[inline(always)]
-            /// Convenience function for creating a new pixel
-            /// The order of arguments is R,G,B,A
-            pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-                Self {r,g,b,a}
-            }
-        }
-
         impl<T: Clone> $RGBA<T> {
             /// Iterate over all components (length=4)
             #[inline(always)]
@@ -288,6 +352,7 @@ fn rgba_test() {
 }
 
 #[test]
+#[allow(deprecated)]
 fn bgra_test() {
     let neg = BGRA::new(1, 2, 3i32, 1000).map(|x| -x);
     assert_eq!(neg.r, -1);

@@ -76,6 +76,7 @@ impl<T> Into<[T; 4]> for BGRA<T> {
 }
 
 #[test]
+#[allow(deprecated)]
 fn convert_array() {
     use crate::alt::{BGR8, BGRA8};
     use crate::{RGB8, RGBA8};

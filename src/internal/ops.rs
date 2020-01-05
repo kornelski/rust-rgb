@@ -288,7 +288,7 @@ mod test {
     #[should_panic]
     #[cfg(debug_assertions)]
     fn test_add_overflow() {
-        assert_ne!(RGBA::new(255u8, 255, 0, 0), RED_RGBA+BLUE_RGBA);;
+        assert_ne!(RGBA::new(255u8, 255, 0, 0), RED_RGBA+BLUE_RGBA);
     }
 
     #[test]

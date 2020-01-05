@@ -6,16 +6,27 @@ use crate::RGBA;
 use core;
 use core::fmt;
 
+impl<T> RGB<T> {
+    /// Convenience function for creating a new pixel
+    /// The order of arguments is R,G,B
+    #[inline(always)]
+    pub const fn new(r: T, g: T, b: T) -> Self {
+        Self { r, g, b }
+    }
+}
+
+impl<T> BGR<T> {
+    /// Convenience function for creating a new pixel
+    /// Wargning: The order of arguments is R,G,B
+    #[deprecated(note="This function has a misleading order of arguments. Use BGR{} literal instead")]
+    #[inline(always)]
+    pub const fn new(r: T, g: T, b: T) -> Self {
+        Self { b, g, r }
+    }
+}
+
 macro_rules! impl_rgb {
     ($RGB:ident, $RGBA:ident) => {
-        impl<T> $RGB<T> {
-            /// Convenience function for creating a new pixel
-            /// The order of arguments is R,G,B
-            #[inline(always)]
-            pub const fn new(r: T, g: T, b: T) -> Self {
-                Self { r, g, b }
-            }
-        }
         impl<T: Clone> $RGB<T> {
             /// Iterate over color components (R, G, and B)
             #[inline(always)]
@@ -179,6 +190,7 @@ mod rgb_test {
     }
 
     #[test]
+    #[allow(deprecated)]
     fn test_fmt() {
         let red_rgb = RGB::new(255, 0, 0);
         let red_bgr = BGR::new(255, 0, 0);
