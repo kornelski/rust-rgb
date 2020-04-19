@@ -56,7 +56,7 @@ macro_rules! as_pixels_impl {
 as_pixels_impl!{RGB, 3}
 as_pixels_impl!{RGBA, 4}
 as_pixels_impl!{BGR, 3}
-as_pixels_impl!{BGRA, 3}
+as_pixels_impl!{BGRA, 4}
 as_pixels_impl!{Gray, 1}
 as_pixels_impl!{GrayAlpha, 2}
 
