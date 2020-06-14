@@ -1,3 +1,4 @@
+use plain::Plain;
 use core;
 
 /// Casting the struct to slices of its components
@@ -14,7 +15,17 @@ pub trait ComponentSlice<T> {
 }
 
 /// Casting a slice of `RGB/A` values to a slice of `u8`
-pub trait ComponentBytes<T: Copy + Send + Sync + 'static> where Self: ComponentSlice<T> {
+///
+/// If instead of `RGB8` you use `RGB<MyCustomType>`, and you want to cast from/to that custom type,
+/// implement the `Plain` trait for it:
+///
+/// ```rust
+/// # struct MyCustomType;
+/// unsafe impl rgb::plain::Plain for MyCustomType {}
+/// ```
+///
+/// Plain types are not allowed to contain struct padding, booleans, chars, enums, references or pointers.
+pub trait ComponentBytes<T: Plain> where Self: ComponentSlice<T> {
     /// The components interpreted as raw bytes, in machine's native endian. In `RGB` bytes of the red component are first.
     #[inline]
     fn as_bytes(&self) -> &[u8] {

@@ -43,6 +43,9 @@ impl<T, A> BGRA<T,A> {
     }
 }
 
+unsafe impl<T, A> plain::Plain for RGBA<T, A> where T: plain::Plain, A: plain::Plain {}
+unsafe impl<T, A> plain::Plain for BGRA<T, A> where T: plain::Plain, A: plain::Plain {}
+
 #[cfg(feature = "argb")]
 impl<T> ARGB<T> {
     #[inline(always)]
@@ -86,6 +89,11 @@ impl<T, A> ABGR<T,A> {
         Self {r,g,b,a}
     }
 }
+
+#[cfg(feature = "argb")]
+unsafe impl<T, A> plain::Plain for ARGB<T, A> where T: plain::Plain, A: plain::Plain {}
+#[cfg(feature = "argb")]
+unsafe impl<T, A> plain::Plain for ABGR<T, A> where T: plain::Plain, A: plain::Plain {}
 
 macro_rules! impl_rgba {
     ($RGBA:ident) => {
@@ -188,7 +196,7 @@ macro_rules! impl_rgba {
             }
         }
 
-        impl<T: Copy + Send + Sync + 'static> ComponentBytes<T> for [$RGBA<T>] {}
+        impl<T: plain::Plain> ComponentBytes<T> for [$RGBA<T>] {}
     }
 }
 
@@ -364,6 +372,8 @@ fn abgr_test() {
 #[allow(deprecated)]
 fn bgra_test() {
     let neg = BGRA::new(1, 2, 3i32, 1000).map(|x| -x);
+    let _ = neg.as_slice();
+    let _ = [neg].as_bytes();
     assert_eq!(neg.r, -1);
     assert_eq!(neg.bgr().r, -1);
     assert_eq!(neg.g, -2);

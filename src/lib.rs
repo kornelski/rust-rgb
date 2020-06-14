@@ -47,6 +47,12 @@ mod internal {
 /// BGR might be useful for some Windows or OpenGL APIs.
 pub mod alt;
 
+/// Re-export from `plain` crate
+pub mod plain {
+    // wrapped in mod to prevent `use rgb::*` picking it
+    pub use plain::Plain;
+}
+
 pub use crate::internal::convert::*;
 pub use crate::internal::ops::*;
 pub use crate::internal::pixel::*;

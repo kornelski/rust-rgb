@@ -21,6 +21,7 @@ travis-ci = { repository = "kornelski/rust-rgb" }
 
 [dependencies]
 serde = { version = "1.0", optional = true, features = ["derive"] }
+plain = "0.2.3"
 
 [dev-dependencies]
 serde_json = "1.0"

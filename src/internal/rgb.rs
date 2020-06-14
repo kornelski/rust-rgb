@@ -1,3 +1,4 @@
+use plain::Plain;
 use super::pixel::*;
 use crate::alt::BGR;
 use crate::alt::BGRA;
@@ -24,6 +25,9 @@ impl<T> BGR<T> {
         Self { b, g, r }
     }
 }
+
+unsafe impl<T> Plain for RGB<T> where T: Plain {}
+unsafe impl<T> Plain for BGR<T> where T: Plain {}
 
 macro_rules! impl_rgb {
     ($RGB:ident, $RGBA:ident) => {
@@ -101,7 +105,7 @@ macro_rules! impl_rgb {
             }
         }
 
-        impl<T: Copy + Send + Sync + 'static> ComponentBytes<T> for [$RGB<T>] {}
+        impl<T: Plain> ComponentBytes<T> for [$RGB<T>] {}
     }
 }
 
