@@ -20,7 +20,6 @@ rgb = "0.8"
 The structs implement common Rust traits and a few convenience functions, e.g. `map` that repeats an operation on every subpixel:
 
 ```rust
-extern crate rgb;
 use rgb::*; // Laziest way to use traits which add extra methods to the structs
 
 let px = RGB {
@@ -36,7 +35,7 @@ assert_eq!(RGB8::new(0, 255, 0), inverted);
 
 ### Byte slices to pixel slices
 
-For interoperability with functions operating on generic arrays of bytes there are functinos for safe casting to and from pixel slices.
+For interoperability with functions operating on generic arrays of bytes there are functions for safe casting to and from pixel slices.
 
 ```rust
 let raw = vec![0u8; width*height*3];
@@ -44,14 +43,15 @@ let pixels: &[RGB8] = raw.as_rgb(); /// Safe casts without copying
 let raw_again = pixels.as_bytes();
 ```
 
+Note: if you get an error about "no method named `as_bytes` found", add `use rgb::ComponentBytes`. If you're using a custom component type (`RGB<CustomType>`), implement `rgb::plain::Plain` trait for the component.
 
 ----
 
 ## About colorspaces
 
-This crate is intentionally ignorant about flavors of RGB color spaces. *Correct* color management is a complex problem, and this crate aims to be the lowest common denominator.
+*Correct* color management is a complex problem, and this crate aims to be the lowest common denominator, so it's intentionally agnostic about it.
 
-However, it supports any subpixel type for `RGB<T>`, and `RGBA<RGBType, AlphaType>`, so you can use them with a newtype, e.g.:
+However, this library supports any subpixel type for `RGB<T>`, and `RGBA<RGBType, AlphaType>`, so you can use them with a newtype, e.g.:
 
 ```rust
 struct LinearLight(u16);

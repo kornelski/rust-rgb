@@ -29,6 +29,7 @@ pub trait ComponentBytes<T: Plain> where Self: ComponentSlice<T> {
     /// The components interpreted as raw bytes, in machine's native endian. In `RGB` bytes of the red component are first.
     #[inline]
     fn as_bytes(&self) -> &[u8] {
+        assert_ne!(0, core::mem::size_of::<T>());
         let slice = self.as_slice();
         unsafe {
             core::slice::from_raw_parts(slice.as_ptr() as *const _, slice.len() * core::mem::size_of::<T>())
@@ -38,6 +39,7 @@ pub trait ComponentBytes<T: Plain> where Self: ComponentSlice<T> {
     /// The components interpreted as raw bytes, in machine's native endian. In `RGB` bytes of the red component are first.
     #[inline]
     fn as_bytes_mut(&mut self) -> &mut [u8] {
+        assert_ne!(0, core::mem::size_of::<T>());
         let slice = self.as_mut_slice();
         unsafe {
             core::slice::from_raw_parts_mut(slice.as_mut_ptr() as *mut _, slice.len() * core::mem::size_of::<T>())
