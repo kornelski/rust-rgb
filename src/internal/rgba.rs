@@ -352,6 +352,15 @@ fn rgba_test() {
 }
 
 #[test]
+#[cfg(feature = "argb")]
+fn abgr_test() {
+    let abgr = ABGR {r:1,g:2,b:3,a:4};
+    assert_eq!(4, abgr.as_slice()[0]);
+    use crate::AsPixels;
+    assert_eq!(abgr, [abgr].as_bytes().as_pixels()[0]);
+}
+
+#[test]
 #[allow(deprecated)]
 fn bgra_test() {
     let neg = BGRA::new(1, 2, 3i32, 1000).map(|x| -x);

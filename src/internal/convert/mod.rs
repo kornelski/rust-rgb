@@ -1,8 +1,5 @@
 use super::pixel::*;
-use crate::alt::Gray;
-use crate::alt::GrayAlpha;
-use crate::alt::BGR;
-use crate::alt::BGRA;
+use crate::alt::*;
 use crate::RGB;
 use crate::RGBA;
 use core::convert::*;
@@ -59,6 +56,10 @@ as_pixels_impl!{BGR, 3}
 as_pixels_impl!{BGRA, 4}
 as_pixels_impl!{Gray, 1}
 as_pixels_impl!{GrayAlpha, 2}
+#[cfg(feature = "argb")]
+as_pixels_impl!{ARGB, 2}
+#[cfg(feature = "argb")]
+as_pixels_impl!{ABGR, 2}
 
 /// Cast a slice of component values (bytes) as a slice of RGB/RGBA pixels
 ///

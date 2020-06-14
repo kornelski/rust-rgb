@@ -36,12 +36,14 @@ pub trait ComponentBytes<T: Copy + Send + Sync + 'static> where Self: ComponentS
 
 /// Applying operation to every component
 ///
-/// ```rust,ignore
+/// ```rust
+/// use rgb::ComponentMap;
+/// # let pixel = rgb::RGB::new(0u8,0,0);
 /// let inverted = pixel.map(|c| 255 - c);
 ///
-/// For simple math there are Add/Sub/Mul implementations:
+/// // For simple math there are Add/Sub/Mul implementations:
 /// let halved = pixel.map(|c| c / 2);
-/// let halved = pixel / 2;
+/// let doubled = pixel * 2;
 /// ```
 pub trait ComponentMap<DestPixel, SrcComponent, DestComponent> {
     /// Convenience function (equivalent of `self.iter().map().collect()`) for applying the same formula to every component.
