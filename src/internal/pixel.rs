@@ -1,4 +1,3 @@
-use plain::Plain;
 use core;
 
 /// Casting the struct to slices of its components
@@ -25,7 +24,8 @@ pub trait ComponentSlice<T> {
 /// ```
 ///
 /// Plain types are not allowed to contain struct padding, booleans, chars, enums, references or pointers.
-pub trait ComponentBytes<T: Plain> where Self: ComponentSlice<T> {
+#[cfg(feature = "as-bytes")]
+pub trait ComponentBytes<T: plain::Plain> where Self: ComponentSlice<T> {
     /// The components interpreted as raw bytes, in machine's native endian. In `RGB` bytes of the red component are first.
     #[inline]
     fn as_bytes(&self) -> &[u8] {

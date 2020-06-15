@@ -48,6 +48,7 @@ mod internal {
 pub mod alt;
 
 /// Re-export from `plain` crate
+#[cfg(feature = "as-bytes")]
 pub mod plain {
     // wrapped in mod to prevent `use rgb::*` picking it
     pub use plain::Plain;

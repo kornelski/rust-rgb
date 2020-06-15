@@ -1,4 +1,3 @@
-use plain::Plain;
 use crate::internal::pixel::*;
 use core::mem;
 use core::ops;
@@ -114,8 +113,10 @@ pub struct GrayAlpha<ComponentType, AlphaComponentType = ComponentType>(
     pub AlphaComponentType,
 );
 
-unsafe impl<T> Plain for Gray<T> where T: Plain {}
-unsafe impl<T, A> Plain for GrayAlpha<T, A> where T: Plain, A: Plain {}
+#[cfg(feature = "as-bytes")]
+unsafe impl<T> plain::Plain for Gray<T> where T: plain::Plain {}
+#[cfg(feature = "as-bytes")]
+unsafe impl<T, A> plain::Plain for GrayAlpha<T, A> where T: plain::Plain, A: plain::Plain {}
 
 /// 8-bit gray
 pub type GRAY8 = Gray<u8>;
@@ -223,7 +224,8 @@ impl<T> ComponentSlice<T> for [GrayAlpha<T>] {
     }
 }
 
-impl<T: Plain> ComponentBytes<T> for [GrayAlpha<T>] {}
+#[cfg(feature = "as-bytes")]
+impl<T: plain::Plain> ComponentBytes<T> for [GrayAlpha<T>] {}
 
 impl<T> ComponentSlice<T> for Gray<T> {
     #[inline(always)]
@@ -256,7 +258,8 @@ impl<T> ComponentSlice<T> for [Gray<T>] {
     }
 }
 
-impl<T: Plain> ComponentBytes<T> for [Gray<T>] {}
+#[cfg(feature = "as-bytes")]
+impl<T: plain::Plain> ComponentBytes<T> for [Gray<T>] {}
 
 /// Assumes 255 is opaque
 impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u8> {

@@ -1,4 +1,3 @@
-use plain::Plain;
 use super::pixel::*;
 use crate::alt::BGR;
 use crate::alt::BGRA;
@@ -26,8 +25,10 @@ impl<T> BGR<T> {
     }
 }
 
-unsafe impl<T> Plain for RGB<T> where T: Plain {}
-unsafe impl<T> Plain for BGR<T> where T: Plain {}
+#[cfg(feature = "as-bytes")]
+unsafe impl<T> plain::Plain for RGB<T> where T: plain::Plain {}
+#[cfg(feature = "as-bytes")]
+unsafe impl<T> plain::Plain for BGR<T> where T: plain::Plain {}
 
 macro_rules! impl_rgb {
     ($RGB:ident, $RGBA:ident) => {
@@ -105,7 +106,8 @@ macro_rules! impl_rgb {
             }
         }
 
-        impl<T: Plain> ComponentBytes<T> for [$RGB<T>] {}
+        #[cfg(feature = "as-bytes")]
+        impl<T: plain::Plain> ComponentBytes<T> for [$RGB<T>] {}
     }
 }
 

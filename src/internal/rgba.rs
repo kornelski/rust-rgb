@@ -43,7 +43,9 @@ impl<T, A> BGRA<T,A> {
     }
 }
 
+#[cfg(feature = "as-bytes")]
 unsafe impl<T, A> plain::Plain for RGBA<T, A> where T: plain::Plain, A: plain::Plain {}
+#[cfg(feature = "as-bytes")]
 unsafe impl<T, A> plain::Plain for BGRA<T, A> where T: plain::Plain, A: plain::Plain {}
 
 #[cfg(feature = "argb")]
@@ -196,6 +198,7 @@ macro_rules! impl_rgba {
             }
         }
 
+        #[cfg(feature = "as-bytes")]
         impl<T: plain::Plain> ComponentBytes<T> for [$RGBA<T>] {}
     }
 }

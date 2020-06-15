@@ -1,6 +1,6 @@
 [package]
 name = "rgb"
-version = "0.8.19-rc"
+version = "0.8.19-rc.2"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 include = ["src/**/*", "Cargo.toml", "README.md", "examples/*.rs", "LICENSE"]
 description = "`struct RGB/RGBA/etc.` for sharing pixels between crates + convenience methods for color manipulation.\nAllows no-copy high-level interoperability. Also adds common convenience methods and implements standard Rust traits to make `RGB`/`RGBA` pixels and slices first-class Rust objects."
@@ -14,6 +14,8 @@ categories = ["rust-patterns", "multimedia::images"]
 edition = "2018"
 
 [features]
+default = ["as-bytes"]
+as-bytes = ["plain"]
 argb = []
 
 [badges]
@@ -21,7 +23,7 @@ travis-ci = { repository = "kornelski/rust-rgb" }
 
 [dependencies]
 serde = { version = "1.0", optional = true, features = ["derive"] }
-plain = "0.2.3"
+plain = { version = "0.2.3", optional = true }
 
 [dev-dependencies]
 serde_json = "1.0"
