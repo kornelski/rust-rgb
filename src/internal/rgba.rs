@@ -44,9 +44,13 @@ impl<T, A> BGRA<T,A> {
 }
 
 #[cfg(feature = "as-bytes")]
-unsafe impl<T, A> plain::Plain for RGBA<T, A> where T: plain::Plain, A: plain::Plain {}
+unsafe impl<T, A> crate::Pod for RGBA<T, A> where T: crate::Pod, A: crate::Pod {}
 #[cfg(feature = "as-bytes")]
-unsafe impl<T, A> plain::Plain for BGRA<T, A> where T: plain::Plain, A: plain::Plain {}
+unsafe impl<T, A> crate::Pod for BGRA<T, A> where T: crate::Pod, A: crate::Pod {}
+#[cfg(feature = "as-bytes")]
+unsafe impl<T, A> crate::Zeroable for RGBA<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
+#[cfg(feature = "as-bytes")]
+unsafe impl<T, A> crate::Zeroable for BGRA<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
 
 #[cfg(feature = "argb")]
 impl<T> ARGB<T> {
@@ -92,10 +96,14 @@ impl<T, A> ABGR<T,A> {
     }
 }
 
-#[cfg(feature = "argb")]
-unsafe impl<T, A> plain::Plain for ARGB<T, A> where T: plain::Plain, A: plain::Plain {}
-#[cfg(feature = "argb")]
-unsafe impl<T, A> plain::Plain for ABGR<T, A> where T: plain::Plain, A: plain::Plain {}
+#[cfg(all(feature = "as-bytes", feature = "argb"))]
+unsafe impl<T, A> crate::Pod for ARGB<T, A> where T: crate::Pod, A: crate::Pod {}
+#[cfg(all(feature = "as-bytes", feature = "argb"))]
+unsafe impl<T, A> crate::Pod for ABGR<T, A> where T: crate::Pod, A: crate::Pod {}
+#[cfg(all(feature = "as-bytes", feature = "argb"))]
+unsafe impl<T, A> crate::Zeroable for ARGB<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
+#[cfg(all(feature = "as-bytes", feature = "argb"))]
+unsafe impl<T, A> crate::Zeroable for ABGR<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
 
 macro_rules! impl_rgba {
     ($RGBA:ident) => {
@@ -199,7 +207,7 @@ macro_rules! impl_rgba {
         }
 
         #[cfg(feature = "as-bytes")]
-        impl<T: plain::Plain> ComponentBytes<T> for [$RGBA<T>] {}
+        impl<T: crate::Pod> ComponentBytes<T> for [$RGBA<T>] {}
     }
 }
 
@@ -358,8 +366,11 @@ fn rgba_test() {
     assert_eq!(4, px.rgb_mut().b);
     assert_eq!(100, px.a);
 
-    let v = vec![RGBA::new(1u8,2,3,4), RGBA::new(5,6,7,8)];
-    assert_eq!(&[1,2,3,4,5,6,7,8], v.as_bytes());
+    #[cfg(feature = "as-bytes")]
+    {
+        let v = vec![RGBA::new(1u8,2,3,4), RGBA::new(5,6,7,8)];
+        assert_eq!(&[1,2,3,4,5,6,7,8], v.as_bytes());
+    }
 }
 
 #[test]
@@ -376,7 +387,11 @@ fn abgr_test() {
 fn bgra_test() {
     let neg = BGRA::new(1, 2, 3i32, 1000).map(|x| -x);
     let _ = neg.as_slice();
-    let _ = [neg].as_bytes();
+
+    #[cfg(feature = "as-bytes")]
+    {
+        let _ = [neg].as_bytes();
+    }
     assert_eq!(neg.r, -1);
     assert_eq!(neg.bgr().r, -1);
     assert_eq!(neg.g, -2);
@@ -399,6 +414,10 @@ fn bgra_test() {
     assert_eq!(4, px.bgr_mut().b);
     assert_eq!(100, px.a);
 
-    let v = vec![BGRA::new(3u8, 2, 1, 4), BGRA::new(7, 6, 5, 8)];
-    assert_eq!(&[1,2,3,4,5,6,7,8], v.as_bytes());
+
+    #[cfg(feature = "as-bytes")]
+    {
+        let v = vec![BGRA::new(3u8, 2, 1, 4), BGRA::new(7, 6, 5, 8)];
+        assert_eq!(&[1,2,3,4,5,6,7,8], v.as_bytes());
+    }
 }

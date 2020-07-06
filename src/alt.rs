@@ -114,9 +114,13 @@ pub struct GrayAlpha<ComponentType, AlphaComponentType = ComponentType>(
 );
 
 #[cfg(feature = "as-bytes")]
-unsafe impl<T> plain::Plain for Gray<T> where T: plain::Plain {}
+unsafe impl<T> crate::Pod for Gray<T> where T: crate::Pod {}
 #[cfg(feature = "as-bytes")]
-unsafe impl<T, A> plain::Plain for GrayAlpha<T, A> where T: plain::Plain, A: plain::Plain {}
+unsafe impl<T, A> crate::Pod for GrayAlpha<T, A> where T: crate::Pod, A: crate::Pod {}
+#[cfg(feature = "as-bytes")]
+unsafe impl<T> crate::Zeroable for Gray<T> where T: crate::Zeroable {}
+#[cfg(feature = "as-bytes")]
+unsafe impl<T, A> crate::Zeroable for GrayAlpha<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
 
 /// 8-bit gray
 pub type GRAY8 = Gray<u8>;
@@ -225,7 +229,7 @@ impl<T> ComponentSlice<T> for [GrayAlpha<T>] {
 }
 
 #[cfg(feature = "as-bytes")]
-impl<T: plain::Plain> ComponentBytes<T> for [GrayAlpha<T>] {}
+impl<T: crate::Pod> ComponentBytes<T> for [GrayAlpha<T>] {}
 
 impl<T> ComponentSlice<T> for Gray<T> {
     #[inline(always)]
@@ -259,7 +263,7 @@ impl<T> ComponentSlice<T> for [Gray<T>] {
 }
 
 #[cfg(feature = "as-bytes")]
-impl<T: plain::Plain> ComponentBytes<T> for [Gray<T>] {}
+impl<T: crate::Pod> ComponentBytes<T> for [Gray<T>] {}
 
 /// Assumes 255 is opaque
 impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u8> {

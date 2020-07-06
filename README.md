@@ -1,4 +1,4 @@
-# `struct RGB` for [Rust](https://www.rust-lang.org)  [![v](https://img.shields.io/crates/v/rgb.svg)](https://crates.io/crates/rgb)
+# `struct RGB` for [Rust](https://www.rust-lang.org)  [![crate](https://img.shields.io/crates/v/rgb.svg)](https://lib.rs/crates/rgb)
 
 Operating on pixels as weakly-typed vectors of `u8` is error-prone and inconvenient. It's better to use vectors of pixel structs. However, Rust is so strongly typed that *your* RGB pixel struct is not compatible with *my* RGB pixel struct. So let's all use mine :P
 
@@ -43,7 +43,7 @@ let pixels: &[RGB8] = raw.as_rgb(); /// Safe casts without copying
 let raw_again = pixels.as_bytes();
 ```
 
-Note: if you get an error about "no method named `as_bytes` found", add `use rgb::ComponentBytes`. If you're using a custom component type (`RGB<CustomType>`), implement `rgb::plain::Plain` trait for the component.
+Note: if you get an error about "no method named `as_bytes` found", add `use rgb::ComponentBytes`. If you're using a custom component type (`RGB<CustomType>`), implement `rgb::Pod` (plain old data) and `rgb::Zeroable` trait for the component (these traits are from [`bytemuck`](//lib.rs/bytemuck) crate).
 
 ----
 

@@ -26,9 +26,13 @@ impl<T> BGR<T> {
 }
 
 #[cfg(feature = "as-bytes")]
-unsafe impl<T> plain::Plain for RGB<T> where T: plain::Plain {}
+unsafe impl<T> crate::Pod for RGB<T> where T: crate::Pod {}
 #[cfg(feature = "as-bytes")]
-unsafe impl<T> plain::Plain for BGR<T> where T: plain::Plain {}
+unsafe impl<T> crate::Pod for BGR<T> where T: crate::Pod {}
+#[cfg(feature = "as-bytes")]
+unsafe impl<T> crate::Zeroable for RGB<T> where T: crate::Zeroable {}
+#[cfg(feature = "as-bytes")]
+unsafe impl<T> crate::Zeroable for BGR<T> where T: crate::Zeroable {}
 
 macro_rules! impl_rgb {
     ($RGB:ident, $RGBA:ident) => {
@@ -107,7 +111,7 @@ macro_rules! impl_rgb {
         }
 
         #[cfg(feature = "as-bytes")]
-        impl<T: plain::Plain> ComponentBytes<T> for [$RGB<T>] {}
+        impl<T: crate::Pod> ComponentBytes<T> for [$RGB<T>] {}
     }
 }
 
@@ -189,8 +193,12 @@ mod rgb_test {
         assert!(h.contains(&RGB::new(3,111,5)));
         assert!(!h.contains(&RGB::new(111,5,3)));
 
-        let v = vec![RGB::new(1u8,2,3), RGB::new(4,5,6)];
-        assert_eq!(&[1,2,3,4,5,6], v.as_bytes());
+
+        #[cfg(feature = "as-bytes")]
+        {
+            let v = vec![RGB::new(1u8,2,3), RGB::new(4,5,6)];
+            assert_eq!(&[1,2,3,4,5,6], v.as_bytes());
+        }
 
         assert_eq!(RGB::new(0u8,0,0), Default::default());
     }
