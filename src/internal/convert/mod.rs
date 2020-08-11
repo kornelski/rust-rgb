@@ -85,24 +85,28 @@ pub trait FromSlice<T: Copy> {
 }
 
 impl<T: Copy> FromSlice<T> for [T] {
+    #[inline]
     fn as_rgb(&self) -> &[RGB<T>] {
         debug_assert_eq!(3, mem::size_of::<RGB<T>>() / mem::size_of::<T>());
         unsafe {
             slice::from_raw_parts(self.as_ptr() as *const _, self.len() / 3)
         }
     }
+    #[inline]
     fn as_rgba(&self) -> &[RGBA<T>] {
         debug_assert_eq!(4, mem::size_of::<RGBA<T>>() / mem::size_of::<T>());
         unsafe {
             slice::from_raw_parts(self.as_ptr() as *const _, self.len() / 4)
         }
     }
+    #[inline]
     fn as_rgb_mut(&mut self) -> &mut [RGB<T>] {
         debug_assert_eq!(3, mem::size_of::<RGB<T>>() / mem::size_of::<T>());
         unsafe {
             slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() / 3)
         }
     }
+    #[inline]
     fn as_rgba_mut(&mut self) -> &mut [RGBA<T>] {
         debug_assert_eq!(4, mem::size_of::<RGBA<T>>() / mem::size_of::<T>());
         unsafe {
@@ -110,24 +114,31 @@ impl<T: Copy> FromSlice<T> for [T] {
         }
     }
 
+    #[inline]
     fn as_bgr(&self) -> &[BGR<T>] {
         debug_assert_eq!(3, mem::size_of::<BGR<T>>() / mem::size_of::<T>());
         unsafe {
             slice::from_raw_parts(self.as_ptr() as *const _, self.len() / 3)
         }
     }
+
+    #[inline]
     fn as_bgra(&self) -> &[BGRA<T>] {
         debug_assert_eq!(4, mem::size_of::<BGRA<T>>() / mem::size_of::<T>());
         unsafe {
             slice::from_raw_parts(self.as_ptr() as *const _, self.len() / 4)
         }
     }
+
+    #[inline]
     fn as_bgr_mut(&mut self) -> &mut [BGR<T>] {
         debug_assert_eq!(3, mem::size_of::<BGR<T>>() / mem::size_of::<T>());
         unsafe {
             slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() / 3)
         }
     }
+
+    #[inline]
     fn as_bgra_mut(&mut self) -> &mut [BGRA<T>] {
         debug_assert_eq!(4, mem::size_of::<BGRA<T>>() / mem::size_of::<T>());
         unsafe {
@@ -177,6 +188,7 @@ rgb_impl_from!{RGBA, i32,f64}
 rgb_impl_from!{RGBA, f32,f64}
 
 impl<T: Clone> From<Gray<T>> for RGB<T> {
+    #[inline(always)]
     fn from(other: Gray<T>) -> Self {
         Self {
             r: other.0.clone(),
@@ -187,6 +199,7 @@ impl<T: Clone> From<Gray<T>> for RGB<T> {
 }
 
 impl<T: Clone,A> From<GrayAlpha<T,A>> for RGBA<T,A> {
+    #[inline(always)]
     fn from(other: GrayAlpha<T,A>) -> Self {
         Self {
             r: other.0.clone(),
@@ -198,6 +211,7 @@ impl<T: Clone,A> From<GrayAlpha<T,A>> for RGBA<T,A> {
 }
 
 impl<T> From<RGB<T>> for BGR<T> {
+    #[inline(always)]
     fn from(other: RGB<T>) -> Self {
         Self {
             r: other.r,
@@ -208,6 +222,7 @@ impl<T> From<RGB<T>> for BGR<T> {
 }
 
 impl<T> From<RGBA<T>> for BGRA<T> {
+    #[inline(always)]
     fn from(other: RGBA<T>) -> Self {
         Self {
             r: other.r,
@@ -219,6 +234,7 @@ impl<T> From<RGBA<T>> for BGRA<T> {
 }
 
 impl<T> From<BGR<T>> for RGB<T> {
+    #[inline(always)]
     fn from(other: BGR<T>) -> Self {
         Self {
             r: other.r,
@@ -229,6 +245,7 @@ impl<T> From<BGR<T>> for RGB<T> {
 }
 
 impl<T> From<BGRA<T>> for RGBA<T> {
+    #[inline(always)]
     fn from(other: BGRA<T>) -> Self {
         Self {
             r: other.r,
@@ -240,24 +257,28 @@ impl<T> From<BGRA<T>> for RGBA<T> {
 }
 
 impl<T> AsRef<T> for Gray<T> {
+    #[inline(always)]
     fn as_ref(&self) -> &T {
         &self.0
     }
 }
 
 impl<T> AsRef<[T]> for RGB<T> {
+    #[inline(always)]
     fn as_ref(&self) -> &[T] {
         self.as_slice()
     }
 }
 
 impl<T> AsRef<[T]> for RGBA<T> {
+    #[inline(always)]
     fn as_ref(&self) -> &[T] {
         self.as_slice()
     }
 }
 
 impl<T> AsRef<T> for GrayAlpha<T> {
+    #[inline(always)]
     fn as_ref(&self) -> &T {
         &self.0
     }
@@ -265,24 +286,28 @@ impl<T> AsRef<T> for GrayAlpha<T> {
 
 
 impl<T> AsMut<T> for Gray<T> {
+    #[inline(always)]
     fn as_mut(&mut self) -> &mut T {
         &mut self.0
     }
 }
 
 impl<T> AsMut<[T]> for RGB<T> {
+    #[inline(always)]
     fn as_mut(&mut self) -> &mut [T] {
         self.as_mut_slice()
     }
 }
 
 impl<T> AsMut<[T]> for RGBA<T> {
+    #[inline(always)]
     fn as_mut(&mut self) -> &mut [T] {
         self.as_mut_slice()
     }
 }
 
 impl<T> AsMut<T> for GrayAlpha<T> {
+    #[inline(always)]
     fn as_mut(&mut self) -> &mut T {
         &mut self.0
     }

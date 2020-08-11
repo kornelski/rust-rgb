@@ -21,6 +21,7 @@ impl<T: Add> Add for RGB<T> {
 impl<T> AddAssign for RGB<T> where
     T: Add<Output = T> + Copy
 {
+    #[inline(always)]
     fn add_assign(&mut self, other: RGB<T>) {
         *self = Self {
             r: self.r + other.r,
@@ -121,6 +122,7 @@ impl<T, A> AddAssign<RGBA<T, A>> for RGBA<T, A> where
     T: Copy + Add<Output = T>,
     A: Copy + Add<Output = A>
 {
+    #[inline(always)]
     fn add_assign(&mut self, other: RGBA<T, A>) {
         *self = Self {
             r: self.r + other.r,

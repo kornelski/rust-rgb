@@ -42,6 +42,7 @@ impl<T,A> Into<(T,T,T,A)> for RGBA<T,A> {
 }
 
 impl<T> From<(T,T,T)> for BGR<T> {
+    #[inline(always)]
     fn from(other: (T,T,T)) -> Self {
         Self {
             b: other.0,
@@ -52,12 +53,14 @@ impl<T> From<(T,T,T)> for BGR<T> {
 }
 
 impl<T> Into<(T,T,T)> for BGR<T> {
+    #[inline(always)]
     fn into(self) -> (T,T,T) {
         (self.b, self.g, self.r)
     }
 }
 
 impl<T,A> From<(T,T,T,A)> for BGRA<T,A> {
+    #[inline(always)]
     fn from(other: (T,T,T,A)) -> Self {
         Self {
             b: other.0,
@@ -69,6 +72,7 @@ impl<T,A> From<(T,T,T,A)> for BGRA<T,A> {
 }
 
 impl<T,A> Into<(T,T,T,A)> for BGRA<T,A> {
+    #[inline(always)]
     fn into(self) -> (T,T,T,A) {
         (self.b, self.g, self.r, self.a)
     }

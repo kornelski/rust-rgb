@@ -173,6 +173,7 @@ impl<T: Copy, A: Clone> GrayAlpha<T, A> {
     }
 
     /// Create a new `GrayAlpha` with a new alpha value created by the callback.
+    #[inline(always)]
     pub fn map_alpha<F, B>(&self, f: F) -> GrayAlpha<T, B>
         where F: FnOnce(A) -> B
     {
@@ -220,6 +221,7 @@ impl<T> ComponentSlice<T> for [GrayAlpha<T>] {
             slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 2)
         }
     }
+
     #[inline]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
@@ -254,6 +256,7 @@ impl<T> ComponentSlice<T> for [Gray<T>] {
             slice::from_raw_parts(self.as_ptr() as *const _, self.len())
         }
     }
+
     #[inline]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
@@ -267,6 +270,7 @@ impl<T: crate::Pod> ComponentBytes<T> for [Gray<T>] {}
 
 /// Assumes 255 is opaque
 impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u8> {
+    #[inline(always)]
     fn from(other: Gray<T>) -> Self {
         GrayAlpha(other.0, 0xFF)
     }
@@ -274,6 +278,7 @@ impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u8> {
 
 /// Assumes 65535 is opaque
 impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u16> {
+    #[inline(always)]
     fn from(other: Gray<T>) -> Self {
         GrayAlpha(other.0, 0xFFFF)
     }

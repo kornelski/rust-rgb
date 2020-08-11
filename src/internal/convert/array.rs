@@ -2,7 +2,7 @@ use crate::alt::{BGR, BGRA};
 use crate::{RGB, RGBA};
 
 impl<T: Copy> From<[T; 3]> for RGB<T> {
-    #[inline]
+    #[inline(always)]
     fn from(other: [T; 3]) -> Self {
         Self {
             r: other[0],
@@ -13,14 +13,14 @@ impl<T: Copy> From<[T; 3]> for RGB<T> {
 }
 
 impl<T> Into<[T; 3]> for RGB<T> {
-    #[inline]
+    #[inline(always)]
     fn into(self) -> [T; 3] {
         [self.r, self.g, self.b]
     }
 }
 
 impl<T: Copy> From<[T; 4]> for RGBA<T> {
-    #[inline]
+    #[inline(always)]
     fn from(other: [T; 4]) -> Self {
         Self {
             r: other[0],
@@ -32,14 +32,14 @@ impl<T: Copy> From<[T; 4]> for RGBA<T> {
 }
 
 impl<T> Into<[T; 4]> for RGBA<T> {
-    #[inline]
+    #[inline(always)]
     fn into(self) -> [T; 4] {
         [self.r, self.g, self.b, self.a]
     }
 }
 
 impl<T: Copy> From<[T; 3]> for BGR<T> {
-    #[inline]
+    #[inline(always)]
     fn from(other: [T; 3]) -> Self {
         Self {
             b: other[0],
@@ -50,14 +50,14 @@ impl<T: Copy> From<[T; 3]> for BGR<T> {
 }
 
 impl<T> Into<[T; 3]> for BGR<T> {
-    #[inline]
+    #[inline(always)]
     fn into(self) -> [T; 3] {
         [self.b, self.g, self.r]
     }
 }
 
 impl<T: Copy> From<[T; 4]> for BGRA<T> {
-    #[inline]
+    #[inline(always)]
     fn from(other: [T; 4]) -> Self {
         Self {
             b: other[0],
@@ -69,7 +69,7 @@ impl<T: Copy> From<[T; 4]> for BGRA<T> {
 }
 
 impl<T> Into<[T; 4]> for BGRA<T> {
-    #[inline]
+    #[inline(always)]
     fn into(self) -> [T; 4] {
         [self.b, self.g, self.r, self.a]
     }

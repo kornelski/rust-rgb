@@ -149,6 +149,7 @@ macro_rules! impl_rgba {
 
             /// Create a new RGBA with a new alpha value created by the callback.
             /// Allows changing of the type used for the alpha channel.
+            #[inline]
             pub fn map_alpha<F, B>(&self, f: F) -> $RGBA<T, B>
                 where F: FnOnce(A) -> B {
                 $RGBA {
@@ -265,6 +266,7 @@ impl<T, A> BGRA<T, A> {
 
     /// Provide a mutable view of only RGB components (leaving out alpha).
     /// Useful to change color without changing opacity.
+    #[inline(always)]
     pub fn bgr_mut(&mut self) -> &mut BGR<T> {
         unsafe {
             &mut *(self as *mut _ as *mut BGR<T>)
