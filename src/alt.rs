@@ -134,14 +134,24 @@ pub type GRAYA8 = GrayAlpha<u8>;
 /// 16-bit gray with alpha in machine's native endian
 pub type GRAYA16 = GrayAlpha<u16>;
 
+impl<T> Gray<T> {
+    /// New grayscale pixel
+    #[inline(always)]
+    pub fn new(brightness: T) -> Self {
+        Self(brightness)
+    }
+}
+
 impl<T> ops::Deref for Gray<T> {
     type Target = T;
+    #[inline(always)]
     fn deref(&self) -> &T {
         &self.0
     }
 }
 
 impl<T: Copy> From<T> for Gray<T> {
+    #[inline(always)]
     fn from(component: T) -> Self {
         Gray(component)
     }
@@ -156,6 +166,12 @@ impl<T: Clone, A> GrayAlpha<T, A> {
 }
 
 impl<T, A> GrayAlpha<T, A> {
+    /// New grayscale+alpha pixel
+    #[inline(always)]
+    pub fn new(brightness: T, alpha: A) -> Self {
+        Self(brightness, alpha)
+    }
+
     /// Provide a mutable view of only `Gray` component (leaving out alpha).
     #[inline(always)]
     pub fn gray_mut(&mut self) -> &mut Gray<T> {
@@ -168,6 +184,7 @@ impl<T, A> GrayAlpha<T, A> {
 impl<T: Copy, A: Clone> GrayAlpha<T, A> {
     #[inline(always)]
     /// Create a new `GrayAlpha` with the new alpha value, but same gray value
+    #[inline(always)]
     pub fn alpha(&self, a: A) -> Self {
         Self(self.0, a)
     }
@@ -296,10 +313,10 @@ fn gray() {
     assert_eq!(110, 10 + Gray(100).as_ref());
 
     let ga: GRAYA8 = GrayAlpha(1, 2);
-    assert_eq!(ga.gray(), Gray(1));
+    assert_eq!(ga.gray(), Gray::new(1));
     let mut g2 = ga.clone();
     *g2.gray_mut() = Gray(3);
-    assert_eq!(g2.map_gray(|g| g+1), GrayAlpha(4, 2));
+    assert_eq!(g2.map_gray(|g| g+1), GRAYA8::new(4, 2));
     assert_eq!(g2.map(|g| g+1), GrayAlpha(4, 3));
     assert_eq!(g2.0, 3);
     assert_eq!(g2.as_slice(), &[3, 2]);
