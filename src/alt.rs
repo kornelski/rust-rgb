@@ -205,6 +205,13 @@ impl<T: Copy, A: Clone> GrayAlpha<T, A> {
     }
 }
 
+impl<T: Copy, B> ComponentMap<Gray<B>, T, B> for Gray<T> {
+    #[inline(always)]
+    fn map<F>(&self, mut f: F) -> Gray<B> where F: FnMut(T) -> B {
+        Gray(f(self.0))
+    }
+}
+
 impl<T: Copy, B> ComponentMap<GrayAlpha<B>, T, B> for GrayAlpha<T> {
     #[inline(always)]
     fn map<F>(&self, mut f: F) -> GrayAlpha<B>
@@ -253,16 +260,12 @@ impl<T: crate::Pod> ComponentBytes<T> for [GrayAlpha<T>] {}
 impl<T> ComponentSlice<T> for Gray<T> {
     #[inline(always)]
     fn as_slice(&self) -> &[T] {
-        unsafe {
-            slice::from_raw_parts(self as *const Self as *const T, 1)
-        }
+        slice::from_ref(&self.0)
     }
 
     #[inline(always)]
     fn as_mut_slice(&mut self) -> &mut [T] {
-        unsafe {
-            slice::from_raw_parts_mut(self as *mut Self as *mut T, 1)
-        }
+        slice::from_mut(&mut self.0)
     }
 }
 
@@ -308,7 +311,8 @@ fn gray() {
     assert_eq!(rgb.g, 1);
     assert_eq!(rgb.b, 1);
 
-    let g: GRAY8 = 100.into();
+    let g: GRAY8 = 200.into();
+    let g = g.map(|c| c/2);
     assert_eq!(110, *g + 10);
     assert_eq!(110, 10 + Gray(100).as_ref());
 
