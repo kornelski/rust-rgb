@@ -1,258 +1,234 @@
+use crate::alt::Gray;
+use crate::alt::GrayAlpha;
 use super::pixel::*;
 use crate::RGB;
 use crate::RGBA;
 use core::ops::*;
 
-/// `px + px`
-impl<T: Add> Add for RGB<T> {
-    type Output = RGB<<T as Add>::Output>;
+macro_rules! impl_struct_ops_opaque {
+    ($ty:ident => $($field:tt)+) => {
+        /// `px + px`
+        impl<T: Add> Add for $ty<T> {
+            type Output = $ty<<T as Add>::Output>;
 
-    #[inline(always)]
-    fn add(self, other: RGB<T>) -> Self::Output {
-        RGB {
-            r: self.r + other.r,
-            g: self.g + other.g,
-            b: self.b + other.b,
+            #[inline(always)]
+            fn add(self, other: $ty<T>) -> Self::Output {
+                $ty {
+                    $(
+                        $field: self.$field + other.$field,
+                    )+
+                }
+            }
+        }
+
+        /// `px + px`
+        impl<T> AddAssign for $ty<T> where
+            T: Add<Output = T> + Copy
+        {
+            #[inline(always)]
+            fn add_assign(&mut self, other: $ty<T>) {
+                *self = Self {
+                    $(
+                        $field: self.$field + other.$field,
+                    )+
+                };
+            }
+        }
+
+        /// `px - px`
+        impl<T: Sub> Sub for $ty<T> {
+            type Output = $ty<<T as Sub>::Output>;
+
+            #[inline(always)]
+            fn sub(self, other: $ty<T>) -> Self::Output {
+                $ty {
+                    $(
+                        $field: self.$field - other.$field,
+                    )+
+                }
+            }
+        }
+
+        /// `px - px`
+        impl<T> SubAssign for $ty<T> where
+            T: Sub<Output = T> + Copy
+        {
+            #[inline(always)]
+            fn sub_assign(&mut self, other: $ty<T>) {
+                *self = Self {
+                    $(
+                        $field: self.$field - other.$field,
+                    )+
+                };
+            }
+        }
+    };
+}
+
+macro_rules! impl_struct_ops_alpha {
+    ($ty:ident => $($field:tt)+) => {
+        /// `px + px`
+        impl<T: Add, A: Add> Add for $ty<T, A> {
+            type Output = $ty<<T as Add>::Output, <A as Add>::Output>;
+
+            #[inline(always)]
+            fn add(self, other: $ty<T, A>) -> Self::Output {
+                $ty {
+                    $(
+                        $field: self.$field + other.$field,
+                    )+
+                }
+            }
+        }
+
+        /// `px + px`
+        impl<T, A> AddAssign for $ty<T, A> where
+            T: Add<Output = T> + Copy,
+            A: Add<Output = A> + Copy
+        {
+            #[inline(always)]
+            fn add_assign(&mut self, other: $ty<T, A>) {
+                *self = Self {
+                    $(
+                        $field: self.$field + other.$field,
+                    )+
+                };
+            }
+        }
+
+        /// `px - px`
+        impl<T: Sub, A: Sub> Sub for $ty<T, A> {
+            type Output = $ty<<T as Sub>::Output, <A as Sub>::Output>;
+
+            #[inline(always)]
+            fn sub(self, other: $ty<T, A>) -> Self::Output {
+                $ty {
+                    $(
+                        $field: self.$field - other.$field,
+                    )+
+                }
+            }
+        }
+
+        /// `px - px`
+        impl<T, A> SubAssign for $ty<T, A> where
+            T: Sub<Output = T> + Copy,
+            A: Sub<Output = A> + Copy
+        {
+            #[inline(always)]
+            fn sub_assign(&mut self, other: $ty<T, A>) {
+                *self = Self {
+                    $(
+                        $field: self.$field - other.$field,
+                    )+
+                };
+            }
+        }
+    };
+}
+
+macro_rules! impl_scalar {
+    ($ty:ident) => {
+        /// `px - 1`
+        impl<T> Sub<T> for $ty<T> where
+            T: Copy + Sub<Output=T>
+        {
+            type Output = $ty<<T as Sub>::Output>;
+
+            #[inline(always)]
+            fn sub(self, r: T) -> Self::Output {
+                self.map(|l| l-r)
+            }
+        }
+
+        /// `px - 1`
+        impl<T> SubAssign<T> for $ty<T> where
+            T: Copy + Sub<Output=T>
+        {
+            #[inline(always)]
+            fn sub_assign(&mut self, r: T) {
+                *self = self.map(|l| l-r);
+            }
+        }
+
+        /// `px + 1`
+        impl<T> Add<T> for $ty<T> where
+            T: Copy + Add<Output=T>
+        {
+            type Output = $ty<T>;
+
+            #[inline(always)]
+            fn add(self, r: T) -> Self::Output {
+                self.map(|l|l+r)
+            }
+        }
+
+        /// `px + 1`
+        impl<T> AddAssign<T> for $ty<T> where
+            T: Copy + Add<Output=T>
+        {
+            #[inline(always)]
+            fn add_assign(&mut self, r: T) {
+                *self = self.map(|l| l+r);
+            }
+        }
+
+        /// `px * 1`
+        impl<T> Mul<T> for $ty<T> where
+            T: Copy + Mul<Output=T>
+        {
+            type Output = $ty<T>;
+
+            #[inline(always)]
+            fn mul(self, r: T) -> Self::Output {
+                self.map(|l|l*r)
+            }
+        }
+
+        /// `px * 1`
+        impl<T> MulAssign<T> for $ty<T> where
+            T: Copy + Mul<Output=T>
+        {
+            #[inline(always)]
+            fn mul_assign(&mut self, r: T) {
+                *self = self.map(|l| l*r);
+            }
+        }
+
+        /// `px / 1`
+        impl<T> Div<T> for $ty<T> where
+            T: Copy + Div<Output=T>
+        {
+            type Output = $ty<T>;
+
+            #[inline(always)]
+            fn div(self, r: T) -> Self::Output {
+                self.map(|l| l / r)
+            }
+        }
+
+        /// `px * 1`
+        impl<T> DivAssign<T> for $ty<T> where
+            T: Copy + Div<Output=T>
+        {
+            #[inline(always)]
+            fn div_assign(&mut self, r: T) {
+                *self = self.map(|l| l / r);
+            }
         }
     }
 }
 
-/// `px + px`
-impl<T> AddAssign for RGB<T> where
-    T: Add<Output = T> + Copy
-{
-    #[inline(always)]
-    fn add_assign(&mut self, other: RGB<T>) {
-        *self = Self {
-            r: self.r + other.r,
-            g: self.g + other.g,
-            b: self.b + other.b,
-        };
-    }
-}
+impl_scalar!{RGB}
+impl_scalar!{RGBA}
+impl_scalar!{Gray}
+impl_scalar!{GrayAlpha}
 
-/// `px - px`
-impl<T: Sub> Sub for RGB<T> {
-    type Output = RGB<<T as Sub>::Output>;
+impl_struct_ops_opaque! {RGB => r g b}
+impl_struct_ops_opaque! {Gray => 0}
 
-    #[inline(always)]
-    fn sub(self, other: RGB<T>) -> Self::Output {
-        RGB {
-            r: self.r - other.r,
-            g: self.g - other.g,
-            b: self.b - other.b,
-        }
-    }
-}
-
-/// `px - px`
-impl<T> SubAssign for RGB<T> where
-    T: Sub<Output = T> + Copy
-{
-    #[inline(always)]
-    fn sub_assign(&mut self, other: RGB<T>) {
-        *self = Self {
-            r: self.r - other.r,
-            g: self.g - other.g,
-            b: self.b - other.b,
-        };
-    }
-}
-
-/// `px - 1`
-impl<T> Sub<T> for RGB<T> where
-    T: Copy + Sub<Output=T>
-{
-    type Output = RGB<<T as Sub>::Output>;
-
-    #[inline(always)]
-    fn sub(self, r: T) -> Self::Output {
-        self.map(|l| l-r)
-    }
-}
-
-/// `px - 1`
-impl<T> SubAssign<T> for RGB<T> where
-    T: Copy + Sub<Output=T>
-{
-    #[inline(always)]
-    fn sub_assign(&mut self, r: T) {
-        *self = self.map(|l| l-r);
-    }
-}
-
-/// `px + 1`
-impl<T> Add<T> for RGB<T> where
-    T: Copy + Add<Output=T>
-{
-    type Output = RGB<T>;
-
-    #[inline(always)]
-    fn add(self, r: T) -> Self::Output {
-        self.map(|l|l+r)
-    }
-}
-
-/// `px + 1`
-impl<T> AddAssign<T> for RGB<T> where
-    T: Copy + Add<Output=T>
-{
-    #[inline(always)]
-    fn add_assign(&mut self, r: T) {
-        *self = self.map(|l| l+r);
-    }
-}
-
-/// `px + px`
-impl<T: Add, A: Add> Add<RGBA<T, A>> for RGBA<T, A> {
-    type Output = RGBA<<T as Add>::Output, <A as Add>::Output>;
-
-    #[inline(always)]
-    fn add(self, other: RGBA<T, A>) -> Self::Output {
-        RGBA {
-            r: self.r + other.r,
-            g: self.g + other.g,
-            b: self.b + other.b,
-            a: self.a + other.a,
-        }
-    }
-}
-
-impl<T, A> AddAssign<RGBA<T, A>> for RGBA<T, A> where
-    T: Copy + Add<Output = T>,
-    A: Copy + Add<Output = A>
-{
-    #[inline(always)]
-    fn add_assign(&mut self, other: RGBA<T, A>) {
-        *self = Self {
-            r: self.r + other.r,
-            g: self.g + other.g,
-            b: self.b + other.b,
-            a: self.a + other.a,
-        };
-    }
-}
-
-/// `px - px`
-impl<T: Sub, A: Sub> Sub<RGBA<T, A>> for RGBA<T, A> {
-    type Output = RGBA<<T as Sub>::Output, <A as Sub>::Output>;
-
-    #[inline(always)]
-    fn sub(self, other: RGBA<T, A>) -> Self::Output {
-        RGBA {
-            r: self.r - other.r,
-            g: self.g - other.g,
-            b: self.b - other.b,
-            a: self.a - other.a,
-        }
-    }
-}
-
-/// `px - px`
-impl<T, A> SubAssign<RGBA<T, A>> for RGBA<T, A> where
-    T: Copy + Sub<Output = T>,
-    A: Copy + Sub<Output = A>
-{
-    #[inline(always)]
-    fn sub_assign(&mut self, other: RGBA<T, A>) {
-        *self = RGBA {
-            r: self.r - other.r,
-            g: self.g - other.g,
-            b: self.b - other.b,
-            a: self.a - other.a,
-        }
-    }
-}
-
-/// `px - 1`
-/// Works only if alpha channel has same depth as RGB channels
-impl<T> Sub<T> for RGBA<T> where
-    T: Copy + Sub
-{
-    type Output = RGBA<<T as Sub>::Output, <T as Sub>::Output>;
-
-    #[inline(always)]
-    fn sub(self, r: T) -> Self::Output {
-        self.map(|l| l - r)
-    }
-}
-
-/// `px - 1`
-/// Works only if alpha channel has same depth as RGB channels
-impl<T> SubAssign<T> for RGBA<T> where
-    T: Copy + Sub<Output = T>
-{
-    #[inline(always)]
-    fn sub_assign(&mut self, r: T) {
-        *self = self.map(|l| l - r);
-    }
-}
-
-/// `px + 1`
-impl<T> Add<T> for RGBA<T> where
-    T: Copy + Add<Output=T>
-{
-    type Output = RGBA<T>;
-
-    #[inline(always)]
-    fn add(self, r: T) -> Self::Output {
-        self.map(|l| l+r)
-    }
-}
-
-/// `px + 1`
-impl<T> AddAssign<T> for RGBA<T> where
-    T: Copy + Add<Output=T>
-{
-    #[inline(always)]
-    fn add_assign(&mut self, r: T) {
-        *self = self.map(|l| l+r);
-    }
-}
-
-/// `px * 1`
-impl<T> Mul<T> for RGB<T> where
-    T: Copy + Mul<Output=T>
-{
-    type Output = RGB<T>;
-
-    #[inline(always)]
-    fn mul(self, r: T) -> Self::Output {
-        self.map(|l|l*r)
-    }
-}
-
-/// `px * 1`
-impl<T> MulAssign<T> for RGB<T> where
-    T: Copy + Mul<Output=T>
-{
-    #[inline(always)]
-    fn mul_assign(&mut self, r: T) {
-        *self = self.map(|l| l*r);
-    }
-}
-
-/// `px * 1`
-impl<T> Mul<T> for RGBA<T> where
-    T: Copy + Mul<Output=T>
-{
-    type Output = RGBA<T>;
-
-    #[inline(always)]
-    fn mul(self, r: T) -> Self::Output {
-        self.map(|l|l*r)
-    }
-}
-
-/// `px * 1`
-impl<T> MulAssign<T> for RGBA<T> where
-    T: Copy + Mul<Output=T>
-{
-    #[inline(always)]
-    fn mul_assign(&mut self, r: T) {
-        *self = self.map(|l| l*r);
-    }
-}
+impl_struct_ops_alpha! {RGBA => r g b a}
+impl_struct_ops_alpha! {GrayAlpha => 0 1}
 
 #[cfg(test)]
 mod test {
