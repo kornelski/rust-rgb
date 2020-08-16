@@ -3,7 +3,6 @@ use crate::alt::BGR;
 use crate::alt::BGRA;
 use crate::RGB;
 use crate::RGBA;
-use core;
 use core::fmt;
 
 impl<T> RGB<T> {
@@ -105,7 +104,7 @@ macro_rules! impl_rgb {
             #[inline]
             fn as_mut_slice(&mut self) -> &mut [T] {
                 unsafe {
-                    core::slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * 3)
+                    core::slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() * 3)
                 }
             }
         }

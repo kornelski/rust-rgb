@@ -1,5 +1,4 @@
 use core::fmt;
-use core;
 use crate::alt::*;
 use crate::RGB;
 use crate::RGBA;
@@ -202,7 +201,7 @@ macro_rules! impl_rgba {
             #[inline]
             fn as_mut_slice(&mut self) -> &mut [T] {
                 unsafe {
-                    core::slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * 4)
+                    core::slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() * 4)
                 }
             }
         }

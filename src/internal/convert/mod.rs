@@ -43,7 +43,7 @@ macro_rules! as_pixels_impl {
             }
             fn as_pixels_mut(&mut self) -> &mut [$typ<T>] {
                 unsafe {
-                    slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() / $elems)
+                    slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() / $elems)
                 }
             }
         }
@@ -112,14 +112,14 @@ impl<T: Copy> FromSlice<T> for [T] {
     fn as_rgb_mut(&mut self) -> &mut [RGB<T>] {
         debug_assert_eq!(3 * mem::size_of::<T>(), mem::size_of::<RGB<T>>());
         unsafe {
-            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() / 3)
+            slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() / 3)
         }
     }
     #[inline]
     fn as_rgba_mut(&mut self) -> &mut [RGBA<T>] {
         debug_assert_eq!(4 * mem::size_of::<T>(), mem::size_of::<RGBA<T>>());
         unsafe {
-            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() / 4)
+            slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() / 4)
         }
     }
 
@@ -176,7 +176,7 @@ impl<T: Copy> FromSlice<T> for [T] {
     fn as_bgr_mut(&mut self) -> &mut [BGR<T>] {
         debug_assert_eq!(3 * mem::size_of::<T>(), mem::size_of::<BGR<T>>());
         unsafe {
-            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() / 3)
+            slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() / 3)
         }
     }
 
@@ -184,7 +184,7 @@ impl<T: Copy> FromSlice<T> for [T] {
     fn as_bgra_mut(&mut self) -> &mut [BGRA<T>] {
         debug_assert_eq!(4 * mem::size_of::<T>(), mem::size_of::<BGRA<T>>());
         unsafe {
-            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() / 4)
+            slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() / 4)
         }
     }
 }

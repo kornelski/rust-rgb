@@ -1,5 +1,4 @@
 use crate::internal::pixel::*;
-use core::mem;
 use core::ops;
 use core::slice;
 
@@ -176,7 +175,7 @@ impl<T, A> GrayAlpha<T, A> {
     #[inline(always)]
     pub fn gray_mut(&mut self) -> &mut Gray<T> {
         unsafe {
-            mem::transmute(self)
+            &mut *(self as *mut _ as *mut _)
         }
     }
 }
@@ -201,7 +200,7 @@ impl<T: Copy, A: Clone> GrayAlpha<T, A> {
     #[inline(always)]
     pub fn map_gray<F, U, B>(&self, f: F) -> GrayAlpha<U, B>
         where F: FnOnce(T) -> U, U: Clone, B: From<A> + Clone {
-        GrayAlpha(f(self.0.clone()), self.1.clone().into())
+        GrayAlpha(f(self.0), self.1.clone().into())
     }
 }
 
