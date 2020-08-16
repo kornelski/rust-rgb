@@ -75,9 +75,9 @@ pub trait FromSlice<T: Copy> {
     fn as_rgba_mut(&mut self) -> &mut [RGBA<T>];
 
     /// Reinterpert mutable slice as grayscale pixels
-    fn as_gray(&self) -> &mut [Gray<T>];
+    fn as_gray(&self) -> &[Gray<T>];
     /// Reinterpert mutable slice as grayscale pixels with alpha
-    fn as_gray_alpha(&self) -> &mut [GrayAlpha<T>];
+    fn as_gray_alpha(&self) -> &[GrayAlpha<T>];
     /// Reinterpert mutable slice as grayscale pixels
     fn as_gray_mut(&mut self) -> &mut [Gray<T>];
     /// Reinterpert mutable slice as grayscale pixels with alpha
@@ -124,18 +124,18 @@ impl<T: Copy> FromSlice<T> for [T] {
     }
 
     #[inline]
-    fn as_gray(&self) -> &mut [Gray<T>] {
+    fn as_gray(&self) -> &[Gray<T>] {
         debug_assert_eq!(mem::size_of::<Gray<T>>(), mem::size_of::<T>());
         unsafe {
-            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len())
+            slice::from_raw_parts(self.as_ptr() as *const _, self.len())
         }
     }
 
     #[inline]
-    fn as_gray_alpha(&self) -> &mut [GrayAlpha<T>] {
+    fn as_gray_alpha(&self) -> &[GrayAlpha<T>] {
         debug_assert_eq!(2 * mem::size_of::<T>(), mem::size_of::<GrayAlpha<T>>());
         unsafe {
-            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() / 2)
+            slice::from_raw_parts(self.as_ptr() as *const _, self.len() / 2)
         }
     }
 
@@ -143,7 +143,7 @@ impl<T: Copy> FromSlice<T> for [T] {
     fn as_gray_mut(&mut self) -> &mut [Gray<T>] {
         debug_assert_eq!(mem::size_of::<Gray<T>>(), mem::size_of::<T>());
         unsafe {
-            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len())
+            slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len())
         }
     }
 
@@ -151,7 +151,7 @@ impl<T: Copy> FromSlice<T> for [T] {
     fn as_gray_alpha_mut(&mut self) -> &mut [GrayAlpha<T>] {
         debug_assert_eq!(2 * mem::size_of::<T>(), mem::size_of::<GrayAlpha<T>>());
         unsafe {
-            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() / 2)
+            slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() / 2)
         }
     }
 
