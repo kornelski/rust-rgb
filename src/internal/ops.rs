@@ -4,6 +4,7 @@ use super::pixel::*;
 use crate::RGB;
 use crate::RGBA;
 use core::ops::*;
+use core::iter::Sum;
 
 macro_rules! impl_struct_ops_opaque {
     ($ty:ident => $($field:tt)+) => {
@@ -60,6 +61,13 @@ macro_rules! impl_struct_ops_opaque {
                         $field: self.$field - other.$field,
                     )+
                 };
+            }
+        }
+
+        impl<T> Sum<$ty<T>> for $ty<T> where T: Default + Add<Output=T> {
+            #[inline(always)]
+            fn sum<I: Iterator<Item=Self>>(iter: I) -> Self {
+                iter.fold($ty::default(), Add::add)
             }
         }
     };
@@ -122,6 +130,13 @@ macro_rules! impl_struct_ops_alpha {
                         $field: self.$field - other.$field,
                     )+
                 };
+            }
+        }
+
+        impl<T, A> Sum<$ty<T, A>> for $ty<T, A> where T: Default + Add<Output=T>, A: Default + Add<Output=A> {
+            #[inline(always)]
+            fn sum<I: Iterator<Item=Self>>(iter: I) -> Self {
+                iter.fold($ty::default(), Add::add)
             }
         }
     };
@@ -335,5 +350,17 @@ mod test {
         assert_eq!(RGBA::new(0, 255, 0, 0), green_rgba);
         green_rgba *= 2;
         assert_eq!(RGBA::new(0, 255*2, 0, 0), green_rgba);
+    }
+
+    #[test]
+    fn sum() {
+        let s1 = [RGB::new(1u8,1,1), RGB::new(2,3,4)].iter().copied().sum::<RGB<u8>>();
+        let s2 = [RGB::new(1u16,1,1), RGB::new(2,3,4)].iter().copied().sum::<RGB<u16>>();
+        let s3 = [RGBA::new_alpha(1u8,1,1,1u16), RGBA::new_alpha(2,3,4,5)].iter().copied().sum::<RGBA<u8, u16>>();
+        let s4 = [RGBA::new_alpha(1u16,1,1,1u8), RGBA::new_alpha(2,3,4,5)].iter().copied().sum::<RGBA<u16, u8>>();
+        assert_eq!(s1, RGB::new(3, 4, 5));
+        assert_eq!(s2, RGB::new(3, 4, 5));
+        assert_eq!(s3, RGBA::new_alpha(3, 4, 5, 6));
+        assert_eq!(s4, RGBA::new_alpha(3, 4, 5, 6));
     }
 }
