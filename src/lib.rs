@@ -16,8 +16,10 @@
 //! let pixel = pixel_rgba.rgb();
 //!
 //! let pixels = vec![pixel; 100];
+//! use rgb::ComponentBytes; // Import byte conversion trait
 //! let bytes = pixels.as_bytes();
 //!
+//! use rgb::ComponentMap; // Import pixel map trait
 //! let half_bright = pixel.map(|channel| channel / 2);
 //! let doubled = half_bright * 2;
 //! # let _ = doubled;
