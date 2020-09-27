@@ -136,7 +136,7 @@ pub type GRAYA16 = GrayAlpha<u16>;
 impl<T> Gray<T> {
     /// New grayscale pixel
     #[inline(always)]
-    pub fn new(brightness: T) -> Self {
+    pub const fn new(brightness: T) -> Self {
         Self(brightness)
     }
 }
@@ -167,7 +167,7 @@ impl<T: Clone, A> GrayAlpha<T, A> {
 impl<T, A> GrayAlpha<T, A> {
     /// New grayscale+alpha pixel
     #[inline(always)]
-    pub fn new(brightness: T, alpha: A) -> Self {
+    pub const fn new(brightness: T, alpha: A) -> Self {
         Self(brightness, alpha)
     }
 
