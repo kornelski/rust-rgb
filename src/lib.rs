@@ -178,7 +178,7 @@ fn rgba_works() {
 
 #[test]
 fn bytes() {
-    let rgb = RGB8::new(1,2,3);
+    let mut rgb = RGB8::new(1,2,3);
 
     #[cfg(feature = "as-bytes")]
     {
@@ -191,9 +191,8 @@ fn bytes() {
         assert_eq!(&[rgb], rgb_bytes.as_rgb());
         assert_eq!(&[rgb], rgb_bytes.as_pixels());
     }
-    let mut rgb2 = [rgb];
-    assert_eq!(rgb2.as_mut_slice().as_rgb_mut(), &mut [rgb]);
-    assert_eq!(&mut [rgb], rgb2.as_mut_slice().as_pixels_mut());
+    assert_eq!(&mut [rgb], rgb.as_mut_slice().as_rgb_mut());
+    assert_eq!(&mut [rgb], rgb.as_mut_slice().as_pixels_mut());
 
 
     #[cfg(feature = "as-bytes")]
@@ -214,14 +213,13 @@ fn bytes() {
     assert_eq!(&[rgb], rgb_slice.as_rgb());
     assert_eq!(rgb, rgb_slice.into_iter().cloned().collect());
 
-    let rgba = RGBA16::new(1,2,3,4);
+    let mut rgba = RGBA16::new(1,2,3,4);
     let rgba_slice = rgba.as_slice();
     assert_eq!(&[1,2,3,4], rgba_slice);
     assert_eq!(&[1,2,3], rgba_slice.as_rgb()[0].as_slice());
     assert_eq!(&[rgba], rgba_slice.as_rgba());
     assert_eq!(rgba, rgba_slice.into_iter().cloned().collect());
-    let mut rgba2 = [rgba];
-    assert_eq!(rgba2.as_mut_slice().as_rgba_mut(), &mut [rgba]);
+    assert_eq!(&mut [rgba], rgba.as_mut_slice().as_rgba_mut());
 
     let mut foo = vec![0u8; 8];
     foo.as_rgba_mut()[1] = RGBA::new(1,2,3,4);
