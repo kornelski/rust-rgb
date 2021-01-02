@@ -36,12 +36,6 @@ unsafe impl<T> crate::Zeroable for BGR<T> where T: crate::Zeroable {}
 macro_rules! impl_rgb {
     ($RGB:ident, $RGBA:ident) => {
         impl<T: Clone> $RGB<T> {
-            /// Iterate over color components (R, G, and B)
-            #[inline(always)]
-            pub fn iter(&self) -> core::iter::Cloned<core::slice::Iter<'_, T>> {
-                self.as_slice().iter().cloned()
-            }
-
             /// Convenience function for converting to RGBA
             #[inline(always)]
             pub fn alpha(&self, a: T) -> $RGBA<T> {
@@ -111,6 +105,42 @@ macro_rules! impl_rgb {
 
         #[cfg(feature = "as-bytes")]
         impl<T: crate::Pod> ComponentBytes<T> for [$RGB<T>] {}
+    }
+}
+
+pub struct Iter<'a, T> {
+    orig: &'a RGB<T>,
+    index: u32,
+}
+
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let Self { orig: RGB { r, g, b }, index } = self;
+        match index {
+            0 => {
+                self.index = 1;
+                Some(r)
+            }
+            1 => {
+                self.index = 2;
+                Some(g)
+            }
+            2 => {
+                self.index = 3;
+                Some(b)
+            }
+            _ => None,
+        }
+    }
+}
+
+impl<T> RGB<T> {
+    /// Iterate over the channels of this value in the order R, G, B.
+    #[inline(always)]
+    pub fn iter(&self) -> impl Iterator<Item = &'_ T> {
+        Iter { orig: self, index: 0 }
     }
 }
 

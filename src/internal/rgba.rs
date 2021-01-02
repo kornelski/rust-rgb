@@ -106,14 +106,6 @@ unsafe impl<T, A> crate::Zeroable for ABGR<T, A> where T: crate::Zeroable, A: cr
 
 macro_rules! impl_rgba {
     ($RGBA:ident) => {
-        impl<T: Clone> $RGBA<T> {
-            /// Iterate over all components (length=4)
-            #[inline(always)]
-            pub fn iter(&self) -> core::iter::Cloned<core::slice::Iter<'_, T>> {
-                self.as_slice().iter().cloned()
-            }
-        }
-
         impl<T: Clone, A> $RGBA<T, A> {
             /// Copy RGB components out of the RGBA struct
             ///
@@ -328,6 +320,46 @@ impl_alpha_conv! {RGB, ABGR}
 impl_alpha_conv! {BGR, ARGB}
 #[cfg(feature = "argb")]
 impl_alpha_conv! {RGB, ARGB}
+
+pub struct Iter<'a, T> {
+    orig: &'a RGBA<T>,
+    index: u32,
+}
+
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let Self { orig: RGBA { r, g, b, a }, index } = self;
+        match index {
+            0 => {
+                self.index = 1;
+                Some(r)
+            }
+            1 => {
+                self.index = 2;
+                Some(g)
+            }
+            2 => {
+                self.index = 3;
+                Some(b)
+            }
+            3 => {
+                self.index = 4;
+                Some(a)
+            }
+            _ => None,
+        }
+    }
+}
+
+impl<T> RGBA<T> {
+    /// Iterate over the channels of this value in the order R, G, B, A.
+    #[inline(always)]
+    pub fn iter(&self) -> impl Iterator<Item = &'_ T> {
+        Iter { orig: self, index: 0 }
+    }
+}
 
 impl<T: fmt::Display, A: fmt::Display> fmt::Display for RGBA<T, A> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

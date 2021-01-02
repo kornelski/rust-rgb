@@ -122,7 +122,7 @@ fn rgb_works() {
     let rgb = RGB{r:0u8,g:128,b:255}.clone();
     assert_eq!(rgb.b, 255);
 
-    assert_eq!(rgb, rgb.iter().map(|ch| ch).collect());
+    assert_eq!(rgb, rgb.iter().copied().collect());
 
     #[cfg(feature = "as-bytes")]
     {
@@ -169,7 +169,7 @@ fn rgba_works() {
     assert_eq!(rgba.b, 255);
     assert_eq!(rgba.a, 33);
 
-    assert_eq!(rgba, rgba.iter().map(|ch| ch).collect());
+    assert_eq!(rgba, rgba.iter().copied().collect());
 
     assert_eq!("rgba(1,2,3,4)", format!("{}", RGBA::new(1,2,3,4)));
 
