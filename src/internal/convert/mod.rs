@@ -69,10 +69,16 @@ pub trait FromSlice<T: Copy> {
     fn as_rgb(&self) -> &[RGB<T>];
     /// Reinterpert slice as RGBA pixels
     fn as_rgba(&self) -> &[RGBA<T>];
+    /// Reinterpert slice as alpha-first ARGB pixels
+    #[cfg(feature = "argb")]
+    fn as_argb(&self) -> &[ARGB<T>];
     /// Reinterpert mutable slice as RGB pixels
     fn as_rgb_mut(&mut self) -> &mut [RGB<T>];
     /// Reinterpert mutable slice as RGBA pixels
     fn as_rgba_mut(&mut self) -> &mut [RGBA<T>];
+    /// Reinterpert mutable slice as alpha-first ARGB pixels
+    #[cfg(feature = "argb")]
+    fn as_argb_mut(&mut self) -> &mut [ARGB<T>];
 
     /// Reinterpert mutable slice as grayscale pixels
     fn as_gray(&self) -> &[Gray<T>];
@@ -87,106 +93,117 @@ pub trait FromSlice<T: Copy> {
     fn as_bgr(&self) -> &[BGR<T>];
     /// Reinterpert slice as reverse-order BGRA pixels
     fn as_bgra(&self) -> &[BGRA<T>];
+    /// Reinterpert slice as reverse-order ABGR pixels
+    #[cfg(feature = "argb")]
+    fn as_abgr(&self) -> &[ABGR<T>];
     /// Reinterpert ntable slice as reverse-order BGR pixels
     fn as_bgr_mut(&mut self) -> &mut [BGR<T>];
-    /// Reinterpert mutable slice as reverse-order BGRA pixels
+    /// Reinterpert mutable slice as reverse-order alpha-last BGRA pixels
     fn as_bgra_mut(&mut self) -> &mut [BGRA<T>];
+    /// Reinterpert mutable slice as reverse-order alpha-first ABGR pixels
+    #[cfg(feature = "argb")]
+    fn as_abgr_mut(&mut self) -> &mut [ABGR<T>];
 }
 
 impl<T: Copy> FromSlice<T> for [T] {
     #[inline]
     fn as_rgb(&self) -> &[RGB<T>] {
-        debug_assert_eq!(3 * mem::size_of::<T>(), mem::size_of::<RGB<T>>());
-        unsafe {
-            slice::from_raw_parts(self.as_ptr() as *const _, self.len() / 3)
-        }
+        unsafe { from_items_to_struct(self) }
     }
+
     #[inline]
     fn as_rgba(&self) -> &[RGBA<T>] {
-        debug_assert_eq!(4 * mem::size_of::<T>(), mem::size_of::<RGBA<T>>());
-        unsafe {
-            slice::from_raw_parts(self.as_ptr() as *const _, self.len() / 4)
-        }
+        unsafe { from_items_to_struct(self) }
     }
+
+    #[inline]
+    #[cfg(feature = "argb")]
+    fn as_argb(&self) -> &[ARGB<T>] {
+        unsafe { from_items_to_struct(self) }
+    }
+
     #[inline]
     fn as_rgb_mut(&mut self) -> &mut [RGB<T>] {
-        debug_assert_eq!(3 * mem::size_of::<T>(), mem::size_of::<RGB<T>>());
-        unsafe {
-            slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() / 3)
-        }
+        unsafe { from_items_to_struct_mut(self) }
     }
+
     #[inline]
     fn as_rgba_mut(&mut self) -> &mut [RGBA<T>] {
-        debug_assert_eq!(4 * mem::size_of::<T>(), mem::size_of::<RGBA<T>>());
-        unsafe {
-            slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() / 4)
-        }
+        unsafe { from_items_to_struct_mut(self) }
+    }
+
+    #[inline]
+    #[cfg(feature = "argb")]
+    fn as_argb_mut(&mut self) -> &mut [ARGB<T>] {
+        unsafe { from_items_to_struct_mut(self) }
     }
 
     #[inline]
     fn as_gray(&self) -> &[Gray<T>] {
-        debug_assert_eq!(mem::size_of::<Gray<T>>(), mem::size_of::<T>());
-        unsafe {
-            slice::from_raw_parts(self.as_ptr() as *const _, self.len())
-        }
+        unsafe { from_items_to_struct(self) }
     }
 
     #[inline]
     fn as_gray_alpha(&self) -> &[GrayAlpha<T>] {
-        debug_assert_eq!(2 * mem::size_of::<T>(), mem::size_of::<GrayAlpha<T>>());
-        unsafe {
-            slice::from_raw_parts(self.as_ptr() as *const _, self.len() / 2)
-        }
+        unsafe { from_items_to_struct(self) }
     }
 
     #[inline]
     fn as_gray_mut(&mut self) -> &mut [Gray<T>] {
-        debug_assert_eq!(mem::size_of::<Gray<T>>(), mem::size_of::<T>());
-        unsafe {
-            slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len())
-        }
+        unsafe { from_items_to_struct_mut(self) }
     }
 
     #[inline]
     fn as_gray_alpha_mut(&mut self) -> &mut [GrayAlpha<T>] {
-        debug_assert_eq!(2 * mem::size_of::<T>(), mem::size_of::<GrayAlpha<T>>());
-        unsafe {
-            slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() / 2)
-        }
+        unsafe { from_items_to_struct_mut(self) }
     }
 
 
     #[inline]
     fn as_bgr(&self) -> &[BGR<T>] {
-        debug_assert_eq!(3 * mem::size_of::<T>(), mem::size_of::<BGR<T>>());
-        unsafe {
-            slice::from_raw_parts(self.as_ptr() as *const _, self.len() / 3)
-        }
+        unsafe { from_items_to_struct(self) }
+    }
+
+    #[inline]
+    #[cfg(feature = "argb")]
+    fn as_abgr(&self) -> &[ABGR<T>] {
+        unsafe { from_items_to_struct(self) }
     }
 
     #[inline]
     fn as_bgra(&self) -> &[BGRA<T>] {
-        debug_assert_eq!(4 * mem::size_of::<T>(), mem::size_of::<BGRA<T>>());
-        unsafe {
-            slice::from_raw_parts(self.as_ptr() as *const _, self.len() / 4)
-        }
+        unsafe { from_items_to_struct(self) }
     }
 
     #[inline]
     fn as_bgr_mut(&mut self) -> &mut [BGR<T>] {
-        debug_assert_eq!(3 * mem::size_of::<T>(), mem::size_of::<BGR<T>>());
-        unsafe {
-            slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() / 3)
-        }
+        unsafe { from_items_to_struct_mut(self) }
     }
 
     #[inline]
     fn as_bgra_mut(&mut self) -> &mut [BGRA<T>] {
-        debug_assert_eq!(4 * mem::size_of::<T>(), mem::size_of::<BGRA<T>>());
-        unsafe {
-            slice::from_raw_parts_mut(self.as_mut_ptr() as *mut _, self.len() / 4)
-        }
+        unsafe { from_items_to_struct_mut(self) }
     }
+
+    #[inline]
+    #[cfg(feature = "argb")]
+    fn as_abgr_mut(&mut self) -> &mut [ABGR<T>] {
+        unsafe { from_items_to_struct_mut(self) }
+    }
+}
+
+#[inline(always)]
+unsafe fn from_items_to_struct<F, T>(from: &[F]) -> &[T] {
+    debug_assert_eq!(0, mem::size_of::<T>() % mem::size_of::<F>());
+    let len = from.len() / (mem::size_of::<T>() / mem::size_of::<F>());
+    slice::from_raw_parts(from.as_ptr() as *const T, len)
+}
+
+#[inline(always)]
+unsafe fn from_items_to_struct_mut<F, T>(from: &mut [F]) -> &mut [T] {
+    debug_assert_eq!(0, mem::size_of::<T>() % mem::size_of::<F>());
+    let len = from.len() / (mem::size_of::<T>() / mem::size_of::<F>());
+    slice::from_raw_parts_mut(from.as_ptr() as *mut T, len)
 }
 
 macro_rules! rgb_impl_from {

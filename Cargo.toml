@@ -39,4 +39,4 @@ required-features = ["as-bytes"]
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
-features = [ "argb", "serde" ]
+features = [ "argb", "serde", "as-bytes" ]
