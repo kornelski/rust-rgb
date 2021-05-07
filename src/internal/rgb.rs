@@ -77,6 +77,18 @@ macro_rules! impl_rgb {
             }
         }
 
+        impl<T: Copy, B> ColorComponentMap<$RGB<B>, T, B> for $RGB<T> {
+            #[inline(always)]
+            fn map_c<F>(&self, mut f: F) -> $RGB<B>
+                where F: FnMut(T) -> B {
+                $RGB {
+                    r:f(self.r),
+                    g:f(self.g),
+                    b:f(self.b),
+                }
+            }
+        }
+
         impl<T> ComponentSlice<T> for $RGB<T> {
             #[inline(always)]
             fn as_slice(&self) -> &[T] {
