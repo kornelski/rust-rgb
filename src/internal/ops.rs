@@ -1,5 +1,6 @@
 use crate::alt::Gray;
 use crate::alt::GrayAlpha;
+use crate::alt::ARGB;
 use super::pixel::*;
 use crate::RGB;
 use crate::RGBA;
@@ -236,6 +237,7 @@ macro_rules! impl_scalar {
 
 impl_scalar!{RGB}
 impl_scalar!{RGBA}
+impl_scalar!{ARGB}
 impl_scalar!{Gray}
 impl_scalar!{GrayAlpha}
 
@@ -243,6 +245,7 @@ impl_struct_ops_opaque! {RGB => r g b}
 impl_struct_ops_opaque! {Gray => 0}
 
 impl_struct_ops_alpha! {RGBA => r g b a}
+impl_struct_ops_alpha! {ARGB => a r g b}
 impl_struct_ops_alpha! {GrayAlpha => 0 1}
 
 #[cfg(test)]
