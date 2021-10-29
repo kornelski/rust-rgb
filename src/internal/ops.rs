@@ -1,11 +1,12 @@
 use crate::alt::Gray;
 use crate::alt::GrayAlpha;
-use crate::alt::ARGB;
 use super::pixel::*;
 use crate::RGB;
 use crate::RGBA;
 use core::ops::*;
 use core::iter::Sum;
+#[cfg(feature = "argb")]
+use crate::alt::ARGB;
 
 macro_rules! impl_struct_ops_opaque {
     ($ty:ident => $($field:tt)+) => {
@@ -237,6 +238,7 @@ macro_rules! impl_scalar {
 
 impl_scalar!{RGB}
 impl_scalar!{RGBA}
+#[cfg(feature = "argb")]
 impl_scalar!{ARGB}
 impl_scalar!{Gray}
 impl_scalar!{GrayAlpha}
@@ -245,6 +247,7 @@ impl_struct_ops_opaque! {RGB => r g b}
 impl_struct_ops_opaque! {Gray => 0}
 
 impl_struct_ops_alpha! {RGBA => r g b a}
+#[cfg(feature = "argb")]
 impl_struct_ops_alpha! {ARGB => a r g b}
 impl_struct_ops_alpha! {GrayAlpha => 0 1}
 
