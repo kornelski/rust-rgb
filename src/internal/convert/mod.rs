@@ -246,6 +246,41 @@ rgb_impl_from!{RGBA, i16,f64}
 rgb_impl_from!{RGBA, i32,f64}
 rgb_impl_from!{RGBA, f32,f64}
 
+macro_rules! reorder_impl_from {
+    (@rgb $t1:ident, $t2:ident) => {
+        reorder_impl_from!(@once $t1, $t2, r, g, b);
+        reorder_impl_from!(@once $t2, $t1, r, g, b);
+    };
+    (@rgba $t1:ident, $t2:ident) => {
+        reorder_impl_from!(@once $t1, $t2, r, g, b, a);
+        reorder_impl_from!(@once $t2, $t1, r, g, b, a);
+    };
+    (@once $t1:ident, $t2:ident, $($component:ident),+) => {
+        impl<T> From<$t1<T>> for $t2<T> where T: ::core::clone::Clone {
+            fn from(other: $t1<T>) -> Self {
+                let $t1 { $($component),+ } = other;
+                Self {
+                    $($component),+
+                }
+            }
+        }
+    }
+}
+
+#[cfg(feature = "argb")]
+reorder_impl_from!(@rgba RGBA, ARGB);
+#[cfg(feature = "argb")]
+reorder_impl_from!(@rgba ABGR, ARGB);
+#[cfg(feature = "argb")]
+reorder_impl_from!(@rgba BGRA, ARGB);
+#[cfg(feature = "argb")]
+reorder_impl_from!(@rgba BGRA, ABGR);
+
+reorder_impl_from!(@rgb RGB, BGR);
+reorder_impl_from!(@rgba BGRA, RGBA);
+#[cfg(feature = "argb")]
+reorder_impl_from!(@rgba ABGR, RGBA);
+
 impl<T: Clone> From<Gray<T>> for RGB<T> {
     #[inline(always)]
     fn from(other: Gray<T>) -> Self {
@@ -265,52 +300,6 @@ impl<T: Clone,A> From<GrayAlpha<T,A>> for RGBA<T,A> {
             g: other.0.clone(),
             b: other.0,
             a: other.1,
-        }
-    }
-}
-
-impl<T> From<RGB<T>> for BGR<T> {
-    #[inline(always)]
-    fn from(other: RGB<T>) -> Self {
-        Self {
-            r: other.r,
-            g: other.g,
-            b: other.b,
-        }
-    }
-}
-
-impl<T> From<RGBA<T>> for BGRA<T> {
-    #[inline(always)]
-    fn from(other: RGBA<T>) -> Self {
-        Self {
-            r: other.r,
-            g: other.g,
-            b: other.b,
-            a: other.a,
-        }
-    }
-}
-
-impl<T> From<BGR<T>> for RGB<T> {
-    #[inline(always)]
-    fn from(other: BGR<T>) -> Self {
-        Self {
-            r: other.r,
-            g: other.g,
-            b: other.b,
-        }
-    }
-}
-
-impl<T> From<BGRA<T>> for RGBA<T> {
-    #[inline(always)]
-    fn from(other: BGRA<T>) -> Self {
-        Self {
-            r: other.r,
-            g: other.g,
-            b: other.b,
-            a: other.a,
         }
     }
 }
@@ -370,6 +359,22 @@ impl<T> AsMut<T> for GrayAlpha<T> {
     fn as_mut(&mut self) -> &mut T {
         &mut self.0
     }
+}
+
+#[cfg(feature = "argb")]
+#[test]
+fn argb_converts() {
+    let argb = ARGB {a: 0xffu8, r: 0xff, g: 0xff, b: 0xff};
+    let rgba = RGBA {a: 0xffu8, r: 0xff, g: 0xff, b: 0xff};
+
+    assert_eq!(RGBA::from(argb), rgba);
+    assert_eq!(ARGB::from(rgba), argb);
+
+    let bgra = BGRA {a: 0xffu8, r: 0xff, g: 0xff, b: 0xff};
+    let abgr = ABGR {a: 0xffu8, r: 0xff, g: 0xff, b: 0xff};
+
+    assert_eq!(BGRA::from(abgr), bgra);
+    assert_eq!(ABGR::from(bgra), abgr);
 }
 
 
