@@ -181,7 +181,6 @@ impl<T, A> GrayAlpha<T, A> {
 }
 
 impl<T: Copy, A: Clone> GrayAlpha<T, A> {
-    #[inline(always)]
     /// Create a new `GrayAlpha` with the new alpha value, but same gray value
     #[inline(always)]
     pub fn alpha(&self, a: A) -> Self {

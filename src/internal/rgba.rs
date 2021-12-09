@@ -370,7 +370,7 @@ fn rgba_test() {
     assert_eq!(neg, neg.as_slice().iter().cloned().collect());
     assert!(neg < RGBA::new(0,0,0,0));
 
-    let neg: RGBA<i16> = RGBA::new(1u8,2,3,4).map_rgb(|c| -(c as i16));
+    let neg = RGBA::new(1u8,2,3,4).map_rgb(|c| -(c as i16));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4i16, neg.a);
     let neg = RGBA::new(1u8,2,3,4).map_c(|c| -(c as i16));
@@ -421,7 +421,7 @@ fn bgra_test() {
     assert_eq!(&[-3,-2,-1,-1000], neg.as_slice());
     assert!(neg < BGRA::new(0, 0, 0, 0));
 
-    let neg: BGRA<i16> = BGRA::new(1u8, 2u8, 3u8, 4u8).map_rgb(|c| -(c as i16));
+    let neg = BGRA::new(1u8, 2u8, 3u8, 4u8).map_rgb(|c| -(c as i16));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4i16, neg.a);
     let neg = BGRA::new(1u8, 2u8, 3u8, 4u8).map_c(|c| -(c as i16));
