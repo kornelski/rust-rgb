@@ -292,6 +292,18 @@ impl<T: Clone> From<Gray<T>> for RGB<T> {
     }
 }
 
+impl<T: Clone> From<Gray<T>> for RGBA<T, u8> {
+    #[inline(always)]
+    fn from(other: Gray<T>) -> Self {
+        Self {
+            r: other.0.clone(),
+            g: other.0.clone(),
+            b: other.0,
+            a: 255,
+        }
+    }
+}
+
 impl<T: Clone,A> From<GrayAlpha<T,A>> for RGBA<T,A> {
     #[inline(always)]
     fn from(other: GrayAlpha<T,A>) -> Self {

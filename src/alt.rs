@@ -326,6 +326,12 @@ fn gray() {
     assert_eq!(rgb.g, 1);
     assert_eq!(rgb.b, 1);
 
+    let rgba: crate::RGBA<_> = Gray(1u8).into();
+    assert_eq!(rgba.r, 1);
+    assert_eq!(rgba.g, 1);
+    assert_eq!(rgba.b, 1);
+    assert_eq!(rgba.a, 255);
+
     let g: GRAY8 = 200.into();
     let g = g.map(|c| c/2);
     assert_eq!(110, *g + 10);
