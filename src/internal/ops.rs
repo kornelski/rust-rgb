@@ -38,6 +38,34 @@ macro_rules! impl_struct_ops_opaque {
             }
         }
 
+        /// `px * px`
+        impl<T: Mul> Mul for $ty<T> {
+            type Output = $ty<<T as Mul>::Output>;
+
+            #[inline(always)]
+            fn mul(self, other: $ty<T>) -> Self::Output {
+                $ty {
+                    $(
+                        $field: self.$field * other.$field,
+                    )+
+                }
+            }
+        }
+
+        /// `px * px`
+        impl<T> MulAssign for $ty<T> where
+            T: Mul<Output = T> + Copy
+        {
+            #[inline(always)]
+            fn mul_assign(&mut self, other: $ty<T>) {
+                *self = Self {
+                    $(
+                        $field: self.$field * other.$field,
+                    )+
+                };
+            }
+        }
+
         /// `px - px`
         impl<T: Sub> Sub for $ty<T> {
             type Output = $ty<<T as Sub>::Output>;
@@ -341,6 +369,8 @@ mod test {
     fn test_mult() {
         assert_eq!(RGB::new(0.5,1.5,2.5), RGB::new(1.,3.,5.) * 0.5);
         assert_eq!(RGBA::new(2,4,6,8), RGBA::new(1,2,3,4) * 2);
+        assert_eq!(RGB::new(0.5,1.5,2.5) * RGB::new(1.,3.,5.),
+        RGB::new(0.5,4.5,12.5));
     }
 
     #[test]
@@ -350,6 +380,10 @@ mod test {
         assert_eq!(RGB::new(0, 255, 0), green_rgb);
         green_rgb *= 2;
         assert_eq!(RGB::new(0, 255*2, 0), green_rgb);
+
+        let mut rgb = RGB::new(0.5,1.5,2.5);
+        rgb *= RGB::new(1.,3.,5.);
+        assert_eq!(rgb, RGB::new(0.5,4.5,12.5));
 
         let mut green_rgba = RGBA::new(0u16, 255, 0, 0);
         green_rgba *= 1;
