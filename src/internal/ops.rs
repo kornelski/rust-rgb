@@ -5,6 +5,9 @@ use crate::RGB;
 use crate::RGBA;
 use core::ops::*;
 use core::iter::Sum;
+use approx::AbsDiffEq;
+use approx::RelativeEq;
+use approx::UlpsEq;
 #[cfg(feature = "argb")]
 use crate::alt::ARGB;
 
@@ -100,6 +103,46 @@ macro_rules! impl_struct_ops_opaque {
                 iter.fold($ty::default(), Add::add)
             }
         }
+
+        impl<T> AbsDiffEq for $ty<T> where T: AbsDiffEq<Epsilon=T> + Copy {
+            type Epsilon = T::Epsilon;
+
+            #[inline]
+            fn default_epsilon() -> T::Epsilon {
+                T::default_epsilon()
+            }
+
+            #[inline]
+            fn abs_diff_eq(&self, other: &Self, epsilon: T::Epsilon)
+            -> bool
+            {
+                $(T::abs_diff_eq(&self.$field, &other.$field, epsilon))&&+
+            }
+        }
+
+        impl<T> RelativeEq for $ty<T> where T: RelativeEq + AbsDiffEq<Epsilon=T> + Copy {
+            #[inline]
+            fn default_max_relative() -> T::Epsilon {
+                T::default_max_relative()
+            }
+
+            #[inline]
+            fn relative_eq(&self, other: &Self, epsilon: T::Epsilon, max_relative: T::Epsilon) -> bool {
+                $(T::relative_eq(&self.$field, &other.$field, epsilon, max_relative))&&+
+            }
+        }
+
+        impl<T> UlpsEq for $ty<T> where T: UlpsEq + AbsDiffEq<Epsilon=T> + Copy {
+            #[inline]
+            fn default_max_ulps() -> u32 {
+                T::default_max_ulps()
+            }
+
+            #[inline]
+            fn ulps_eq(&self, other: &Self, epsilon: T::Epsilon, max_ulps: u32) -> bool {
+                $(T::ulps_eq(&self.$field, &other.$field, epsilon, max_ulps))&&+
+            }
+        }
     };
 }
 
@@ -167,6 +210,46 @@ macro_rules! impl_struct_ops_alpha {
             #[inline(always)]
             fn sum<I: Iterator<Item=Self>>(iter: I) -> Self {
                 iter.fold($ty::default(), Add::add)
+            }
+        }
+
+        impl<T> AbsDiffEq for $ty<T> where T: AbsDiffEq<Epsilon=T> + Copy {
+            type Epsilon = T::Epsilon;
+
+            #[inline]
+            fn default_epsilon() -> T::Epsilon {
+                T::default_epsilon()
+            }
+
+            #[inline]
+            fn abs_diff_eq(&self, other: &Self, epsilon: T::Epsilon)
+            -> bool
+            {
+                $(T::abs_diff_eq(&self.$field, &other.$field, epsilon))&&+
+            }
+        }
+
+        impl<T> RelativeEq for $ty<T> where T: RelativeEq + AbsDiffEq<Epsilon=T> + Copy {
+            #[inline]
+            fn default_max_relative() -> T::Epsilon {
+                T::default_max_relative()
+            }
+
+            #[inline]
+            fn relative_eq(&self, other: &Self, epsilon: T::Epsilon, max_relative: T::Epsilon) -> bool {
+                $(T::relative_eq(&self.$field, &other.$field, epsilon, max_relative))&&+
+            }
+        }
+
+        impl<T> UlpsEq for $ty<T> where T: UlpsEq + AbsDiffEq<Epsilon=T> + Copy {
+            #[inline]
+            fn default_max_ulps() -> u32 {
+                T::default_max_ulps()
+            }
+
+            #[inline]
+            fn ulps_eq(&self, other: &Self, epsilon: T::Epsilon, max_ulps: u32) -> bool {
+                $(T::ulps_eq(&self.$field, &other.$field, epsilon, max_ulps))&&+
             }
         }
     };

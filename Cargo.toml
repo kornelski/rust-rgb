@@ -24,6 +24,7 @@ travis-ci = { repository = "kornelski/rust-rgb" }
 maintenance = { status = "actively-developed" }
 
 [dependencies]
+approx = "0.5"
 serde = { version = "1.0.130", optional = true, default-features = false, features = ["derive"] }
 bytemuck = { version = "1.7.2", optional = true }
 
