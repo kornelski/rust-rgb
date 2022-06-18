@@ -203,7 +203,7 @@ unsafe fn from_items_to_struct<F, T>(from: &[F]) -> &[T] {
 unsafe fn from_items_to_struct_mut<F, T>(from: &mut [F]) -> &mut [T] {
     debug_assert_eq!(0, mem::size_of::<T>() % mem::size_of::<F>());
     let len = from.len() / (mem::size_of::<T>() / mem::size_of::<F>());
-    slice::from_raw_parts_mut(from.as_ptr() as *mut T, len)
+    slice::from_raw_parts_mut(from.as_mut_ptr() as *mut T, len)
 }
 
 macro_rules! rgb_impl_from {
