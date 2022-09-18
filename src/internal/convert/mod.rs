@@ -219,7 +219,11 @@ macro_rules! rgb_impl_from {
 }
 
 rgb_impl_from!{RGB, u8,i16}
+rgb_impl_from!{RGB, u8,u16}
+rgb_impl_from!{RGB, u8,u32}
 rgb_impl_from!{RGB, u16,i32}
+rgb_impl_from!{RGB, u16,u32}
+rgb_impl_from!{RGB, u16,u64}
 
 rgb_impl_from!{RGB, u8,f32}
 rgb_impl_from!{RGB, u8,f64}
@@ -232,9 +236,13 @@ rgb_impl_from!{RGB, i16,f64}
 rgb_impl_from!{RGB, i32,f64}
 rgb_impl_from!{RGB, f32,f64}
 
-
 rgb_impl_from!{RGBA, u16,i32}
+rgb_impl_from!{RGBA, u16,u32}
+rgb_impl_from!{RGBA, u16,u64}
 
+rgb_impl_from!{RGBA, u8,i16}
+rgb_impl_from!{RGBA, u8,u16}
+rgb_impl_from!{RGBA, u8,u32}
 rgb_impl_from!{RGBA, u8,f32}
 rgb_impl_from!{RGBA, u8,f64}
 rgb_impl_from!{RGBA, u16,f32}
