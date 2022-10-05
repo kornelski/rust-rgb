@@ -101,7 +101,7 @@ pub struct RGBA<ComponentType, AlphaComponentType = ComponentType> {
 
 /// 8-bit RGB
 ///
-/// The colorspace is techincally undefined, but generally sRGB is assumed.
+/// The colorspace is technically undefined, but generally sRGB is assumed.
 pub type RGB8 = RGB<u8>;
 
 /// 16-bit RGB in machine's native endian
