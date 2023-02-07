@@ -4,6 +4,8 @@ use crate::alt::BGRA;
 use crate::RGB;
 use crate::RGBA;
 use core::fmt;
+#[cfg(feature = "grb")]
+use crate::alt::GRB;
 
 impl<T> RGB<T> {
     /// Convenience function for creating a new pixel
@@ -34,34 +36,12 @@ unsafe impl<T> crate::Zeroable for RGB<T> where T: crate::Zeroable {}
 unsafe impl<T> crate::Zeroable for BGR<T> where T: crate::Zeroable {}
 
 macro_rules! impl_rgb {
-    ($RGB:ident, $RGBA:ident) => {
+    ($RGB:ident) => {
         impl<T: Clone> $RGB<T> {
             /// Iterate over color components (R, G, and B)
             #[inline(always)]
             pub fn iter(&self) -> core::iter::Cloned<core::slice::Iter<'_, T>> {
                 self.as_slice().iter().cloned()
-            }
-
-            /// Convenience function for converting to RGBA
-            #[inline(always)]
-            pub fn alpha(&self, a: T) -> $RGBA<T> {
-                $RGBA {
-                    r: self.r.clone(),
-                    g: self.g.clone(),
-                    b: self.b.clone(),
-                    a,
-                }
-            }
-
-            /// Convenience function for converting to RGBA with alpha channel of a different type than type of the pixels
-            #[inline(always)]
-            pub fn new_alpha<A>(&self, a: A) -> $RGBA<T, A> {
-                $RGBA {
-                    r: self.r.clone(),
-                    g: self.g.clone(),
-                    b: self.b.clone(),
-                    a,
-                }
             }
         }
 
@@ -126,6 +106,35 @@ macro_rules! impl_rgb {
     }
 }
 
+macro_rules! impl_rgb_to_alpha {
+    ($RGB:ident, $RGBA:ident) => {
+        impl<T: Clone> $RGB<T> {
+            /// Convenience function for converting to RGBA
+            #[inline(always)]
+            pub fn alpha(&self, a: T) -> $RGBA<T> {
+                $RGBA {
+                    r: self.r.clone(),
+                    g: self.g.clone(),
+                    b: self.b.clone(),
+                    a,
+                }
+            }
+
+            /// Convenience function for converting to RGBA with alpha channel of a different type than type of the pixels
+            #[inline(always)]
+            pub fn new_alpha<A>(&self, a: A) -> $RGBA<T, A> {
+                $RGBA {
+                    r: self.r.clone(),
+                    g: self.g.clone(),
+                    b: self.b.clone(),
+                    a,
+                }
+            }
+        }
+    }
+}
+
+
 impl<T> core::iter::FromIterator<T> for RGB<T> {
     /// Takes exactly 3 elements from the iterator and creates a new instance.
     /// Panics if there are fewer elements in the iterator.
@@ -140,8 +149,12 @@ impl<T> core::iter::FromIterator<T> for RGB<T> {
     }
 }
 
-impl_rgb!{RGB, RGBA}
-impl_rgb!{BGR, BGRA}
+impl_rgb!{RGB}
+impl_rgb_to_alpha!{RGB, RGBA}
+impl_rgb!{BGR}
+impl_rgb_to_alpha!{BGR, BGRA}
+#[cfg(feature = "grb")]
+impl_rgb!{GRB}
 
 impl<T: fmt::Display> fmt::Display for RGB<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -183,6 +196,15 @@ impl<T: fmt::LowerHex> fmt::LowerHex for BGR<T> {
 mod rgb_test {
     use super::*;
     use std;
+
+    #[test]
+    #[cfg(feature = "grb")]
+    fn grb_test() {
+        let grb = GRB {g:1,r:2,b:3}.map(|c| c * 2) + 1;
+        let rgb: crate::RGB8 = grb.into();
+        assert_eq!(rgb, RGB::new(5,3,7));
+    }
+
     #[test]
     fn sanity_check() {
         let neg = RGB::new(1,2,3i32).map(|x| -x);

@@ -54,6 +54,8 @@ as_pixels_impl!{RGB, 3}
 as_pixels_impl!{RGBA, 4}
 as_pixels_impl!{BGR, 3}
 as_pixels_impl!{BGRA, 4}
+#[cfg(feature = "grb")]
+as_pixels_impl!{GRB, 3}
 as_pixels_impl!{Gray, 1}
 as_pixels_impl!{GrayAlpha, 2}
 #[cfg(feature = "argb")]
@@ -288,6 +290,8 @@ reorder_impl_from!(@rgb RGB, BGR);
 reorder_impl_from!(@rgba BGRA, RGBA);
 #[cfg(feature = "argb")]
 reorder_impl_from!(@rgba ABGR, RGBA);
+#[cfg(feature = "grb")]
+reorder_impl_from!(@rgb RGB, GRB);
 
 impl<T: Clone> From<Gray<T>> for RGB<T> {
     #[inline(always)]

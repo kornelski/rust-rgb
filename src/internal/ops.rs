@@ -7,6 +7,8 @@ use core::ops::*;
 use core::iter::Sum;
 #[cfg(feature = "argb")]
 use crate::alt::ARGB;
+#[cfg(feature = "grb")]
+use crate::alt::GRB;
 
 macro_rules! impl_struct_ops_opaque {
     ($ty:ident => $($field:tt)+) => {
@@ -268,10 +270,14 @@ impl_scalar!{RGB}
 impl_scalar!{RGBA}
 #[cfg(feature = "argb")]
 impl_scalar!{ARGB}
+#[cfg(feature = "grb")]
+impl_scalar!{GRB}
 impl_scalar!{Gray}
 impl_scalar!{GrayAlpha}
 
 impl_struct_ops_opaque! {RGB => r g b}
+#[cfg(feature = "grb")]
+impl_struct_ops_opaque! {GRB => g r b}
 impl_struct_ops_opaque! {Gray => 0}
 
 impl_struct_ops_alpha! {RGBA => r g b a}

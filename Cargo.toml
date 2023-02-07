@@ -18,6 +18,7 @@ default = ["as-bytes"]
 # safe as_bytes() casts require a marker trait for non-padded, non-pointery types.
 as-bytes = ["bytemuck"]
 argb = []
+grb = []
 
 [badges]
 travis-ci = { repository = "kornelski/rust-rgb" }

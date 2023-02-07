@@ -30,10 +30,10 @@ pub struct BGRA<ComponentType, AlphaComponentType = ComponentType> {
     pub a: AlphaComponentType,
 }
 
+#[cfg(feature = "argb")]
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[cfg(feature = "argb")]
 /// A+BGR
 pub struct ABGR<ComponentType, AlphaComponentType = ComponentType> {
     /// Alpha first
@@ -46,10 +46,10 @@ pub struct ABGR<ComponentType, AlphaComponentType = ComponentType> {
     pub r: ComponentType,
 }
 
+#[cfg(feature = "argb")]
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[cfg(feature = "argb")]
 /// A+RGB
 pub struct ARGB<ComponentType, AlphaComponentType = ComponentType> {
     /// Alpha first
@@ -89,6 +89,24 @@ pub type ABGR16 = ABGR<u16>;
 /// 16-bit ARGB in machine's native endian. 0 = transparent, 65535 = opaque.
 #[cfg(feature = "argb")]
 pub type ARGB16 = ARGB<u16>;
+
+#[cfg(feature = "grb")]
+#[repr(C)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
+/// RGB with red-green swapped (may be useful for LEDs)
+pub struct GRB<ComponentType> {
+    /// Green first
+    pub g: ComponentType,
+    /// Red
+    pub r: ComponentType,
+    /// Blue last
+    pub b: ComponentType,
+}
+
+/// 8-bit GRB
+#[cfg(feature = "grb")]
+pub type GRB8 = GRB<u8>;
 
 ////////////////////////////////////////
 
