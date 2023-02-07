@@ -1,3 +1,5 @@
+#[cfg(feature = "argb")]
+use crate::alt::{ARGB};
 use crate::alt::{BGR, BGRA};
 use crate::{RGB, RGBA};
 
@@ -35,6 +37,27 @@ impl<T> Into<[T; 4]> for RGBA<T> {
     #[inline(always)]
     fn into(self) -> [T; 4] {
         [self.r, self.g, self.b, self.a]
+    }
+}
+
+#[cfg(feature = "argb")]
+impl<T: Copy> From<[T; 4]> for ARGB<T> {
+    #[inline(always)]
+    fn from(other: [T; 4]) -> Self {
+        Self {
+            a: other[0],
+            r: other[1],
+            g: other[2],
+            b: other[3],
+        }
+    }
+}
+
+#[cfg(feature = "argb")]
+impl<T> Into<[T; 4]> for ARGB<T> {
+    #[inline(always)]
+    fn into(self) -> [T; 4] {
+        [self.a, self.r, self.g, self.b]
     }
 }
 
