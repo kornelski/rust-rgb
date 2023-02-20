@@ -59,9 +59,9 @@ as_pixels_impl!{GRB, 3}
 as_pixels_impl!{Gray, 1}
 as_pixels_impl!{GrayAlpha, 2}
 #[cfg(feature = "argb")]
-as_pixels_impl!{ARGB, 2}
+as_pixels_impl!{ARGB, 4}
 #[cfg(feature = "argb")]
-as_pixels_impl!{ABGR, 2}
+as_pixels_impl!{ABGR, 4}
 
 /// Cast a slice of component values (bytes) as a slice of RGB/RGBA pixels
 ///
