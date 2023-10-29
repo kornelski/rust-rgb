@@ -313,6 +313,17 @@ impl<T: Clone, A> RGBA<T, A> {
     }
 }
 
+#[cfg(feature = "argb")]
+impl<T: Clone, A> ARGB<T, A> {
+    /// Copy RGB components out of the ARGB struct
+    ///
+    /// Note: you can use `.into()` to convert between other types
+    #[inline(always)]
+    pub fn rgb(&self) -> RGB<T> {
+        RGB {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+    }
+}
+
 impl<T: Clone, A> BGRA<T, A> {
     /// Copy RGB components out of the RGBA struct
     ///

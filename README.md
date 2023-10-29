@@ -43,7 +43,7 @@ let pixels: &[RGB8] = raw.as_rgb(); /// Safe casts without copying
 let raw_again = pixels.as_bytes();
 ```
 
-Note: if you get an error about "no method named `as_bytes` found", add `use rgb::ComponentBytes`. If you're using a custom component type (`RGB<CustomType>`), implement `rgb::Pod` (plain old data) and `rgb::Zeroable` trait for the component (these traits are from [`bytemuck`](//lib.rs/bytemuck) crate).
+Note: if you get an error about "no method named `as_bytes` found", add `use rgb::ComponentBytes`. If you're using a custom component type (`RGB<CustomType>`), implement `rgb::Pod` (plain old data) and `rgb::Zeroable` trait for the component (these traits are from [`bytemuck`](https://lib.rs/bytemuck) crate).
 
 ----
 

@@ -388,14 +388,15 @@ impl<T> AsMut<T> for GrayAlpha<T> {
 #[cfg(feature = "argb")]
 #[test]
 fn argb_converts() {
-    let argb = ARGB {a: 0xffu8, r: 0xff, g: 0xff, b: 0xff};
-    let rgba = RGBA {a: 0xffu8, r: 0xff, g: 0xff, b: 0xff};
+    let argb = ARGB {a: 0xffu8, r: 0xfa, g: 0xfb, b: 0xfc};
+    let rgba = RGBA {a: 0xffu8, r: 0xfa, g: 0xfb, b: 0xfc};
 
     assert_eq!(RGBA::from(argb), rgba);
     assert_eq!(ARGB::from(rgba), argb);
+    assert_eq!(rgba.rgb(), argb.rgb());
 
-    let bgra = BGRA {a: 0xffu8, r: 0xff, g: 0xff, b: 0xff};
-    let abgr = ABGR {a: 0xffu8, r: 0xff, g: 0xff, b: 0xff};
+    let bgra = BGRA {a: 0xffu8, r: 0x1f, g: 0x2f, b: 0x3f};
+    let abgr = ABGR {a: 0xffu8, r: 0x1f, g: 0x2f, b: 0x3f};
 
     assert_eq!(BGRA::from(abgr), bgra);
     assert_eq!(ABGR::from(bgra), abgr);
