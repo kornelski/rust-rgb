@@ -18,7 +18,7 @@ impl<T> RGB<T> {
 
 impl<T> BGR<T> {
     /// Convenience function for creating a new pixel
-    /// Wargning: The order of arguments is R,G,B
+    /// Warning: The order of arguments is R,G,B
     #[deprecated(note="This function has a misleading order of arguments. Use BGR{} literal instead")]
     #[inline(always)]
     pub const fn new(r: T, g: T, b: T) -> Self {
