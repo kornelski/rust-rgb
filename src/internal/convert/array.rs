@@ -14,10 +14,10 @@ impl<T: Copy> From<[T; 3]> for RGB<T> {
     }
 }
 
-impl<T> Into<[T; 3]> for RGB<T> {
+impl<T> From<RGB<T>> for [T; 3] {
     #[inline(always)]
-    fn into(self) -> [T; 3] {
-        [self.r, self.g, self.b]
+    fn from(value: RGB<T>) -> Self {
+        [value.r, value.g, value.b]
     }
 }
 
@@ -33,10 +33,10 @@ impl<T: Copy> From<[T; 4]> for RGBA<T> {
     }
 }
 
-impl<T> Into<[T; 4]> for RGBA<T> {
+impl<T> From<RGBA<T>> for [T; 4] {
     #[inline(always)]
-    fn into(self) -> [T; 4] {
-        [self.r, self.g, self.b, self.a]
+    fn from(value: RGBA<T>) -> Self {
+        [value.r, value.g, value.b, value.a]
     }
 }
 
@@ -72,10 +72,10 @@ impl<T: Copy> From<[T; 3]> for BGR<T> {
     }
 }
 
-impl<T> Into<[T; 3]> for BGR<T> {
+impl<T> From<BGR<T>> for [T; 3] {
     #[inline(always)]
-    fn into(self) -> [T; 3] {
-        [self.b, self.g, self.r]
+    fn from(value: BGR<T>) -> Self {
+        [value.b, value.g, value.r]
     }
 }
 
@@ -91,10 +91,10 @@ impl<T: Copy> From<[T; 4]> for BGRA<T> {
     }
 }
 
-impl<T> Into<[T; 4]> for BGRA<T> {
+impl<T> From<BGRA<T>> for [T; 4] {
     #[inline(always)]
-    fn into(self) -> [T; 4] {
-        [self.b, self.g, self.r, self.a]
+    fn from(value: BGRA<T>) -> Self {
+        [value.b, value.g, value.r, value.a]
     }
 }
 
