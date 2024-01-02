@@ -41,7 +41,7 @@ pub trait ComponentBytes<T: crate::Pod> where Self: ComponentSlice<T> {
         assert_ne!(0, core::mem::size_of::<T>());
         let slice = self.as_slice();
         unsafe {
-            core::slice::from_raw_parts(slice.as_ptr() as *const _, slice.len() * core::mem::size_of::<T>())
+            core::slice::from_raw_parts(slice.as_ptr() as *const _, core::mem::size_of_val(slice))
         }
     }
 
@@ -51,7 +51,7 @@ pub trait ComponentBytes<T: crate::Pod> where Self: ComponentSlice<T> {
         assert_ne!(0, core::mem::size_of::<T>());
         let slice = self.as_mut_slice();
         unsafe {
-            core::slice::from_raw_parts_mut(slice.as_mut_ptr() as *mut _, slice.len() * core::mem::size_of::<T>())
+            core::slice::from_raw_parts_mut(slice.as_mut_ptr() as *mut _, core::mem::size_of_val(slice))
         }
     }
 }
