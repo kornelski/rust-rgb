@@ -19,6 +19,7 @@ default = ["as-bytes"]
 as-bytes = ["bytemuck"]
 argb = []
 grb = []
+defmt-03 = ["dep:defmt"]
 
 [badges]
 travis-ci = { repository = "kornelski/rust-rgb" }
@@ -27,6 +28,7 @@ maintenance = { status = "actively-developed" }
 [dependencies]
 serde = { version = "1.0.130", optional = true, default-features = false, features = ["derive"] }
 bytemuck = { version = "1.7.2", optional = true }
+defmt = { version = "0.3", optional = true }
 
 [dev-dependencies]
 serde_json = "1.0.68"
