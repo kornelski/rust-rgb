@@ -64,6 +64,7 @@ pub use crate::internal::rgba::*;
 
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// The RGB pixel
 ///
@@ -80,6 +81,7 @@ pub struct RGB<ComponentType> {
 
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// The RGBA pixel
 ///
