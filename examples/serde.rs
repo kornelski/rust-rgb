@@ -1,5 +1,3 @@
-extern crate rgb;
-extern crate serde_json;
 
 use rgb::*;
 
