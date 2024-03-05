@@ -28,7 +28,7 @@ impl<T> BGRA<T> {
     /// Warning: The order of arguments is R,G,B,A
     #[deprecated(note="This function has a misleading order of arguments. Use BGRA{} literal instead")]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self {r,g,b,a}
+        Self { b, g, r, a }
     }
 }
 
@@ -38,7 +38,7 @@ impl<T, A> BGRA<T,A> {
     /// Warning: The order of arguments is R,G,B,A
     #[deprecated(note="This function has a misleading order of arguments. Use BGRA{} literal instead")]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-        Self {r,g,b,a}
+        Self { b, g, r, a }
     }
 }
 
@@ -378,7 +378,7 @@ fn rgba_test() {
     assert_eq!(neg.rgb().b, -3);
     assert_eq!(neg.a, -1000);
     assert_eq!(neg.map_alpha(|x| x+1).a, -999);
-    assert_eq!(neg, neg.as_slice().iter().cloned().collect());
+    assert_eq!(neg, neg.as_slice().iter().copied().collect());
     assert!(neg < RGBA::new(0,0,0,0));
 
     let neg = RGBA::new(1u8,2,3,4).map_rgb(|c| -(c as i16));

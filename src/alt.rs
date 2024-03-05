@@ -275,7 +275,7 @@ impl<T> ComponentSlice<T> for [GrayAlpha<T>] {
     #[inline]
     fn as_slice(&self) -> &[T] {
         unsafe {
-            slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 2)
+            slice::from_raw_parts(self.as_ptr().cast(), self.len() * 2)
         }
     }
 
@@ -306,7 +306,7 @@ impl<T> ComponentSlice<T> for [Gray<T>] {
     #[inline]
     fn as_slice(&self) -> &[T] {
         unsafe {
-            slice::from_raw_parts(self.as_ptr() as *const _, self.len())
+            slice::from_raw_parts(self.as_ptr().cast(), self.len())
         }
     }
 

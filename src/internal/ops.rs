@@ -1,6 +1,6 @@
 use crate::alt::Gray;
 use crate::alt::GrayAlpha;
-use super::pixel::*;
+use super::pixel::ComponentMap;
 use crate::RGB;
 use crate::RGBA;
 use core::ops::*;

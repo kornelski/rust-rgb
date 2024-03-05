@@ -11,5 +11,5 @@ fn main() {
     let px = RGB8::new(255, 0, 255);
     let inverted: RGB8 = px.map(|ch| 255 - ch);
 
-    println!("{}", inverted); // rgb(0,255,0)
+    println!("{inverted}"); // rgb(0,255,0)
 }

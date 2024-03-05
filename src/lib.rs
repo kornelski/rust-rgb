@@ -218,7 +218,7 @@ fn bytes() {
     assert_eq!(&[1,2,3,4], rgba_slice);
     assert_eq!(&[1,2,3], rgba_slice.as_rgb()[0].as_slice());
     assert_eq!(&[rgba], rgba_slice.as_rgba());
-    assert_eq!(rgba, rgba_slice.into_iter().cloned().collect());
+    assert_eq!(rgba, rgba_slice.iter().copied().collect());
     let mut rgba2 = [rgba];
     assert_eq!(rgba2[..].as_mut_slice().as_rgba_mut(), &mut [rgba]);
 

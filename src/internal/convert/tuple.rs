@@ -2,7 +2,6 @@ use crate::alt::BGR;
 use crate::alt::BGRA;
 use crate::RGB;
 use crate::RGBA;
-use core::convert::*;
 
 impl<T> From<(T,T,T)> for RGB<T> {
     #[inline]

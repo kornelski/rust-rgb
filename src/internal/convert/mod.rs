@@ -2,7 +2,6 @@ use super::pixel::*;
 use crate::alt::*;
 use crate::RGB;
 use crate::RGBA;
-use core::convert::*;
 use core::mem;
 use core::slice;
 
@@ -198,14 +197,14 @@ impl<T: Copy> FromSlice<T> for [T] {
 unsafe fn from_items_to_struct<F, T>(from: &[F]) -> &[T] {
     debug_assert_eq!(0, mem::size_of::<T>() % mem::size_of::<F>());
     let len = from.len() / (mem::size_of::<T>() / mem::size_of::<F>());
-    slice::from_raw_parts(from.as_ptr() as *const T, len)
+    slice::from_raw_parts(from.as_ptr().cast::<T>(), len)
 }
 
 #[inline(always)]
 unsafe fn from_items_to_struct_mut<F, T>(from: &mut [F]) -> &mut [T] {
     debug_assert_eq!(0, mem::size_of::<T>() % mem::size_of::<F>());
     let len = from.len() / (mem::size_of::<T>() / mem::size_of::<F>());
-    slice::from_raw_parts_mut(from.as_mut_ptr() as *mut T, len)
+    slice::from_raw_parts_mut(from.as_mut_ptr().cast::<T>(), len)
 }
 
 macro_rules! rgb_impl_from {
