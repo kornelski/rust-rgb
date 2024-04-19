@@ -220,6 +220,7 @@ macro_rules! rgb_impl_from {
 }
 
 rgb_impl_from!{RGB, u8,i16}
+rgb_impl_from!{RGB, u8,i32}
 rgb_impl_from!{RGB, u8,u16}
 rgb_impl_from!{RGB, u8,u32}
 rgb_impl_from!{RGB, u16,i32}
