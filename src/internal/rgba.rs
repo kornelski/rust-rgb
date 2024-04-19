@@ -1,24 +1,24 @@
-use core::fmt;
+use super::pixel::*;
 use crate::alt::*;
 use crate::RGB;
 use crate::RGBA;
-use super::pixel::*;
+use core::fmt;
 
 impl<T> RGBA<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self {r,g,b,a}
+        Self { r, g, b, a }
     }
 }
 
-impl<T, A> RGBA<T,A> {
+impl<T, A> RGBA<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-        Self {r,g,b,a}
+        Self { r, g, b, a }
     }
 }
 
@@ -26,50 +26,78 @@ impl<T> BGRA<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B,A
-    #[deprecated(note="This function has a misleading order of arguments. Use BGRA{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use BGRA{} literal instead"
+    )]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
         Self { b, g, r, a }
     }
 }
 
-impl<T, A> BGRA<T,A> {
+impl<T, A> BGRA<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B,A
-    #[deprecated(note="This function has a misleading order of arguments. Use BGRA{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use BGRA{} literal instead"
+    )]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
         Self { b, g, r, a }
     }
 }
 
 #[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Pod for RGBA<T, A> where T: crate::Pod, A: crate::Pod {}
+unsafe impl<T, A> crate::Pod for RGBA<T, A>
+where
+    T: crate::Pod,
+    A: crate::Pod,
+{
+}
 #[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Pod for BGRA<T, A> where T: crate::Pod, A: crate::Pod {}
+unsafe impl<T, A> crate::Pod for BGRA<T, A>
+where
+    T: crate::Pod,
+    A: crate::Pod,
+{
+}
 #[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Zeroable for RGBA<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
+unsafe impl<T, A> crate::Zeroable for RGBA<T, A>
+where
+    T: crate::Zeroable,
+    A: crate::Zeroable,
+{
+}
 #[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Zeroable for BGRA<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
+unsafe impl<T, A> crate::Zeroable for BGRA<T, A>
+where
+    T: crate::Zeroable,
+    A: crate::Zeroable,
+{
+}
 
 #[cfg(feature = "argb")]
 impl<T> ARGB<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
-    #[deprecated(note="This function has a misleading order of arguments. Use ARGB{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use ARGB{} literal instead"
+    )]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self {r,g,b,a}
+        Self { r, g, b, a }
     }
 }
 
 #[cfg(feature = "argb")]
-impl<T, A> ARGB<T,A> {
+impl<T, A> ARGB<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
-    #[deprecated(note="This function has a misleading order of arguments. Use ARGB{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use ARGB{} literal instead"
+    )]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-        Self {r,g,b,a}
+        Self { r, g, b, a }
     }
 }
 
@@ -78,31 +106,55 @@ impl<T> ABGR<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
-    #[deprecated(note="This function has a misleading order of arguments. Use ABGR{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use ABGR{} literal instead"
+    )]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self {r,g,b,a}
+        Self { r, g, b, a }
     }
 }
 
 #[cfg(feature = "argb")]
-impl<T, A> ABGR<T,A> {
+impl<T, A> ABGR<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
-    #[deprecated(note="This function has a misleading order of arguments. Use ABGR{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use ABGR{} literal instead"
+    )]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-        Self {r,g,b,a}
+        Self { r, g, b, a }
     }
 }
 
 #[cfg(all(feature = "as-bytes", feature = "argb"))]
-unsafe impl<T, A> crate::Pod for ARGB<T, A> where T: crate::Pod, A: crate::Pod {}
+unsafe impl<T, A> crate::Pod for ARGB<T, A>
+where
+    T: crate::Pod,
+    A: crate::Pod,
+{
+}
 #[cfg(all(feature = "as-bytes", feature = "argb"))]
-unsafe impl<T, A> crate::Pod for ABGR<T, A> where T: crate::Pod, A: crate::Pod {}
+unsafe impl<T, A> crate::Pod for ABGR<T, A>
+where
+    T: crate::Pod,
+    A: crate::Pod,
+{
+}
 #[cfg(all(feature = "as-bytes", feature = "argb"))]
-unsafe impl<T, A> crate::Zeroable for ARGB<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
+unsafe impl<T, A> crate::Zeroable for ARGB<T, A>
+where
+    T: crate::Zeroable,
+    A: crate::Zeroable,
+{
+}
 #[cfg(all(feature = "as-bytes", feature = "argb"))]
-unsafe impl<T, A> crate::Zeroable for ABGR<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
+unsafe impl<T, A> crate::Zeroable for ABGR<T, A>
+where
+    T: crate::Zeroable,
+    A: crate::Zeroable,
+{
+}
 
 macro_rules! impl_rgba {
     ($RGBA:ident) => {
@@ -120,7 +172,11 @@ macro_rules! impl_rgba {
             /// Note: you can use `.into()` to convert between other types
             #[inline(always)]
             pub fn bgr(&self) -> BGR<T> {
-                BGR {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+                BGR {
+                    r: self.r.clone(),
+                    g: self.g.clone(),
+                    b: self.b.clone(),
+                }
             }
         }
 
@@ -128,7 +184,10 @@ macro_rules! impl_rgba {
             /// Create new RGBA with the same alpha value, but different RGB values
             #[inline(always)]
             pub fn map_rgb<F, U, B>(&self, mut f: F) -> $RGBA<U, B>
-                where F: FnMut(T) -> U, U: Clone, B: From<A> + Clone
+            where
+                F: FnMut(T) -> U,
+                U: Clone,
+                B: From<A> + Clone,
             {
                 $RGBA {
                     r: f(self.r),
@@ -142,7 +201,10 @@ macro_rules! impl_rgba {
             /// Create a new RGBA with the new alpha value, but same RGB values
             pub fn alpha(&self, a: A) -> Self {
                 Self {
-                    r: self.r, g: self.g, b: self.b, a,
+                    r: self.r,
+                    g: self.g,
+                    b: self.b,
+                    a,
                 }
             }
 
@@ -150,7 +212,9 @@ macro_rules! impl_rgba {
             /// Allows changing of the type used for the alpha channel.
             #[inline]
             pub fn map_alpha<F, B>(&self, f: F) -> $RGBA<T, B>
-                where F: FnOnce(A) -> B {
+            where
+                F: FnOnce(A) -> B,
+            {
                 $RGBA {
                     r: self.r,
                     g: self.g,
@@ -193,25 +257,19 @@ macro_rules! impl_rgba {
         impl<T> ComponentSlice<T> for $RGBA<T> {
             #[inline(always)]
             fn as_slice(&self) -> &[T] {
-                unsafe {
-                    core::slice::from_raw_parts(self as *const Self as *const T, 4)
-                }
+                unsafe { core::slice::from_raw_parts(self as *const Self as *const T, 4) }
             }
 
             #[inline(always)]
             fn as_mut_slice(&mut self) -> &mut [T] {
-                unsafe {
-                    core::slice::from_raw_parts_mut(self as *mut Self as *mut T, 4)
-                }
+                unsafe { core::slice::from_raw_parts_mut(self as *mut Self as *mut T, 4) }
             }
         }
 
         impl<T> ComponentSlice<T> for [$RGBA<T>] {
             #[inline]
             fn as_slice(&self) -> &[T] {
-                unsafe {
-                    core::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 4)
-                }
+                unsafe { core::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 4) }
             }
             #[inline]
             fn as_mut_slice(&mut self) -> &mut [T] {
@@ -223,7 +281,7 @@ macro_rules! impl_rgba {
 
         #[cfg(feature = "as-bytes")]
         impl<T: crate::Pod> ComponentBytes<T> for [$RGBA<T>] {}
-    }
+    };
 }
 
 macro_rules! impl_alpha_conv {
@@ -253,7 +311,7 @@ macro_rules! impl_alpha_conv {
                 }
             }
         }
-    }
+    };
 }
 
 impl<T, A> RGBA<T, A> {
@@ -261,9 +319,7 @@ impl<T, A> RGBA<T, A> {
     /// Useful to change color without changing opacity.
     #[inline(always)]
     pub fn rgb_mut(&mut self) -> &mut RGB<T> {
-        unsafe {
-            &mut *(self as *mut _ as *mut RGB<T>)
-        }
+        unsafe { &mut *(self as *mut _ as *mut RGB<T>) }
     }
 }
 
@@ -273,18 +329,14 @@ impl<T, A> BGRA<T, A> {
     #[inline(always)]
     #[deprecated(note = "This function will change. Use bgr_mut()")]
     pub fn rgb_mut(&mut self) -> &mut BGR<T> {
-        unsafe {
-            &mut *(self as *mut _ as *mut BGR<T>)
-        }
+        unsafe { &mut *(self as *mut _ as *mut BGR<T>) }
     }
 
     /// Provide a mutable view of only RGB components (leaving out alpha).
     /// Useful to change color without changing opacity.
     #[inline(always)]
     pub fn bgr_mut(&mut self) -> &mut BGR<T> {
-        unsafe {
-            &mut *(self as *mut _ as *mut BGR<T>)
-        }
+        unsafe { &mut *(self as *mut _ as *mut BGR<T>) }
     }
 }
 
@@ -309,7 +361,11 @@ impl<T: Clone, A> RGBA<T, A> {
     /// Note: you can use `.into()` to convert between other types
     #[inline(always)]
     pub fn rgb(&self) -> RGB<T> {
-        RGB {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+        RGB {
+            r: self.r.clone(),
+            g: self.g.clone(),
+            b: self.b.clone(),
+        }
     }
 }
 
@@ -320,7 +376,11 @@ impl<T: Clone, A> ARGB<T, A> {
     /// Note: you can use `.into()` to convert between other types
     #[inline(always)]
     pub fn rgb(&self) -> RGB<T> {
-        RGB {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+        RGB {
+            r: self.r.clone(),
+            g: self.g.clone(),
+            b: self.b.clone(),
+        }
     }
 }
 
@@ -331,7 +391,11 @@ impl<T: Clone, A> BGRA<T, A> {
     #[inline(always)]
     #[deprecated(note = "This function will change. Use bgr()")]
     pub fn rgb(&self) -> BGR<T> {
-        BGR {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+        BGR {
+            r: self.r.clone(),
+            g: self.g.clone(),
+            b: self.b.clone(),
+        }
     }
 }
 
@@ -369,7 +433,7 @@ impl<T: fmt::Display, A: fmt::Display> fmt::Display for BGRA<T, A> {
 
 #[test]
 fn rgba_test() {
-    let neg = RGBA::new(1,2,3i32,1000).map(|x| -x);
+    let neg = RGBA::new(1, 2, 3i32, 1000).map(|x| -x);
     assert_eq!(neg.r, -1);
     assert_eq!(neg.rgb().r, -1);
     assert_eq!(neg.g, -2);
@@ -377,18 +441,23 @@ fn rgba_test() {
     assert_eq!(neg.b, -3);
     assert_eq!(neg.rgb().b, -3);
     assert_eq!(neg.a, -1000);
-    assert_eq!(neg.map_alpha(|x| x+1).a, -999);
+    assert_eq!(neg.map_alpha(|x| x + 1).a, -999);
     assert_eq!(neg, neg.as_slice().iter().copied().collect());
-    assert!(neg < RGBA::new(0,0,0,0));
+    assert!(neg < RGBA::new(0, 0, 0, 0));
 
-    let neg = RGBA::new(1u8,2,3,4).map_rgb(|c| -(c as i16));
+    let neg = RGBA::new(1u8, 2, 3, 4).map_rgb(|c| -(c as i16));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4i16, neg.a);
-    let neg = RGBA::new(1u8,2,3,4).map_c(|c| -(c as i16));
+    let neg = RGBA::new(1u8, 2, 3, 4).map_c(|c| -(c as i16));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4u8, neg.a);
 
-    let mut px = RGBA{r:1,g:2,b:3,a:4};
+    let mut px = RGBA {
+        r: 1,
+        g: 2,
+        b: 3,
+        a: 4,
+    };
     px.as_mut_slice()[3] = 100;
     assert_eq!(1, px.rgb_mut().r);
     assert_eq!(2, px.rgb_mut().g);
@@ -398,15 +467,20 @@ fn rgba_test() {
 
     #[cfg(feature = "as-bytes")]
     {
-        let v = vec![RGBA::new(1u8,2,3,4), RGBA::new(5,6,7,8)];
-        assert_eq!(&[1,2,3,4,5,6,7,8], v.as_bytes());
+        let v = vec![RGBA::new(1u8, 2, 3, 4), RGBA::new(5, 6, 7, 8)];
+        assert_eq!(&[1, 2, 3, 4, 5, 6, 7, 8], v.as_bytes());
     }
 }
 
 #[test]
 #[cfg(feature = "argb")]
 fn abgr_test() {
-    let abgr = ABGR {r:1,g:2,b:3,a:4};
+    let abgr = ABGR {
+        r: 1,
+        g: 2,
+        b: 3,
+        a: 4,
+    };
     assert_eq!(4, abgr.as_slice()[0]);
     use crate::AsPixels;
     assert_eq!(abgr, [abgr].as_bytes().as_pixels()[0]);
@@ -429,7 +503,7 @@ fn bgra_test() {
     assert_eq!(neg.b, -3);
     assert_eq!(neg.bgr().b, -3);
     assert_eq!(neg.a, -1000);
-    assert_eq!(&[-3,-2,-1,-1000], neg.as_slice());
+    assert_eq!(&[-3, -2, -1, -1000], neg.as_slice());
     assert!(neg < BGRA::new(0, 0, 0, 0));
 
     let neg = BGRA::new(1u8, 2u8, 3u8, 4u8).map_rgb(|c| -(c as i16));
@@ -439,7 +513,13 @@ fn bgra_test() {
     assert_eq!(-1i16, neg.r);
     assert_eq!(4u8, neg.a);
 
-    let mut px = BGRA{r:1,g:2,b:3,a:-9}.alpha(4);
+    let mut px = BGRA {
+        r: 1,
+        g: 2,
+        b: 3,
+        a: -9,
+    }
+    .alpha(4);
     px.as_mut_slice()[3] = 100;
     assert_eq!(1, px.bgr_mut().r);
     assert_eq!(2, px.bgr_mut().g);
@@ -447,10 +527,9 @@ fn bgra_test() {
     assert_eq!(4, px.bgr_mut().b);
     assert_eq!(100, px.a);
 
-
     #[cfg(feature = "as-bytes")]
     {
         let v = vec![BGRA::new(3u8, 2, 1, 4), BGRA::new(7, 6, 5, 8)];
-        assert_eq!(&[1,2,3,4,5,6,7,8], v.as_bytes());
+        assert_eq!(&[1, 2, 3, 4, 5, 6, 7, 8], v.as_bytes());
     }
 }
