@@ -285,6 +285,44 @@ impl_struct_ops_alpha! {RGBA => r g b a}
 impl_struct_ops_alpha! {ARGB => a r g b}
 impl_struct_ops_alpha! {GrayAlpha => 0 1}
 
+macro_rules! impl_struct_checked {
+    ($ty:ident, $field_ty:ident, => $($field:tt)+) => {
+        impl $ty<$field_ty>
+        {
+            /// `px.checked_add(px)`
+            #[inline(always)]
+            pub fn checked_add(self, rhs: $ty<$field_ty>) -> Option<Self> {
+                Some($ty {
+                    $(
+                        $field: self.$field.checked_add(rhs.$field)?,
+                    )+
+                })
+            }
+
+            /// `px.checked_sub(px)`
+            #[inline(always)]
+            pub fn checked_sub(self, rhs: $ty<$field_ty>) -> Option<Self> {
+                Some($ty {
+                    $(
+                        $field: self.$field.checked_sub(rhs.$field)?,
+                    )+
+                })
+            }
+        }
+    }
+}
+
+impl_struct_checked!(RGB, u8, => r g b);
+impl_struct_checked!(RGB, u16, => r g b);
+impl_struct_checked!(RGB, u32, => r g b);
+impl_struct_checked!(RGB, u64, => r g b);
+impl_struct_checked!(RGB, i8, => r g b);
+impl_struct_checked!(RGB, i16, => r g b);
+impl_struct_checked!(RGB, i32, => r g b);
+impl_struct_checked!(RGB, i64, => r g b);
+impl_struct_checked!(RGB, usize, => r g b);
+impl_struct_checked!(RGB, isize, => r g b);
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -318,6 +356,20 @@ mod test {
     }
 
     #[test]
+    fn test_checked_add() {
+        assert_eq!(WHITE_RGB.checked_add(WHITE_RGB), None);
+        assert_eq!(RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(255, 0, 0)), None);
+        assert_eq!(RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(0, 255, 0)), None);
+        assert_eq!(RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(0, 0, 255)), None);
+        assert_eq!(WHITE_RGB.checked_add(BLACK_RGB), Some(WHITE_RGB));
+
+        assert_eq!(RGB::<i8>::new(-128, 2, 3).checked_add(RGB::<i8>::new(-1, 0, 0)), None);
+        assert_eq!(RGB::<i8>::new(2, -128, 3).checked_add(RGB::<i8>::new(0, -1, 0)), None);
+        assert_eq!(RGB::<i8>::new(2, 2, -128).checked_add(RGB::<i8>::new(0, 0, -1)), None);
+        assert_eq!(RGB::<i8>::new(2, 2, -128).checked_add(RGB::<i8>::new(0, 0, 1)), Some(RGB::<i8>::new(2, 2, -127)));
+    }
+
+    #[test]
     #[should_panic]
     #[cfg(debug_assertions)]
     fn test_add_overflow() {
@@ -331,6 +383,19 @@ mod test {
 
         assert_eq!(RGBA::new(255, 255, 0, 0), WHITE_RGBA - BLUE_RGBA);
         assert_eq!(BLACK_RGBA, WHITE_RGBA - 255);
+    }
+
+    #[test]
+    fn test_checked_sub() {
+        assert_eq!(RGB::<u8>::new(2,4,6).checked_sub(RGB::<u8>::new(3,4,6)), None);
+        assert_eq!(RGB::<u8>::new(2,4,6).checked_sub(RGB::<u8>::new(2,5,6)), None);
+        assert_eq!(RGB::<u8>::new(2,4,6).checked_sub(RGB::<u8>::new(2,4,7)), None);
+        assert_eq!(RGB::<u8>::new(2,4,6).checked_sub(RGB::<u8>::new(2,4,6)), Some(BLACK_RGB));
+
+        assert_eq!(RGB::<i8>::new(-128,4,6).checked_sub(RGB::<i8>::new(1,4,7)), None);
+        assert_eq!(RGB::<i8>::new(2,-128,6).checked_sub(RGB::<i8>::new(2,1,7)), None);
+        assert_eq!(RGB::<i8>::new(2,4,-128).checked_sub(RGB::<i8>::new(2,4,1)), None);
+        assert_eq!(RGB::<i8>::new(2,4,6).checked_sub(RGB::<i8>::new(-2,4,6)), Some(RGB::<i8>::new(4,0,0)));
     }
 
     #[test]
