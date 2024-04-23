@@ -195,7 +195,6 @@ impl<T: fmt::LowerHex> fmt::LowerHex for BGR<T> {
 #[cfg(test)]
 mod rgb_test {
     use super::*;
-    use std;
 
     #[test]
     #[cfg(feature = "grb")]

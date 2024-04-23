@@ -10,6 +10,39 @@ use crate::alt::ARGB;
 #[cfg(feature = "grb")]
 use crate::alt::GRB;
 
+#[cfg(feature = "checked_fns")]
+macro_rules! impl_struct_checked {
+    ($ty:ident, $field_ty:ident, => $($field:tt)+) => {
+        impl $ty<$field_ty>
+        {
+            /// `px.checked_add(px)`
+            #[inline(always)]
+            pub fn checked_add(self, rhs: $ty<$field_ty>) -> Option<Self> {
+                Some($ty {
+                    $(
+                        $field: self.$field.checked_add(rhs.$field)?,
+                    )+
+                })
+            }
+
+            /// `px.checked_sub(px)`
+            #[inline(always)]
+            pub fn checked_sub(self, rhs: $ty<$field_ty>) -> Option<Self> {
+                Some($ty {
+                    $(
+                        $field: self.$field.checked_sub(rhs.$field)?,
+                    )+
+                })
+            }
+        }
+    }
+}
+
+#[cfg(not(feature = "checked_fns"))]
+macro_rules! impl_struct_checked {
+    ($ty:ident, $field_ty:ident, => $($field:tt)+) => {}
+}
+
 macro_rules! impl_struct_ops_opaque {
     ($ty:ident => $($field:tt)+) => {
         /// `px + px`
@@ -102,6 +135,15 @@ macro_rules! impl_struct_ops_opaque {
                 iter.fold($ty::default(), Add::add)
             }
         }
+
+        impl_struct_checked!($ty, u8, => $($field)+);
+        impl_struct_checked!($ty, u16, => $($field)+);
+        impl_struct_checked!($ty, u32, => $($field)+);
+        impl_struct_checked!($ty, u64, => $($field)+);
+        impl_struct_checked!($ty, i8, => $($field)+);
+        impl_struct_checked!($ty, i16, => $($field)+);
+        impl_struct_checked!($ty, i32, => $($field)+);
+        impl_struct_checked!($ty, i64, => $($field)+);
     };
 }
 
@@ -171,6 +213,15 @@ macro_rules! impl_struct_ops_alpha {
                 iter.fold($ty::default(), Add::add)
             }
         }
+
+        impl_struct_checked!($ty, u8, => $($field)+);
+        impl_struct_checked!($ty, u16, => $($field)+);
+        impl_struct_checked!($ty, u32, => $($field)+);
+        impl_struct_checked!($ty, u64, => $($field)+);
+        impl_struct_checked!($ty, i8, => $($field)+);
+        impl_struct_checked!($ty, i16, => $($field)+);
+        impl_struct_checked!($ty, i32, => $($field)+);
+        impl_struct_checked!($ty, i64, => $($field)+);
     };
 }
 
@@ -285,44 +336,6 @@ impl_struct_ops_alpha! {RGBA => r g b a}
 impl_struct_ops_alpha! {ARGB => a r g b}
 impl_struct_ops_alpha! {GrayAlpha => 0 1}
 
-macro_rules! impl_struct_checked {
-    ($ty:ident, $field_ty:ident, => $($field:tt)+) => {
-        impl $ty<$field_ty>
-        {
-            /// `px.checked_add(px)`
-            #[inline(always)]
-            pub fn checked_add(self, rhs: $ty<$field_ty>) -> Option<Self> {
-                Some($ty {
-                    $(
-                        $field: self.$field.checked_add(rhs.$field)?,
-                    )+
-                })
-            }
-
-            /// `px.checked_sub(px)`
-            #[inline(always)]
-            pub fn checked_sub(self, rhs: $ty<$field_ty>) -> Option<Self> {
-                Some($ty {
-                    $(
-                        $field: self.$field.checked_sub(rhs.$field)?,
-                    )+
-                })
-            }
-        }
-    }
-}
-
-impl_struct_checked!(RGB, u8, => r g b);
-impl_struct_checked!(RGB, u16, => r g b);
-impl_struct_checked!(RGB, u32, => r g b);
-impl_struct_checked!(RGB, u64, => r g b);
-impl_struct_checked!(RGB, i8, => r g b);
-impl_struct_checked!(RGB, i16, => r g b);
-impl_struct_checked!(RGB, i32, => r g b);
-impl_struct_checked!(RGB, i64, => r g b);
-impl_struct_checked!(RGB, usize, => r g b);
-impl_struct_checked!(RGB, isize, => r g b);
-
 #[cfg(test)]
 mod test {
     use super::*;
@@ -356,12 +369,13 @@ mod test {
     }
 
     #[test]
+    #[cfg(feature = "checked_fns")]
     fn test_checked_add() {
         assert_eq!(WHITE_RGB.checked_add(WHITE_RGB), None);
         assert_eq!(RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(255, 0, 0)), None);
         assert_eq!(RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(0, 255, 0)), None);
         assert_eq!(RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(0, 0, 255)), None);
-        assert_eq!(WHITE_RGB.checked_add(BLACK_RGB), Some(WHITE_RGB));
+        assert_eq!(WHITE_RGBA.checked_add(BLACK_RGBA), Some(WHITE_RGBA));
 
         assert_eq!(RGB::<i8>::new(-128, 2, 3).checked_add(RGB::<i8>::new(-1, 0, 0)), None);
         assert_eq!(RGB::<i8>::new(2, -128, 3).checked_add(RGB::<i8>::new(0, -1, 0)), None);
@@ -386,8 +400,9 @@ mod test {
     }
 
     #[test]
+    #[cfg(feature = "checked_fns")]
     fn test_checked_sub() {
-        assert_eq!(RGB::<u8>::new(2,4,6).checked_sub(RGB::<u8>::new(3,4,6)), None);
+        assert_eq!(RGBA::<u8>::new(2,4,6,111).checked_sub(RGBA::<u8>::new(3,4,6,0)), None);
         assert_eq!(RGB::<u8>::new(2,4,6).checked_sub(RGB::<u8>::new(2,5,6)), None);
         assert_eq!(RGB::<u8>::new(2,4,6).checked_sub(RGB::<u8>::new(2,4,7)), None);
         assert_eq!(RGB::<u8>::new(2,4,6).checked_sub(RGB::<u8>::new(2,4,6)), Some(BLACK_RGB));
