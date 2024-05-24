@@ -1,3 +1,4 @@
+#![doc = include_str!("../README.md")]
 #![doc(html_logo_url = "https://kornel.ski/rgb-logo.png")]
 #![warn(missing_docs)]
 #![no_std]
