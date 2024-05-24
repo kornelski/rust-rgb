@@ -9,7 +9,7 @@
 ///
 /// You can specify a different type for alpha, but it's only for special cases
 /// (e.g. if you use a newtype like `GrayAlpha<LinearLight<u16>, u16>`).
-pub struct Gray<T, A = T>(
+pub struct GrayAlpha<T, A = T>(
     /// Grayscale Component
     pub T,
     /// Alpha Component
