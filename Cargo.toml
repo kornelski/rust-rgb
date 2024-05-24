@@ -1,6 +1,6 @@
 [package]
 name = "rgb"
-version = "0.8.41"
+version = "0.9.0"
 authors = ["Kornel Lesiński <kornel@geekhood.net>"]
 include = ["src/**/*", "Cargo.toml", "README.md", "examples/*.rs", "LICENSE"]
 description = "`struct RGB/RGBA/etc.` for sharing pixels between crates + convenience methods for color manipulation.\nAllows no-copy high-level interoperability. Also adds common convenience methods and implements standard Rust traits to make `RGB`/`RGBA` pixels and slices first-class Rust objects."
@@ -14,17 +14,14 @@ categories = ["graphics", "rust-patterns", "multimedia::images"]
 edition = "2021"
 
 [features]
-default = ["as-bytes"]
-# safe as_bytes() casts require a marker trait for non-padded, non-pointery types.
-as-bytes = ["bytemuck"]
-argb = []
-grb = []
+default = []
+
 # Enable `checked_add` and `checked_sub` methods on `RGB<u8>`
 checked_fns = []
 # support for the `defmt` crate
 defmt-03 = ["dep:defmt"]
-# Preview of changes for v0.9. May cause semver breakage if enabled.
-unstable-experimental = []
+serde = ["dep:serde"]
+bytemuck = ["dep:bytemuck"]
 
 [badges]
 travis-ci = { repository = "kornelski/rust-rgb" }
@@ -44,9 +41,9 @@ required-features = ["serde"]
 
 [[example]]
 name = "example"
-required-features = ["as-bytes"]
+required-features = []
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
-features = [ "argb", "serde", "as-bytes" ]
+features = ["argb", "serde"]
 rustdoc-args = ["--generate-link-to-definition"]

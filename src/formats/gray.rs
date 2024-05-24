@@ -9,7 +9,6 @@ pub struct Gray_v08<T>(
     pub T,
 );
 
-#[cfg(feature = "unstable-experimental")]
 /// A `Grayscale` pixel (rgb crate v0.9)
 #[allow(non_camel_case_types)]
 #[repr(C)]
@@ -21,7 +20,6 @@ pub struct Gray_v09<T> {
     pub v: T,
 }
 
-#[cfg(feature = "unstable-experimental")]
 impl<T> core::ops::Deref for Gray_v08<T> {
     type Target = Gray_v09<T>;
 
@@ -33,7 +31,6 @@ impl<T> core::ops::Deref for Gray_v08<T> {
 }
 
 #[test]
-#[cfg(feature = "unstable-experimental")]
 fn swizzle() {
     let g = Gray_v08(10u8);
     assert_eq!(10, g.v);
