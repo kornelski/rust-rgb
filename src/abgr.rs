@@ -23,7 +23,7 @@ pub struct Abgr<T> {
 }
 
 impl<T> Pixel<T, 4> for Abgr<T> {
-    fn as_components(self) -> [T; 4] {
+    fn into_components(self) -> [T; 4] {
         [self.a, self.b, self.g, self.r]
     }
 

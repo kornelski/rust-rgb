@@ -3,8 +3,7 @@
 /// Usually `T` is a small copiable intrinsic type such as `u8`, `u16` or `f32`.
 pub trait Pixel<T, const N: usize> {
     /// Converts an owned `Pixel` type to an array of its components.
-    #[allow(clippy::wrong_self_convention)]
-    fn as_components(self) -> [T; N];
+    fn into_components(self) -> [T; N];
     /// Converts a reference of a `Pixel` type to a reference of an array of its components.
     fn as_components_ref(&self) -> &[T; N];
     /// Converts a mutable reference of a `Pixel` type to a mutable reference of an array of its components.
