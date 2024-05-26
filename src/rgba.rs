@@ -22,19 +22,14 @@ pub struct Rgba<T, A = T> {
     pub a: A,
 }
 
-impl<T> HomogeneousPixel<T, 4> for Rgba<T> {
+impl<T> HomogeneousPixel<T, 4> for Rgba<T>
+where
+    T: Copy,
+{
     type PixelWithComponent<U> = Rgba<U>;
 
-    fn into_components(self) -> [T; 4] {
+    fn components(&self) -> [T; 4] {
         [self.a, self.b, self.g, self.r]
-    }
-
-    fn as_components_ref(&self) -> &[T; 4] {
-        unsafe { core::mem::transmute(self) }
-    }
-
-    fn as_components_mut(&mut self) -> &mut [T; 4] {
-        unsafe { core::mem::transmute(self) }
     }
 
     fn from_components(components: [T; 4]) -> Self {
@@ -46,14 +41,6 @@ impl<T> HomogeneousPixel<T, 4> for Rgba<T> {
             g: iter.next().unwrap(),
             r: iter.next().unwrap(),
         }
-    }
-
-    fn from_components_ref(components: &[T; 4]) -> &Self {
-        unsafe { core::mem::transmute(components) }
-    }
-
-    fn from_components_mut(components: &mut [T; 4]) -> &mut Self {
-        unsafe { core::mem::transmute(components) }
     }
 }
 

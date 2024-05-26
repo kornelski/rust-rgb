@@ -6,18 +6,9 @@ pub trait HomogeneousPixel<T, const N: usize> {
     type PixelWithComponent<U>;
 
     /// Converts an owned `Pixel` type to an array of its components.
-    fn into_components(self) -> [T; N];
-    /// Converts a reference of a `Pixel` type to a reference of an array of its components.
-    fn as_components_ref(&self) -> &[T; N];
-    /// Converts a mutable reference of a `Pixel` type to a mutable reference of an array of its components.
-    fn as_components_mut(&mut self) -> &mut [T; N];
-
+    fn components(&self) -> [T; N];
     /// Converts an array of components to a `Pixel`.
     fn from_components(components: [T; N]) -> Self;
-    /// Converts a reference of an array of components to a refrecce of a `Pixel`.
-    fn from_components_ref(components: &[T; N]) -> &Self;
-    /// Converts a mutable reference of an array of components to a mutable reference of a `Pixel`.
-    fn from_components_mut(components: &mut [T; N]) -> &mut Self;
 
     /// Map the pixel to the same outer pixel type with an optionally different inner type.
     fn map<U>(&self, f: impl FnMut(T) -> U) -> Self::PixelWithComponent<U>
@@ -25,7 +16,7 @@ pub trait HomogeneousPixel<T, const N: usize> {
         Self::PixelWithComponent<U>: HomogeneousPixel<U, N>,
         Self: Copy,
     {
-        Self::PixelWithComponent::from_components(self.into_components().map(f))
+        Self::PixelWithComponent::from_components(self.components().map(f))
     }
 }
 
