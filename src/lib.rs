@@ -29,4 +29,4 @@ pub use grb::Grb;
 pub use rgb::Rgb;
 pub use rgba::Rgba;
 
-pub use pixel::Pixel;
+pub use pixel::{Pixel, PixelExt};

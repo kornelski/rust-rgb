@@ -16,3 +16,18 @@ pub trait Pixel<T, const N: usize> {
     /// Converts a mutable reference of an array of components to a mutable reference of a `Pixel`.
     fn from_components_mut(components: &mut [T; N]) -> &mut Self;
 }
+
+/// Pixel extension trait for helper functions
+pub trait PixelExt<T, const N: usize>: Pixel<T, N> {
+    /// The same pixel type as Self but with a different generic component type.
+    type PixelWithComponent<U>;
+
+    /// Map a Pixel<T> to a different Pixel<U>
+    fn map<U>(&self, f: impl FnMut(T) -> U) -> Self::PixelWithComponent<U>
+    where
+        Self::PixelWithComponent<U>: Pixel<U, N>,
+        Self: Copy,
+    {
+        Self::PixelWithComponent::from_components(self.into_components().map(f))
+    }
+}
