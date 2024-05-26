@@ -1,4 +1,4 @@
-use crate::{Pixel, PixelExt};
+use crate::{HeterogeneousPixel, HomogeneousPixel};
 
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -22,7 +22,9 @@ pub struct Rgba<T, A = T> {
     pub a: A,
 }
 
-impl<T> Pixel<T, 4> for Rgba<T> {
+impl<T> HomogeneousPixel<T, 4> for Rgba<T> {
+    type PixelWithComponent<U> = Rgba<U>;
+
     fn into_components(self) -> [T; 4] {
         [self.a, self.b, self.g, self.r]
     }
@@ -55,6 +57,27 @@ impl<T> Pixel<T, 4> for Rgba<T> {
     }
 }
 
-impl<T> PixelExt<T, 4> for Rgba<T> {
-    type PixelWithComponent<U> = Rgba<U>;
+impl<T, A> HeterogeneousPixel<T, A, 3> for Rgba<T, A>
+where
+    T: Copy,
+    A: Copy,
+{
+    type PixelWithComponent<U, B> = Rgba<U, B>;
+
+    fn colors(&self) -> [T; 3] {
+        [self.r, self.g, self.b]
+    }
+
+    fn alpha(&self) -> A {
+        self.a
+    }
+
+    fn from_colors_alpha(colors: [T; 3], alpha: A) -> Self {
+        Self {
+            r: colors[0],
+            g: colors[1],
+            b: colors[2],
+            a: alpha,
+        }
+    }
 }
