@@ -9,9 +9,9 @@
 ///
 /// You can specify a different type for alpha, but it's only for special cases
 /// (e.g. if you use a newtype like `Abgr<LinearLight<u16>, u16>`).
-pub struct Abgr<T> {
+pub struct Abgr<T, A> {
     /// Alpha Component
-    pub a: T,
+    pub a: A,
     /// Blue Component
     pub b: T,
     /// Green Component

@@ -1,53 +1,47 @@
 /// A Pixel made up of a compile-time known number of contiguously stored `T`s.
 ///
 /// Usually `T` is a small copiable intrinsic type such as `u8`, `u16` or `f32`.
-pub trait HomogeneousPixel<T, const N: usize> {
+pub trait HomogeneousPixel<T> {
     /// The same pixel type as Self but with a different generic component type.
-    type PixelWithComponent<U>;
+    type SelfType<U>;
+    /// The array form of Self
+    type ArrayForm<R>;
 
     /// Converts an owned `Pixel` type to an array of its components.
-    fn components(&self) -> [T; N];
+    fn components(&self) -> Self::ArrayForm<T>;
     /// Converts an array of components to a `Pixel`.
-    fn from_components(components: [T; N]) -> Self;
+    fn from_components(components: Self::ArrayForm<T>) -> Self;
 
     /// Map the pixel to the same outer pixel type with an optionally different inner type.
-    fn map<U>(&self, f: impl FnMut(T) -> U) -> Self::PixelWithComponent<U>
+    fn map<U>(&self, f: impl FnMut(T) -> U) -> Self::SelfType<U>
     where
-        Self::PixelWithComponent<U>: HomogeneousPixel<U, N>,
-        Self: Copy,
-    {
-        Self::PixelWithComponent::from_components(self.components().map(f))
-    }
+        U: Copy;
 }
 
 /// A pixel with possibly differently typed color and alpha components.
-pub trait HeterogeneousPixel<T, A, const N: usize> {
+pub trait HeterogeneousPixel<T, A> {
     /// The same pixel type as Self but with a different generic component types.
-    type PixelWithComponent<U, B>;
+    type SelfType<U, B>;
+    /// The color array form of Self
+    type ColorArrayForm<R>;
 
     /// The color components
-    fn colors(&self) -> [T; N];
+    fn colors(&self) -> Self::ColorArrayForm<T>;
     /// The alpha component
     fn alpha(&self) -> A;
 
     /// Create a new instance given the color and alpha components.
-    fn from_colors_alpha(colors: [T; N], alpha: A) -> Self;
+    fn from_colors_alpha(colors: Self::ColorArrayForm<T>, alpha: A) -> Self;
 
     /// Map the pixel to the same outer pixel type with an optionally different inner color component
     /// type and the exact same alpha component.
-    fn map_colors<U>(&self, f: impl FnMut(T) -> U) -> Self::PixelWithComponent<U, A>
+    fn map_colors<U>(&self, f: impl FnMut(T) -> U) -> Self::SelfType<U, A>
     where
-        Self::PixelWithComponent<U, A>: HeterogeneousPixel<U, A, N>,
-    {
-        Self::PixelWithComponent::from_colors_alpha(self.colors().map(f), self.alpha())
-    }
+        U: Copy;
 
     /// Map the pixel to the same outer pixel type with an optionally different inner color component
     /// type and the exact same alpha component.
-    fn map_alpha<B>(&self, mut f: impl FnMut(A) -> B) -> Self::PixelWithComponent<T, B>
+    fn map_alpha<B>(&self, f: impl FnMut(A) -> B) -> Self::SelfType<T, B>
     where
-        Self::PixelWithComponent<T, B>: HeterogeneousPixel<T, B, N>,
-    {
-        Self::PixelWithComponent::from_colors_alpha(self.colors(), f(self.alpha()))
-    }
+        B: Copy;
 }
