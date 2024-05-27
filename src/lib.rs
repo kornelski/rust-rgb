@@ -16,3 +16,17 @@ mod gray_alpha;
 mod grb;
 mod rgb;
 mod rgba;
+
+mod pixel;
+
+pub use abgr::Abgr;
+pub use argb::Argb;
+pub use bgr::Bgr;
+pub use bgra::Bgra;
+pub use gray::Gray;
+pub use gray_alpha::GrayAlpha;
+pub use grb::Grb;
+pub use rgb::Rgb;
+pub use rgba::Rgba;
+
+pub use pixel::{HeterogeneousPixel, HomogeneousPixel};
