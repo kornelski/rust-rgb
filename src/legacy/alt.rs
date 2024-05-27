@@ -2,65 +2,19 @@ use crate::legacy::internal::pixel::*;
 use core::ops;
 use core::slice;
 
-#[repr(C)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// RGB in reverse byte order
-pub struct BGR<ComponentType> {
-    /// Blue first
-    pub b: ComponentType,
-    /// Green
-    pub g: ComponentType,
-    /// Red last
-    pub r: ComponentType,
-}
-
-#[repr(C)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// BGR+A
-pub struct BGRA<ComponentType, AlphaComponentType = ComponentType> {
-    /// Blue first
-    pub b: ComponentType,
-    /// Green
-    pub g: ComponentType,
-    /// Red
-    pub r: ComponentType,
-    /// Alpha last
-    pub a: AlphaComponentType,
-}
+pub use crate::formats::gray::Gray;
+pub use crate::formats::gray_alpha::GrayAlpha;
+pub use crate::formats::bgra::Bgra as BGRA;
+pub use crate::formats::bgr::Bgr as BGR;
 
 #[cfg(feature = "argb")]
-#[repr(C)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// A+BGR
-pub struct ABGR<ComponentType, AlphaComponentType = ComponentType> {
-    /// Alpha first
-    pub a: AlphaComponentType,
-    /// Blue
-    pub b: ComponentType,
-    /// Green
-    pub g: ComponentType,
-    /// Red last
-    pub r: ComponentType,
-}
+pub use crate::formats::abgr::Abgr as ABGR;
 
 #[cfg(feature = "argb")]
-#[repr(C)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// A+RGB
-pub struct ARGB<ComponentType, AlphaComponentType = ComponentType> {
-    /// Alpha first
-    pub a: AlphaComponentType,
-    /// Red
-    pub r: ComponentType,
-    /// Green
-    pub g: ComponentType,
-    /// Blue last
-    pub b: ComponentType,
-}
+pub use crate::formats::argb::Argb as ARGB;
+
+#[cfg(feature = "grb")]
+pub use crate::formats::grb::Grb as GRB;
 
 /// 8-bit BGR
 pub type BGR8 = BGR<u8>;
@@ -90,45 +44,9 @@ pub type ABGR16 = ABGR<u16>;
 #[cfg(feature = "argb")]
 pub type ARGB16 = ARGB<u16>;
 
-#[cfg(feature = "grb")]
-#[repr(C)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// RGB with red-green swapped (may be useful for LEDs)
-pub struct GRB<ComponentType> {
-    /// Green first
-    pub g: ComponentType,
-    /// Red
-    pub r: ComponentType,
-    /// Blue last
-    pub b: ComponentType,
-}
-
 /// 8-bit GRB
 #[cfg(feature = "grb")]
 pub type GRB8 = GRB<u8>;
-
-////////////////////////////////////////
-
-#[repr(C)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// Grayscale. Use `.0` or `*` (deref) to access the value.
-pub struct Gray<ComponentType>(
-    /// brightness level
-    pub ComponentType,
-);
-
-#[repr(C)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// Grayscale with alpha. Use `.0`/`.1` to access.
-pub struct GrayAlpha<ComponentType, AlphaComponentType = ComponentType>(
-    /// brightness level
-    pub ComponentType,
-    /// alpha
-    pub AlphaComponentType,
-);
 
 #[cfg(feature = "as-bytes")]
 unsafe impl<T> crate::Pod for Gray<T> where T: crate::Pod {}

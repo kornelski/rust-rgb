@@ -33,8 +33,20 @@
 #[cfg(test)]
 #[macro_use] extern crate std;
 
-#[cfg(feature = "serde")]
-#[macro_use] extern crate serde;
+pub(crate) mod formats {
+    #[cfg(feature = "argb")]
+    pub mod abgr;
+    #[cfg(feature = "argb")]
+    pub mod argb;
+    pub mod bgr;
+    pub mod bgra;
+    pub mod gray;
+    pub mod gray_alpha;
+    #[cfg(feature = "grb")]
+    pub mod grb;
+    pub mod rgb;
+    pub mod rgba;
+}
 
 pub(crate) mod legacy {
     pub(crate) mod internal {
@@ -62,44 +74,8 @@ pub use bytemuck::Zeroable;
 pub use crate::legacy::internal::convert::*;
 pub use crate::legacy::internal::pixel::*;
 
-#[repr(C)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
-#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// The RGB pixel
-///
-/// The component type can be `u8` (aliased as `RGB8`), `u16` (aliased as `RGB16`),
-/// or any other type (but simple copyable types are recommended.)
-pub struct RGB<ComponentType> {
-    /// Red
-    pub r: ComponentType,
-    /// Green
-    pub g: ComponentType,
-    /// Blue
-    pub b: ComponentType,
-}
-
-#[repr(C)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
-#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// The RGBA pixel
-///
-/// The component type can be `u8` (aliased as `RGBA8`), `u16` (aliased as `RGBA16`),
-/// or any other type (but simple copyable types are recommended.)
-///
-/// You can specify a different type for alpha, but it's only for special cases
-/// (e.g. if you use a newtype like `RGBA<LinearLight<u16>, u16>`).
-pub struct RGBA<ComponentType, AlphaComponentType = ComponentType> {
-    /// Red
-    pub r: ComponentType,
-    /// Green
-    pub g: ComponentType,
-    /// Blue
-    pub b: ComponentType,
-    /// Alpha
-    pub a: AlphaComponentType,
-}
+pub use formats::rgb::Rgb as RGB;
+pub use formats::rgba::Rgba as RGBA;
 
 /// 8-bit RGB
 ///
