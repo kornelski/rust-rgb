@@ -124,8 +124,8 @@ mod rgba {
 }
 mod abgr {
     use crate::*;
-    implement_homogeneous_pixel!(Abgr, 4, [a, g, b, r]);
-    implement_heterogeneous_pixel!(Abgr, 3, [g, b, r], a);
+    implement_homogeneous_pixel!(Abgr, 4, [a, b, g, r]);
+    implement_heterogeneous_pixel!(Abgr, 3, [b, g, r], a);
 }
 mod argb {
     use crate::*;
