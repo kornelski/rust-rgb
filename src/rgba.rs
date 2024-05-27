@@ -22,11 +22,12 @@ pub struct Rgba<T, A = T> {
     pub a: A,
 }
 
-impl<T> HomogeneousPixel<T, 4> for Rgba<T>
+impl<T> HomogeneousPixel<T> for Rgba<T>
 where
     T: Copy,
 {
-    type PixelWithComponent<U> = Rgba<U>;
+    type SelfType<U> = Rgba<U>;
+    type ArrayForm<R> = [R; 4];
 
     fn components(&self) -> [T; 4] {
         [self.a, self.b, self.g, self.r]
@@ -42,14 +43,22 @@ where
             r: iter.next().unwrap(),
         }
     }
+
+    fn map<U>(&self, f: impl FnMut(T) -> U) -> Self::SelfType<U>
+    where
+        U: Copy,
+    {
+        Self::SelfType::from_components(self.components().map(f))
+    }
 }
 
-impl<T, A> HeterogeneousPixel<T, A, 3> for Rgba<T, A>
+impl<T, A> HeterogeneousPixel<T, A> for Rgba<T, A>
 where
     T: Copy,
     A: Copy,
 {
-    type PixelWithComponent<U, B> = Rgba<U, B>;
+    type SelfType<U, B> = Rgba<U, B>;
+    type ColorArrayForm<R> = [R; 3];
 
     fn colors(&self) -> [T; 3] {
         [self.r, self.g, self.b]
@@ -66,5 +75,18 @@ where
             b: colors[2],
             a: alpha,
         }
+    }
+
+    fn map_colors<U>(&self, f: impl FnMut(T) -> U) -> Self::SelfType<U, A>
+    where
+        U: Copy,
+    {
+        Self::SelfType::from_colors_alpha(self.colors().map(f), self.alpha())
+    }
+    fn map_alpha<B>(&self, mut f: impl FnMut(A) -> B) -> Self::SelfType<T, B>
+    where
+        B: Copy,
+    {
+        Self::SelfType::from_colors_alpha(self.colors(), f(self.alpha()))
     }
 }
