@@ -16,10 +16,6 @@ edition = "2021"
 [features]
 default = []
 
-argb = []
-grb = []
-bgr = []
-
 # Enable `checked_add` and `checked_sub` methods on `RGB<u8>`
 checked_fns = []
 
