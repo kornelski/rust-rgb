@@ -4,11 +4,9 @@
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// A `Grayscale` pixel.
 ///
-/// Use `.0` or `*` (deref) to access the value.
-///
 /// The component type can be `u8` (aliased as [`GrayU8`]), `u16` (aliased as [`GrayU16`]),
 /// or any other type (but simple copyable types are recommended).
-pub struct Gray<T>(
+pub struct Gray<T> {
     /// Grayscale Component
-    pub T,
-);
+    pub gray: T,
+}
