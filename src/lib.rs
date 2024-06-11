@@ -13,8 +13,6 @@ mod rgb;
 mod rgba;
 
 mod from;
-#[cfg(feature = "libm")]
-mod from_pixel_common;
 mod pixel;
 mod with_alpha;
 
@@ -23,15 +21,12 @@ pub use argb::Argb;
 pub use bgr::Bgr;
 pub use bgra::Bgra;
 pub use gray::Gray;
-pub use gray_alpha::GrayAlpha;
+pub use gray_alpha::GrayA;
 pub use rgb::Rgb;
 pub use rgba::Rgba;
 
-#[cfg(feature = "libm")]
-pub use from_pixel_common::{
-    enlargeable::Enlargeable, from_component_common::FromComponentCommon, FromPixelCommon,
-};
 pub use pixel::{
-    as_slice::AsSlice, contiguous_pixel::ContiguousPixel, pixel_component::PixelComponent, Pixel,
+    as_slice::AsSlice, contiguous_pixel::ContiguousPixel, homogeneous_pixel::HomogeneousPixel,
+    heterogeneous_pixel::HeterogeneousPixel, pixel_component::PixelComponent,
 };
 pub use with_alpha::{WithAlpha, WithoutAlpha};

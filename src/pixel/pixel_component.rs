@@ -8,7 +8,7 @@ pub trait PixelComponent: Copy + Num + NumCast + NumAssign + NumOps + PartialOrd
     const COMPONENT_MAX: Self;
 }
 
-macro_rules! implement_integer {
+macro_rules! integer {
     ($int:ident) => {
         impl PixelComponent for $int {
             const COMPONENT_MIN: Self = $int::MIN;
@@ -16,7 +16,7 @@ macro_rules! implement_integer {
         }
     };
 }
-macro_rules! implement_float {
+macro_rules! float {
     ($int:ident) => {
         impl PixelComponent for $int {
             const COMPONENT_MIN: Self = 0.0;
@@ -24,17 +24,17 @@ macro_rules! implement_float {
         }
     };
 }
-implement_integer!(u8);
-implement_integer!(u16);
-implement_integer!(u32);
-implement_integer!(u64);
-implement_integer!(u128);
-implement_integer!(i8);
-implement_integer!(i16);
-implement_integer!(i32);
-implement_integer!(i64);
-implement_integer!(i128);
-implement_integer!(usize);
-implement_integer!(isize);
-implement_float!(f32);
-implement_float!(f64);
+integer!(u8);
+integer!(u16);
+integer!(u32);
+integer!(u64);
+integer!(u128);
+integer!(i8);
+integer!(i16);
+integer!(i32);
+integer!(i64);
+integer!(i128);
+integer!(usize);
+integer!(isize);
+float!(f32);
+float!(f64);

@@ -1,9 +1,9 @@
 use crate::*;
 
 /// A pixel which can gain an alpha component.
-pub trait WithAlpha: Pixel {
+pub trait WithAlpha: HomogeneousPixel {
     /// The pixel type with its alpha component.
-    type WithAlpha: Pixel;
+    type WithAlpha: HomogeneousPixel;
 
     /// Returns the pixel type with its alpha component. If no alpha component is already contained
     /// then it is set to the maximum value.
@@ -11,23 +11,23 @@ pub trait WithAlpha: Pixel {
     fn with_alpha(self) -> Self::WithAlpha;
 }
 /// A pixel which can lose its alpha component.
-pub trait WithoutAlpha: Pixel {
+pub trait WithoutAlpha: HomogeneousPixel {
     /// The pixel type without its alpha component.
-    type WithoutAlpha: Pixel;
+    type WithoutAlpha: HomogeneousPixel;
 
     /// Returns the pixel type without its alpha component.
     fn without_alpha(self) -> Self::WithoutAlpha;
 }
 
-macro_rules! implement_lower_upper {
-    ($lower:ident, $upper:ident, {$($bit:ident),*}) => {
+macro_rules! lower_upper {
+    ($lower:ident, $upper:ident, {$($color_bit:tt),*}, $alpha_bit:tt) => {
         impl<T> WithAlpha for $lower<T> where T: PixelComponent {
             type WithAlpha = $upper<T>;
 
             fn with_alpha(self) -> Self::WithAlpha {
                 $upper {
-                    $($bit: self.$bit),*,
-                    a: <$lower<T> as Pixel>::Component::COMPONENT_MAX,
+                    $($color_bit: self.$color_bit),*,
+                    $alpha_bit: <$lower<T> as HomogeneousPixel>::Component::COMPONENT_MAX,
                 }
             }
         }
@@ -36,13 +36,13 @@ macro_rules! implement_lower_upper {
 
             fn without_alpha(self) -> Self::WithoutAlpha {
                 $lower {
-                    $($bit: self.$bit),*,
+                    $($color_bit: self.$color_bit),*
                 }
             }
         }
     };
 }
-macro_rules! implement_with_no_op {
+macro_rules! with_no_op {
     ($original:ident) => {
         impl<T> WithAlpha for $original<T>
         where
@@ -56,7 +56,7 @@ macro_rules! implement_with_no_op {
         }
     };
 }
-macro_rules! implement_without_no_op {
+macro_rules! without_no_op {
     ($original:ident) => {
         impl<T> WithoutAlpha for $original<T>
         where
@@ -71,16 +71,16 @@ macro_rules! implement_without_no_op {
     };
 }
 
-implement_without_no_op!(Rgb);
-implement_without_no_op!(Bgr);
-implement_without_no_op!(Gray);
+without_no_op!(Rgb);
+without_no_op!(Bgr);
+without_no_op!(Gray);
 
-implement_with_no_op!(Rgba);
-implement_with_no_op!(Argb);
-implement_with_no_op!(Bgra);
-implement_with_no_op!(Abgr);
-implement_with_no_op!(GrayA);
+with_no_op!(Rgba);
+with_no_op!(Argb);
+with_no_op!(Bgra);
+with_no_op!(Abgr);
+with_no_op!(GrayA);
 
-implement_lower_upper!(Rgb, Rgba, {r, g, b});
-implement_lower_upper!(Bgr, Bgra, {r, g, b});
-implement_lower_upper!(Gray, GrayA, { gray });
+lower_upper!(Rgb, Rgba, {r, g, b}, a);
+lower_upper!(Bgr, Bgra, {r, g, b}, a);
+lower_upper!(Gray, GrayA, { 0 }, 1);

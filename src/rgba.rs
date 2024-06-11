@@ -2,7 +2,7 @@
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// An `RGBA` pixel.
-pub struct Rgba<T> {
+pub struct Rgba<T, A = T> {
     /// Red Component
     pub r: T,
     /// Green Component
@@ -10,5 +10,5 @@ pub struct Rgba<T> {
     /// Blue Component
     pub b: T,
     /// Alpha Component
-    pub a: T,
+    pub a: A,
 }

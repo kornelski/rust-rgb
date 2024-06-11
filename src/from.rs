@@ -1,7 +1,7 @@
 use crate::*;
 
 macro_rules! between {
-    ($from_type:ident, $self_type:ident, {$($bit:ident),*}) => {
+    ($from_type:ident, $self_type:ident, {$($bit:tt),*}) => {
         impl<R, S> From<$from_type<R>> for $self_type<S> where R: Into<S> {
             fn from(value: $from_type<R>) -> Self {
                 Self{$($bit: value.$bit.into()),*}
@@ -38,10 +38,10 @@ between!(Rgba, Abgr, {r, g, b, a});
 between!(Argb, Abgr, {r, g, b, a});
 between!(Bgra, Abgr, {r, g, b, a});
 
-between!(GrayAlpha, Gray, { gray });
+between!(GrayA, Gray, { 0 });
 
 macro_rules! with_array {
-    ($type:ident, $length:literal, [$($bit:ident),*]) => {
+    ($type:ident, $length:literal, [$($bit:tt),*]) => {
         impl<R, S> From<$type<R>> for [S; $length] where R: Into<S> {
             fn from(value: $type<R>) -> Self {
                 [$(value.$bit.into()),*]
@@ -62,5 +62,5 @@ with_array!(Rgba, 4, [r, g, b, a]);
 with_array!(Argb, 4, [a, r, g, b]);
 with_array!(Bgra, 4, [b, g, r, a]);
 with_array!(Abgr, 4, [a, b, g, r]);
-with_array!(Gray, 1, [gray]);
-with_array!(GrayAlpha, 2, [gray, a]);
+with_array!(Gray, 1, [0]);
+with_array!(GrayA, 2, [0, 1]);
