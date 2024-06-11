@@ -73,6 +73,7 @@ macro_rules! without_no_op {
 
 without_no_op!(Rgb);
 without_no_op!(Bgr);
+without_no_op!(Grb);
 without_no_op!(Gray);
 
 with_no_op!(Rgba);

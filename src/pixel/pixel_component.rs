@@ -9,16 +9,16 @@ pub trait PixelComponent: Copy + Num + NumCast + NumAssign + NumOps + PartialOrd
 }
 
 macro_rules! integer {
-    ($int:ident) => {
-        impl PixelComponent for $int {
-            const COMPONENT_MIN: Self = $int::MIN;
-            const COMPONENT_MAX: Self = $int::MAX;
+    ($name:ident) => {
+        impl PixelComponent for $name {
+            const COMPONENT_MIN: Self = $name::MIN;
+            const COMPONENT_MAX: Self = $name::MAX;
         }
     };
 }
 macro_rules! float {
-    ($int:ident) => {
-        impl PixelComponent for $int {
+    ($name:ident) => {
+        impl PixelComponent for $name {
             const COMPONENT_MIN: Self = 0.0;
             const COMPONENT_MAX: Self = 1.0;
         }

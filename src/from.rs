@@ -15,12 +15,21 @@ between!(Argb, Rgb, {r, g, b});
 between!(Bgra, Rgb, {r, g, b});
 between!(Abgr, Rgb, {r, g, b});
 between!(Bgr, Rgb, {r, g, b});
+between!(Grb, Rgb, {r, g, b});
 
 between!(Rgba, Bgr, {r, g, b});
 between!(Argb, Bgr, {r, g, b});
 between!(Bgra, Bgr, {r, g, b});
 between!(Abgr, Bgr, {r, g, b});
 between!(Rgb, Bgr, {r, g, b});
+between!(Grb, Bgr, {r, g, b});
+
+between!(Rgba, Grb, {r, g, b});
+between!(Argb, Grb, {r, g, b});
+between!(Bgra, Grb, {r, g, b});
+between!(Abgr, Grb, {r, g, b});
+between!(Rgb, Grb, {r, g, b});
+between!(Bgr, Grb, {r, g, b});
 
 between!(Argb, Rgba, {r, g, b, a});
 between!(Bgra, Rgba, {r, g, b, a});
@@ -58,6 +67,7 @@ macro_rules! with_array {
 
 with_array!(Rgb, 3, [r, g, b]);
 with_array!(Bgr, 3, [b, g, r]);
+with_array!(Grb, 3, [g, r, b]);
 with_array!(Rgba, 4, [r, g, b, a]);
 with_array!(Argb, 4, [a, r, g, b]);
 with_array!(Bgra, 4, [b, g, r, a]);
