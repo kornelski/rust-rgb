@@ -14,6 +14,7 @@ pub use formats::bgr::Bgr;
 pub use formats::bgra::Bgra;
 pub use formats::gray::Gray;
 pub use formats::gray_a::GrayA;
+pub use formats::grb::Grb;
 pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
 

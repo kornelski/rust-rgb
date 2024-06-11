@@ -141,36 +141,13 @@ macro_rules! with_alpha {
     }
 }
 
-mod rgba {
-    use crate::*;
-    with_alpha!(Rgba, 4, [r, g, b, a], [r, g, b], a);
-}
-mod abgr {
-    use crate::*;
-    with_alpha!(Abgr, 4, [a, b, g, r], [b, g, r], a);
-}
-mod argb {
-    use crate::*;
-    with_alpha!(Argb, 4, [a, r, g, b], [r, g, b], a);
-}
-mod bgra {
-    use crate::*;
-    with_alpha!(Bgra, 4, [b, g, r, a], [b, g, r], a);
-}
-mod gray_alpha {
-    use crate::*;
-    with_alpha!(GrayA, 2, [0, 1], [0], 1);
-}
+with_alpha!(Rgba, 4, [r, g, b, a], [r, g, b], a);
+with_alpha!(Abgr, 4, [a, b, g, r], [b, g, r], a);
+with_alpha!(Argb, 4, [a, r, g, b], [r, g, b], a);
+with_alpha!(Bgra, 4, [b, g, r, a], [b, g, r], a);
+with_alpha!(GrayA, 2, [0, 1], [0], 1);
 
-mod gray {
-    use crate::*;
-    without_alpha!(Gray, 1, [0]);
-}
-mod bgr {
-    use crate::*;
-    without_alpha!(Bgr, 3, [b, g, r]);
-}
-mod rgb {
-    use crate::*;
-    without_alpha!(Rgb, 3, [r, g, b]);
-}
+without_alpha!(Bgr, 3, [b, g, r]);
+without_alpha!(Rgb, 3, [r, g, b]);
+without_alpha!(Grb, 3, [r, g, b]);
+without_alpha!(Gray, 1, [0]);

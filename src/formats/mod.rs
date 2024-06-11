@@ -6,3 +6,4 @@ pub mod bgra;
 pub mod abgr;
 pub mod gray;
 pub mod gray_a;
+pub mod grb;

@@ -36,6 +36,7 @@ macro_rules! contiguous {
 //layout.
 contiguous!(Rgb);
 contiguous!(Bgr);
+contiguous!(Grb);
 contiguous!(Rgba);
 contiguous!(Argb);
 contiguous!(Bgra);
