@@ -26,7 +26,7 @@ pub use rgb::Rgb;
 pub use rgba::Rgba;
 
 pub use pixel::{
-    as_slice::AsSlice, contiguous_pixel::ContiguousPixel, homogeneous_pixel::HomogeneousPixel,
-    heterogeneous_pixel::HeterogeneousPixel, pixel_component::PixelComponent,
+    as_slice::AsSlice, contiguous_pixel::ContiguousPixel, heterogeneous_pixel::HeterogeneousPixel,
+    homogeneous_pixel::HomogeneousPixel, pixel_component::PixelComponent,
 };
 pub use with_alpha::{WithAlpha, WithoutAlpha};
