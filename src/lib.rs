@@ -3,27 +3,19 @@
 #![warn(missing_docs)]
 #![no_std]
 
-mod abgr;
-mod argb;
-mod bgr;
-mod bgra;
-mod gray;
-mod gray_alpha;
-mod rgb;
-mod rgba;
-
+mod formats;
 mod from;
 mod pixel;
 mod with_alpha;
 
-pub use abgr::Abgr;
-pub use argb::Argb;
-pub use bgr::Bgr;
-pub use bgra::Bgra;
-pub use gray::Gray;
-pub use gray_alpha::GrayA;
-pub use rgb::Rgb;
-pub use rgba::Rgba;
+pub use formats::abgr::Abgr;
+pub use formats::argb::Argb;
+pub use formats::bgr::Bgr;
+pub use formats::bgra::Bgra;
+pub use formats::gray::Gray;
+pub use formats::gray_a::GrayA;
+pub use formats::rgb::Rgb;
+pub use formats::rgba::Rgba;
 
 pub use pixel::{
     as_slice::AsSlice, contiguous_pixel::ContiguousPixel, heterogeneous_pixel::HeterogeneousPixel,
