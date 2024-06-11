@@ -79,8 +79,8 @@ implement_with_no_op!(Rgba);
 implement_with_no_op!(Argb);
 implement_with_no_op!(Bgra);
 implement_with_no_op!(Abgr);
-implement_with_no_op!(GrayAlpha);
+implement_with_no_op!(GrayA);
 
 implement_lower_upper!(Rgb, Rgba, {r, g, b});
 implement_lower_upper!(Bgr, Bgra, {r, g, b});
-implement_lower_upper!(Gray, GrayAlpha, { gray });
+implement_lower_upper!(Gray, GrayA, { gray });
