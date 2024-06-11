@@ -23,6 +23,10 @@ pub trait HeterogeneousPixel: Copy {
     /// have 0.
     const COMPONENT_COUNT: u8;
 
+    /// The same pixel type as `Self` but with a different component type `U`
+    type SelfType<U: PixelComponent, V: PixelComponent>: HeterogeneousPixel<
+        SelfType<Self::ColorComponent, Self::AlphaComponent> = Self,
+    >;
     //TODO if const generic expressions become stable remove this associated type and just use
     //`[Self::Component; Self::COMPONENT_COUNT]` as the return type.
     //
@@ -64,6 +68,7 @@ macro_rules! without_alpha {
 
             const COMPONENT_COUNT: u8 = $length;
 
+            type SelfType<U: PixelComponent, V: PixelComponent> = $name<U>;
             type ColorArray<R> = [R; $length];
 
             fn color_array(&self) -> Self::ColorArray<Self::ColorComponent> {
@@ -93,7 +98,6 @@ macro_rules! without_alpha {
         }
     }
 }
-
 macro_rules! with_alpha {
     ($name:tt, $length:literal, [$($bit:tt),*], [$($color_bit:tt),*], $alpha_bit:tt) => {
         impl<T, A> HeterogeneousPixel for $name<T, A>
@@ -106,6 +110,7 @@ macro_rules! with_alpha {
 
             const COMPONENT_COUNT: u8 = $length;
 
+            type SelfType<U: PixelComponent, V: PixelComponent> = $name<U, V>;
             type ColorArray<R> = [R; $length - 1];
 
             fn color_array(&self) -> Self::ColorArray<Self::ColorComponent> {
