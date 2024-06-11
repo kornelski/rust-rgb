@@ -48,13 +48,41 @@ pub trait HeterogeneousPixel: Copy {
         alpha: Self::AlphaComponent,
     ) -> Self;
 
-    /// Maps each of the pixels color components with a function `f`.
-    fn map_colors(&self, f: impl FnMut(Self::ColorComponent) -> Self::ColorComponent) -> Self;
+    /// Maps each of the pixels color components with a function `f` to any other type.
+    ///
+    /// See [`HeterogeneousPixel::map_colors_same()`] if you want to map the color components to the
+    /// same type.
+    fn map_colors<U>(
+        &self,
+        f: impl FnMut(Self::ColorComponent) -> U,
+    ) -> Self::SelfType<U, Self::AlphaComponent>
+    where
+        U: PixelComponent;
+    /// Maps each of the pixels color components with a function `f` to the same type.
+    ///
+    /// See [`HeterogeneousPixel::map_colors()`] if you want to map the color components to a
+    /// different type.
+    fn map_colors_same(&self, f: impl FnMut(Self::ColorComponent) -> Self::ColorComponent) -> Self;
 
-    /// Maps the pixels alpha components with a function `f`.
+    /// Maps the pixels alpha component with a function `f` to any other type.
     ///
     /// If the pixel has no alpha component then the pixel is returned unchanged.
-    fn map_alpha(&self, f: impl FnMut(Self::AlphaComponent) -> Self::AlphaComponent) -> Self;
+    ///
+    /// See [`HeterogeneousPixel::map_alpha_same()`] if you want to map the alpha component to the
+    /// same type.
+    fn map_alpha<U>(
+        &self,
+        f: impl FnMut(Self::AlphaComponent) -> U,
+    ) -> Self::SelfType<Self::ColorComponent, U>
+    where
+        U: PixelComponent;
+    /// Maps the pixels alpha component with a function `f` to the same type.
+    ///
+    /// If the pixel has no alpha component then the pixel is returned unchanged.
+    ///
+    /// See [`HeterogeneousPixel::map_alpha()`] if you want to map the alpha component to a
+    /// different type.
+    fn map_alpha_same(&self, f: impl FnMut(Self::AlphaComponent) -> Self::AlphaComponent) -> Self;
 }
 
 macro_rules! without_alpha {
@@ -86,12 +114,30 @@ macro_rules! without_alpha {
                 Self {$($color_bit: iter.next().expect("colors iterator does not contain enough components for this pixel")),*}
             }
 
-            fn map_colors(&self, mut f: impl FnMut(Self::ColorComponent) -> Self::ColorComponent) -> Self
+            fn map_colors<U>(
+                &self,
+                mut f: impl FnMut(Self::ColorComponent) -> U,
+            ) -> Self::SelfType<U, Self::AlphaComponent>
+            where
+                U: PixelComponent
+            {
+                $name {$($color_bit: f(self.$color_bit),)*}
+            }
+            fn map_colors_same(&self, mut f: impl FnMut(Self::ColorComponent) -> Self::ColorComponent) -> Self
             {
                 Self {$($color_bit: f(self.$color_bit),)*}
             }
 
-            fn map_alpha(&self, _: impl FnMut(Self::AlphaComponent) -> Self::AlphaComponent) -> Self
+            fn map_alpha<U>(
+                &self,
+                _: impl FnMut(Self::AlphaComponent) -> U,
+            ) -> Self::SelfType<Self::ColorComponent, U>
+            where
+                U: PixelComponent
+            {
+                *self
+            }
+            fn map_alpha_same(&self, _: impl FnMut(Self::AlphaComponent) -> Self::AlphaComponent) -> Self
             {
                 *self
             }
@@ -99,7 +145,7 @@ macro_rules! without_alpha {
     }
 }
 macro_rules! with_alpha {
-    ($name:tt, $length:literal, [$($bit:tt),*], [$($color_bit:tt),*], $alpha_bit:tt) => {
+    ($name:tt, $length:literal, [$($color_bit:tt),*], $alpha_bit:tt) => {
         impl<T, A> HeterogeneousPixel for $name<T, A>
         where
             T: PixelComponent,
@@ -128,24 +174,42 @@ macro_rules! with_alpha {
                 Self {$($color_bit: iter.next().expect("colors iterator does not contain enough components for this pixel")),*, $alpha_bit: alpha}
             }
 
-            fn map_colors(&self, f: impl FnMut(Self::ColorComponent) -> Self::ColorComponent) -> Self
+            fn map_colors<U>(
+                &self,
+                mut f: impl FnMut(Self::ColorComponent) -> U,
+            ) -> Self::SelfType<U, Self::AlphaComponent>
+            where
+                U: PixelComponent
             {
-                Self::from_colors_alpha(self.color_array().map(f), self.$alpha_bit)
+                $name {$($color_bit: f(self.$color_bit),)* $alpha_bit: self.$alpha_bit}
+            }
+            fn map_colors_same(&self, mut f: impl FnMut(Self::ColorComponent) -> Self::ColorComponent) -> Self
+            {
+                Self {$($color_bit: f(self.$color_bit),)* $alpha_bit: self.$alpha_bit}
             }
 
-            fn map_alpha(&self, mut f: impl FnMut(Self::AlphaComponent) -> Self::AlphaComponent) -> Self
+            fn map_alpha<U>(
+                &self,
+                mut f: impl FnMut(Self::AlphaComponent) -> U,
+            ) -> Self::SelfType<Self::ColorComponent, U>
+            where
+                U: PixelComponent
             {
-                Self::from_colors_alpha(self.color_array(), f(self.$alpha_bit))
+                $name {$($color_bit: self.$color_bit,)* $alpha_bit: f(self.$alpha_bit)}
+            }
+            fn map_alpha_same(&self, mut f: impl FnMut(Self::AlphaComponent) -> Self::AlphaComponent) -> Self
+            {
+                $name {$($color_bit: self.$color_bit,)* $alpha_bit: f(self.$alpha_bit)}
             }
         }
     }
 }
 
-with_alpha!(Rgba, 4, [r, g, b, a], [r, g, b], a);
-with_alpha!(Abgr, 4, [a, b, g, r], [b, g, r], a);
-with_alpha!(Argb, 4, [a, r, g, b], [r, g, b], a);
-with_alpha!(Bgra, 4, [b, g, r, a], [b, g, r], a);
-with_alpha!(GrayA, 2, [0, 1], [0], 1);
+with_alpha!(Rgba, 4, [r, g, b], a);
+with_alpha!(Abgr, 4, [b, g, r], a);
+with_alpha!(Argb, 4, [r, g, b], a);
+with_alpha!(Bgra, 4, [b, g, r], a);
+with_alpha!(GrayA, 2, [0], 1);
 
 without_alpha!(Bgr, 3, [b, g, r]);
 without_alpha!(Rgb, 3, [r, g, b]);
