@@ -1,5 +1,5 @@
-/// A helpful trait for turning the associated array types in the [`Pixel`](crate::Pixel) trait
-/// into a slice.
+/// A helpful trait for turning the associated array types in the pixel traits
+/// into slices.
 pub trait AsSlice<T> {
     /// Returns as a slice of `T`
     fn as_slice(&self) -> &[T];

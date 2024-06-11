@@ -17,20 +17,21 @@ macro_rules! contiguous {
             fn from_component_slice_ref(slice: &[Self::Component]) -> &Self {
                 assert_eq!(
                     slice.len(),
-                    usize::from(<$pixel<T> as HomogeneousPixel>::COMPONENT_COUNT)
+                    usize::from(<$pixel<T> as HeterogeneousPixel>::COMPONENT_COUNT)
                 );
                 unsafe { &*(slice.as_ptr() as *const $pixel<T>) }
             }
             fn from_component_slice_mut(slice: &mut [Self::Component]) -> &mut Self {
                 assert_eq!(
                     slice.len(),
-                    usize::from(<$pixel<T> as HomogeneousPixel>::COMPONENT_COUNT)
+                    usize::from(<$pixel<T> as HeterogeneousPixel>::COMPONENT_COUNT)
                 );
                 unsafe { &mut *(slice.as_mut_ptr() as *mut $pixel<T>) }
             }
         }
     };
 }
+
 //This is safe since we use #[repr(C)] for the pixel struct definitions to ensure contiguous
 //layout.
 contiguous!(Rgb);
