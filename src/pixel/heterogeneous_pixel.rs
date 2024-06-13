@@ -28,6 +28,7 @@ pub trait HeterogeneousPixel: Copy {
         SelfType<Self::ColorComponent, Self::AlphaComponent> = Self,
     >;
 
+    //TODO switch to returning an plain array if const generic expressions ever stabilize
     /// Converts an owned `Pixel` type to an array of its color components.
     fn color_array(
         &self,
