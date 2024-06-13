@@ -19,8 +19,9 @@ pub use formats::rgba::Rgba;
 
 pub use pixel::{
     contiguous_pixel::ContiguousPixel,
+    gain_alpha::{GainAlpha, LoseAlpha},
+    has_alpha::HasAlpha,
     heterogeneous_pixel::HeterogeneousPixel,
     homogeneous_pixel::HomogeneousPixel,
     pixel_component::PixelComponent,
-    gain_alpha::{GainAlpha, LoseAlpha},
 };

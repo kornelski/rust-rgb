@@ -35,7 +35,7 @@ pub trait HeterogeneousPixel: Copy {
            + AsMut<[Self::ColorComponent]>
            + IntoIterator<Item = Self::ColorComponent>;
     /// Returns the alpha component of the pixel if it has one.
-    fn alpha(&self) -> Option<Self::AlphaComponent>;
+    fn alpha_checked(&self) -> Option<Self::AlphaComponent>;
 
     /// Create a new instance given an array of its color components and an alpha component.
     ///
@@ -100,7 +100,7 @@ macro_rules! without_alpha {
             fn color_array(&self) -> impl AsRef<[Self::ColorComponent]> + AsMut<[Self::ColorComponent]> + IntoIterator<Item=Self::ColorComponent> {
                 [$(self.$color_bit),*]
             }
-            fn alpha(&self) -> Option<Self::AlphaComponent> {
+            fn alpha_checked(&self) -> Option<Self::AlphaComponent> {
                 None
             }
 
@@ -159,7 +159,7 @@ macro_rules! with_alpha {
             fn color_array(&self) -> impl AsRef<[Self::ColorComponent]> + AsMut<[Self::ColorComponent]> + IntoIterator<Item=Self::ColorComponent> {
                 [$(self.$color_bit),*]
             }
-            fn alpha(&self) -> Option<Self::AlphaComponent> {
+            fn alpha_checked(&self) -> Option<Self::AlphaComponent> {
                 Some(self.$alpha_bit)
             }
 
