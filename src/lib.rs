@@ -6,7 +6,6 @@
 mod formats;
 mod from;
 mod pixel;
-mod with_alpha;
 
 pub use formats::abgr::Abgr;
 pub use formats::argb::Argb;
@@ -19,7 +18,10 @@ pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
 
 pub use pixel::{
-    as_slice::AsSlice, contiguous_pixel::ContiguousPixel, heterogeneous_pixel::HeterogeneousPixel,
-    homogeneous_pixel::HomogeneousPixel, pixel_component::PixelComponent,
+    contiguous_pixel::ContiguousPixel,
+    gain_alpha::{GainAlpha, LoseAlpha},
+    has_alpha::HasAlpha,
+    heterogeneous_pixel::HeterogeneousPixel,
+    homogeneous_pixel::HomogeneousPixel,
+    pixel_component::PixelComponent,
 };
-pub use with_alpha::{WithAlpha, WithoutAlpha};

@@ -27,16 +27,15 @@ pub trait HeterogeneousPixel: Copy {
     type SelfType<U: PixelComponent, V: PixelComponent>: HeterogeneousPixel<
         SelfType<Self::ColorComponent, Self::AlphaComponent> = Self,
     >;
-    //TODO if const generic expressions become stable remove this associated type and just use
-    //`[Self::Component; Self::COMPONENT_COUNT]` as the return type.
-    //
-    /// The color array form of `Self`
-    type ColorArray<R>: IntoIterator<Item = R> + AsSlice<R>;
 
     /// Converts an owned `Pixel` type to an array of its color components.
-    fn color_array(&self) -> Self::ColorArray<Self::ColorComponent>;
+    fn color_array(
+        &self,
+    ) -> impl AsRef<[Self::ColorComponent]>
+           + AsMut<[Self::ColorComponent]>
+           + IntoIterator<Item = Self::ColorComponent>;
     /// Returns the alpha component of the pixel if it has one.
-    fn alpha(&self) -> Option<Self::AlphaComponent>;
+    fn alpha_checked(&self) -> Option<Self::AlphaComponent>;
 
     /// Create a new instance given an array of its color components and an alpha component.
     ///
@@ -97,12 +96,11 @@ macro_rules! without_alpha {
             const COMPONENT_COUNT: u8 = $length;
 
             type SelfType<U: PixelComponent, V: PixelComponent> = $name<U>;
-            type ColorArray<R> = [R; $length];
 
-            fn color_array(&self) -> Self::ColorArray<Self::ColorComponent> {
+            fn color_array(&self) -> impl AsRef<[Self::ColorComponent]> + AsMut<[Self::ColorComponent]> + IntoIterator<Item=Self::ColorComponent> {
                 [$(self.$color_bit),*]
             }
-            fn alpha(&self) -> Option<Self::AlphaComponent> {
+            fn alpha_checked(&self) -> Option<Self::AlphaComponent> {
                 None
             }
 
@@ -157,12 +155,11 @@ macro_rules! with_alpha {
             const COMPONENT_COUNT: u8 = $length;
 
             type SelfType<U: PixelComponent, V: PixelComponent> = $name<U, V>;
-            type ColorArray<R> = [R; $length - 1];
 
-            fn color_array(&self) -> Self::ColorArray<Self::ColorComponent> {
+            fn color_array(&self) -> impl AsRef<[Self::ColorComponent]> + AsMut<[Self::ColorComponent]> + IntoIterator<Item=Self::ColorComponent> {
                 [$(self.$color_bit),*]
             }
-            fn alpha(&self) -> Option<Self::AlphaComponent> {
+            fn alpha_checked(&self) -> Option<Self::AlphaComponent> {
                 Some(self.$alpha_bit)
             }
 

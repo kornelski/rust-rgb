@@ -16,14 +16,10 @@ pub trait HomogeneousPixel:
     /// The component type of the pixel used for both color and alpha components if any.
     type Component: PixelComponent;
 
-    //TODO if const generic expressions become stable remove this associated type and just use
-    //`[Self::Component; Self::COMPONENT_COUNT]` as the return type.
-    //
-    /// The component array form of `Self`
-    type ComponentArray<R>: IntoIterator<Item = R> + AsSlice<R>;
-
     /// Converts an owned `Pixel` type to an array of its components.
-    fn component_array(&self) -> Self::ComponentArray<Self::Component>;
+    fn component_array(
+        &self,
+    ) -> impl AsRef<[Self::Component]> + AsMut<[Self::Component]> + IntoIterator<Item = Self::Component>;
 
     /// Creates a new instance given an iterator of its components.
     ///
@@ -54,9 +50,7 @@ macro_rules! without_alpha {
         {
             type Component = T;
 
-            type ComponentArray<R> = [R; $length];
-
-            fn component_array(&self) -> Self::ComponentArray<Self::Component> {
+            fn component_array(&self) -> impl AsRef<[Self::Component]> + AsMut<[Self::Component]> + IntoIterator<Item=Self::Component> {
                 [$(self.$bit),*]
             }
 
@@ -87,9 +81,7 @@ macro_rules! with_alpha {
         {
             type Component = T;
 
-            type ComponentArray<R> = [R; $length];
-
-            fn component_array(&self) -> Self::ComponentArray<Self::Component> {
+            fn component_array(&self) -> impl AsRef<[Self::Component]> + AsMut<[Self::Component]> + IntoIterator<Item=Self::Component> {
                 [$(self.$bit),*]
             }
 
