@@ -18,7 +18,9 @@ pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
 
 pub use pixel::{
-    as_slice::AsSlice, contiguous_pixel::ContiguousPixel, heterogeneous_pixel::HeterogeneousPixel,
-    homogeneous_pixel::HomogeneousPixel, pixel_component::PixelComponent,
+    contiguous_pixel::ContiguousPixel,
+    heterogeneous_pixel::HeterogeneousPixel,
+    homogeneous_pixel::HomogeneousPixel,
+    pixel_component::PixelComponent,
+    with_alpha::{WithAlpha, WithoutAlpha},
 };
-pub use with_alpha::{WithAlpha, WithoutAlpha};
