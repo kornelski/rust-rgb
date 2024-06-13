@@ -16,6 +16,7 @@ pub trait HomogeneousPixel:
     /// The component type of the pixel used for both color and alpha components if any.
     type Component: PixelComponent;
 
+    //TODO switch to returning an plain array if const generic expressions every stabilize
     /// Converts an owned `Pixel` type to an array of its components.
     fn component_array(
         &self,
