@@ -22,5 +22,5 @@ pub use pixel::{
     heterogeneous_pixel::HeterogeneousPixel,
     homogeneous_pixel::HomogeneousPixel,
     pixel_component::PixelComponent,
-    with_alpha::{WithAlpha, WithoutAlpha},
+    gain_alpha::{GainAlpha, LoseAlpha},
 };
