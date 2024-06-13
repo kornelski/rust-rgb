@@ -6,7 +6,6 @@
 mod formats;
 mod from;
 mod pixel;
-mod with_alpha;
 
 pub use formats::abgr::Abgr;
 pub use formats::argb::Argb;
