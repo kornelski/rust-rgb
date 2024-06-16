@@ -1,4 +1,18 @@
+use core::fmt::Display;
+
 use crate::*;
+
+#[derive(Debug, Clone, Copy)]
+/// Error returned from the [`HomogeneousPixel::try_from_components()`] function.
+pub struct TryFromComponentsError;
+impl Display for TryFromComponentsError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(
+            f,
+            "the components iterator did not contain enough items to create this pixel"
+        )
+    }
+}
 
 /// A Pixel made up of a compile-time known number of contiguously stored color components and optionally an
 /// alpha component.
@@ -12,7 +26,6 @@ use crate::*;
 /// of four components, three color components and one alpha component.
 pub trait HomogeneousPixel:
     HeterogeneousPixel<ColorComponent = Self::Component, AlphaComponent = Self::Component>
-    + for<'a> TryFrom<&'a [Self::Component]>
 {
     /// The component type of the pixel used for both color and alpha components if any.
     type Component: PixelComponent;
@@ -21,12 +34,12 @@ pub trait HomogeneousPixel:
     /// Converts an owned `Pixel` type to an array of its components.
     fn component_array(&self) -> impl ArrayLike<Self::Component>;
 
-    /// Creates a new instance given an iterator of its components.
+    /// Tries to create new instance given an iterator of its components.
     ///
-    /// # Panics
-    ///
-    /// This function will panic if the iterator does not produce enough components for the pixel.
-    fn from_components(components: impl IntoIterator<Item = Self::Component>) -> Self;
+    /// Returns an error if the `components` iterator does not contain enough items to create the pixel.
+    fn try_from_components(
+        components: impl IntoIterator<Item = Self::Component>,
+    ) -> Result<Self, TryFromComponentsError>;
 
     /// Maps each of the pixels components with a function `f` to any other component type.
     ///
@@ -54,11 +67,11 @@ macro_rules! without_alpha {
                 [$(self.$bit),*]
             }
 
-            fn from_components(
+            fn try_from_components(
                 components: impl IntoIterator<Item = Self::Component>,
-            ) -> Self {
+            ) -> Result<Self, TryFromComponentsError> {
                 let mut iter = components.into_iter();
-                Self {$($bit: iter.next().expect("components iterator does not contain enough components for this pixel")),*}
+                Ok(Self {$($bit: iter.next().ok_or(TryFromComponentsError)?),*})
             }
 
             fn map_components<U>(&self, mut f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
@@ -85,11 +98,11 @@ macro_rules! with_alpha {
                 [$(self.$bit),*]
             }
 
-            fn from_components(
+            fn try_from_components(
                 components: impl IntoIterator<Item = Self::Component>,
-            ) -> Self {
+            ) -> Result<Self, TryFromComponentsError> {
                 let mut iter = components.into_iter();
-                Self {$($bit: iter.next().expect("components iterator does not contain enough components for this pixel")),*}
+                Ok(Self {$($bit: iter.next().ok_or(TryFromComponentsError)?),*})
             }
 
             fn map_components<U>(&self, mut f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
