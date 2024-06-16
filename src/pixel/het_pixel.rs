@@ -3,7 +3,7 @@ use core::fmt::Display;
 use crate::*;
 
 #[derive(Debug, Clone, Copy)]
-/// Error returned from the [`HeterogeneousPixel::try_from_colors_alpha()`] function.
+/// Error returned from the [`HetPixel::try_from_colors_alpha()`] function.
 pub struct TryFromColorsAlphaError;
 impl Display for TryFromColorsAlphaError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -14,17 +14,17 @@ impl Display for TryFromColorsAlphaError {
     }
 }
 
-/// A Pixel made up of a compile-time known number of contiguously stored color components and optionally an
+/// A Pixel made up of a compile-time known number of color components and optionally an
 /// alpha component.
 ///
-/// Unlike [`HomogeneousPixel`] the alpha component does not have to be the same type as the color
+/// Unlike [`HomPixel`] the alpha component does not have to be the same type as the color
 /// components.
 ///
 /// # Terminology
 ///
 /// Component = An element of a pixel, inclusive of alpha. For example, [`Rgba`](crate::Rgba) is a pixel made up
 /// of four components, three color components and one alpha component.
-pub trait HeterogeneousPixel: Copy {
+pub trait HetPixel: Copy {
     /// The component type of the pixel used the color component(s).
     type ColorComponent: PixelComponent;
     /// The component type of the pixel used the alpha component if any.
@@ -38,7 +38,7 @@ pub trait HeterogeneousPixel: Copy {
     const COMPONENT_COUNT: u8;
 
     /// The same pixel type as `Self` but with a different component type `U`
-    type SelfType<U: PixelComponent, V: PixelComponent>: HeterogeneousPixel<
+    type SelfType<U: PixelComponent, V: PixelComponent>: HetPixel<
         SelfType<Self::ColorComponent, Self::AlphaComponent> = Self,
     >;
 
@@ -58,7 +58,7 @@ pub trait HeterogeneousPixel: Copy {
 
     /// Maps each of the pixels color components with a function `f` to any other type.
     ///
-    /// See [`HeterogeneousPixel::map_colors_same()`] if you want to map the color components to the
+    /// See [`HetPixel::map_colors_same()`] if you want to map the color components to the
     /// same type.
     fn map_colors<U>(
         &self,
@@ -68,7 +68,7 @@ pub trait HeterogeneousPixel: Copy {
         U: PixelComponent;
     /// Maps each of the pixels color components with a function `f` to the same type.
     ///
-    /// See [`HeterogeneousPixel::map_colors()`] if you want to map the color components to a
+    /// See [`HetPixel::map_colors()`] if you want to map the color components to a
     /// different type.
     fn map_colors_same(&self, f: impl FnMut(Self::ColorComponent) -> Self::ColorComponent) -> Self;
 
@@ -76,7 +76,7 @@ pub trait HeterogeneousPixel: Copy {
     ///
     /// If the pixel has no alpha component then the pixel is returned unchanged.
     ///
-    /// See [`HeterogeneousPixel::map_alpha_same()`] if you want to map the alpha component to the
+    /// See [`HetPixel::map_alpha_same()`] if you want to map the alpha component to the
     /// same type.
     fn map_alpha<U>(
         &self,
@@ -88,14 +88,14 @@ pub trait HeterogeneousPixel: Copy {
     ///
     /// If the pixel has no alpha component then the pixel is returned unchanged.
     ///
-    /// See [`HeterogeneousPixel::map_alpha()`] if you want to map the alpha component to a
+    /// See [`HetPixel::map_alpha()`] if you want to map the alpha component to a
     /// different type.
     fn map_alpha_same(&self, f: impl FnMut(Self::AlphaComponent) -> Self::AlphaComponent) -> Self;
 }
 
 macro_rules! without_alpha {
     ($name:ident, $length:literal, [$($color_bit:tt),*]) => {
-        impl<T> HeterogeneousPixel for $name<T>
+        impl<T> HetPixel for $name<T>
         where
             T: PixelComponent,
         {
@@ -153,7 +153,7 @@ macro_rules! without_alpha {
 }
 macro_rules! with_alpha {
     ($name:tt, $length:literal, [$($color_bit:tt),*], $alpha_bit:tt) => {
-        impl<T, A> HeterogeneousPixel for $name<T, A>
+        impl<T, A> HetPixel for $name<T, A>
         where
             T: PixelComponent,
             A: PixelComponent,
