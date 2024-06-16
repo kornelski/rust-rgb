@@ -18,9 +18,7 @@ pub trait HomogeneousPixel:
 
     //TODO switch to returning an plain array if const generic expressions ever stabilize
     /// Converts an owned `Pixel` type to an array of its components.
-    fn component_array(
-        &self,
-    ) -> impl AsRef<[Self::Component]> + AsMut<[Self::Component]> + IntoIterator<Item = Self::Component>;
+    fn component_array(&self) -> impl ArrayLike<Self::Component>;
 
     /// Creates a new instance given an iterator of its components.
     ///
@@ -51,7 +49,7 @@ macro_rules! without_alpha {
         {
             type Component = T;
 
-            fn component_array(&self) -> impl AsRef<[Self::Component]> + AsMut<[Self::Component]> + IntoIterator<Item=Self::Component> {
+            fn component_array(&self) -> impl ArrayLike<Self::Component> {
                 [$(self.$bit),*]
             }
 
@@ -82,7 +80,7 @@ macro_rules! with_alpha {
         {
             type Component = T;
 
-            fn component_array(&self) -> impl AsRef<[Self::Component]> + AsMut<[Self::Component]> + IntoIterator<Item=Self::Component> {
+            fn component_array(&self) -> impl ArrayLike<Self::Component> {
                 [$(self.$bit),*]
             }
 

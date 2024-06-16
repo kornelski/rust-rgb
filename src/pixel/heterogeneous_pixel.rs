@@ -30,11 +30,7 @@ pub trait HeterogeneousPixel: Copy {
 
     //TODO switch to returning an plain array if const generic expressions ever stabilize
     /// Converts an owned `Pixel` type to an array of its color components.
-    fn color_array(
-        &self,
-    ) -> impl AsRef<[Self::ColorComponent]>
-           + AsMut<[Self::ColorComponent]>
-           + IntoIterator<Item = Self::ColorComponent>;
+    fn color_array(&self) -> impl ArrayLike<Self::ColorComponent>;
     /// Returns the alpha component of the pixel if it has one.
     fn alpha_checked(&self) -> Option<Self::AlphaComponent>;
 
@@ -98,7 +94,7 @@ macro_rules! without_alpha {
 
             type SelfType<U: PixelComponent, V: PixelComponent> = $name<U>;
 
-            fn color_array(&self) -> impl AsRef<[Self::ColorComponent]> + AsMut<[Self::ColorComponent]> + IntoIterator<Item=Self::ColorComponent> {
+            fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> {
                 [$(self.$color_bit),*]
             }
             fn alpha_checked(&self) -> Option<Self::AlphaComponent> {
@@ -157,7 +153,7 @@ macro_rules! with_alpha {
 
             type SelfType<U: PixelComponent, V: PixelComponent> = $name<U, V>;
 
-            fn color_array(&self) -> impl AsRef<[Self::ColorComponent]> + AsMut<[Self::ColorComponent]> + IntoIterator<Item=Self::ColorComponent> {
+            fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> {
                 [$(self.$color_bit),*]
             }
             fn alpha_checked(&self) -> Option<Self::AlphaComponent> {

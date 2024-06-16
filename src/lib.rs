@@ -18,6 +18,7 @@ pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
 
 pub use pixel::{
+    arraylike::ArrayLike,
     contiguous_pixel::ContiguousPixel,
     gain_alpha::{GainAlpha, LoseAlpha},
     has_alpha::HasAlpha,
