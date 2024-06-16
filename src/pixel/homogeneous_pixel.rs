@@ -12,6 +12,7 @@ use crate::*;
 /// of four components, three color components and one alpha component.
 pub trait HomogeneousPixel:
     HeterogeneousPixel<ColorComponent = Self::Component, AlphaComponent = Self::Component>
+    + for<'a> TryFrom<&'a [Self::Component]>
 {
     /// The component type of the pixel used for both color and alpha components if any.
     type Component: PixelComponent;
