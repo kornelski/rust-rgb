@@ -1,4 +1,18 @@
+use core::fmt::Display;
+
 use crate::*;
+
+#[derive(Debug, Clone, Copy)]
+/// Error returned from the [`HeterogeneousPixel::try_from_colors_alpha()`] function.
+pub struct TryFromColorsAlphaError;
+impl Display for TryFromColorsAlphaError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(
+            f,
+            "the colors iterator did not contain enough items to create this pixel"
+        )
+    }
+}
 
 /// A Pixel made up of a compile-time known number of contiguously stored color components and optionally an
 /// alpha component.
@@ -34,15 +48,13 @@ pub trait HeterogeneousPixel: Copy {
     /// Returns the alpha component of the pixel if it has one.
     fn alpha_checked(&self) -> Option<Self::AlphaComponent>;
 
-    /// Create a new instance given an array of its color components and an alpha component.
+    /// Tries to create new instance given an iterator of color components and an alpha component.
     ///
-    /// # Panics
-    ///
-    /// This function will panic if the colors iterator does not produce enough color components for the pixel.
-    fn from_colors_alpha(
+    /// Returns an error if the `colors` iterator does not contain enough items to create the pixel.
+    fn try_from_colors_alpha(
         colors: impl IntoIterator<Item = Self::ColorComponent>,
         alpha: Self::AlphaComponent,
-    ) -> Self;
+    ) -> Result<Self, TryFromColorsAlphaError>;
 
     /// Maps each of the pixels color components with a function `f` to any other type.
     ///
@@ -101,12 +113,12 @@ macro_rules! without_alpha {
                 None
             }
 
-            fn from_colors_alpha(
+            fn try_from_colors_alpha(
                 colors: impl IntoIterator<Item = Self::ColorComponent>,
                 _: Self::AlphaComponent,
-            ) -> Self {
+            ) -> Result<Self, TryFromColorsAlphaError> {
                 let mut iter = colors.into_iter();
-                Self {$($color_bit: iter.next().expect("colors iterator does not contain enough components for this pixel")),*}
+                Ok(Self {$($color_bit: iter.next().ok_or(TryFromColorsAlphaError)?),*})
             }
 
             fn map_colors<U>(
@@ -160,12 +172,12 @@ macro_rules! with_alpha {
                 Some(self.$alpha_bit)
             }
 
-            fn from_colors_alpha(
+            fn try_from_colors_alpha(
                 colors: impl IntoIterator<Item = Self::ColorComponent>,
                 alpha: Self::AlphaComponent,
-            ) -> Self {
+            ) -> Result<Self, TryFromColorsAlphaError> {
                 let mut iter = colors.into_iter();
-                Self {$($color_bit: iter.next().expect("colors iterator does not contain enough components for this pixel")),*, $alpha_bit: alpha}
+                Ok(Self {$($color_bit: iter.next().ok_or(TryFromColorsAlphaError)?),*, $alpha_bit: alpha})
             }
 
             fn map_colors<U>(
