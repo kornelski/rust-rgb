@@ -1,10 +1,10 @@
 use crate::*;
 
 /// A pixel which has an alpha component.
-pub trait HasAlpha: HeterogeneousPixel {
+pub trait HasAlpha: HetPixel {
     /// Returns the pixels alpha component.
     ///
-    /// Use [`HeterogeneousPixel::from_colors_alpha()`] to set the pixels alpha component.
+    /// Use [`HetPixel::try_from_colors_alpha()`] to set the pixels alpha component.
     fn alpha(&self) -> Self::AlphaComponent;
 }
 

@@ -3,7 +3,7 @@ use core::fmt::Display;
 use crate::*;
 
 #[derive(Debug, Clone, Copy)]
-/// Error returned from the [`HomogeneousPixel::try_from_components()`] function.
+/// Error returned from the [`HomPixel::try_from_components()`] function.
 pub struct TryFromComponentsError;
 impl Display for TryFromComponentsError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -14,18 +14,20 @@ impl Display for TryFromComponentsError {
     }
 }
 
-/// A Pixel made up of a compile-time known number of contiguously stored color components and optionally an
+/// A Pixel made up of a compile-time known number of color components and optionally an
 /// alpha component.
 ///
-/// Unlike [`HeterogeneousPixel`] the alpha component must be the same type as the color
+/// Unlike [`HetPixel`] the alpha component must be the same type as the color
 /// components.
+///
+/// All types which implement [`HomPixel`] also implement [`HetPixel`] due to the super-trait trait bound.
 ///
 /// # Terminology
 ///
 /// Component = An element of a pixel, inclusive of alpha. For example, [`Rgba`](crate::Rgba) is a pixel made up
 /// of four components, three color components and one alpha component.
-pub trait HomogeneousPixel:
-    HeterogeneousPixel<ColorComponent = Self::Component, AlphaComponent = Self::Component>
+pub trait HomPixel:
+    HetPixel<ColorComponent = Self::Component, AlphaComponent = Self::Component>
 {
     /// The component type of the pixel used for both color and alpha components if any.
     type Component: PixelComponent;
@@ -43,21 +45,21 @@ pub trait HomogeneousPixel:
 
     /// Maps each of the pixels components with a function `f` to any other component type.
     ///
-    /// See [`HomogeneousPixel::map_components_same()`] if you want to map the components to the
+    /// See [`HomPixel::map_components_same()`] if you want to map the components to the
     /// same type.
     fn map_components<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
     where
         U: PixelComponent;
     /// Maps each of the pixels components with a function `f` to the same component type.
     ///
-    /// See [`HomogeneousPixel::map_components()`] if you want to map the components to a
+    /// See [`HomPixel::map_components()`] if you want to map the components to a
     /// different type.
     fn map_components_same(&self, f: impl FnMut(Self::Component) -> Self::Component) -> Self;
 }
 
 macro_rules! without_alpha {
     ($name:tt, $length:literal, [$($bit:tt),*]) => {
-        impl<T> HomogeneousPixel for $name<T>
+        impl<T> HomPixel for $name<T>
         where
             T: PixelComponent,
         {
@@ -88,7 +90,7 @@ macro_rules! without_alpha {
 }
 macro_rules! with_alpha {
     ($name:tt, $length:literal, [$($bit:tt),*]) => {
-        impl<T> HomogeneousPixel for $name<T, T>
+        impl<T> HomPixel for $name<T, T>
         where
             T: PixelComponent,
         {

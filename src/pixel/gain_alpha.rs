@@ -1,9 +1,9 @@
 use crate::*;
 
 /// A pixel which can gain an alpha component.
-pub trait GainAlpha: HeterogeneousPixel {
+pub trait GainAlpha: HetPixel {
     /// The pixel type after gaining an alpha component.
-    type GainAlpha: HeterogeneousPixel;
+    type GainAlpha: HetPixel;
 
     /// Returns the pixel type after gaining an alpha component.
     ///
@@ -12,9 +12,9 @@ pub trait GainAlpha: HeterogeneousPixel {
     fn gain_alpha(self) -> Self::GainAlpha;
 }
 /// A pixel which can lose its alpha component.
-pub trait LoseAlpha: HeterogeneousPixel {
+pub trait LoseAlpha: HetPixel {
     /// The pixel type after losing its alpha component.
-    type LoseAlpha: HeterogeneousPixel;
+    type LoseAlpha: HetPixel;
 
     /// Returns the pixel type after losing its alpha component.
     fn lose_alpha(self) -> Self::LoseAlpha;
@@ -28,7 +28,7 @@ macro_rules! lower_upper {
             fn gain_alpha(self) -> Self::GainAlpha {
                 $upper {
                     $($color_bit: self.$color_bit),*,
-                    $alpha_bit: <$lower<T> as HeterogeneousPixel>::AlphaComponent::COMPONENT_MAX,
+                    $alpha_bit: <$lower<T> as HetPixel>::AlphaComponent::COMPONENT_MAX,
                 }
             }
         }

@@ -21,7 +21,7 @@ pub use pixel::{
     arraylike::ArrayLike,
     gain_alpha::{GainAlpha, LoseAlpha},
     has_alpha::HasAlpha,
-    heterogeneous_pixel::{HeterogeneousPixel, TryFromColorsAlphaError},
-    homogeneous_pixel::{HomogeneousPixel, TryFromComponentsError},
+    het_pixel::{HetPixel, TryFromColorsAlphaError},
+    hom_pixel::{HomPixel, TryFromComponentsError},
     pixel_component::PixelComponent,
 };
