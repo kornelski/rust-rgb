@@ -3,13 +3,16 @@
 #![warn(missing_docs)]
 #![no_std]
 
-#[cfg(feature = "bytemuck")]
-mod bytemuck;
 mod formats;
 mod from;
+mod pixel;
+
+#[cfg(feature = "bytemuck")]
+mod bytemuck;
+#[cfg(feature = "legacy")]
+mod legacy;
 #[cfg(feature = "num-traits")]
 mod num_traits;
-mod pixel;
 
 pub use formats::abgr::Abgr;
 pub use formats::argb::Argb;
@@ -31,3 +34,19 @@ pub use pixel::{
     hom_pixel::{HomPixel, TryFromComponentsError},
     pixel_component::PixelComponent,
 };
+
+/// The legacy alt module.
+#[cfg(feature = "legacy")]
+pub mod alt {
+    pub use crate::Abgr as ABGR;
+    pub use crate::Argb as ARGB;
+    pub use crate::Bgr as BGR;
+    pub use crate::Bgra as BGRA;
+    pub use crate::Gray;
+    pub use crate::GrayA as GrayAlpha;
+    pub use crate::Grb as GRB;
+}
+#[cfg(feature = "legacy")]
+pub use crate::Rgb as RGB;
+#[cfg(feature = "legacy")]
+pub use crate::Rgba as RGBA;
