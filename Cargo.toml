@@ -16,6 +16,8 @@ edition = "2021"
 [features]
 default = []
 
+legacy = []
+
 num-traits = ["dep:num-traits"]
 defmt-03 = ["dep:defmt"]
 serde = ["dep:serde"]
