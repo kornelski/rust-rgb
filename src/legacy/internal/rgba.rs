@@ -1,7 +1,6 @@
 use super::pixel::*;
 use crate::alt::*;
 use crate::{RGB, RGBA};
-use core::fmt;
 
 impl<T> RGBA<T> {
     #[inline(always)]
@@ -124,13 +123,6 @@ macro_rules! impl_rgba {
                     b: f(self.b),
                     a: self.a.clone().into(),
                 }
-            }
-
-            #[doc(hidden)]
-            #[deprecated(note = "use .with_alpha(a) instead")]
-            /// Create a new RGBA with the new alpha value, but same RGB values
-            pub fn alpha(&self, a: A) -> Self {
-                self.with_alpha(a)
             }
 
             #[inline(always)]
@@ -350,19 +342,6 @@ impl_alpha_conv! {RGB, ABGR}
 impl_alpha_conv! {BGR, ARGB}
 #[cfg(feature = "argb")]
 impl_alpha_conv! {RGB, ARGB}
-
-impl<T: fmt::Display, A: fmt::Display> fmt::Display for RGBA<T, A> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "rgba({},{},{},{})", self.r, self.g, self.b, self.a)
-    }
-}
-
-impl<T: fmt::Display, A: fmt::Display> fmt::Display for BGRA<T, A> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "bgra({},{},{},{})", self.r, self.g, self.b, self.a)
-    }
-}
-
 #[test]
 fn rgba_test() {
     let neg = RGBA::new(1,2,3i32,1000).map(|x| -x);
@@ -411,6 +390,8 @@ fn abgr_test() {
 #[test]
 #[allow(deprecated)]
 fn bgra_test() {
+    use crate::*;
+
     let neg = BGRA::new(1, 2, 3i32, 1000).map(|x| -x);
     let _ = neg.as_slice();
 
@@ -435,7 +416,7 @@ fn bgra_test() {
     assert_eq!(-1i16, neg.r);
     assert_eq!(4u8, neg.a);
 
-    let mut px = BGRA{r:1,g:2,b:3,a:-9}.alpha(4);
+    let mut px = BGRA{r:1,g:2,b:3,a:-9}.with_alpha(4);
     px.as_mut_slice()[3] = 100;
     assert_eq!(1, px.bgr_mut().r);
     assert_eq!(2, px.bgr_mut().g);

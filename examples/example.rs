@@ -1,5 +1,6 @@
 use rgb::*;
 
+#[cfg(feature = "legacy")]
 fn main() {
 
     let px = Rgb{r:255_u8,g:0,b:100};
@@ -13,3 +14,6 @@ fn main() {
 
     println!("{inverted}"); // rgb(0,255,0)
 }
+
+#[cfg(not(feature = "legacy"))]
+fn main() {}

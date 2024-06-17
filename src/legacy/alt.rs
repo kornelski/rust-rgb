@@ -79,16 +79,6 @@ impl<T> Gray<T> {
     }
 }
 
-#[cfg(not(feature = "unstable-experimental"))]
-impl<T> core::ops::Deref for Gray<T> {
-    type Target = T;
-
-    #[inline(always)]
-    fn deref(&self) -> &T {
-        &self.0
-    }
-}
-
 impl<T: Copy> From<T> for Gray<T> {
     #[inline(always)]
     fn from(component: T) -> Self {
@@ -269,8 +259,7 @@ fn gray() {
 
     let g: GRAY8 = 200.into();
     let g = g.map(|c| c / 2);
-    #[cfg(not(feature = "unstable-experimental"))]
-    assert_eq!(110, *g + 10);
+    assert_eq!(110, g.v + 10);
     assert_eq!(110, 10 + Gray(100).as_ref());
 
     let ga: GRAYA8 = GrayAlpha(1, 2);

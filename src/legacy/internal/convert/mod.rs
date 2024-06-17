@@ -3,9 +3,6 @@ use crate::alt::*;
 use crate::{RGB, RGBA};
 use core::{mem, slice};
 
-mod array;
-mod tuple;
-
 /// Casts a slice of bytes into a slice of pixels, e.g. `[u8]` to `[RGB8]`.
 ///
 /// See also `FromSlice`
@@ -252,43 +249,6 @@ rgb_impl_from! {RGBA, i16,f64}
 
 rgb_impl_from! {RGBA, i32,f64}
 rgb_impl_from! {RGBA, f32,f64}
-
-macro_rules! reorder_impl_from {
-    (@rgb $t1:ident, $t2:ident) => {
-        reorder_impl_from!(@once $t1, $t2, r, g, b);
-        reorder_impl_from!(@once $t2, $t1, r, g, b);
-    };
-    (@rgba $t1:ident, $t2:ident) => {
-        reorder_impl_from!(@once $t1, $t2, r, g, b, a);
-        reorder_impl_from!(@once $t2, $t1, r, g, b, a);
-    };
-    (@once $t1:ident, $t2:ident, $($component:ident),+) => {
-        impl<T> From<$t1<T>> for $t2<T> where T: ::core::clone::Clone {
-            fn from(other: $t1<T>) -> Self {
-                let $t1 { $($component),+ } = other;
-                Self {
-                    $($component),+
-                }
-            }
-        }
-    }
-}
-
-#[cfg(feature = "argb")]
-reorder_impl_from!(@rgba RGBA, ARGB);
-#[cfg(feature = "argb")]
-reorder_impl_from!(@rgba ABGR, ARGB);
-#[cfg(feature = "argb")]
-reorder_impl_from!(@rgba BGRA, ARGB);
-#[cfg(feature = "argb")]
-reorder_impl_from!(@rgba BGRA, ABGR);
-
-reorder_impl_from!(@rgb RGB, BGR);
-reorder_impl_from!(@rgba BGRA, RGBA);
-#[cfg(feature = "argb")]
-reorder_impl_from!(@rgba ABGR, RGBA);
-#[cfg(feature = "grb")]
-reorder_impl_from!(@rgb RGB, GRB);
 
 impl<T: Clone> From<Gray<T>> for RGB<T> {
     #[inline(always)]

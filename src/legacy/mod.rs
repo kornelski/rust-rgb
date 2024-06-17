@@ -5,26 +5,22 @@ pub(crate) mod internal {
     pub mod rgb;
     pub mod rgba;
 }
+
+pub use bytemuck::Pod;
+pub use internal::pixel::{ComponentSlice, ComponentBytes, ComponentMap, ColorComponentMap};
+pub use internal::convert::{AsPixels, FromSlice};
+
 /// BGR/BGRA alernative layouts & grayscale
 ///
 /// BGR might be useful for some Windows or OpenGL APIs.
 pub mod alt;
 
-pub use crate::legacy::internal::convert::*;
-pub use crate::legacy::internal::pixel::*;
-
 #[doc(hidden)]
 /// Renamed to `Rgb`
-pub use formats::rgb::Rgb as RGB;
+pub use crate::Rgb as RGB;
 #[doc(hidden)]
 /// Renamed to `Rgba`
-pub use formats::rgba::Rgba as RGBA;
-
-#[cfg(feature = "unstable-experimental")]
-pub use formats::gray_a::GrayA;
-
-#[cfg(feature = "unstable-experimental")]
-pub use formats::gray::Gray_v09 as Gray;
+pub use crate::Rgba as RGBA;
 
 /// 8-bit RGB
 ///
@@ -46,6 +42,8 @@ pub type RGBA16 = RGBA<u16>;
 
 #[test]
 fn rgb_works() {
+    use crate::*;
+
     let rgb = RGB{r:0u8,g:128,b:255}.clone();
     assert_eq!(rgb.b, 255);
 
@@ -104,6 +102,8 @@ fn rgba_works() {
 
 #[test]
 fn bytes() {
+    use crate::*;
+
     let rgb = RGB8::new(1,2,3);
 
     #[cfg(feature = "as-bytes")]

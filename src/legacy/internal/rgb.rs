@@ -3,7 +3,6 @@ use super::pixel::*;
 use crate::alt::GRB;
 use crate::alt::{BGR, BGRA};
 use crate::{RGB, RGBA};
-use core::fmt;
 
 impl<T> RGB<T> {
     /// Convenience function for creating a new pixel
@@ -99,15 +98,7 @@ macro_rules! impl_rgb_to_alpha {
     ($RGB:ident, $RGBA:ident) => {
         impl<T: Clone> $RGB<T> {
             /// Convenience function for converting to RGBA
-            #[doc(hidden)]
-            #[deprecated(note = "use .with_alpha(a) instead")]
-            pub fn alpha(&self, a: T) -> $RGBA<T> {
-                self.with_alpha(a)
-            }
-
-            /// Convenience function for converting to RGBA
             #[inline(always)]
-            #[doc(alias = "alpha")]
             pub fn with_alpha(&self, a: T) -> $RGBA<T> {
                 $RGBA {
                     r: self.r.clone(),
@@ -151,42 +142,6 @@ impl_rgb! {BGR}
 impl_rgb_to_alpha! {BGR, BGRA}
 #[cfg(feature = "grb")]
 impl_rgb! {GRB}
-
-impl<T: fmt::Display> fmt::Display for RGB<T> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "rgb({},{},{})", self.r, self.g, self.b)
-    }
-}
-
-impl<T: fmt::UpperHex> fmt::UpperHex for RGB<T> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "RGB {{ #{:02X}{:02X}{:02X} }}", self.r, self.g, self.b)
-    }
-}
-
-impl<T: fmt::LowerHex> fmt::LowerHex for RGB<T> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "RGB {{ #{:02x}{:02x}{:02x} }}", self.r, self.g, self.b)
-    }
-}
-
-impl<T: fmt::Display> fmt::Display for BGR<T> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "bgr({},{},{})", self.b, self.g, self.r)
-    }
-}
-
-impl<T: fmt::UpperHex> fmt::UpperHex for BGR<T> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "BGR {{ #{:02X}{:02X}{:02X} }}", self.b, self.g, self.r)
-    }
-}
-
-impl<T: fmt::LowerHex> fmt::LowerHex for BGR<T> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "BGR {{ #{:02x}{:02x}{:02x} }}", self.b, self.g, self.r)
-    }
-}
 
 #[cfg(test)]
 mod rgb_test {

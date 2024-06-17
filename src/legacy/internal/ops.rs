@@ -1,11 +1,6 @@
-use crate::formats::gray::Gray_v08 as Gray;
 use super::pixel::ComponentMap;
+use crate::alt::Gray;
 use crate::alt::GrayAlpha;
-#[cfg(feature = "argb")]
-use crate::alt::ARGB;
-#[cfg(feature = "grb")]
-use crate::alt::GRB;
-use crate::{RGB, RGBA};
 use core::iter::Sum;
 use core::ops::*;
 
@@ -316,29 +311,17 @@ macro_rules! impl_scalar {
     };
 }
 
-impl_scalar! {RGB}
-impl_scalar! {RGBA}
-#[cfg(feature = "argb")]
-impl_scalar! {ARGB}
-#[cfg(feature = "grb")]
-impl_scalar! {GRB}
 impl_scalar! {Gray}
 impl_scalar! {GrayAlpha}
 
-impl_struct_ops_opaque! {RGB => r g b}
-#[cfg(feature = "grb")]
-impl_struct_ops_opaque! {GRB => g r b}
 impl_struct_ops_opaque! {Gray => 0}
-
-impl_struct_ops_alpha! {RGBA => r g b a}
-#[cfg(feature = "argb")]
-impl_struct_ops_alpha! {ARGB => a r g b}
 impl_struct_ops_alpha! {GrayAlpha => 0 1}
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use crate::*;
     use core::num::Wrapping;
+
     const WHITE_RGB: RGB<u8> = RGB::new(255, 255, 255);
     const BLACK_RGB: RGB<u8> = RGB::new(0, 0, 0);
     const RED_RGB: RGB<u8> = RGB::new(255, 0, 0);
@@ -353,6 +336,8 @@ mod test {
 
     #[test]
     fn test_add() {
+        use crate::*;
+
         assert_eq!(RGB::new(2,4,6), RGB::new(1,2,3) + RGB{r:1,g:2,b:3});
         assert_eq!(RGB::new(2.,4.,6.), RGB::new(1.,3.,5.) + 1.);
 
@@ -480,6 +465,8 @@ mod test {
 
     #[test]
     fn sum() {
+        use crate::*;
+
         let s1 = [RGB::new(1u8,1,1), RGB::new(2,3,4)].iter().copied().sum::<RGB<u8>>();
         let s2 = [RGB::new(1u16,1,1), RGB::new(2,3,4)].iter().copied().sum::<RGB<u16>>();
         let s3 = [RGBA::new_alpha(1u16,1,1,Wrapping(1u16)), RGBA::new_alpha(2,3,4,Wrapping(5))].iter().copied().sum::<RGBA<u16, Wrapping<u16>>>();

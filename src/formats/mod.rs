@@ -4,6 +4,8 @@ pub mod bgr;
 pub mod bgra;
 pub mod gray;
 pub mod gray_a;
+#[cfg(feature = "legacy")]
+pub mod gray_alpha;
 pub mod grb;
 pub mod rgb;
 pub mod rgba;

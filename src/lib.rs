@@ -4,13 +4,21 @@
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
 #![no_std]
 
-#[cfg(feature = "bytemuck")]
-mod bytemuck;
+#[cfg(all(test, feature = "legacy"))]
+#[macro_use] extern crate std;
+
 mod formats;
 mod from;
+mod pixel;
+
+#[cfg(feature = "bytemuck")]
+mod bytemuck;
+#[cfg(feature = "legacy")]
+mod legacy;
+#[cfg(feature = "legacy")]
+pub use legacy::*;
 #[cfg(feature = "num-traits")]
 mod num_traits;
-mod pixel;
 
 pub use formats::abgr::Abgr;
 pub use formats::argb::Argb;
