@@ -5,8 +5,9 @@
 
 mod formats;
 mod from;
-mod pixel;
+#[cfg(feature = "num-traits")]
 mod num_traits;
+mod pixel;
 
 pub use formats::abgr::Abgr;
 pub use formats::argb::Argb;
