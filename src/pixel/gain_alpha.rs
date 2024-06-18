@@ -1,4 +1,5 @@
-use crate::*;
+use crate::HetPixel;
+use crate::PixelComponent;
 
 /// A pixel which can gain an alpha component.
 pub trait GainAlpha: HetPixel {
