@@ -8,6 +8,8 @@
 mod bytemuck;
 mod formats;
 mod from;
+#[cfg(feature = "num-traits")]
+mod num_traits;
 mod pixel;
 
 pub use formats::abgr::Abgr;

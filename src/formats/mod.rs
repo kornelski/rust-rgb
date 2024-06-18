@@ -127,7 +127,7 @@ macro_rules! hom_trait_impls {
 
             #[inline(always)]
             fn add(self, other: $name<T>) -> Self::Output {
-                $name {
+                Self::Output {
                     $(
                         $bit: self.$bit + other.$bit,
                     )+
@@ -142,7 +142,7 @@ macro_rules! hom_trait_impls {
 
             #[inline(always)]
             fn add(self, r: T) -> Self::Output {
-                $name {
+                Self::Output {
                     $(
                         $bit: self.$bit + r,
                     )+
@@ -169,7 +169,7 @@ macro_rules! hom_trait_impls {
         {
             #[inline(always)]
             fn add_assign(&mut self, r: T) {
-                *self = $name {
+                *self = Self {
                     $(
                         $bit: self.$bit + r,
                     )+
@@ -182,8 +182,8 @@ macro_rules! hom_trait_impls {
             type Output = $name<<T as Sub>::Output>;
 
             #[inline(always)]
-            fn sub(self, other: $name<T>) -> Self::Output {
-                $name {
+            fn sub(self, other: Self) -> Self::Output {
+                Self::Output {
                     $(
                         $bit: self.$bit - other.$bit,
                     )+
@@ -198,7 +198,7 @@ macro_rules! hom_trait_impls {
 
             #[inline(always)]
             fn sub(self, r: T) -> Self::Output {
-                $name {
+                Self::Output {
                     $(
                         $bit: self.$bit - r,
                     )+
@@ -225,7 +225,7 @@ macro_rules! hom_trait_impls {
         {
             #[inline(always)]
             fn sub_assign(&mut self, r: T) {
-                *self = $name {
+                *self = Self {
                     $(
                         $bit: self.$bit - r,
                     )+
@@ -238,8 +238,8 @@ macro_rules! hom_trait_impls {
             type Output = $name<<T as Mul>::Output>;
 
             #[inline(always)]
-            fn mul(self, other: $name<T>) -> Self::Output {
-                $name {
+            fn mul(self, other: Self) -> Self::Output {
+                Self::Output {
                     $(
                         $bit: self.$bit * other.$bit,
                     )+
@@ -254,7 +254,7 @@ macro_rules! hom_trait_impls {
 
             #[inline(always)]
             fn mul(self, r: T) -> Self::Output {
-                $name {
+                Self::Output {
                     $(
                         $bit: self.$bit * r,
                     )+
@@ -281,7 +281,7 @@ macro_rules! hom_trait_impls {
         {
             #[inline(always)]
             fn mul_assign(&mut self, r: T) {
-                *self = $name {
+                *self = Self {
                     $(
                         $bit: self.$bit * r,
                     )+
@@ -294,8 +294,8 @@ macro_rules! hom_trait_impls {
             type Output = $name<<T as Div>::Output>;
 
             #[inline(always)]
-            fn div(self, other: $name<T>) -> Self::Output {
-                $name {
+            fn div(self, other: Self) -> Self::Output {
+                Self::Output {
                     $(
                         $bit: self.$bit / other.$bit,
                     )+
@@ -310,7 +310,7 @@ macro_rules! hom_trait_impls {
 
             #[inline(always)]
             fn div(self, r: T) -> Self::Output {
-                $name {
+                Self::Output {
                     $(
                         $bit: self.$bit / r,
                     )+

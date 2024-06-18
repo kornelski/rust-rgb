@@ -16,6 +16,7 @@ edition = "2021"
 [features]
 default = []
 
+num-traits = ["dep:num-traits"]
 # Enable `checked_add` and `checked_sub` methods on `RGB<u8>`
 checked_fns = []
 # support for the `defmt` crate
@@ -31,6 +32,7 @@ maintenance = { status = "actively-developed" }
 serde = { version = "1.0.200", optional = true, default-features = false, features = ["derive"] }
 bytemuck = { version = "1.16", optional = true }
 defmt = { version = "0.3.8", optional = true }
+num-traits = { version = "0.2.19", optional = true, default-features = false }
 
 [dev-dependencies]
 serde_json = "1.0.100"
