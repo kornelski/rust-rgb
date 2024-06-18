@@ -1,5 +1,5 @@
 /// A trait for all the required super-traits for a pixel component type.
-pub trait PixelComponent: Copy {
+pub trait PixelComponent: Copy + 'static {
     /// The minimum component value
     const COMPONENT_MIN: Self;
     /// The maximum component value
