@@ -3,6 +3,8 @@
 #![warn(missing_docs)]
 #![no_std]
 
+#[cfg(feature = "bytemuck")]
+mod bytemuck;
 mod formats;
 mod from;
 #[cfg(feature = "num-traits")]
