@@ -4,6 +4,8 @@
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
 #![no_std]
 
+#[cfg(feature = "bytemuck")]
+mod bytemuck;
 mod formats;
 mod from;
 mod pixel;
