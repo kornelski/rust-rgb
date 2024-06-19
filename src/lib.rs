@@ -18,8 +18,9 @@ pub use formats::abgr::Abgr;
 pub use formats::argb::Argb;
 pub use formats::bgr::Bgr;
 pub use formats::bgra::Bgra;
+#[cfg(feature = "legacy")]
 pub use formats::gray::Gray;
-pub use formats::gray_a::GrayAlpha;
+pub use formats::gray_alpha::GrayAlpha;
 pub use formats::grb::Grb;
 pub use formats::luma::Luma;
 pub use formats::luma_a::LumaA;
