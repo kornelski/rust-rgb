@@ -1,4 +1,6 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayAlpha, Grb, Luma, LumaA, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, Rgb, Rgba};
+#[cfg(feature = "legacy")]
+use crate::{Gray, GrayAlpha};
 
 use num_traits::ops::checked::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
 
@@ -53,6 +55,7 @@ macro_rules! num_traits {
 num_traits!(Rgb, [r, g, b]);
 num_traits!(Bgr, [b, g, r]);
 num_traits!(Grb, [g, r, b]);
+#[cfg(feature = "legacy")]
 num_traits!(Gray, [0]);
 num_traits!(Luma, [l]);
 
@@ -60,5 +63,6 @@ num_traits!(Rgba, [r, g, b, a]);
 num_traits!(Argb, [a, r, g, b]);
 num_traits!(Bgra, [b, g, r, a]);
 num_traits!(Abgr, [a, b, g, r]);
+#[cfg(feature = "legacy")]
 num_traits!(GrayAlpha, [0, 1]);
 num_traits!(LumaA, [l, a]);
