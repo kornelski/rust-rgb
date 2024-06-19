@@ -1,5 +1,7 @@
 use crate::HasAlpha;
 use crate::HetPixel;
+use crate::Luma;
+use crate::LumaA;
 use crate::PixelComponent;
 use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba};
 
@@ -124,13 +126,16 @@ lose_already_no_alpha!(Rgb);
 lose_already_no_alpha!(Bgr);
 lose_already_no_alpha!(Grb);
 lose_already_no_alpha!(Gray);
+lose_already_no_alpha!(Luma);
 
 gain_already_alpha!(Rgba, a);
 gain_already_alpha!(Argb, a);
 gain_already_alpha!(Bgra, a);
 gain_already_alpha!(Abgr, a);
 gain_already_alpha!(GrayA, 1);
+gain_already_alpha!(LumaA, a);
 
 lower_upper!(Rgb, Rgba, {r, g, b}, a);
 lower_upper!(Bgr, Bgra, {r, g, b}, a);
 lower_upper!(Gray, GrayA, { 0 }, 1);
+lower_upper!(Luma, LumaA, { l }, a);

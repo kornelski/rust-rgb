@@ -18,6 +18,8 @@ pub use formats::bgra::Bgra;
 pub use formats::gray::Gray;
 pub use formats::gray_a::GrayA;
 pub use formats::grb::Grb;
+pub use formats::luma::Luma;
+pub use formats::luma_a::LumaA;
 pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
 
