@@ -5,6 +5,8 @@ pub mod bgra;
 pub mod gray;
 pub mod gray_a;
 pub mod grb;
+pub mod luma;
+pub mod luma_a;
 pub mod rgb;
 pub mod rgba;
 
@@ -13,7 +15,7 @@ use core::fmt;
 use core::iter::Sum;
 use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
-use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, PixelComponent, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Luma, LumaA, PixelComponent, Rgb, Rgba};
 
 macro_rules! hom_trait_impls {
 
@@ -355,3 +357,5 @@ hom_trait_impls!(Bgra, 4, [b:0, g:1, r:2, a:3], "bgra({}, {}, {}, {})", "bgra(#{
 hom_trait_impls!(Abgr, 4, [a:0, b:1, g:2, r:3], "abgr({}, {}, {}, {})", "abgr(#{:02X}{:02X}{:02X}{:02X})", "abgr(#{:02x}{:02x}{:02x}{:02x})");
 hom_trait_impls!(Gray, 1, [0:0], "gray({})", "gray(#{:02X})", "gray(#{:02x})");
 hom_trait_impls!(GrayA, 2, [0:0, 1:1], "grayA({}, {})", "grayA(#{:02X}{:02X})", "grayA(#{:02x}{:02x})");
+hom_trait_impls!(Luma, 1, [l:0], "luma({})", "luma(#{:02X})", "luma(#{:02x})");
+hom_trait_impls!(LumaA, 2, [l:0, a:1], "LumaA({}, {})", "lumaA(#{:02X}{:02X})", "lumaA(#{:02x}{:02x})");
