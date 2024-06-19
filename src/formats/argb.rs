@@ -2,7 +2,7 @@
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// An `ARGB` pixel.
+/// An `Alpha + Red + Green + Blue` pixel.
 pub struct Argb<T, A = T> {
     /// Alpha Component
     pub a: A,
