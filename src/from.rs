@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Luma, LumaA, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayAlpha, Grb, Luma, LumaA, Rgb, Rgba};
 
 macro_rules! without_alpha {
     ($from_type:ident, $self_type:ident, {$($bit:tt),*}) => {
@@ -74,13 +74,13 @@ with_alpha!(Rgba, Abgr, {r, g, b, a});
 with_alpha!(Argb, Abgr, {r, g, b, a});
 with_alpha!(Bgra, Abgr, {r, g, b, a});
 
-alpha_to_no_alpha!(GrayA, Gray, { 0 });
+alpha_to_no_alpha!(GrayAlpha, Gray, { 0 });
 alpha_to_no_alpha_verbose!(LumaA, Gray, { l:0 });
 
 alpha_to_no_alpha!(LumaA, Luma, { l });
-alpha_to_no_alpha_verbose!(GrayA, Luma, { 0:l });
+alpha_to_no_alpha_verbose!(GrayAlpha, Luma, { 0:l });
 
-impl<R, S, T, U> From<LumaA<R, S>> for GrayA<T, U>
+impl<R, S, T, U> From<LumaA<R, S>> for GrayAlpha<T, U>
 where
     R: Into<T>,
     S: Into<U>,
@@ -89,12 +89,12 @@ where
         Self(value.l.into(), value.a.into())
     }
 }
-impl<R, S, T, U> From<GrayA<R, S>> for LumaA<T, U>
+impl<R, S, T, U> From<GrayAlpha<R, S>> for LumaA<T, U>
 where
     R: Into<T>,
     S: Into<U>,
 {
-    fn from(value: GrayA<R, S>) -> Self {
+    fn from(value: GrayAlpha<R, S>) -> Self {
         Self {
             l: value.0.into(),
             a: value.1.into(),

@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayAlpha, Grb, Rgb, Rgba};
 
 macro_rules! impl_rgb {
     ($Rgb:ident) => {
@@ -177,7 +177,7 @@ impl<T> Gray<T> {
     }
 }
 
-impl<T: Clone, A> GrayA<T, A> {
+impl<T: Clone, A> GrayAlpha<T, A> {
     /// Copy `Gray` component out of the `GrayAlpha` struct
     #[inline(always)]
     pub fn gray(&self) -> Gray<T> {
@@ -185,7 +185,7 @@ impl<T: Clone, A> GrayA<T, A> {
     }
 }
 
-impl<T, A> GrayA<T, A> {
+impl<T, A> GrayAlpha<T, A> {
     /// New grayscale+alpha pixel
     #[inline(always)]
     pub const fn new(brightness: T, alpha: A) -> Self {
@@ -199,7 +199,7 @@ impl<T, A> GrayA<T, A> {
     }
 }
 
-impl<T: Copy, A: Clone> GrayA<T, A> {
+impl<T: Copy, A: Clone> GrayAlpha<T, A> {
     /// Create a new `GrayAlpha` with the new alpha value, but same gray value
     #[inline(always)]
     pub fn alpha(&self, a: A) -> Self {
@@ -208,22 +208,22 @@ impl<T: Copy, A: Clone> GrayA<T, A> {
 
     /// Create a new `GrayAlpha` with a new alpha value created by the callback.
     #[inline(always)]
-    pub fn map_alpha<F, B>(&self, f: F) -> GrayA<T, B>
+    pub fn map_alpha<F, B>(&self, f: F) -> GrayAlpha<T, B>
     where
         F: FnOnce(A) -> B,
     {
-        GrayA(self.0, f(self.1.clone()))
+        GrayAlpha(self.0, f(self.1.clone()))
     }
 
     /// Create new `GrayAlpha` with the same alpha value, but different `Gray` value
     #[inline(always)]
-    pub fn map_gray<F, U, B>(&self, f: F) -> GrayA<U, B>
+    pub fn map_gray<F, U, B>(&self, f: F) -> GrayAlpha<U, B>
     where
         F: FnOnce(T) -> U,
         U: Clone,
         B: From<A> + Clone,
     {
-        GrayA(f(self.0), self.1.clone().into())
+        GrayAlpha(f(self.0), self.1.clone().into())
     }
 }
 
