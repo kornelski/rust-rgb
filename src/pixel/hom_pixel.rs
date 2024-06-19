@@ -36,8 +36,11 @@ pub trait HomPixel:
     type Component: PixelComponent;
 
     //TODO switch to returning an plain array if const generic expressions ever stabilize
-    /// Converts an owned `Pixel` type to an array of its components.
-    fn component_array(&self) -> impl ArrayLike<Self::Component>;
+    /// Returns an owned array of copies of the pixels components.
+    fn component_array(&self) -> impl ArrayLike<Self::Component> + Copy;
+    //TODO switch to returning an plain array if const generic expressions ever stabilize
+    /// Returns an owned array of the pixel's mutably borrowed components.
+    fn component_array_mut(&mut self) -> impl ArrayLike<&mut Self::Component>;
 
     /// Tries to create new instance given an iterator of its components.
     ///
@@ -68,8 +71,11 @@ macro_rules! without_alpha {
         {
             type Component = T;
 
-            fn component_array(&self) -> impl ArrayLike<Self::Component> {
+            fn component_array(&self) -> impl ArrayLike<Self::Component> + Copy {
                 [$(self.$bit),*]
+            }
+            fn component_array_mut(&mut self) -> impl ArrayLike<&mut Self::Component> {
+                [$(&mut self.$bit),*]
             }
 
             fn try_from_components(
@@ -99,8 +105,11 @@ macro_rules! with_alpha {
         {
             type Component = T;
 
-            fn component_array(&self) -> impl ArrayLike<Self::Component> {
+            fn component_array(&self) -> impl ArrayLike<Self::Component> + Copy {
                 [$(self.$bit),*]
+            }
+            fn component_array_mut(&mut self) -> impl ArrayLike<&mut Self::Component> {
+                [$(&mut self.$bit),*]
             }
 
             fn try_from_components(

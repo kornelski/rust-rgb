@@ -8,10 +8,10 @@ use crate::Rgba;
 
 /// A pixel which has an alpha component.
 pub trait HasAlpha: HetPixel {
-    /// Returns the pixels alpha component.
-    ///
-    /// Use [`HetPixel::try_from_colors_alpha()`] to set the pixels alpha component.
+    /// Returns a copy of the pixel's alpha component.
     fn alpha(&self) -> Self::AlphaComponent;
+    /// Returns a mutable borrow of the pixel's alpha component.
+    fn alpha_mut(&mut self) -> &mut Self::AlphaComponent;
 }
 
 macro_rules! has_alpha {
@@ -23,6 +23,9 @@ macro_rules! has_alpha {
         {
             fn alpha(&self) -> Self::AlphaComponent {
                 self.$alpha_bit
+            }
+            fn alpha_mut(&mut self) -> &mut Self::AlphaComponent {
+                &mut self.$alpha_bit
             }
         }
     };
