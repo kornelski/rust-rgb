@@ -43,10 +43,16 @@ pub trait HetPixel: Copy + 'static {
     >;
 
     //TODO switch to returning an plain array if const generic expressions ever stabilize
-    /// Converts an owned `Pixel` type to an array of its color components.
-    fn color_array(&self) -> impl ArrayLike<Self::ColorComponent>;
-    /// Returns the alpha component of the pixel if it has one.
+    /// Returns an owned array of copies of the pixels color components.
+    fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> + Copy;
+    //TODO switch to returning an plain array if const generic expressions ever stabilize
+    /// Returns an owned array of the pixel's mutably borrowed color components.
+    fn color_array_mut(&mut self) -> impl ArrayLike<&mut Self::ColorComponent>;
+
+    /// Returns a copy of the pixel's alpha alpha component if it has one.
     fn alpha_checked(&self) -> Option<Self::AlphaComponent>;
+    /// Returns a mutable borrow of the pixel's alpha alpha component if it has one.
+    fn alpha_checked_mut(&mut self) -> Option<&mut Self::AlphaComponent>;
 
     /// Tries to create new instance given an iterator of color components and an alpha component.
     ///
@@ -106,10 +112,17 @@ macro_rules! without_alpha {
 
             type SelfType<U: PixelComponent, V: PixelComponent> = $name<U>;
 
-            fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> {
+            fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> + Copy {
                 [$(self.$color_bit),*]
             }
+            fn color_array_mut(&mut self) -> impl ArrayLike<&mut Self::ColorComponent> {
+                [$(&mut self.$color_bit),*]
+            }
+
             fn alpha_checked(&self) -> Option<Self::AlphaComponent> {
+                None
+            }
+            fn alpha_checked_mut(&mut self) -> Option<&mut Self::AlphaComponent> {
                 None
             }
 
@@ -165,11 +178,18 @@ macro_rules! with_alpha {
 
             type SelfType<U: PixelComponent, V: PixelComponent> = $name<U, V>;
 
-            fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> {
+            fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> + Copy {
                 [$(self.$color_bit),*]
             }
+            fn color_array_mut(&mut self) -> impl ArrayLike<&mut Self::ColorComponent> {
+                [$(&mut self.$color_bit),*]
+            }
+
             fn alpha_checked(&self) -> Option<Self::AlphaComponent> {
                 Some(self.$alpha_bit)
+            }
+            fn alpha_checked_mut(&mut self) -> Option<&mut Self::AlphaComponent> {
+                Some(&mut self.$alpha_bit)
             }
 
             fn try_from_colors_alpha(
