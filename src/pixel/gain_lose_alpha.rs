@@ -3,7 +3,7 @@ use crate::HetPixel;
 use crate::Luma;
 use crate::LumaA;
 use crate::PixelComponent;
-use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayAlpha, Grb, Rgb, Rgba};
 
 /// A pixel which can gain an alpha component.
 pub trait GainAlpha: HetPixel {
@@ -132,10 +132,10 @@ gain_already_alpha!(Rgba, a);
 gain_already_alpha!(Argb, a);
 gain_already_alpha!(Bgra, a);
 gain_already_alpha!(Abgr, a);
-gain_already_alpha!(GrayA, 1);
+gain_already_alpha!(GrayAlpha, 1);
 gain_already_alpha!(LumaA, a);
 
 lower_upper!(Rgb, Rgba, {r, g, b}, a);
 lower_upper!(Bgr, Bgra, {r, g, b}, a);
-lower_upper!(Gray, GrayA, { 0 }, 1);
+lower_upper!(Gray, GrayAlpha, { 0 }, 1);
 lower_upper!(Luma, LumaA, { l }, a);
