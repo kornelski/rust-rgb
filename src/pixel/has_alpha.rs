@@ -1,11 +1,9 @@
-use crate::Abgr;
-use crate::Argb;
-use crate::Bgra;
-use crate::GrayA;
+#[cfg(feature = "legacy")]
+use crate::GrayAlpha;
+
 use crate::HetPixel;
-use crate::LumaA;
 use crate::PixelComponent;
-use crate::Rgba;
+use crate::{Abgr, Argb, Bgra, LumaA, Rgba};
 
 /// A pixel which has an alpha component.
 pub trait HasAlpha: HetPixel {
@@ -36,5 +34,6 @@ has_alpha!(Rgba, a);
 has_alpha!(Argb, a);
 has_alpha!(Bgra, a);
 has_alpha!(Abgr, a);
-has_alpha!(GrayA, 1);
+#[cfg(feature = "legacy")]
+has_alpha!(GrayAlpha, 1);
 has_alpha!(LumaA, a);

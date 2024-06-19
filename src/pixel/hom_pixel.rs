@@ -1,8 +1,10 @@
 use core::fmt::Display;
 
 use crate::{
-    Abgr, Argb, ArrayLike, Bgr, Bgra, Gray, GrayA, Grb, HetPixel, Luma, LumaA, PixelComponent, Rgb, Rgba
+    Abgr, Argb, ArrayLike, Bgr, Bgra, Grb, HetPixel, Luma, LumaA, PixelComponent, Rgb, Rgba
 };
+#[cfg(feature = "legacy")]
+use crate::{Gray, GrayAlpha};
 
 #[derive(Debug, Clone, Copy)]
 /// Error returned from the [`HomPixel::try_from_components()`] function.
@@ -136,11 +138,13 @@ with_alpha!(Rgba, 4, [r, g, b, a]);
 with_alpha!(Abgr, 4, [a, b, g, r]);
 with_alpha!(Argb, 4, [a, r, g, b]);
 with_alpha!(Bgra, 4, [b, g, r, a]);
-with_alpha!(GrayA, 2, [0, 1]);
+#[cfg(feature = "legacy")]
+with_alpha!(GrayAlpha, 2, [0, 1]);
 with_alpha!(LumaA, 2, [l, a]);
 
 without_alpha!(Bgr, 3, [b, g, r]);
 without_alpha!(Rgb, 3, [r, g, b]);
 without_alpha!(Grb, 3, [r, g, b]);
+#[cfg(feature = "legacy")]
 without_alpha!(Gray, 1, [0]);
 without_alpha!(Luma, 1, [l]);
