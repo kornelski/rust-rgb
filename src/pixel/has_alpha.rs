@@ -3,6 +3,7 @@ use crate::Argb;
 use crate::Bgra;
 use crate::GrayA;
 use crate::HetPixel;
+use crate::LumaA;
 use crate::PixelComponent;
 use crate::Rgba;
 
@@ -36,3 +37,4 @@ has_alpha!(Argb, a);
 has_alpha!(Bgra, a);
 has_alpha!(Abgr, a);
 has_alpha!(GrayA, 1);
+has_alpha!(LumaA, a);

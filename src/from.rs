@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Luma, LumaA, Rgb, Rgba};
 
 macro_rules! without_alpha {
     ($from_type:ident, $self_type:ident, {$($bit:tt),*}) => {
@@ -23,6 +23,15 @@ macro_rules! alpha_to_no_alpha {
         impl<R, S, T> From<$from_type<R, S>> for $self_type<T> where R: Into<T> {
             fn from(value: $from_type<R, S>) -> Self {
                 Self{$($bit: value.$bit.into()),*}
+            }
+        }
+    };
+}
+macro_rules! alpha_to_no_alpha_verbose {
+    ($from_type:ident, $self_type:ident, {$($from_bit:tt:$self_bit:tt),*}) => {
+        impl<R, S, T> From<$from_type<R, S>> for $self_type<T> where R: Into<T> {
+            fn from(value: $from_type<R, S>) -> Self {
+                Self{$($self_bit: value.$from_bit.into()),*}
             }
         }
     };
@@ -66,3 +75,45 @@ with_alpha!(Argb, Abgr, {r, g, b, a});
 with_alpha!(Bgra, Abgr, {r, g, b, a});
 
 alpha_to_no_alpha!(GrayA, Gray, { 0 });
+alpha_to_no_alpha_verbose!(LumaA, Gray, { l:0 });
+
+alpha_to_no_alpha!(LumaA, Luma, { l });
+alpha_to_no_alpha_verbose!(GrayA, Luma, { 0:l });
+
+impl<R, S, T, U> From<LumaA<R, S>> for GrayA<T, U>
+where
+    R: Into<T>,
+    S: Into<U>,
+{
+    fn from(value: LumaA<R, S>) -> Self {
+        Self(value.l.into(), value.a.into())
+    }
+}
+impl<R, S, T, U> From<GrayA<R, S>> for LumaA<T, U>
+where
+    R: Into<T>,
+    S: Into<U>,
+{
+    fn from(value: GrayA<R, S>) -> Self {
+        Self {
+            l: value.0.into(),
+            a: value.1.into(),
+        }
+    }
+}
+impl<R, S> From<Luma<R>> for Gray<S>
+where
+    R: Into<S>,
+{
+    fn from(value: Luma<R>) -> Self {
+        Self(value.l.into())
+    }
+}
+impl<R, S> From<Gray<R>> for Luma<S>
+where
+    R: Into<S>,
+{
+    fn from(value: Gray<R>) -> Self {
+        Self { l: value.0.into() }
+    }
+}
