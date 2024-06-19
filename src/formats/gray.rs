@@ -10,6 +10,14 @@ pub struct Gray_v08<T>(
 );
 
 /// A `Grayscale` pixel (rgb crate v0.9)
+///
+/// # Examples
+///
+/// ```
+/// use rgb::Gray;
+///
+/// let pixel: Gray<u8> = Gray { v: 0 };
+/// ```
 #[allow(non_camel_case_types)]
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]

@@ -3,7 +3,7 @@ use crate::{HetPixel, PixelComponent};
 use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, Gray, GrayA, Grb,Rgb, Rgba, Rgbw};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-/// Error returned from the [`HomPixel::try_from_components()`] function.
+/// Error returned from the [`Pixel::try_from_components()`] function.
 pub struct TryFromComponentsError;
 impl Display for TryFromComponentsError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -22,13 +22,8 @@ impl Display for TryFromComponentsError {
 ///
 /// This trait is implemented on every pixel type in the crate.
 ///
-/// All types which implement [`HomPixel`] also implement [`HetPixel`] due to the super-trait trait bound.
-///
-/// # Terminology
-///
-/// Component = An element of a pixel, inclusive of alpha. For example, [`Rgba`](crate::Rgba) is a pixel made up
-/// of four components, three color components and one alpha component.
-pub trait HomPixel:
+/// All types which implement [`Pixel`] also implement [`HetPixel`] due to the super-trait trait bound.
+pub trait Pixel:
     HetPixel<ColorComponent = Self::Component, AlphaComponent = Self::Component>
     + IntoIterator<Item = Self::Component>
 {
@@ -38,7 +33,7 @@ pub trait HomPixel:
     /// An generic associated type used to return the array of
     /// components despite rust's lack of const generic expressions.
     ///
-    /// Used in functions like [`HomPixel::component_array()`].
+    /// Used in functions like [`Pixel::component_array()`].
     ///
     /// For example, [`Rgb`] has `ComponentArray<U> = [U; 3]` wheareas
     /// [`Rgba`] has `ComponentArray<U> = [U; 4]`.
@@ -49,7 +44,7 @@ pub trait HomPixel:
     /// # Examples
     ///
     /// ```
-    /// use rgb::{HomPixel, Rgb, Rgba};
+    /// use rgb::{Pixel, Rgb, Rgba};
     ///
     /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
     /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
@@ -66,7 +61,7 @@ pub trait HomPixel:
     /// # Examples
     ///
     /// ```
-    /// use rgb::{HomPixel, Rgb, Rgba};
+    /// use rgb::{Pixel, Rgb, Rgba};
     ///
     /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
     /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
@@ -87,7 +82,7 @@ pub trait HomPixel:
     /// # Examples
     ///
     /// ```
-    /// use rgb::{HomPixel, Rgb, Rgba, TryFromComponentsError};
+    /// use rgb::{Pixel, Rgb, Rgba, TryFromComponentsError};
     ///
     /// let mut values2 = [0_u8, 10];
     /// let mut values4 = [0_u8, 10, 100, 40];
@@ -104,13 +99,13 @@ pub trait HomPixel:
 
     /// Maps each of the pixels components with a function `f` to any other component type.
     ///
-    /// See [`HomPixel::map_components_same()`] if you want to map the components to the
+    /// See [`Pixel::map_components_same()`] if you want to map the components to the
     /// same type.
     ///
     /// # Examples
     ///
     /// ```
-    /// use rgb::{HomPixel, Rgb, Rgba};
+    /// use rgb::{Pixel, Rgb, Rgba};
     ///
     /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
     /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
@@ -127,13 +122,13 @@ pub trait HomPixel:
         U: PixelComponent;
     /// Maps each of the pixels components with a function `f` to the same component type.
     ///
-    /// See [`HomPixel::map_components()`] if you want to map the components to a
+    /// See [`Pixel::map_components()`] if you want to map the components to a
     /// different type.
     ///
     /// # Examples
     ///
     /// ```
-    /// use rgb::{HomPixel, Rgb, Rgba};
+    /// use rgb::{Pixel, Rgb, Rgba};
     ///
     /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
     /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
@@ -150,7 +145,7 @@ pub trait HomPixel:
 
 macro_rules! without_alpha {
     ($name:tt, $length:literal, [$($bit:tt),*]) => {
-        impl<T> HomPixel for $name<T>
+        impl<T> Pixel for $name<T>
         where
             T: PixelComponent,
         {
@@ -188,7 +183,7 @@ macro_rules! without_alpha {
 }
 macro_rules! with_alpha {
     ($name:tt, $length:literal, [$($bit:tt),*]) => {
-        impl<T> HomPixel for $name<T, T>
+        impl<T> Pixel for $name<T, T>
         where
             T: PixelComponent,
         {
