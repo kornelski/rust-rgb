@@ -29,7 +29,7 @@ pub use formats::rgba::Rgba;
 
 pub use pixel::{
     arraylike::ArrayLike,
-    gain_lose_alpha::{GainAlpha, LoseAlpha},
+    gain_alpha::GainAlpha,
     has_alpha::HasAlpha,
     het_pixel::{HetPixel, TryFromColorsAlphaError},
     hom_pixel::{HomPixel, TryFromComponentsError},
