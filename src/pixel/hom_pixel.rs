@@ -1,12 +1,12 @@
 use core::fmt::Display;
 
 use crate::{
-    Abgr, Argb, ArrayLike, Bgr, Bgra, Grb, HetPixel, Luma, LumaA, PixelComponent, Rgb, Rgba
+    Abgr, Argb, ArrayLike, Bgr, Bgra, Grb, HetPixel, Luma, LumaA, PixelComponent, Rgb, Rgba,
 };
 #[cfg(feature = "legacy")]
 use crate::{Gray, GrayAlpha};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 /// Error returned from the [`HomPixel::try_from_components()`] function.
 pub struct TryFromComponentsError;
 impl Display for TryFromComponentsError {
@@ -24,6 +24,8 @@ impl Display for TryFromComponentsError {
 /// Unlike [`HetPixel`] the alpha component must be the same type as the color
 /// components.
 ///
+/// This trait is implemented on every pixel type in the crate.
+///
 /// All types which implement [`HomPixel`] also implement [`HetPixel`] due to the super-trait trait bound.
 ///
 /// # Terminology
@@ -37,16 +39,69 @@ pub trait HomPixel:
     /// The component type of the pixel used for both color and alpha components if any.
     type Component: PixelComponent;
 
-    //TODO switch to returning an plain array if const generic expressions ever stabilize
+    /// An generic associated type used to return the array of
+    /// components despite rust's lack of const generic expressions.
+    ///
+    /// Used in functions like [`HomPixel::component_array()`].
+    ///
+    /// For example, [`Rgb`] has `ComponentArray<U> = [U; 3]` wheareas
+    /// [`Rgba`] has `ComponentArray<U> = [U; 4]`.
+    type ComponentArray<U>: ArrayLike<U>;
+
     /// Returns an owned array of copies of the pixels components.
-    fn component_array(&self) -> impl ArrayLike<Self::Component> + Copy;
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HomPixel, Rgb, Rgba};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// assert_eq!(rgb.component_array(), [0, 10, 100]);
+    /// assert_eq!(rgba.component_array(), [0, 10, 100, 50]);
+    /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
+    fn component_array(&self) -> Self::ComponentArray<Self::Component>
+    where
+        Self::ComponentArray<Self::Component>: Copy;
     /// Returns an owned array of the pixel's mutably borrowed components.
-    fn component_array_mut(&mut self) -> impl ArrayLike<&mut Self::Component>;
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HomPixel, Rgb, Rgba};
+    ///
+    /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// *rgb.component_array_mut()[1] = 40;
+    /// *rgba.component_array_mut()[2] = 40;
+    ///
+    /// assert_eq!(rgb.component_array(), [0, 40, 100]);
+    /// assert_eq!(rgba.component_array(), [0, 10, 40, 50]);
+    /// ```
+    //TODO switch to returning an plain array if const generic expressions ever stabilize
+    fn component_array_mut(&mut self) -> Self::ComponentArray<&mut Self::Component>;
 
     /// Tries to create new instance given an iterator of its components.
     ///
     /// Returns an error if the `components` iterator does not contain enough items to create the pixel.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HomPixel, Rgb, Rgba, TryFromComponentsError};
+    ///
+    /// let mut values2 = [0_u8, 10];
+    /// let mut values4 = [0_u8, 10, 100, 40];
+    ///
+    /// assert_eq!(Rgb::try_from_components(values2), Err(TryFromComponentsError));
+    /// assert_eq!(Rgba::try_from_components(values2), Err(TryFromComponentsError));
+    ///
+    /// assert_eq!(Rgb::try_from_components(values4), Ok(Rgb {r: 0, g: 10, b: 100}));
+    /// assert_eq!(Rgba::try_from_components(values4), Ok(Rgba {r: 0, g: 10, b: 100, a: 40}));
+    /// ```
     fn try_from_components(
         components: impl IntoIterator<Item = Self::Component>,
     ) -> Result<Self, TryFromComponentsError>;
@@ -55,6 +110,22 @@ pub trait HomPixel:
     ///
     /// See [`HomPixel::map_components_same()`] if you want to map the components to the
     /// same type.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HomPixel, Rgb, Rgba};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// let f = |color: u8| {
+    ///     u16::from(color) * 10
+    /// };
+    ///
+    /// assert_eq!(rgb.map_components(f), Rgb {r: 0, g: 100, b: 1000});
+    /// assert_eq!(rgba.map_components(f), Rgba {r: 0, g: 100, b: 1000, a: 500});
+    /// ```
     fn map_components<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
     where
         U: PixelComponent;
@@ -62,6 +133,22 @@ pub trait HomPixel:
     ///
     /// See [`HomPixel::map_components()`] if you want to map the components to a
     /// different type.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HomPixel, Rgb, Rgba};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// let f = |color: u8| {
+    ///     color / 2
+    /// };
+    ///
+    /// assert_eq!(rgb.map_components_same(f), Rgb {r: 0, g: 5, b: 50});
+    /// assert_eq!(rgba.map_components_same(f), Rgba {r: 0, g: 5, b: 50, a: 25});
+    /// ```
     fn map_components_same(&self, f: impl FnMut(Self::Component) -> Self::Component) -> Self;
 }
 
@@ -72,11 +159,15 @@ macro_rules! without_alpha {
             T: PixelComponent,
         {
             type Component = T;
+			type ComponentArray<U> = [U; $length];
 
-            fn component_array(&self) -> impl ArrayLike<Self::Component> + Copy {
+			fn component_array(&self) -> Self::ComponentArray<Self::Component>
+			where
+				Self::ComponentArray<Self::Component>: Copy
+			{
                 [$(self.$bit),*]
             }
-            fn component_array_mut(&mut self) -> impl ArrayLike<&mut Self::Component> {
+			fn component_array_mut(&mut self) -> Self::ComponentArray<&mut Self::Component> {
                 [$(&mut self.$bit),*]
             }
 
@@ -106,11 +197,15 @@ macro_rules! with_alpha {
             T: PixelComponent,
         {
             type Component = T;
+			type ComponentArray<U> = [U; $length];
 
-            fn component_array(&self) -> impl ArrayLike<Self::Component> + Copy {
+			fn component_array(&self) -> Self::ComponentArray<Self::Component>
+			where
+				Self::ComponentArray<Self::Component>: Copy
+			{
                 [$(self.$bit),*]
             }
-            fn component_array_mut(&mut self) -> impl ArrayLike<&mut Self::Component> {
+			fn component_array_mut(&mut self) -> Self::ComponentArray<&mut Self::Component> {
                 [$(&mut self.$bit),*]
             }
 

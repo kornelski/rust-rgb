@@ -8,26 +8,69 @@ use crate::{Abgr, Argb, Bgr, Bgra, Rgb, Rgba};
 use crate::{Gray, GrayAlpha};
 
 /// A pixel which can gain an alpha component.
+///
+/// It's implemented for every pixel type in the crate, including those which
+/// already have an alpha component.
 pub trait GainAlpha: HetPixel {
     /// The pixel type after gaining an alpha component.
+    /// 
+    /// For example, for `Rgb`: `GainAlpha = Rgba`.
     type GainAlpha: HasAlpha;
 
     /// Returns the pixel type after gaining an alpha component.
     ///
-    /// If an alpha is already contained then it remains at the same value. If no alpha component
-    /// is already contained then it is set to the maximum value via [`PixelComponent`].
+    /// If an alpha is already contained then it remains at the same value. If
+    /// no alpha component is already contained then it is set to the maximum
+    /// value via [`PixelComponent`].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{Rgb, Rgba, GainAlpha};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// assert_eq!(rgb.gain_alpha(), Rgba {r: 0, g: 10, b: 100, a: 255});
+    /// assert_eq!(rgba.gain_alpha(), Rgba {r: 0, g: 10, b: 100, a: 50});
+    /// ```
     fn gain_alpha(self) -> Self::GainAlpha;
 
     /// Returns the pixel type after gaining an alpha component.
     ///
-    /// If an alpha is already contained then it remains at the same value. If no alpha component
-    /// is already contained then it is set to the given `alpha` value.
+    /// If an alpha is already contained then it remains at the same value. If
+    /// no alpha component is already contained then it is set to the given
+    /// `alpha` value.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{Rgb, Rgba, GainAlpha};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// assert_eq!(rgb.gain_alpha_with(0), Rgba {r: 0, g: 10, b: 100, a: 0});
+    /// assert_eq!(rgba.gain_alpha_with(0), Rgba {r: 0, g: 10, b: 100, a: 50});
+    /// ```
     fn gain_alpha_with(self, alpha: Self::AlphaComponent) -> Self::GainAlpha;
 
     /// Returns the pixel type after gaining an alpha component.
     ///
-    /// The alpha value is set to the given `alpha` value regardless of whether the pixel already
-    /// contained an alpha component.
+    /// The alpha value is set to the given `alpha` value regardless of whether
+    /// the pixel already contained an alpha component.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{Rgb, Rgba, GainAlpha};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// assert_eq!(rgb.gain_alpha_exact(0), Rgba {r: 0, g: 10, b: 100, a: 0});
+    /// assert_eq!(rgba.gain_alpha_exact(0), Rgba {r: 0, g: 10, b: 100, a: 0});
+    /// ```
     fn gain_alpha_exact(self, alpha: Self::AlphaComponent) -> Self::GainAlpha;
 }
 

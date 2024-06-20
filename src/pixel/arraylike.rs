@@ -4,10 +4,10 @@ use core::{
 };
 
 /// A trait used when returning arrays from the two pixel traits due to the lack of the const
-/// generic expression feature on stable rust.
+/// generic expressions feature on stable rust.
 ///
-/// A blanket implementation is provided but only for item types which implement
-/// [`PixelComponent`].
+/// See [`HetPixel::color_array()`](crate::HetPixel::color_array) as
+/// an example.
 pub trait ArrayLike<T>:
     AsRef<[T]>
     + AsMut<[T]>
