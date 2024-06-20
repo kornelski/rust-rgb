@@ -3,7 +3,7 @@ use crate::HetPixel;
 use crate::Luma;
 use crate::LumaA;
 use crate::PixelComponent;
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Rgb, Rgba};
 #[cfg(feature = "legacy")]
 use crate::{Gray, GrayAlpha};
 
@@ -30,17 +30,6 @@ pub trait GainAlpha: HetPixel {
     /// contained an alpha component.
     fn gain_alpha_exact(self, alpha: Self::AlphaComponent) -> Self::GainAlpha;
 }
-/// A pixel which can lose its alpha component.
-pub trait LoseAlpha: HetPixel {
-    /// The pixel type after losing its alpha component.
-    type LoseAlpha: HetPixel;
-
-    /// Returns the pixel type after losing its alpha component.
-    fn lose_alpha(self) -> Self::LoseAlpha;
-
-    /// Returns the pixel type after losing its alpha component and the lost alpha component if any.
-    fn lose_alpha_verbose(self) -> (Self::LoseAlpha, Option<Self::AlphaComponent>);
-}
 
 macro_rules! lower_upper {
     ($lower:ident, $upper:ident, {$($color_bit:tt),*}, $alpha_bit:tt) => {
@@ -66,23 +55,6 @@ macro_rules! lower_upper {
                 }
             }
         }
-        impl<T> LoseAlpha for $upper<T> where T: PixelComponent {
-            type LoseAlpha = $lower<T>;
-
-            fn lose_alpha(self) -> Self::LoseAlpha {
-                $lower {
-                    $($color_bit: self.$color_bit),*
-                }
-            }
-            fn lose_alpha_verbose(self) -> (Self::LoseAlpha, Option<Self::AlphaComponent>) {
-                (
-                    $lower {
-                        $($color_bit: self.$color_bit),*
-                    },
-                    Some(self.$alpha_bit)
-                )
-            }
-        }
     };
 }
 macro_rules! gain_already_alpha {
@@ -106,30 +78,6 @@ macro_rules! gain_already_alpha {
         }
     };
 }
-macro_rules! lose_already_no_alpha {
-    ($original:ident) => {
-        impl<T> LoseAlpha for $original<T>
-        where
-            T: PixelComponent,
-        {
-            type LoseAlpha = $original<T>;
-
-            fn lose_alpha(self) -> Self::LoseAlpha {
-                self
-            }
-            fn lose_alpha_verbose(self) -> (Self::LoseAlpha, Option<Self::AlphaComponent>) {
-                (self, None)
-            }
-        }
-    };
-}
-
-lose_already_no_alpha!(Rgb);
-lose_already_no_alpha!(Bgr);
-lose_already_no_alpha!(Grb);
-#[cfg(feature = "legacy")]
-lose_already_no_alpha!(Gray);
-lose_already_no_alpha!(Luma);
 
 gain_already_alpha!(Rgba, a);
 gain_already_alpha!(Argb, a);
