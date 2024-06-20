@@ -1,12 +1,10 @@
 use core::fmt::Display;
 
-use crate::{
-    Abgr, Argb, ArrayLike, Bgr, Bgra, Grb, Luma, LumaA, PixelComponent, Rgb, Rgba,
-};
+use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, Grb, Luma, LumaA, PixelComponent, Rgb, Rgba};
 #[cfg(feature = "legacy")]
 use crate::{Gray, GrayAlpha};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 /// Error returned from the [`HetPixel::try_from_colors_alpha()`] function.
 pub struct TryFromColorsAlphaError;
 impl Display for TryFromColorsAlphaError {
@@ -24,6 +22,8 @@ impl Display for TryFromColorsAlphaError {
 /// Unlike [`HomPixel`] the alpha component does not have to be the same type as the color
 /// components.
 ///
+/// This trait is implemented on every pixel type in the crate.
+///
 /// # Terminology
 ///
 /// Component = An element of a pixel, inclusive of alpha. For example, [`Rgba`](crate::Rgba) is a pixel made up
@@ -39,28 +39,126 @@ pub trait HetPixel: Copy + 'static {
     /// If the pixel contains an alpha components then this number should be equal to the number of
     /// color components + 1. That is, you cannot have more than 1 alpha components, but you can
     /// have 0.
+    ///
+    /// For example, [`Rgb`] has a `COMPONENT_COUNT` == 3 whereas
+    /// [`Rgba`] has a `COMPONENT_COUNT` == 4.
     const COMPONENT_COUNT: u8;
 
-    /// The same pixel type as `Self` but with a different component type `U`
+    /// The same pixel type as `Self` but with a different component type `U`.
+    ///
+    /// This is used to allow the implementation of
+    /// [`HetPixel::map_colors`] and similar methods due to rust's
+    /// current lack of higher kinded types.
+    ///
+    /// For example, [`Rgb`] has `SelfType<U, V> = Rgb<U>` whereas
+    /// [`Rgba`] has `SelfType<U, V> = Rgba<U, V>`.
     type SelfType<U: PixelComponent, V: PixelComponent>: HetPixel<
         SelfType<Self::ColorComponent, Self::AlphaComponent> = Self,
     >;
 
-    //TODO switch to returning an plain array if const generic expressions ever stabilize
+    /// An generic associated type used to return the array of color
+    /// components despite rust's lack of const generic expressions.
+    ///
+    /// Used in functions like [`HetPixel::color_array()`].
+    ///
+    /// For example, [`Rgb`] has `ColorArray<U> = [U; 3]` and
+    /// [`Rgba`] has `ColorArray<U> = [U; 3]` also.
+    type ColorArray<U>: ArrayLike<U>;
+
     /// Returns an owned array of copies of the pixels color components.
-    fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> + Copy;
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HetPixel, Rgb, Rgba};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// assert_eq!(rgb.color_array(), [0, 10, 100]);
+    /// assert_eq!(rgba.color_array(), [0, 10, 100]);
+    /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
+    fn color_array(&self) -> Self::ColorArray<Self::ColorComponent>
+    where
+        Self::ColorArray<Self::ColorComponent>: Copy;
     /// Returns an owned array of the pixel's mutably borrowed color components.
-    fn color_array_mut(&mut self) -> impl ArrayLike<&mut Self::ColorComponent>;
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HetPixel, Rgb, Rgba};
+    ///
+    /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// *rgb.color_array_mut()[1] = 40;
+    /// *rgba.color_array_mut()[2] = 40;
+    ///
+    /// assert_eq!(rgb.color_array(), [0, 40, 100]);
+    /// assert_eq!(rgba.color_array(), [0, 10, 40]);
+    /// ```
+    //TODO switch to returning an plain array if const generic expressions ever stabilize
+    fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent>;
 
     /// Returns a copy of the pixel's alpha alpha component if it has one.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HetPixel, Rgb, Rgba};
+    ///
+    /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// assert_eq!(rgb.alpha_checked(), None);
+    /// assert_eq!(rgba.alpha_checked(), Some(50));
+    /// ```
     fn alpha_checked(&self) -> Option<Self::AlphaComponent>;
     /// Returns a mutable borrow of the pixel's alpha alpha component if it has one.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HetPixel, Rgb, Rgba};
+    ///
+    /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// let f = |a: Option<&mut u8>| {
+    ///     if let Some(a) = a {
+    ///         *a -= 10;
+    ///     }
+    /// };
+    ///
+    /// f(rgb.alpha_checked_mut());
+    /// f(rgba.alpha_checked_mut());
+    ///
+    /// assert_eq!(rgb.alpha_checked(), None);
+    /// assert_eq!(rgba.alpha_checked(), Some(40));
+    /// ```
     fn alpha_checked_mut(&mut self) -> Option<&mut Self::AlphaComponent>;
 
     /// Tries to create new instance given an iterator of color components and an alpha component.
     ///
     /// Returns an error if the `colors` iterator does not contain enough items to create the pixel.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HetPixel, Rgb, Rgba, TryFromColorsAlphaError};
+    ///
+    /// let mut values2 = [0_u8, 10];
+    /// let mut values4 = [0_u8, 10, 100, 40];
+    ///
+    /// let alpha = 50;
+    ///
+    /// assert_eq!(Rgb::try_from_colors_alpha(values2, alpha), Err(TryFromColorsAlphaError));
+    /// assert_eq!(Rgba::try_from_colors_alpha(values2, alpha), Err(TryFromColorsAlphaError));
+    ///
+    /// assert_eq!(Rgb::try_from_colors_alpha(values4, alpha), Ok(Rgb {r: 0, g: 10, b: 100}));
+    /// assert_eq!(Rgba::try_from_colors_alpha(values4, alpha), Ok(Rgba {r: 0, g: 10, b: 100, a: 50}));
+    /// ```
     fn try_from_colors_alpha(
         colors: impl IntoIterator<Item = Self::ColorComponent>,
         alpha: Self::AlphaComponent,
@@ -70,6 +168,22 @@ pub trait HetPixel: Copy + 'static {
     ///
     /// See [`HetPixel::map_colors_same()`] if you want to map the color components to the
     /// same type.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HetPixel, Rgb, Rgba};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// let f = |color: u8| {
+    ///     u16::from(color) * 10
+    /// };
+    ///
+    /// assert_eq!(rgb.map_colors(f), Rgb {r: 0, g: 100, b: 1000});
+    /// assert_eq!(rgba.map_colors(f), Rgba {r: 0, g: 100, b: 1000, a: 50});
+    /// ```
     fn map_colors<U>(
         &self,
         f: impl FnMut(Self::ColorComponent) -> U,
@@ -80,6 +194,22 @@ pub trait HetPixel: Copy + 'static {
     ///
     /// See [`HetPixel::map_colors()`] if you want to map the color components to a
     /// different type.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HetPixel, Rgb, Rgba};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// let f = |color: u8| {
+    ///     color / 2
+    /// };
+    ///
+    /// assert_eq!(rgb.map_colors_same(f), Rgb {r: 0, g: 5, b: 50});
+    /// assert_eq!(rgba.map_colors_same(f), Rgba {r: 0, g: 5, b: 50, a: 50});
+    /// ```
     fn map_colors_same(&self, f: impl FnMut(Self::ColorComponent) -> Self::ColorComponent) -> Self;
 
     /// Maps the pixels alpha component with a function `f` to any other type.
@@ -88,6 +218,22 @@ pub trait HetPixel: Copy + 'static {
     ///
     /// See [`HetPixel::map_alpha_same()`] if you want to map the alpha component to the
     /// same type.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HetPixel, Rgb, Rgba};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// let f = |alpha: u8| {
+    ///     u16::from(alpha) * 10
+    /// };
+    ///
+    /// assert_eq!(rgb.map_alpha(f), Rgb {r: 0, g: 10, b: 100});
+    /// assert_eq!(rgba.map_alpha(f), Rgba {r: 0, g: 10, b: 100, a: 500});
+    /// ```
     fn map_alpha<U>(
         &self,
         f: impl FnMut(Self::AlphaComponent) -> U,
@@ -100,6 +246,22 @@ pub trait HetPixel: Copy + 'static {
     ///
     /// See [`HetPixel::map_alpha()`] if you want to map the alpha component to a
     /// different type.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HetPixel, Rgb, Rgba};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// let f = |alpha: u8| {
+    ///     alpha / 2
+    /// };
+    ///
+    /// assert_eq!(rgb.map_alpha_same(f), Rgb {r: 0, g: 10, b: 100});
+    /// assert_eq!(rgba.map_alpha_same(f), Rgba {r: 0, g: 10, b: 100, a: 25});
+    /// ```
     fn map_alpha_same(&self, f: impl FnMut(Self::AlphaComponent) -> Self::AlphaComponent) -> Self;
 }
 
@@ -115,11 +277,16 @@ macro_rules! without_alpha {
             const COMPONENT_COUNT: u8 = $length;
 
             type SelfType<U: PixelComponent, V: PixelComponent> = $name<U>;
+			type ColorArray<U> = [U; $length];
 
-            fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> + Copy {
+			fn color_array(&self) -> Self::ColorArray<Self::ColorComponent>
+			where
+				Self::ColorArray<Self::ColorComponent>: Copy
+			{
                 [$(self.$color_bit),*]
             }
-            fn color_array_mut(&mut self) -> impl ArrayLike<&mut Self::ColorComponent> {
+			fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent>
+			{
                 [$(&mut self.$color_bit),*]
             }
 
@@ -181,11 +348,16 @@ macro_rules! with_alpha {
             const COMPONENT_COUNT: u8 = $length;
 
             type SelfType<U: PixelComponent, V: PixelComponent> = $name<U, V>;
+			type ColorArray<U> = [U; $length - 1];
 
-            fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> + Copy {
+			fn color_array(&self) -> Self::ColorArray<Self::ColorComponent>
+			where
+				Self::ColorArray<Self::ColorComponent>: Copy
+			{
                 [$(self.$color_bit),*]
             }
-            fn color_array_mut(&mut self) -> impl ArrayLike<&mut Self::ColorComponent> {
+			fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent>
+			{
                 [$(&mut self.$color_bit),*]
             }
 
