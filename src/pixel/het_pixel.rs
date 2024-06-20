@@ -2,7 +2,7 @@ use core::fmt::Display;
 use crate::PixelComponent;
 use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba, Rgbw};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 /// Error returned from the [`HetPixel::try_from_colors_alpha()`] function.
 pub struct TryFromColorsAlphaError;
 impl Display for TryFromColorsAlphaError {
@@ -19,6 +19,8 @@ impl Display for TryFromColorsAlphaError {
 ///
 /// Unlike [`HomPixel`](crate::HomPixel) the alpha component does not have to be the same type as the color
 /// components.
+///
+/// This trait is implemented on every pixel type in the crate.
 ///
 /// # Terminology
 ///
@@ -42,12 +44,50 @@ pub trait HetPixel: Copy + 'static {
         SelfType<Self::ColorComponent, Self::AlphaComponent> = Self,
     >;
 
-    //TODO switch to returning an plain array if const generic expressions ever stabilize
+    /// An generic associated type used to return the array of color
+    /// components despite rust's lack of const generic expressions.
+    ///
+    /// Used in functions like [`HetPixel::color_array()`].
+    ///
+    /// For example, [`Rgb`] has `ColorArray<U> = [U; 3]` and
+    /// [`Rgba`] has `ColorArray<U> = [U; 3]` also.
+    type ColorArray<U>: ArrayLike<U>;
+
     /// Returns an owned array of copies of the pixels color components.
-    fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> + Copy;
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HetPixel, Rgb, Rgba};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// assert_eq!(rgb.color_array(), [0, 10, 100]);
+    /// assert_eq!(rgba.color_array(), [0, 10, 100]);
+    /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
+    fn color_array(&self) -> Self::ColorArray<Self::ColorComponent>
+    where
+        Self::ColorArray<Self::ColorComponent>: Copy;
     /// Returns an owned array of the pixel's mutably borrowed color components.
-    fn color_array_mut(&mut self) -> impl ArrayLike<&mut Self::ColorComponent>;
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HetPixel, Rgb, Rgba};
+    ///
+    /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// *rgb.color_array_mut()[1] = 40;
+    /// *rgba.color_array_mut()[2] = 40;
+    ///
+    /// assert_eq!(rgb.color_array(), [0, 40, 100]);
+    /// assert_eq!(rgba.color_array(), [0, 10, 40]);
+    /// ```
+    //TODO switch to returning an plain array if const generic expressions ever stabilize
+    fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent>;
 
     /// Returns a copy of the pixel's alpha alpha component if it has one.
     fn alpha_checked(&self) -> Option<Self::AlphaComponent>;
@@ -111,11 +151,16 @@ macro_rules! without_alpha {
             const COMPONENT_COUNT: u8 = $length;
 
             type SelfType<U: PixelComponent, V: PixelComponent> = $name<U>;
+			type ColorArray<U> = [U; $length];
 
-            fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> + Copy {
+			fn color_array(&self) -> Self::ColorArray<Self::ColorComponent>
+			where
+				Self::ColorArray<Self::ColorComponent>: Copy
+			{
                 [$(self.$color_bit),*]
             }
-            fn color_array_mut(&mut self) -> impl ArrayLike<&mut Self::ColorComponent> {
+			fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent>
+			{
                 [$(&mut self.$color_bit),*]
             }
 
@@ -177,11 +222,16 @@ macro_rules! with_alpha {
             const COMPONENT_COUNT: u8 = $length;
 
             type SelfType<U: PixelComponent, V: PixelComponent> = $name<U, V>;
+			type ColorArray<U> = [U; $length - 1];
 
-            fn color_array(&self) -> impl ArrayLike<Self::ColorComponent> + Copy {
+			fn color_array(&self) -> Self::ColorArray<Self::ColorComponent>
+			where
+				Self::ColorArray<Self::ColorComponent>: Copy
+			{
                 [$(self.$color_bit),*]
             }
-            fn color_array_mut(&mut self) -> impl ArrayLike<&mut Self::ColorComponent> {
+			fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent>
+			{
                 [$(&mut self.$color_bit),*]
             }
 
