@@ -20,6 +20,8 @@ impl Display for TryFromComponentsError {
 /// Unlike [`HetPixel`] the alpha component must be the same type as the color
 /// components.
 ///
+/// This trait is implemented on every pixel type in the crate.
+///
 /// All types which implement [`HomPixel`] also implement [`HetPixel`] due to the super-trait trait bound.
 ///
 /// # Terminology
@@ -81,6 +83,21 @@ pub trait HomPixel:
     /// Tries to create new instance given an iterator of its components.
     ///
     /// Returns an error if the `components` iterator does not contain enough items to create the pixel.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HomPixel, Rgb, Rgba, TryFromComponentsError};
+    ///
+    /// let mut values2 = [0_u8, 10];
+    /// let mut values4 = [0_u8, 10, 100, 40];
+    ///
+    /// assert_eq!(Rgb::try_from_components(values2), Err(TryFromComponentsError));
+    /// assert_eq!(Rgba::try_from_components(values2), Err(TryFromComponentsError));
+    ///
+    /// assert_eq!(Rgb::try_from_components(values4), Ok(Rgb {r: 0, g: 10, b: 100}));
+    /// assert_eq!(Rgba::try_from_components(values4), Ok(Rgba {r: 0, g: 10, b: 100, a: 40}));
+    /// ```
     fn try_from_components(
         components: impl IntoIterator<Item = Self::Component>,
     ) -> Result<Self, TryFromComponentsError>;
@@ -89,6 +106,22 @@ pub trait HomPixel:
     ///
     /// See [`HomPixel::map_components_same()`] if you want to map the components to the
     /// same type.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HomPixel, Rgb, Rgba};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// let f = |color: u8| {
+    ///     u16::from(color) * 10
+    /// };
+    ///
+    /// assert_eq!(rgb.map_components(f), Rgb {r: 0, g: 100, b: 1000});
+    /// assert_eq!(rgba.map_components(f), Rgba {r: 0, g: 100, b: 1000, a: 500});
+    /// ```
     fn map_components<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
     where
         U: PixelComponent;
@@ -96,6 +129,22 @@ pub trait HomPixel:
     ///
     /// See [`HomPixel::map_components()`] if you want to map the components to a
     /// different type.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{HomPixel, Rgb, Rgba};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// let f = |color: u8| {
+    ///     color / 2
+    /// };
+    ///
+    /// assert_eq!(rgb.map_components_same(f), Rgb {r: 0, g: 5, b: 50});
+    /// assert_eq!(rgba.map_components_same(f), Rgba {r: 0, g: 5, b: 50, a: 25});
+    /// ```
     fn map_components_same(&self, f: impl FnMut(Self::Component) -> Self::Component) -> Self;
 }
 
