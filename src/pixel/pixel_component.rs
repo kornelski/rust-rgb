@@ -49,6 +49,12 @@ macro_rules! float {
         }
     };
 }
+
+impl PixelComponent for bool {
+    const COMPONENT_MIN: Self = false;
+    const COMPONENT_MAX: Self = true;
+}
+
 integer!(u8);
 integer!(u16);
 integer!(u32);
