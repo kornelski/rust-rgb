@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, Rgb, Rgba, Rgbw};
 #[cfg(feature = "legacy")]
 use crate::{Gray, GrayAlpha};
 
@@ -12,6 +12,7 @@ macro_rules! bytemuck {
 bytemuck!(Rgb);
 bytemuck!(Bgr);
 bytemuck!(Grb);
+bytemuck!(Rgbw);
 #[cfg(feature = "legacy")]
 bytemuck!(Gray);
 bytemuck!(Luma);

@@ -1,7 +1,7 @@
 use core::fmt::Display;
 
 use crate::{
-    Abgr, Argb, ArrayLike, Bgr, Bgra, Grb, HetPixel, Luma, LumaA, PixelComponent, Rgb, Rgba,
+    Abgr, Argb, ArrayLike, Bgr, Bgra, Grb, HetPixel, Luma, LumaA, PixelComponent, Rgb, Rgba, Rgbw,
 };
 #[cfg(feature = "legacy")]
 use crate::{Gray, GrayAlpha};
@@ -235,6 +235,7 @@ with_alpha!(LumaA, 2, [l, a]);
 without_alpha!(Bgr, 3, [b, g, r]);
 without_alpha!(Rgb, 3, [r, g, b]);
 without_alpha!(Grb, 3, [r, g, b]);
+without_alpha!(Rgbw, 4, [r, g, b, w]);
 #[cfg(feature = "legacy")]
 without_alpha!(Gray, 1, [0]);
 without_alpha!(Luma, 1, [l]);

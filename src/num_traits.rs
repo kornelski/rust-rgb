@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, Rgb, Rgba, Rgbw};
 #[cfg(feature = "legacy")]
 use crate::{Gray, GrayAlpha};
 
@@ -55,6 +55,7 @@ macro_rules! num_traits {
 num_traits!(Rgb, [r, g, b]);
 num_traits!(Bgr, [b, g, r]);
 num_traits!(Grb, [g, r, b]);
+num_traits!(Rgbw, [r, g, b, w]);
 #[cfg(feature = "legacy")]
 num_traits!(Gray, [0]);
 num_traits!(Luma, [l]);
