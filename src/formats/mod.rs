@@ -7,9 +7,10 @@ pub mod gray_a;
 pub mod grb;
 pub mod rgb;
 pub mod rgba;
+pub mod rgbw;
 
 use crate::PixelComponent;
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, Gray, GrayA, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Grb, Gray, GrayA, Rgb, Rgba, Rgbw};
 use core::array::TryFromSliceError;
 use core::fmt;
 use core::iter::Sum;
@@ -632,6 +633,7 @@ tuple_conversion!(Rgb, 3, [r:0, g:1, b:2]);
 tuple_conversion!(Bgr, 3, [b:0, g:1, r:2]);
 tuple_conversion!(Grb, 3, [g:0, r:1, b:2]);
 tuple_conversion!(Gray, 1, [v:0]);
+tuple_conversion!(Rgbw, 4, [r:0, g:1, b:2, w:3]);
 
 tuple_conversion!(Rgba, 4, [r:0, g:1, b:2, a:3]);
 tuple_conversion!(Argb, 4, [a:0, r:1, g:2, b:3]);
@@ -643,6 +645,7 @@ trait_impls_without_alpha!(Rgb, 3, [r, g, b], "rgb({}, {}, {})", "rgb(#{:02X}{:0
 trait_impls_without_alpha!(Bgr, 3, [b, g, r], "bgr({}, {}, {})", "bgr(#{:02X}{:02X}{:02X})", "bgr(#{:02x}{:02x}{:02x})");
 trait_impls_without_alpha!(Grb, 3, [g, r, b], "grb({}, {}, {})", "grb(#{:02X}{:02X}{:02X})", "grb(#{:02x}{:02x}{:02x})");
 trait_impls_without_alpha!(Gray, 1, [v], "gray({})", "gray(#{:02X})", "gray(#{:02x})");
+trait_impls_without_alpha!(Rgbw, 4, [r, g, b, w], "rgbw({}, {}, {}, {})", "rgbw(#{:02X}{:02X}{:02X}{:02X})", "rgbw(#{:02x}{:02x}{:02x}{:02x})");
 
 trait_impls_with_alpha!(Rgba, 4, [r, g, b, a], "rgba({}, {}, {}, {})", "rgba(#{:02X}{:02X}{:02X}{:02X})", "rgba(#{:02x}{:02x}{:02x}{:02x})");
 trait_impls_with_alpha!(Argb, 4, [a, r, g, b], "argb({}, {}, {}, {})", "argb(#{:02X}{:02X}{:02X}{:02X})", "argb(#{:02x}{:02x}{:02x}{:02x})");

@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba, Rgbw};
 
 use num_traits::ops::checked::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
 
@@ -102,6 +102,7 @@ num_traits_without_alpha!(Rgb, [r, g, b]);
 num_traits_without_alpha!(Bgr, [b, g, r]);
 num_traits_without_alpha!(Grb, [g, r, b]);
 num_traits_without_alpha!(Gray, [v]);
+num_traits_without_alpha!(Rgbw, [r, g, b, w]);
 
 num_traits_with_alpha!(Rgba, [r, g, b, a]);
 num_traits_with_alpha!(Argb, [a, r, g, b]);

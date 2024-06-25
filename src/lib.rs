@@ -21,6 +21,7 @@ pub use formats::gray_a::GrayA;
 pub use formats::grb::Grb;
 pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
+pub use formats::rgbw::Rgbw;
 
 pub use pixel::{
     arraylike::ArrayLike,
