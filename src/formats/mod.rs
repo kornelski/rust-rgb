@@ -2,8 +2,6 @@ pub mod abgr;
 pub mod argb;
 pub mod bgr;
 pub mod bgra;
-pub mod gray;
-pub mod gray_alpha;
 pub mod grb;
 pub mod luma;
 pub mod luma_a;
@@ -16,8 +14,6 @@ use core::iter::Sum;
 use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, PixelComponent, Rgb, Rgba};
-#[cfg(feature = "legacy")]
-use crate::{Gray, GrayAlpha};
 
 macro_rules! hom_trait_impls {
 
@@ -353,13 +349,10 @@ macro_rules! hom_trait_impls {
 hom_trait_impls!(Rgb, 3, [r:0, g:1, b:2], "rgb({}, {}, {})", "rgb(#{:02X}{:02X}{:02X})", "rgb(#{:02x}{:02x}{:02x})");
 hom_trait_impls!(Bgr, 3, [b:0, g:1, r:2], "bgr({}, {}, {})", "bgr(#{:02X}{:02X}{:02X})", "bgr(#{:02x}{:02x}{:02x})");
 hom_trait_impls!(Grb, 3, [g:0, r:1, b:2], "grb({}, {}, {})", "grb(#{:02X}{:02X}{:02X})", "grb(#{:02x}{:02x}{:02x})");
+hom_trait_impls!(Luma, 1, [l:0], "luma({})", "luma(#{:02X})", "luma(#{:02x})");
+
 hom_trait_impls!(Rgba, 4, [r:0, g:1, b:2, a:3], "rgba({}, {}, {}, {})", "rgba(#{:02X}{:02X}{:02X}{:02X})", "rgba(#{:02x}{:02x}{:02x}{:02x})");
 hom_trait_impls!(Argb, 4, [a:0, r:1, g:2, b:3], "argb({}, {}, {}, {})", "argb(#{:02X}{:02X}{:02X}{:02X})", "argb(#{:02x}{:02x}{:02x}{:02x})");
 hom_trait_impls!(Bgra, 4, [b:0, g:1, r:2, a:3], "bgra({}, {}, {}, {})", "bgra(#{:02X}{:02X}{:02X}{:02X})", "bgra(#{:02x}{:02x}{:02x}{:02x})");
 hom_trait_impls!(Abgr, 4, [a:0, b:1, g:2, r:3], "abgr({}, {}, {}, {})", "abgr(#{:02X}{:02X}{:02X}{:02X})", "abgr(#{:02x}{:02x}{:02x}{:02x})");
-#[cfg(feature = "legacy")]
-hom_trait_impls!(Gray, 1, [0:0], "gray({})", "gray(#{:02X})", "gray(#{:02x})");
-#[cfg(feature = "legacy")]
-hom_trait_impls!(GrayAlpha, 2, [0:0, 1:1], "grayA({}, {})", "grayA(#{:02X}{:02X})", "grayA(#{:02x}{:02x})");
-hom_trait_impls!(Luma, 1, [l:0], "luma({})", "luma(#{:02X})", "luma(#{:02x})");
 hom_trait_impls!(LumaA, 2, [l:0, a:1], "LumaA({}, {})", "lumaA(#{:02X}{:02X})", "lumaA(#{:02x}{:02x})");

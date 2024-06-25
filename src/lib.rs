@@ -18,9 +18,6 @@ pub use formats::abgr::Abgr;
 pub use formats::argb::Argb;
 pub use formats::bgr::Bgr;
 pub use formats::bgra::Bgra;
-#[cfg(feature = "legacy")]
-pub use formats::gray::Gray;
-pub use formats::gray_alpha::GrayAlpha;
 pub use formats::grb::Grb;
 pub use formats::luma::Luma;
 pub use formats::luma_a::LumaA;
@@ -36,18 +33,54 @@ pub use pixel::{
     pixel_component::PixelComponent,
 };
 
-/// The legacy alt module.
-#[cfg(feature = "legacy")]
-pub mod alt {
-    pub use crate::Abgr as ABGR;
-    pub use crate::Argb as ARGB;
-    pub use crate::Bgr as BGR;
-    pub use crate::Bgra as BGRA;
-    pub use crate::Gray;
-    pub use crate::GrayAlpha;
-    pub use crate::Grb as GRB;
-}
 #[cfg(feature = "legacy")]
 pub use crate::Rgb as RGB;
 #[cfg(feature = "legacy")]
 pub use crate::Rgba as RGBA;
+
+/// Re-export from `bytemuck` crate
+#[cfg(feature = "as-bytes")]
+#[cfg(feature = "legacy")]
+pub use ::bytemuck::Pod;
+/// Re-export from `bytemuck` crate
+#[cfg(feature = "as-bytes")]
+#[cfg(feature = "legacy")]
+pub use ::bytemuck::Zeroable;
+
+#[cfg(feature = "legacy")]
+pub use legacy::internal::convert::AsPixels;
+#[cfg(feature = "legacy")]
+pub use legacy::internal::convert::FromSlice;
+#[cfg(feature = "legacy")]
+pub use legacy::internal::pixel::ColorComponentMap;
+#[cfg(feature = "legacy")]
+pub use legacy::internal::pixel::ComponentBytes;
+#[cfg(feature = "legacy")]
+pub use legacy::internal::pixel::ComponentMap;
+#[cfg(feature = "legacy")]
+pub use legacy::internal::pixel::ComponentSlice;
+
+#[cfg(feature = "legacy")]
+pub use legacy::alt;
+
+/// 8-bit RGB
+///
+/// The colorspace is technically undefined, but generally sRGB is assumed.
+#[cfg(feature = "legacy")]
+pub type RGB8 = RGB<u8>;
+
+/// 16-bit RGB in machine's native endian
+///
+/// Be careful to perform byte-swapping when reading from files.
+#[cfg(feature = "legacy")]
+pub type RGB16 = RGB<u16>;
+
+/// 8-bit RGBA, alpha is last. 0 = transparent, 255 = opaque.
+#[cfg(feature = "legacy")]
+pub type RGBA8 = RGBA<u8>;
+
+/// 16-bit RGB in machine's native endian. 0 = transparent, 65535 = opaque.
+///
+/// Alpha is last.
+#[cfg(feature = "legacy")]
+pub type RGBA16 = RGBA<u16>;
