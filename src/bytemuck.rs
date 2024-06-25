@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, Rgb, Rgba, Rgbw};
 
 macro_rules! bytemuck {
     ($name:ident) => {
@@ -10,6 +10,7 @@ macro_rules! bytemuck {
 bytemuck!(Rgb);
 bytemuck!(Bgr);
 bytemuck!(Grb);
+bytemuck!(Rgbw);
 bytemuck!(Luma);
 
 bytemuck!(Rgba);
