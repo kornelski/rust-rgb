@@ -16,12 +16,17 @@ edition = "2021"
 [features]
 default = []
 
-legacy = []
-
 num-traits = ["dep:num-traits"]
 defmt-03 = ["dep:defmt"]
 serde = ["dep:serde"]
 bytemuck = ["dep:bytemuck"]
+
+# Legacy features to be removed after `v0.10`
+legacy = ["as-bytes"]
+argb = []
+grb = []
+checked_fns = []
+as-bytes = ["bytemuck"]
 
 [badges]
 travis-ci = { repository = "kornelski/rust-rgb" }
