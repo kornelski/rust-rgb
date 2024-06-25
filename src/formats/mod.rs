@@ -7,11 +7,14 @@ pub mod luma;
 pub mod luma_a;
 pub mod rgb;
 pub mod rgba;
+pub mod rgbw;
 
 use core::array::TryFromSliceError;
 use core::fmt;
 use core::iter::Sum;
 use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+
+use rgbw::Rgbw;
 
 use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, PixelComponent, Rgb, Rgba};
 
@@ -350,6 +353,7 @@ hom_trait_impls!(Rgb, 3, [r:0, g:1, b:2], "rgb({}, {}, {})", "rgb(#{:02X}{:02X}{
 hom_trait_impls!(Bgr, 3, [b:0, g:1, r:2], "bgr({}, {}, {})", "bgr(#{:02X}{:02X}{:02X})", "bgr(#{:02x}{:02x}{:02x})");
 hom_trait_impls!(Grb, 3, [g:0, r:1, b:2], "grb({}, {}, {})", "grb(#{:02X}{:02X}{:02X})", "grb(#{:02x}{:02x}{:02x})");
 hom_trait_impls!(Luma, 1, [l:0], "luma({})", "luma(#{:02X})", "luma(#{:02x})");
+hom_trait_impls!(Rgbw, 4, [r:0, g:1, b:2, w:3], "rgbw({}, {}, {}, {})", "rgbw(#{:02X}{:02X}{:02X}{:02X})", "rgbw(#{:02x}{:02x}{:02x}{:02x})");
 
 hom_trait_impls!(Rgba, 4, [r:0, g:1, b:2, a:3], "rgba({}, {}, {}, {})", "rgba(#{:02X}{:02X}{:02X}{:02X})", "rgba(#{:02x}{:02x}{:02x}{:02x})");
 hom_trait_impls!(Argb, 4, [a:0, r:1, g:2, b:3], "argb({}, {}, {}, {})", "argb(#{:02X}{:02X}{:02X}{:02X})", "argb(#{:02x}{:02x}{:02x}{:02x})");

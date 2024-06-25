@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, Rgb, Rgba, Rgbw};
 
 use num_traits::ops::checked::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
 
@@ -53,6 +53,7 @@ macro_rules! num_traits {
 num_traits!(Rgb, [r, g, b]);
 num_traits!(Bgr, [b, g, r]);
 num_traits!(Grb, [g, r, b]);
+num_traits!(Rgbw, [r, g, b, w]);
 num_traits!(Luma, [l]);
 
 num_traits!(Rgba, [r, g, b, a]);
