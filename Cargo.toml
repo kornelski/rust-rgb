@@ -23,6 +23,8 @@ grb = []
 checked_fns = []
 # support for the `defmt` crate
 defmt-03 = ["dep:defmt"]
+# Preview of changes for v0.9. May cause semver breakage if enabled.
+unstable-experimental = []
 
 [badges]
 travis-ci = { repository = "kornelski/rust-rgb" }

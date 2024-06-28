@@ -1,4 +1,4 @@
-use crate::alt::Gray;
+use crate::formats::gray::Gray_v08 as Gray;
 use crate::alt::GrayAlpha;
 use super::pixel::ComponentMap;
 use crate::RGB;

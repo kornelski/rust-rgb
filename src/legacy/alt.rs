@@ -1,9 +1,8 @@
 use crate::legacy::internal::pixel::*;
-use core::ops;
 use core::slice;
 
-pub use crate::formats::gray::Gray;
-pub use crate::formats::gray_alpha::GrayAlpha;
+pub use crate::formats::gray::Gray_v08 as Gray;
+pub use crate::formats::gray_alpha::GrayAlpha_v08 as GrayAlpha;
 pub use crate::formats::bgra::Bgra as BGRA;
 pub use crate::formats::bgr::Bgr as BGR;
 
@@ -68,7 +67,8 @@ impl<T> Gray<T> {
     }
 }
 
-impl<T> ops::Deref for Gray<T> {
+#[cfg(not(feature = "unstable-experimental"))]
+impl<T> core::ops::Deref for Gray<T> {
     type Target = T;
     #[inline(always)]
     fn deref(&self) -> &T {
@@ -256,6 +256,7 @@ fn gray() {
 
     let g: GRAY8 = 200.into();
     let g = g.map(|c| c/2);
+    #[cfg(not(feature = "unstable-experimental"))]
     assert_eq!(110, *g + 10);
     assert_eq!(110, 10 + Gray(100).as_ref());
 

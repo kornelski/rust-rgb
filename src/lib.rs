@@ -42,6 +42,7 @@ pub(crate) mod formats {
     pub mod bgr;
     pub mod bgra;
     pub mod gray;
+    pub mod gray_a;
     pub mod gray_alpha;
     #[cfg(feature = "grb")]
     pub mod grb;
@@ -80,6 +81,12 @@ pub use crate::legacy::internal::pixel::*;
 
 pub use formats::rgb::Rgb as RGB;
 pub use formats::rgba::Rgba as RGBA;
+
+#[cfg(feature = "unstable-experimental")]
+pub use formats::gray_a::GrayA;
+
+#[cfg(feature = "unstable-experimental")]
+pub use formats::gray::Gray_v09 as Gray;
 
 /// 8-bit RGB
 ///
