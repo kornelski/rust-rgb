@@ -1,4 +1,4 @@
-use crate::internal::pixel::*;
+use crate::legacy::internal::pixel::*;
 use core::ops;
 use core::slice;
 

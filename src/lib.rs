@@ -36,18 +36,21 @@
 #[cfg(feature = "serde")]
 #[macro_use] extern crate serde;
 
-mod internal {
-    pub mod convert;
-    pub mod ops;
-    pub mod pixel;
-    pub mod rgb;
-    pub mod rgba;
+pub(crate) mod legacy {
+    pub(crate) mod internal {
+        pub mod convert;
+        pub mod ops;
+        pub mod pixel;
+        pub mod rgb;
+        pub mod rgba;
+    }
+    /// BGR/BGRA alernative layouts & grayscale
+    ///
+    /// BGR might be useful for some Windows or OpenGL APIs.
+    pub mod alt;
 }
 
-/// BGR/BGRA alernative layouts & grayscale
-///
-/// BGR might be useful for some Windows or OpenGL APIs.
-pub mod alt;
+pub use legacy::alt;
 
 /// Re-export from `bytemuck` crate
 #[cfg(feature = "as-bytes")]
@@ -56,8 +59,8 @@ pub use bytemuck::Pod;
 #[cfg(feature = "as-bytes")]
 pub use bytemuck::Zeroable;
 
-pub use crate::internal::convert::*;
-pub use crate::internal::pixel::*;
+pub use crate::legacy::internal::convert::*;
+pub use crate::legacy::internal::pixel::*;
 
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
