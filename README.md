@@ -10,7 +10,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rgb = "0.8"
+rgb = "0.8.40"
 ```
 
 ## Usage
@@ -68,3 +68,14 @@ rgb = { version = "0.8", features = ["argb"] }
 ```
 
 There's also an optional `serde` feature that makes all types (de)serializable.
+
+### Roadmap to 1.0
+
+The plan is to provide easy migration to v1.0. There will be a transitional v0.9 version released that will be mostly backwards-compatible with 0.8, and forwards-compatible with 1.0.
+
+Planned changes:
+
+ * Types will be renamed to follow Rust's naming convention: `RGBA` → `Rgba`. The old names will continue to work as hidden aliases.
+ * The `Gray` and `GrayAlpha` types will change from tuple structs with `.0` to structs with named fields `.v` (value) and `.a` (alpha). Through a `Deref` trick both field names will work, but `.0` is going to be deprecated.
+ * `bytemuck::Pod` (conversions from/to raw bytes) will require color and alpha components to be the same type (i.e. it will work with `Rgba<u8>`, but not `Rgba<Newtype, DifferentType>`). Currently it's unsound if the alpha has a different size than color components.
+ * Many inherent methods will be moved to a new `Pixel` trait.
