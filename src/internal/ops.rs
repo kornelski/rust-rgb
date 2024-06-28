@@ -338,6 +338,7 @@ impl_struct_ops_alpha! {GrayAlpha => 0 1}
 
 #[cfg(test)]
 mod test {
+    use core::num::Wrapping;
     use super::*;
     const WHITE_RGB: RGB<u8> = RGB::new(255, 255, 255);
     const BLACK_RGB: RGB<u8> = RGB::new(0, 0, 0);
@@ -356,7 +357,7 @@ mod test {
         assert_eq!(RGB::new(2,4,6), RGB::new(1,2,3) + RGB{r:1,g:2,b:3});
         assert_eq!(RGB::new(2.,4.,6.), RGB::new(1.,3.,5.) + 1.);
 
-        assert_eq!(RGBA::new_alpha(2u8,4,6,8u16), RGBA::new_alpha(1u8,2,3,4u16) + RGBA{r:1u8,g:2,b:3,a:4u16});
+        assert_eq!(RGBA::new_alpha(2f32,4.,6.,8u32), RGBA::new_alpha(1f32,2.,3.,4u32) + RGBA{r:1f32,g:2.0,b:3.0,a:4u32});
         assert_eq!(RGBA::new(2i16,4,6,8), RGBA::new(1,3,5,7) + 1);
 
         assert_eq!(RGB::new(255, 255, 0), RED_RGB+GREEN_RGB);
@@ -482,11 +483,11 @@ mod test {
     fn sum() {
         let s1 = [RGB::new(1u8,1,1), RGB::new(2,3,4)].iter().copied().sum::<RGB<u8>>();
         let s2 = [RGB::new(1u16,1,1), RGB::new(2,3,4)].iter().copied().sum::<RGB<u16>>();
-        let s3 = [RGBA::new_alpha(1u8,1,1,1u16), RGBA::new_alpha(2,3,4,5)].iter().copied().sum::<RGBA<u8, u16>>();
-        let s4 = [RGBA::new_alpha(1u16,1,1,1u8), RGBA::new_alpha(2,3,4,5)].iter().copied().sum::<RGBA<u16, u8>>();
+        let s3 = [RGBA::new_alpha(1u16,1,1,Wrapping(1u16)), RGBA::new_alpha(2,3,4,Wrapping(5))].iter().copied().sum::<RGBA<u16, Wrapping<u16>>>();
+        let s4 = [RGBA::new_alpha(1u16,1,1,1u16), RGBA::new_alpha(2,3,4,5)].iter().copied().sum::<RGBA<u16, u16>>();
         assert_eq!(s1, RGB::new(3, 4, 5));
         assert_eq!(s2, RGB::new(3, 4, 5));
-        assert_eq!(s3, RGBA::new_alpha(3, 4, 5, 6));
+        assert_eq!(s3, RGBA::new_alpha(3, 4, 5, Wrapping(6)));
         assert_eq!(s4, RGBA::new_alpha(3, 4, 5, 6));
     }
 }
