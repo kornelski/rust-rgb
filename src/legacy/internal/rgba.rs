@@ -13,13 +13,6 @@ impl<T> RGBA<T> {
     }
 }
 
-#[track_caller]
-const fn assert_no_padding<T, A, S>() {
-    if core::mem::size_of::<A>() + 3 * core::mem::size_of::<T>() != core::mem::size_of::<S>() {
-        panic!("type has padding");
-    }
-}
-
 impl<T, A> RGBA<T,A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
@@ -49,36 +42,6 @@ impl<T, A> BGRA<T, A> {
     #[deprecated(note="This function has a misleading order of arguments. Use BGRA{} literal instead")]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
         Self { b, g, r, a }
-    }
-}
-
-#[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Pod for RGBA<T, A> where T: crate::Pod, A: crate::Pod {}
-
-#[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Pod for BGRA<T, A> where T: crate::Pod, A: crate::Pod {}
-
-#[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Zeroable for RGBA<T, A> where T: crate::Zeroable, A: crate::Zeroable {
-    #[track_caller]
-    #[inline(always)]
-    fn zeroed() -> Self {
-        unsafe {
-            let _ = assert_no_padding::<T, A, Self>();
-            core::mem::zeroed()
-        }
-    }
-}
-
-#[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Zeroable for BGRA<T, A> where T: crate::Zeroable, A: crate::Zeroable {
-    #[track_caller]
-    #[inline(always)]
-    fn zeroed() -> Self {
-        unsafe {
-            let _ = assert_no_padding::<T, A, Self>();
-            core::mem::zeroed()
-        }
     }
 }
 
@@ -123,36 +86,6 @@ impl<T, A> ABGR<T,A> {
     #[deprecated(note="This function has a misleading order of arguments. Use ABGR{} literal instead")]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
         Self {r,g,b,a}
-    }
-}
-
-#[cfg(all(feature = "as-bytes", feature = "argb"))]
-unsafe impl<T, A> crate::Pod for ARGB<T, A> where T: crate::Pod, A: crate::Pod {}
-
-#[cfg(all(feature = "as-bytes", feature = "argb"))]
-unsafe impl<T, A> crate::Pod for ABGR<T, A> where T: crate::Pod, A: crate::Pod {}
-
-#[cfg(all(feature = "as-bytes", feature = "argb"))]
-unsafe impl<T, A> crate::Zeroable for ARGB<T, A> where T: crate::Zeroable, A: crate::Zeroable {
-    #[track_caller]
-    #[inline(always)]
-    fn zeroed() -> Self {
-        unsafe {
-            let _ = assert_no_padding::<T, A, Self>();
-            core::mem::zeroed()
-        }
-    }
-}
-
-#[cfg(all(feature = "as-bytes", feature = "argb"))]
-unsafe impl<T, A> crate::Zeroable for ABGR<T, A> where T: crate::Zeroable, A: crate::Zeroable {
-    #[track_caller]
-    #[inline(always)]
-    fn zeroed() -> Self {
-        unsafe {
-            let _ = assert_no_padding::<T, A, Self>();
-            core::mem::zeroed()
-        }
     }
 }
 
@@ -456,7 +389,7 @@ fn rgba_test() {
 }
 
 #[test]
-#[cfg(feature = "argb")]
+#[cfg(all(feature = "as-bytes", feature = "argb"))]
 fn abgr_test() {
     let abgr = ABGR {r:1,g:2,b:3,a:4};
     assert_eq!(4, abgr.as_slice()[0]);

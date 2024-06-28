@@ -8,7 +8,8 @@
 //! This crate intentionally doesn't implement color management (due to complexity of the problem),
 //! but the structs can be parametrized to implement this if necessary. Other colorspaces are out of scope.
 //!
-//! ```rust
+#![cfg_attr(feature = "as-bytes", doc = "```rust")]
+#![cfg_attr(not(feature = "as-bytes"), doc = "```ignore")]
 //! # use rgb::*;
 //! let pixel = RGB8 {r:0, g:100, b:255};
 //!
@@ -64,12 +65,15 @@ pub(crate) mod legacy {
 
 pub use legacy::alt;
 
+#[cfg(feature = "as-bytes")]
+mod bytemuck;
+
 /// Re-export from `bytemuck` crate
 #[cfg(feature = "as-bytes")]
-pub use bytemuck::Pod;
+pub use ::bytemuck::Pod;
 /// Re-export from `bytemuck` crate
 #[cfg(feature = "as-bytes")]
-pub use bytemuck::Zeroable;
+pub use ::bytemuck::Zeroable;
 
 pub use crate::legacy::internal::convert::*;
 pub use crate::legacy::internal::pixel::*;

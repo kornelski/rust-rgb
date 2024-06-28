@@ -26,15 +26,6 @@ impl<T> BGR<T> {
     }
 }
 
-#[cfg(feature = "as-bytes")]
-unsafe impl<T> crate::Pod for RGB<T> where T: crate::Pod {}
-#[cfg(feature = "as-bytes")]
-unsafe impl<T> crate::Pod for BGR<T> where T: crate::Pod {}
-#[cfg(feature = "as-bytes")]
-unsafe impl<T> crate::Zeroable for RGB<T> where T: crate::Zeroable {}
-#[cfg(feature = "as-bytes")]
-unsafe impl<T> crate::Zeroable for BGR<T> where T: crate::Zeroable {}
-
 macro_rules! impl_rgb {
     ($RGB:ident) => {
         impl<T: Clone> $RGB<T> {

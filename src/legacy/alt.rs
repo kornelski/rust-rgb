@@ -48,26 +48,6 @@ pub type ARGB16 = ARGB<u16>;
 #[cfg(feature = "grb")]
 pub type GRB8 = GRB<u8>;
 
-#[cfg(feature = "as-bytes")]
-unsafe impl<T> crate::Pod for Gray<T> where T: crate::Pod {}
-#[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Pod for GrayAlpha<T, A> where T: crate::Pod, A: crate::Pod {}
-#[cfg(feature = "as-bytes")]
-unsafe impl<T> crate::Zeroable for Gray<T> where T: crate::Zeroable {}
-#[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Zeroable for GrayAlpha<T, A> where T: crate::Zeroable, A: crate::Zeroable {
-    #[track_caller]
-    #[inline(always)]
-    fn zeroed() -> Self {
-        unsafe {
-            if core::mem::size_of::<A>() + core::mem::size_of::<T>() != core::mem::size_of::<Self>() {
-                panic!("type has padding");
-            }
-            core::mem::zeroed()
-        }
-    }
-}
-
 /// 8-bit gray
 pub type GRAY8 = Gray<u8>;
 
@@ -216,8 +196,6 @@ impl<T> ComponentSlice<T> for [GrayAlpha<T>] {
     }
 }
 
-#[cfg(feature = "as-bytes")]
-impl<T: crate::Pod> ComponentBytes<T> for [GrayAlpha<T>] {}
 
 impl<T> ComponentSlice<T> for Gray<T> {
     #[inline(always)]
@@ -246,9 +224,6 @@ impl<T> ComponentSlice<T> for [Gray<T>] {
         }
     }
 }
-
-#[cfg(feature = "as-bytes")]
-impl<T: crate::Pod> ComponentBytes<T> for [Gray<T>] {}
 
 /// Assumes 255 is opaque
 impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u8> {
