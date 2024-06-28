@@ -5,6 +5,14 @@
 /// A `Brightness + Alpha` pixel.
 ///
 /// This pixel is commonly used for grayscale images.
+///
+/// # Examples
+///
+/// ```
+/// use rgb::LumaA;
+///
+/// let pixel: LumaA<u8> = LumaA { l: 0, a: 255 };
+/// ```
 pub struct LumaA<T, A = T> {
     /// Brightness Component
     pub l: T,

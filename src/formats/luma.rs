@@ -5,6 +5,14 @@
 /// A `Brightness` pixel.
 ///
 /// This pixel is commonly used for grayscale images.
+///
+/// # Examples
+///
+/// ```
+/// use rgb::Luma;
+///
+/// let pixel: Luma<u8> = Luma { l: 0 };
+/// ```
 pub struct Luma<T> {
     /// Brightness Component
     pub l: T,
