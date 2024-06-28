@@ -137,7 +137,18 @@ unsafe impl<T, A> crate::Pod for GrayAlpha<T, A> where T: crate::Pod, A: crate::
 #[cfg(feature = "as-bytes")]
 unsafe impl<T> crate::Zeroable for Gray<T> where T: crate::Zeroable {}
 #[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Zeroable for GrayAlpha<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
+unsafe impl<T, A> crate::Zeroable for GrayAlpha<T, A> where T: crate::Zeroable, A: crate::Zeroable {
+    #[track_caller]
+    #[inline(always)]
+    fn zeroed() -> Self {
+        unsafe {
+            if core::mem::size_of::<A>() + core::mem::size_of::<T>() != core::mem::size_of::<Self>() {
+                panic!("type has padding");
+            }
+            core::mem::zeroed()
+        }
+    }
+}
 
 /// 8-bit gray
 pub type GRAY8 = Gray<u8>;

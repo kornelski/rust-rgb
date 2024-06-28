@@ -13,6 +13,13 @@ impl<T> RGBA<T> {
     }
 }
 
+#[track_caller]
+const fn assert_no_padding<T, A, S>() {
+    if core::mem::size_of::<A>() + 3 * core::mem::size_of::<T>() != core::mem::size_of::<S>() {
+        panic!("type has padding");
+    }
+}
+
 impl<T, A> RGBA<T,A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
@@ -32,7 +39,10 @@ impl<T> BGRA<T> {
     }
 }
 
-impl<T, A> BGRA<T,A> {
+/// ```rust,compile_fail
+/// let r = rgb::BGRA::<u8,u16>::zeroed();
+/// ```
+impl<T, A> BGRA<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B,A
@@ -44,12 +54,33 @@ impl<T, A> BGRA<T,A> {
 
 #[cfg(feature = "as-bytes")]
 unsafe impl<T, A> crate::Pod for RGBA<T, A> where T: crate::Pod, A: crate::Pod {}
+
 #[cfg(feature = "as-bytes")]
 unsafe impl<T, A> crate::Pod for BGRA<T, A> where T: crate::Pod, A: crate::Pod {}
+
 #[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Zeroable for RGBA<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
+unsafe impl<T, A> crate::Zeroable for RGBA<T, A> where T: crate::Zeroable, A: crate::Zeroable {
+    #[track_caller]
+    #[inline(always)]
+    fn zeroed() -> Self {
+        unsafe {
+            let _ = assert_no_padding::<T, A, Self>();
+            core::mem::zeroed()
+        }
+    }
+}
+
 #[cfg(feature = "as-bytes")]
-unsafe impl<T, A> crate::Zeroable for BGRA<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
+unsafe impl<T, A> crate::Zeroable for BGRA<T, A> where T: crate::Zeroable, A: crate::Zeroable {
+    #[track_caller]
+    #[inline(always)]
+    fn zeroed() -> Self {
+        unsafe {
+            let _ = assert_no_padding::<T, A, Self>();
+            core::mem::zeroed()
+        }
+    }
+}
 
 #[cfg(feature = "argb")]
 impl<T> ARGB<T> {
@@ -97,12 +128,33 @@ impl<T, A> ABGR<T,A> {
 
 #[cfg(all(feature = "as-bytes", feature = "argb"))]
 unsafe impl<T, A> crate::Pod for ARGB<T, A> where T: crate::Pod, A: crate::Pod {}
+
 #[cfg(all(feature = "as-bytes", feature = "argb"))]
 unsafe impl<T, A> crate::Pod for ABGR<T, A> where T: crate::Pod, A: crate::Pod {}
+
 #[cfg(all(feature = "as-bytes", feature = "argb"))]
-unsafe impl<T, A> crate::Zeroable for ARGB<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
+unsafe impl<T, A> crate::Zeroable for ARGB<T, A> where T: crate::Zeroable, A: crate::Zeroable {
+    #[track_caller]
+    #[inline(always)]
+    fn zeroed() -> Self {
+        unsafe {
+            let _ = assert_no_padding::<T, A, Self>();
+            core::mem::zeroed()
+        }
+    }
+}
+
 #[cfg(all(feature = "as-bytes", feature = "argb"))]
-unsafe impl<T, A> crate::Zeroable for ABGR<T, A> where T: crate::Zeroable, A: crate::Zeroable {}
+unsafe impl<T, A> crate::Zeroable for ABGR<T, A> where T: crate::Zeroable, A: crate::Zeroable {
+    #[track_caller]
+    #[inline(always)]
+    fn zeroed() -> Self {
+        unsafe {
+            let _ = assert_no_padding::<T, A, Self>();
+            core::mem::zeroed()
+        }
+    }
+}
 
 macro_rules! impl_rgba {
     ($RGBA:ident) => {
