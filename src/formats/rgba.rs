@@ -3,6 +3,14 @@
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// An `Red + Green + Blue + Alpha` pixel.
+///
+/// # Examples
+///
+/// ```
+/// use rgb::Rgba;
+///
+/// let pixel: Rgba<u8> = Rgba { r: 0, g: 0, b: 0, a: 255 };
+/// ```
 pub struct Rgba<T, A = T> {
     /// Red Component
     pub r: T,
