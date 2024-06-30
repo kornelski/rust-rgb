@@ -4,16 +4,17 @@
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// A `Brightness` pixel.
 ///
-/// This pixel is commonly used for grayscale images.
+/// This pixel is commonly used for grayscale images. A binary
+/// grayscale images can also be represented using `Gray<bool>`.
 ///
 /// # Examples
 ///
 /// ```
-/// use rgb::Luma;
+/// use rgb::Gray;
 ///
-/// let pixel: Luma<u8> = Luma { l: 0 };
+/// let pixel: Gray<u8> = Gray { v: 0 };
 /// ```
-pub struct Luma<T> {
+pub struct Gray<T> {
     /// Brightness Component
-    pub l: T,
+    pub v: T,
 }

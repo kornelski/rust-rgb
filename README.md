@@ -25,7 +25,7 @@ gamma-corrected lightness, or `Rgb<u8>` could be normal `srgb` or
 This crate offers the following pixel types:
 
 ```rust
-use rgb::{Rgb, Rgba, Argb, Bgr, Bgra, Abgr, Grb, Luma, LumaA};
+use rgb::{Rgb, Rgba, Argb, Bgr, Bgra, Abgr, Grb, Gray, GrayA};
 
 let rgb = Rgb {r: 0, g: 0, b: 0};
 let rbga = Rgba {r: 0, g: 0, b: 0, a: 0};
@@ -37,8 +37,8 @@ let abgr = Abgr {r: 0, g: 0, b: 0, a: 0};
 
 let grb = Grb {g: 0, b: 0, r: 0};
 
-let luma = Luma {l: 0};
-let luma_a = LumaA {l: 0, a: 0};
+let gray = Gray {v: 0};
+let gray_a = GrayA {v: 0, a: 0};
 ```
 
 If you have a pixel type you would like to use that is not currently
