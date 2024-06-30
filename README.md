@@ -63,9 +63,9 @@ use-cases the alpha component type will be the same as the color
 component type.
 
 A pixel with separate types for the color and alpha
-components is called a heterogeneous pixel whereas a pixel with a
+components is called a heterogeneous pixel (`HetPixel`), whereas a pixel with a
 single type for both color and alpha components is called a
-homogeneous pixel.
+homogeneous pixel (`Pixel`).
 
 ## Pixel Traits
 
@@ -100,13 +100,13 @@ let rgba = rgba.map_alpha_same(|a| a * 2.0);
 assert_eq!(rgba, Rgba::<u16, f32> {r: 0, g: 0, b: 510, a: 100.0});
 ```
 
-### HomPixel
+### Pixel
 
 A stricter form of `HetPixel` where the two component types, color and
 alpha, are the same.
 
 ```rust
-use rgb::{Rgba, HomPixel};
+use rgb::{Rgba, Pixel};
 
 let mut rgba: Rgba<u8> = Rgba::try_from_components([0, 0, 0, 0]).unwrap();
 
