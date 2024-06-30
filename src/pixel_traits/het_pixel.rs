@@ -17,7 +17,7 @@ impl Display for TryFromColorsAlphaError {
 /// A Pixel made up of a compile-time known number of color components and optionally an
 /// alpha component.
 ///
-/// Unlike [`HomPixel`](crate::HomPixel) the alpha component does not have to be the same type as the color
+/// Unlike [`Pixel`](crate::Pixel) the alpha component does not have to be the same type as the color
 /// components.
 ///
 /// This trait is implemented on every pixel type in the crate.
