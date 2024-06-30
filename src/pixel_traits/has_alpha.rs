@@ -1,6 +1,6 @@
 use crate::HetPixel;
 use crate::PixelComponent;
-use crate::{Abgr, Argb, Bgra, LumaA, Rgba};
+use crate::{Abgr, Argb, Bgra, GrayA, Rgba};
 
 /// A pixel which has an alpha component.
 ///
@@ -60,4 +60,4 @@ has_alpha!(Rgba, a);
 has_alpha!(Argb, a);
 has_alpha!(Bgra, a);
 has_alpha!(Abgr, a);
-has_alpha!(LumaA, a);
+has_alpha!(GrayA, a);

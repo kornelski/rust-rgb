@@ -2,9 +2,9 @@ pub mod abgr;
 pub mod argb;
 pub mod bgr;
 pub mod bgra;
+pub mod gray;
+pub mod gray_a;
 pub mod grb;
-pub mod luma;
-pub mod luma_a;
 pub mod rgb;
 pub mod rgba;
 pub mod rgbw;
@@ -16,7 +16,7 @@ use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 use rgbw::Rgbw;
 
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, PixelComponent, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, PixelComponent, Rgb, Rgba};
 
 macro_rules! tuple_conversion {
     ($name:ident, 1, [$($bit:tt:$num:tt),*]) => {
@@ -634,14 +634,14 @@ macro_rules! trait_impls_without_alpha {
 tuple_conversion!(Rgb, 3, [r:0, g:1, b:2]);
 tuple_conversion!(Bgr, 3, [b:0, g:1, r:2]);
 tuple_conversion!(Grb, 3, [g:0, r:1, b:2]);
-tuple_conversion!(Luma, 1, [l:0]);
+tuple_conversion!(Gray, 1, [v:0]);
 tuple_conversion!(Rgbw, 4, [r:0, g:1, b:2, w:3]);
 
 tuple_conversion!(Rgba, 4, [r:0, g:1, b:2, a:3]);
 tuple_conversion!(Argb, 4, [a:0, r:1, g:2, b:3]);
 tuple_conversion!(Bgra, 4, [b:0, g:1, r:2, a:3]);
 tuple_conversion!(Abgr, 4, [a:0, b:1, g:2, r:3]);
-tuple_conversion!(LumaA, 2, [l:0, a:1]);
+tuple_conversion!(GrayA, 2, [v:0, a:1]);
 
 trait_impls_without_alpha!(
     Rgb,
@@ -667,7 +667,7 @@ trait_impls_without_alpha!(
     "grb(#{:02X}{:02X}{:02X})",
     "grb(#{:02x}{:02x}{:02x})"
 );
-trait_impls_without_alpha!(Luma, 1, [l], "luma({})", "luma(#{:02X})", "luma(#{:02x})");
+trait_impls_without_alpha!(Gray, 1, [v], "gray({})", "gray(#{:02X})", "gray(#{:02x})");
 trait_impls_without_alpha!(
     Rgbw,
     4,
@@ -710,10 +710,10 @@ trait_impls_with_alpha!(
     "abgr(#{:02x}{:02x}{:02x}{:02x})"
 );
 trait_impls_with_alpha!(
-    LumaA,
+    GrayA,
     2,
-    [l, a],
-    "LumaA({}, {})",
-    "lumaA(#{:02X}{:02X})",
-    "lumaA(#{:02x}{:02x})"
+    [v, a],
+    "grayA({}, {})",
+    "grayA(#{:02X}{:02X})",
+    "grayA(#{:02x}{:02x})"
 );
