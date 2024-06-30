@@ -1,7 +1,7 @@
 use core::fmt::Display;
 
 use crate::{
-    Abgr, Argb, ArrayLike, Bgr, Bgra, Grb, HetPixel, Luma, LumaA, PixelComponent, Rgb, Rgba, Rgbw,
+    Abgr, Argb, ArrayLike, Bgr, Bgra, Grb, HetPixel, Gray, GrayA, PixelComponent, Rgb, Rgba, Rgbw,
 };
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
@@ -226,10 +226,10 @@ with_alpha!(Rgba, 4, [r, g, b, a]);
 with_alpha!(Abgr, 4, [a, b, g, r]);
 with_alpha!(Argb, 4, [a, r, g, b]);
 with_alpha!(Bgra, 4, [b, g, r, a]);
-with_alpha!(LumaA, 2, [l, a]);
+with_alpha!(GrayA, 2, [v, a]);
 
 without_alpha!(Bgr, 3, [b, g, r]);
 without_alpha!(Rgb, 3, [r, g, b]);
 without_alpha!(Grb, 3, [r, g, b]);
 without_alpha!(Rgbw, 4, [r, g, b, w]);
-without_alpha!(Luma, 1, [l]);
+without_alpha!(Gray, 1, [v]);
