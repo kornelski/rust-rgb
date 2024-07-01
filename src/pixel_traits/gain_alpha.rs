@@ -1,11 +1,9 @@
 use crate::HasAlpha;
 use crate::HetPixel;
-use crate::Luma;
-use crate::LumaA;
+use crate::Gray;
+use crate::GrayA;
 use crate::PixelComponent;
 use crate::{Abgr, Argb, Bgr, Bgra, Rgb, Rgba};
-#[cfg(feature = "legacy")]
-use crate::{Gray, GrayAlpha};
 
 /// A pixel which can gain an alpha component.
 ///
@@ -13,7 +11,7 @@ use crate::{Gray, GrayAlpha};
 /// already have an alpha component.
 pub trait GainAlpha: HetPixel {
     /// The pixel type after gaining an alpha component.
-    /// 
+    ///
     /// For example, for `Rgb`: `GainAlpha = Rgba`.
     type GainAlpha: HasAlpha;
 
@@ -126,12 +124,8 @@ gain_already_alpha!(Rgba, a);
 gain_already_alpha!(Argb, a);
 gain_already_alpha!(Bgra, a);
 gain_already_alpha!(Abgr, a);
-#[cfg(feature = "legacy")]
-gain_already_alpha!(GrayAlpha, 1);
-gain_already_alpha!(LumaA, a);
+gain_already_alpha!(GrayA, a);
 
 lower_upper!(Rgb, Rgba, {r, g, b}, a);
 lower_upper!(Bgr, Bgra, {r, g, b}, a);
-#[cfg(feature = "legacy")]
-lower_upper!(Gray, GrayAlpha, { 0 }, 1);
-lower_upper!(Luma, LumaA, { l }, a);
+lower_upper!(Gray, GrayA, { v }, a);

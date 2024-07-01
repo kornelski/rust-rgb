@@ -13,14 +13,19 @@ Add this to your `Cargo.toml`:
 rgb = "0.9"
 ```
 
-## Usage
+## Color-Space Agnostic
 
-### Pixel Types
+This crate is purposefully agnostic about the color-spaces of the
+pixel types. For example, `Gray<u8>` could be either linear lightness or
+gamma-corrected lightness, or `Rgb<u8>` could be normal `srgb` or
+`linear-srgb`.
+
+## Pixel Types
 
 This crate offers the following pixel types:
 
 ```rust
-use rgb::{Rgb, Rgba, Argb, Bgr, Bgra, Abgr, Grb, Luma, LumaA};
+use rgb::{Rgb, Rgba, Argb, Bgr, Bgra, Abgr, Grb, Gray, GrayA};
 
 let rgb = Rgb {r: 0, g: 0, b: 0};
 let rbga = Rgba {r: 0, g: 0, b: 0, a: 0};
@@ -32,8 +37,8 @@ let abgr = Abgr {r: 0, g: 0, b: 0, a: 0};
 
 let grb = Grb {g: 0, b: 0, r: 0};
 
-let luma = Luma {l: 0};
-let luma_a = LumaA {l: 0, a: 0};
+let gray = Gray {v: 0};
+let gray_a = GrayA {v: 0, a: 0};
 ```
 
 If you have a pixel type you would like to use that is not currently
@@ -58,11 +63,11 @@ use-cases the alpha component type will be the same as the color
 component type.
 
 A pixel with separate types for the color and alpha
-components is called a heterogeneous pixel whereas a pixel with a
+components is called a heterogeneous pixel (`HetPixel`), whereas a pixel with a
 single type for both color and alpha components is called a
-homogeneous pixel.
+homogeneous pixel (`Pixel`).
 
-### Pixel Traits
+## Pixel Traits
 
 All functionality for the pixel types is implemented via traits. This
 means that none of the pixel types, like `Rgb<u8>`, have any inherent
@@ -72,7 +77,7 @@ within scope.
 
 This crate offers the following traits:
 
-#### HetPixel
+### HetPixel
 
 The most foundational pixel trait implemented by every pixel type.
 
@@ -95,13 +100,13 @@ let rgba = rgba.map_alpha_same(|a| a * 2.0);
 assert_eq!(rgba, Rgba::<u16, f32> {r: 0, g: 0, b: 510, a: 100.0});
 ```
 
-#### HomPixel
+### Pixel
 
 A stricter form of `HetPixel` where the two component types, color and
 alpha, are the same.
 
 ```rust
-use rgb::{Rgba, HomPixel};
+use rgb::{Rgba, Pixel};
 
 let mut rgba: Rgba<u8> = Rgba::try_from_components([0, 0, 0, 0]).unwrap();
 
@@ -143,9 +148,38 @@ let mut rgba: Rgba<u8> = Rgba {r: 0, g: 0, b: 0, a: 255};
 assert_eq!(rgba.alpha(), 205);
 ```
 
-## Color-Space Agnostic
+## Bytemuck
 
-This crate is purposefully agnostic about the color-spaces of the
-pixel types. For example, `Gray<u8>` could be either linear lightness or
-gamma-corrected lightness, or `Rgb<u8>` could be normal `srgb` or
-`linear-srgb`.
+If you have a `&[u8]` or `Vec<u8>` type and you want a `&[Rgb<u8>]` or
+`Vec<Rgb<u8>>` type then you can safely achieve these type-casts via
+the `bytemuck` crate (see `cast_slice()` and `cast_vec()`).
+
+You will need to enable the `bytemuck` crate feature in order to use
+functions from the `bytemuck` library on the pixel types in this
+crate.
+
+## Crate Features
+
+- `default`: The default feature which does nothing.
+- `num-traits`: Enables various
+  [`num_traits`](https://docs.rs/num-traits) traits impls for the
+  pixel types such as `CheckedAdd`.
+- `defmt-03` = Enables the `Format` trait impls from
+  [`defmt`](https://docs.rs/defmt) `v0.3` for the pixel types
+- `serde` = Enables `Serializable` and `Deserializable` trait impls
+  from [`serde`](https://docs.rs/serde) for the pixel types
+- `bytemuck` = Enables `Pod` and `Zeroable` trait impls from
+  [`bytemuck`](https://docs.rs/serde) for the pixel types
+
+### Legacy Features
+
+The following crate features are only exposed for compatibility with
+the `v0.8` release so as to be non-breaking, however, once migrated to
+`v0.9` you should no longer be using any of these features. They are
+going to be removed in the next major release after `v0.9`.
+
+legacy = ["as-bytes"]
+argb = []
+grb = []
+checked_fns = []
+as-bytes = ["bytemuck"]

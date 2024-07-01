@@ -1,6 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, Luma, LumaA, Rgb, Rgba};
-#[cfg(feature = "legacy")]
-use crate::{Gray, GrayAlpha};
+use crate::{Abgr, Argb, Bgr, Bgra, Grb, Gray, GrayA, Rgb, Rgba, Rgbw};
 
 macro_rules! bytemuck {
     ($name:ident) => {
@@ -12,14 +10,11 @@ macro_rules! bytemuck {
 bytemuck!(Rgb);
 bytemuck!(Bgr);
 bytemuck!(Grb);
-#[cfg(feature = "legacy")]
+bytemuck!(Rgbw);
 bytemuck!(Gray);
-bytemuck!(Luma);
 
 bytemuck!(Rgba);
 bytemuck!(Argb);
 bytemuck!(Bgra);
 bytemuck!(Abgr);
-#[cfg(feature = "legacy")]
-bytemuck!(GrayAlpha);
-bytemuck!(LumaA);
+bytemuck!(GrayA);
