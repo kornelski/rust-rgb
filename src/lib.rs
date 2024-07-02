@@ -1,6 +1,7 @@
 #![doc = include_str!("../README.md")]
 #![doc(html_logo_url = "https://kornel.ski/rgb-logo.png")]
 #![warn(missing_docs)]
+#![cfg_attr(docsrs, feature(doc_auto_cfg))]
 #![no_std]
 
 mod formats;
