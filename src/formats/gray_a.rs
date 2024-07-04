@@ -10,10 +10,6 @@
 /// # Examples
 ///
 /// ```
-///
-/// # Examples
-///
-/// ```
 /// use rgb::GrayA;
 ///
 /// let pixel: GrayA<u8> = GrayA { v: 0, a: 255 };

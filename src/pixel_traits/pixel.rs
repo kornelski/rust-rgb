@@ -1,7 +1,7 @@
 use core::fmt::Display;
 
 use crate::{
-    Abgr, Argb, ArrayLike, Bgr, Bgra, Grb, HetPixel, Gray, GrayA, PixelComponent, Rgb, Rgba, Rgbw,
+    Abgr, Argb, ArrayLike, Bgr, Bgra, Gray, GrayA, Grb, HetPixel, PixelComponent, Rgb, Rgba, Rgbw,
 };
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]

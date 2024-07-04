@@ -1,6 +1,6 @@
 use core::fmt::Display;
 
-use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, Grb, Gray, GrayA, PixelComponent, Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, Gray, GrayA, Grb, PixelComponent, Rgb, Rgba, Rgbw};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 /// Error returned from the [`HetPixel::try_from_colors_alpha()`] function.

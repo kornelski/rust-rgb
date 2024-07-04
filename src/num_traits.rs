@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, Gray, GrayA, Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba, Rgbw};
 
 use num_traits::ops::checked::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
 

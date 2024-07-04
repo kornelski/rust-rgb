@@ -1,6 +1,7 @@
 #![doc = include_str!("../README.md")]
 #![doc(html_logo_url = "https://kornel.ski/rgb-logo.png")]
 #![warn(missing_docs)]
+#![cfg_attr(docsrs, feature(doc_auto_cfg))]
 #![no_std]
 
 mod formats;
@@ -18,9 +19,9 @@ pub use formats::abgr::Abgr;
 pub use formats::argb::Argb;
 pub use formats::bgr::Bgr;
 pub use formats::bgra::Bgra;
-pub use formats::grb::Grb;
 pub use formats::gray::Gray;
 pub use formats::gray_a::GrayA;
+pub use formats::grb::Grb;
 pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
 pub use formats::rgbw::Rgbw;
