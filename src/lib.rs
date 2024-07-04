@@ -26,6 +26,7 @@
 //! # let _ = doubled;
 //! ```
 #![doc(html_logo_url = "https://kornel.ski/rgb-logo.png")]
+#![cfg_attr(docsrs, feature(doc_auto_cfg))]
 #![no_std]
 
 #![warn(missing_docs)]
