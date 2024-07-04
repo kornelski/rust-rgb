@@ -1,7 +1,7 @@
-use crate::HasAlpha;
-use crate::HetPixel;
 use crate::Gray;
 use crate::GrayA;
+use crate::HasAlpha;
+use crate::HetPixel;
 use crate::PixelComponent;
 use crate::{Abgr, Argb, Bgr, Bgra, Rgb, Rgba};
 
