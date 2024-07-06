@@ -1,0 +1,18 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install latest stable Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Test no default features
+        run: cargo test --no-default-features
+      - name: Test all features
+        run: cargo test --all-features
+      - uses: taiki-e/install-action@cargo-hack
+      - name: Check all feature combinations
+        run: cargo hack check --feature-powerset --no-dev-deps --exclude-features unstable-experimental --exclude-all-features --exclude-no-default-features
