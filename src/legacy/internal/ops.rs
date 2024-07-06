@@ -1,14 +1,13 @@
 use crate::formats::gray::Gray_v08 as Gray;
-use crate::alt::GrayAlpha;
 use super::pixel::ComponentMap;
-use crate::RGB;
-use crate::RGBA;
-use core::ops::*;
-use core::iter::Sum;
+use crate::alt::GrayAlpha;
 #[cfg(feature = "argb")]
 use crate::alt::ARGB;
 #[cfg(feature = "grb")]
 use crate::alt::GRB;
+use crate::{RGB, RGBA};
+use core::iter::Sum;
+use core::ops::*;
 
 #[cfg(feature = "checked_fns")]
 macro_rules! impl_struct_checked {
@@ -40,7 +39,7 @@ macro_rules! impl_struct_checked {
 
 #[cfg(not(feature = "checked_fns"))]
 macro_rules! impl_struct_checked {
-    ($ty:ident, $field_ty:ident, => $($field:tt)+) => {}
+    ($ty:ident, $field_ty:ident, => $($field:tt)+) => {};
 }
 
 macro_rules! impl_struct_ops_opaque {
@@ -228,74 +227,74 @@ macro_rules! impl_struct_ops_alpha {
 macro_rules! impl_scalar {
     ($ty:ident) => {
         /// `px - 1`
-        impl<T> Sub<T> for $ty<T> where
-            T: Copy + Sub<Output=T>
+        impl<T> Sub<T> for $ty<T>
+        where T: Copy + Sub<Output = T>
         {
             type Output = $ty<<T as Sub>::Output>;
 
             #[inline(always)]
             fn sub(self, r: T) -> Self::Output {
-                self.map(|l| l-r)
+                self.map(|l| l - r)
             }
         }
 
         /// `px - 1`
-        impl<T> SubAssign<T> for $ty<T> where
-            T: Copy + Sub<Output=T>
+        impl<T> SubAssign<T> for $ty<T>
+        where T: Copy + Sub<Output = T>
         {
             #[inline(always)]
             fn sub_assign(&mut self, r: T) {
-                *self = self.map(|l| l-r);
+                *self = self.map(|l| l - r);
             }
         }
 
         /// `px + 1`
-        impl<T> Add<T> for $ty<T> where
-            T: Copy + Add<Output=T>
+        impl<T> Add<T> for $ty<T>
+        where T: Copy + Add<Output = T>
         {
             type Output = $ty<T>;
 
             #[inline(always)]
             fn add(self, r: T) -> Self::Output {
-                self.map(|l|l+r)
+                self.map(|l| l + r)
             }
         }
 
         /// `px + 1`
-        impl<T> AddAssign<T> for $ty<T> where
-            T: Copy + Add<Output=T>
+        impl<T> AddAssign<T> for $ty<T>
+        where T: Copy + Add<Output = T>
         {
             #[inline(always)]
             fn add_assign(&mut self, r: T) {
-                *self = self.map(|l| l+r);
+                *self = self.map(|l| l + r);
             }
         }
 
         /// `px * 1`
-        impl<T> Mul<T> for $ty<T> where
-            T: Copy + Mul<Output=T>
+        impl<T> Mul<T> for $ty<T>
+        where T: Copy + Mul<Output = T>
         {
             type Output = $ty<T>;
 
             #[inline(always)]
             fn mul(self, r: T) -> Self::Output {
-                self.map(|l|l*r)
+                self.map(|l| l * r)
             }
         }
 
         /// `px * 1`
-        impl<T> MulAssign<T> for $ty<T> where
-            T: Copy + Mul<Output=T>
+        impl<T> MulAssign<T> for $ty<T>
+        where T: Copy + Mul<Output = T>
         {
             #[inline(always)]
             fn mul_assign(&mut self, r: T) {
-                *self = self.map(|l| l*r);
+                *self = self.map(|l| l * r);
             }
         }
 
         /// `px / 1`
-        impl<T> Div<T> for $ty<T> where
-            T: Copy + Div<Output=T>
+        impl<T> Div<T> for $ty<T>
+        where T: Copy + Div<Output = T>
         {
             type Output = $ty<T>;
 
@@ -306,25 +305,25 @@ macro_rules! impl_scalar {
         }
 
         /// `px * 1`
-        impl<T> DivAssign<T> for $ty<T> where
-            T: Copy + Div<Output=T>
+        impl<T> DivAssign<T> for $ty<T>
+        where T: Copy + Div<Output = T>
         {
             #[inline(always)]
             fn div_assign(&mut self, r: T) {
                 *self = self.map(|l| l / r);
             }
         }
-    }
+    };
 }
 
-impl_scalar!{RGB}
-impl_scalar!{RGBA}
+impl_scalar! {RGB}
+impl_scalar! {RGBA}
 #[cfg(feature = "argb")]
-impl_scalar!{ARGB}
+impl_scalar! {ARGB}
 #[cfg(feature = "grb")]
-impl_scalar!{GRB}
-impl_scalar!{Gray}
-impl_scalar!{GrayAlpha}
+impl_scalar! {GRB}
+impl_scalar! {Gray}
+impl_scalar! {GrayAlpha}
 
 impl_struct_ops_opaque! {RGB => r g b}
 #[cfg(feature = "grb")]
@@ -338,8 +337,8 @@ impl_struct_ops_alpha! {GrayAlpha => 0 1}
 
 #[cfg(test)]
 mod test {
-    use core::num::Wrapping;
     use super::*;
+    use core::num::Wrapping;
     const WHITE_RGB: RGB<u8> = RGB::new(255, 255, 255);
     const BLACK_RGB: RGB<u8> = RGB::new(0, 0, 0);
     const RED_RGB: RGB<u8> = RGB::new(255, 0, 0);
@@ -388,7 +387,7 @@ mod test {
     #[should_panic]
     #[cfg(debug_assertions)]
     fn test_add_overflow() {
-        assert_ne!(RGBA::new(255u8, 255, 0, 0), RED_RGBA+BLUE_RGBA);
+        assert_ne!(RGBA::new(255u8, 255, 0, 0), RED_RGBA + BLUE_RGBA);
     }
 
     #[test]

@@ -1,5 +1,5 @@
-use core::ops::Deref;
 use crate::formats::gray_a::GrayA;
+use core::ops::Deref;
 
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]

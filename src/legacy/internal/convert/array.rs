@@ -1,5 +1,5 @@
 #[cfg(feature = "argb")]
-use crate::alt::{ARGB};
+use crate::alt::ARGB;
 use crate::alt::{BGR, BGRA};
 use crate::{RGB, RGBA};
 

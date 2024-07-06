@@ -26,10 +26,9 @@
 //! # let _ = doubled;
 //! ```
 #![doc(html_logo_url = "https://kornel.ski/rgb-logo.png")]
+#![warn(missing_docs)]
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
 #![no_std]
-
-#![warn(missing_docs)]
 
 // std is required to run unit tests
 #[cfg(test)]
@@ -140,7 +139,6 @@ fn rgb_works() {
     let rgb = RGB16{r:0u16,g:0x7F7F,b:65535};
     assert_eq!(rgb.b, 65535);
     assert_eq!(rgb.as_slice()[1], 0x7F7F);
-
 
     #[cfg(feature = "as-bytes")]
     {

@@ -1,24 +1,23 @@
-use core::fmt;
-use crate::alt::*;
-use crate::RGB;
-use crate::RGBA;
 use super::pixel::*;
+use crate::alt::*;
+use crate::{RGB, RGBA};
+use core::fmt;
 
 impl<T> RGBA<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self {r,g,b,a}
+        Self { r, g, b, a }
     }
 }
 
-impl<T, A> RGBA<T,A> {
+impl<T, A> RGBA<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-        Self {r,g,b,a}
+        Self { r, g, b, a }
     }
 }
 
@@ -26,7 +25,7 @@ impl<T> BGRA<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B,A
-    #[deprecated(note="This function has a misleading order of arguments. Use BGRA{} literal instead")]
+    #[deprecated(note = "This function has a misleading order of arguments. Use BGRA{} literal instead")]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
         Self { b, g, r, a }
     }
@@ -39,7 +38,7 @@ impl<T, A> BGRA<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B,A
-    #[deprecated(note="This function has a misleading order of arguments. Use BGRA{} literal instead")]
+    #[deprecated(note = "This function has a misleading order of arguments. Use BGRA{} literal instead")]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
         Self { b, g, r, a }
     }
@@ -50,20 +49,20 @@ impl<T> ARGB<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
-    #[deprecated(note="This function has a misleading order of arguments. Use ARGB{} literal instead")]
+    #[deprecated(note = "This function has a misleading order of arguments. Use ARGB{} literal instead")]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self {r,g,b,a}
+        Self { r, g, b, a }
     }
 }
 
 #[cfg(feature = "argb")]
-impl<T, A> ARGB<T,A> {
+impl<T, A> ARGB<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
-    #[deprecated(note="This function has a misleading order of arguments. Use ARGB{} literal instead")]
+    #[deprecated(note = "This function has a misleading order of arguments. Use ARGB{} literal instead")]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-        Self {r,g,b,a}
+        Self { r, g, b, a }
     }
 }
 
@@ -72,20 +71,20 @@ impl<T> ABGR<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
-    #[deprecated(note="This function has a misleading order of arguments. Use ABGR{} literal instead")]
+    #[deprecated(note = "This function has a misleading order of arguments. Use ABGR{} literal instead")]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self {r,g,b,a}
+        Self { r, g, b, a }
     }
 }
 
 #[cfg(feature = "argb")]
-impl<T, A> ABGR<T,A> {
+impl<T, A> ABGR<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
-    #[deprecated(note="This function has a misleading order of arguments. Use ABGR{} literal instead")]
+    #[deprecated(note = "This function has a misleading order of arguments. Use ABGR{} literal instead")]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-        Self {r,g,b,a}
+        Self { r, g, b, a }
     }
 }
 
@@ -105,7 +104,11 @@ macro_rules! impl_rgba {
             /// Note: you can use `.into()` to convert between other types
             #[inline(always)]
             pub fn bgr(&self) -> BGR<T> {
-                BGR {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+                BGR {
+                    r: self.r.clone(),
+                    g: self.g.clone(),
+                    b: self.b.clone(),
+                }
             }
         }
 
@@ -133,9 +136,7 @@ macro_rules! impl_rgba {
             #[inline(always)]
             /// Create a new RGBA with the new alpha value, but same RGB values
             pub fn with_alpha(&self, a: A) -> Self {
-                Self {
-                    r: self.r, g: self.g, b: self.b, a,
-                }
+                Self { r: self.r, g: self.g, b: self.b, a }
             }
 
             /// Create a new RGBA with a new alpha value created by the callback.
@@ -155,9 +156,7 @@ macro_rules! impl_rgba {
         impl<T: Copy, B> ComponentMap<$RGBA<B>, T, B> for $RGBA<T> {
             #[inline(always)]
             fn map<F>(&self, mut f: F) -> $RGBA<B>
-            where
-                F: FnMut(T) -> B,
-            {
+            where F: FnMut(T) -> B {
                 $RGBA {
                     r: f(self.r),
                     g: f(self.g),
@@ -170,9 +169,7 @@ macro_rules! impl_rgba {
         impl<T: Copy, A: Copy, B> ColorComponentMap<$RGBA<B, A>, T, B> for $RGBA<T, A> {
             #[inline(always)]
             fn map_c<F>(&self, mut f: F) -> $RGBA<B, A>
-            where
-                F: FnMut(T) -> B,
-            {
+            where F: FnMut(T) -> B {
                 $RGBA {
                     r: f(self.r),
                     g: f(self.g),
@@ -205,6 +202,7 @@ macro_rules! impl_rgba {
                     core::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 4)
                 }
             }
+
             #[inline]
             fn as_mut_slice(&mut self) -> &mut [T] {
                 unsafe {
@@ -215,7 +213,7 @@ macro_rules! impl_rgba {
 
         #[cfg(feature = "as-bytes")]
         impl<T: crate::Pod> ComponentBytes<T> for [$RGBA<T>] {}
-    }
+    };
 }
 
 macro_rules! impl_alpha_conv {
@@ -245,7 +243,7 @@ macro_rules! impl_alpha_conv {
                 }
             }
         }
-    }
+    };
 }
 
 impl<T, A> RGBA<T, A> {
@@ -253,9 +251,7 @@ impl<T, A> RGBA<T, A> {
     /// Useful to change color without changing opacity.
     #[inline(always)]
     pub fn rgb_mut(&mut self) -> &mut RGB<T> {
-        unsafe {
-            &mut *(self as *mut _ as *mut RGB<T>)
-        }
+        unsafe { &mut *(self as *mut _ as *mut RGB<T>) }
     }
 }
 
@@ -265,18 +261,14 @@ impl<T, A> BGRA<T, A> {
     #[inline(always)]
     #[deprecated(note = "This function will change. Use bgr_mut()")]
     pub fn rgb_mut(&mut self) -> &mut BGR<T> {
-        unsafe {
-            &mut *(self as *mut _ as *mut BGR<T>)
-        }
+        unsafe { &mut *(self as *mut _ as *mut BGR<T>) }
     }
 
     /// Provide a mutable view of only RGB components (leaving out alpha).
     /// Useful to change color without changing opacity.
     #[inline(always)]
     pub fn bgr_mut(&mut self) -> &mut BGR<T> {
-        unsafe {
-            &mut *(self as *mut _ as *mut BGR<T>)
-        }
+        unsafe { &mut *(self as *mut _ as *mut BGR<T>) }
     }
 }
 
@@ -301,7 +293,11 @@ impl<T: Clone, A> RGBA<T, A> {
     /// Note: you can use `.into()` to convert between other types
     #[inline(always)]
     pub fn rgb(&self) -> RGB<T> {
-        RGB {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+        RGB {
+            r: self.r.clone(),
+            g: self.g.clone(),
+            b: self.b.clone(),
+        }
     }
 }
 
@@ -312,7 +308,11 @@ impl<T: Clone, A> ARGB<T, A> {
     /// Note: you can use `.into()` to convert between other types
     #[inline(always)]
     pub fn rgb(&self) -> RGB<T> {
-        RGB {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+        RGB {
+            r: self.r.clone(),
+            g: self.g.clone(),
+            b: self.b.clone(),
+        }
     }
 }
 
@@ -323,7 +323,11 @@ impl<T: Clone, A> BGRA<T, A> {
     #[inline(always)]
     #[deprecated(note = "This function will change. Use bgr()")]
     pub fn rgb(&self) -> BGR<T> {
-        BGR {r:self.r.clone(), g:self.g.clone(), b:self.b.clone()}
+        BGR {
+            r: self.r.clone(),
+            g: self.g.clone(),
+            b: self.b.clone(),
+        }
     }
 }
 

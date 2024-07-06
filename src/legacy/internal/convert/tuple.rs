@@ -1,29 +1,23 @@
-use crate::alt::BGR;
-use crate::alt::BGRA;
-use crate::RGB;
-use crate::RGBA;
+use crate::alt::{BGR, BGRA};
+use crate::{RGB, RGBA};
 
-impl<T> From<(T,T,T)> for RGB<T> {
+impl<T> From<(T, T, T)> for RGB<T> {
     #[inline]
-    fn from(other: (T,T,T)) -> Self {
-        Self {
-            r: other.0,
-            g: other.1,
-            b: other.2,
-        }
+    fn from(other: (T, T, T)) -> Self {
+        Self { r: other.0, g: other.1, b: other.2 }
     }
 }
 
-impl<T> From<RGB<T>> for (T,T,T) {
+impl<T> From<RGB<T>> for (T, T, T) {
     #[inline]
     fn from(value: RGB<T>) -> Self {
         (value.r, value.g, value.b)
     }
 }
 
-impl<T,A> From<(T,T,T,A)> for RGBA<T,A> {
+impl<T, A> From<(T, T, T, A)> for RGBA<T, A> {
     #[inline]
-    fn from(other: (T,T,T,A)) -> Self {
+    fn from(other: (T, T, T, A)) -> Self {
         Self {
             r: other.0,
             g: other.1,
@@ -33,34 +27,30 @@ impl<T,A> From<(T,T,T,A)> for RGBA<T,A> {
     }
 }
 
-impl<T,A> From<RGBA<T,A>> for (T,T,T,A) {
+impl<T, A> From<RGBA<T, A>> for (T, T, T, A) {
     #[inline]
-    fn from(value: RGBA<T,A>) -> Self {
+    fn from(value: RGBA<T, A>) -> Self {
         (value.r, value.g, value.b, value.a)
     }
 }
 
-impl<T> From<(T,T,T)> for BGR<T> {
+impl<T> From<(T, T, T)> for BGR<T> {
     #[inline(always)]
-    fn from(other: (T,T,T)) -> Self {
-        Self {
-            b: other.0,
-            g: other.1,
-            r: other.2,
-        }
+    fn from(other: (T, T, T)) -> Self {
+        Self { b: other.0, g: other.1, r: other.2 }
     }
 }
 
-impl<T> From<BGR<T>> for (T,T,T) {
+impl<T> From<BGR<T>> for (T, T, T) {
     #[inline(always)]
     fn from(value: BGR<T>) -> Self {
         (value.b, value.g, value.r)
     }
 }
 
-impl<T,A> From<(T,T,T,A)> for BGRA<T,A> {
+impl<T, A> From<(T, T, T, A)> for BGRA<T, A> {
     #[inline(always)]
-    fn from(other: (T,T,T,A)) -> Self {
+    fn from(other: (T, T, T, A)) -> Self {
         Self {
             b: other.0,
             g: other.1,
@@ -70,9 +60,9 @@ impl<T,A> From<(T,T,T,A)> for BGRA<T,A> {
     }
 }
 
-impl<T,A> From<BGRA<T,A>> for (T,T,T,A) {
+impl<T, A> From<BGRA<T, A>> for (T, T, T, A) {
     #[inline(always)]
-    fn from(value: BGRA<T,A>) -> Self {
+    fn from(value: BGRA<T, A>) -> Self {
         (value.b, value.g, value.r, value.a)
     }
 }

@@ -1,11 +1,9 @@
 use super::pixel::*;
-use crate::alt::BGR;
-use crate::alt::BGRA;
-use crate::RGB;
-use crate::RGBA;
-use core::fmt;
 #[cfg(feature = "grb")]
 use crate::alt::GRB;
+use crate::alt::{BGR, BGRA};
+use crate::{RGB, RGBA};
+use core::fmt;
 
 impl<T> RGB<T> {
     /// Convenience function for creating a new pixel
@@ -19,7 +17,7 @@ impl<T> RGB<T> {
 impl<T> BGR<T> {
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B
-    #[deprecated(note="This function has a misleading order of arguments. Use BGR{} literal instead")]
+    #[deprecated(note = "This function has a misleading order of arguments. Use BGR{} literal instead")]
     #[inline(always)]
     pub const fn new(r: T, g: T, b: T) -> Self {
         Self { b, g, r }
@@ -94,7 +92,7 @@ macro_rules! impl_rgb {
 
         #[cfg(feature = "as-bytes")]
         impl<T: crate::Pod> ComponentBytes<T> for [$RGB<T>] {}
-    }
+    };
 }
 
 macro_rules! impl_rgb_to_alpha {
@@ -130,9 +128,8 @@ macro_rules! impl_rgb_to_alpha {
                 }
             }
         }
-    }
+    };
 }
-
 
 impl<T> core::iter::FromIterator<T> for RGB<T> {
     /// Takes exactly 3 elements from the iterator and creates a new instance.
@@ -148,46 +145,46 @@ impl<T> core::iter::FromIterator<T> for RGB<T> {
     }
 }
 
-impl_rgb!{RGB}
-impl_rgb_to_alpha!{RGB, RGBA}
-impl_rgb!{BGR}
-impl_rgb_to_alpha!{BGR, BGRA}
+impl_rgb! {RGB}
+impl_rgb_to_alpha! {RGB, RGBA}
+impl_rgb! {BGR}
+impl_rgb_to_alpha! {BGR, BGRA}
 #[cfg(feature = "grb")]
-impl_rgb!{GRB}
+impl_rgb! {GRB}
 
 impl<T: fmt::Display> fmt::Display for RGB<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f,"rgb({},{},{})", self.r,self.g,self.b)
+        write!(f, "rgb({},{},{})", self.r, self.g, self.b)
     }
 }
 
 impl<T: fmt::UpperHex> fmt::UpperHex for RGB<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f,"RGB {{ #{:02X}{:02X}{:02X} }}", self.r, self.g, self.b)
+        write!(f, "RGB {{ #{:02X}{:02X}{:02X} }}", self.r, self.g, self.b)
     }
 }
 
 impl<T: fmt::LowerHex> fmt::LowerHex for RGB<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f,"RGB {{ #{:02x}{:02x}{:02x} }}", self.r, self.g, self.b)
+        write!(f, "RGB {{ #{:02x}{:02x}{:02x} }}", self.r, self.g, self.b)
     }
 }
 
 impl<T: fmt::Display> fmt::Display for BGR<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f,"bgr({},{},{})", self.b, self.g, self.r)
+        write!(f, "bgr({},{},{})", self.b, self.g, self.r)
     }
 }
 
 impl<T: fmt::UpperHex> fmt::UpperHex for BGR<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f,"BGR {{ #{:02X}{:02X}{:02X} }}", self.b, self.g, self.r)
+        write!(f, "BGR {{ #{:02X}{:02X}{:02X} }}", self.b, self.g, self.r)
     }
 }
 
 impl<T: fmt::LowerHex> fmt::LowerHex for BGR<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f,"BGR {{ #{:02x}{:02x}{:02x} }}", self.b, self.g, self.r)
+        write!(f, "BGR {{ #{:02x}{:02x}{:02x} }}", self.b, self.g, self.r)
     }
 }
 

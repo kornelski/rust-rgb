@@ -1,4 +1,3 @@
-
 /// Casting the struct to slices of its components
 pub trait ComponentSlice<T> {
     /// The components interpreted as an array, e.g. one `RGB` expands to 3 elements.
