@@ -109,8 +109,15 @@ impl<T, A> GrayAlpha<T, A> {
 
 impl<T: Copy, A: Clone> GrayAlpha<T, A> {
     /// Create a new `GrayAlpha` with the new alpha value, but same gray value
-    #[inline(always)]
+    #[doc(hidden)]
+    #[deprecated(note = "use .with_alpha(a) instead")]
     pub fn alpha(&self, a: A) -> Self {
+        self.with_alpha(a)
+    }
+
+    /// Create a new `GrayAlpha` with the new alpha value, but same gray value
+    #[inline(always)]
+    pub fn with_alpha(&self, a: A) -> Self {
         Self(self.0, a)
     }
 
@@ -269,7 +276,7 @@ fn gray() {
     assert_eq!(g2.0, 3);
     assert_eq!(g2.as_slice(), &[3, 2]);
     assert_eq!(g2.as_mut_slice(), &[3, 2]);
-    assert_eq!(g2.alpha(13), GrayAlpha(3, 13));
+    assert_eq!(g2.with_alpha(13), GrayAlpha(3, 13));
     assert_eq!(g2.map_alpha(|x| x+3), GrayAlpha(3, 5));
 
     assert_eq!((&[Gray(1u16), Gray(2)][..]).as_slice(), &[1, 2]);

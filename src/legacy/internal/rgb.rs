@@ -101,8 +101,16 @@ macro_rules! impl_rgb_to_alpha {
     ($RGB:ident, $RGBA:ident) => {
         impl<T: Clone> $RGB<T> {
             /// Convenience function for converting to RGBA
-            #[inline(always)]
+            #[doc(hidden)]
+            #[deprecated(note = "use .with_alpha(a) instead")]
             pub fn alpha(&self, a: T) -> $RGBA<T> {
+                self.with_alpha(a)
+            }
+
+            /// Convenience function for converting to RGBA
+            #[inline(always)]
+            #[doc(alias = "alpha")]
+            pub fn with_alpha(&self, a: T) -> $RGBA<T> {
                 $RGBA {
                     r: self.r.clone(),
                     g: self.g.clone(),
@@ -206,7 +214,7 @@ mod rgb_test {
         px.as_mut_slice()[1] = 111;
         assert_eq!(111, px.g);
 
-        assert_eq!(RGBA::new(250,251,252,253), RGB::new(250,251,252).alpha(253));
+        assert_eq!(RGBA::new(250,251,252,253), RGB::new(250,251,252).with_alpha(253));
 
         assert_eq!(RGB{r:1u8,g:2,b:3}, RGB::new(1u8,2,3));
         assert!(RGB{r:1u8,g:1,b:2} < RGB::new(2,1,1));

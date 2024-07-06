@@ -123,9 +123,16 @@ macro_rules! impl_rgba {
                 }
             }
 
-            #[inline(always)]
+            #[doc(hidden)]
+            #[deprecated(note = "use .with_alpha(a) instead")]
             /// Create a new RGBA with the new alpha value, but same RGB values
             pub fn alpha(&self, a: A) -> Self {
+                self.with_alpha(a)
+            }
+
+            #[inline(always)]
+            /// Create a new RGBA with the new alpha value, but same RGB values
+            pub fn with_alpha(&self, a: A) -> Self {
                 Self {
                     r: self.r, g: self.g, b: self.b, a,
                 }
