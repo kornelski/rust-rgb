@@ -2,6 +2,7 @@
 # 0.8.41
 
 * Renamed `.alpha(new_val)` method to `.with_alpha(new_val)`.
+* Added Rust-idiomatic name aliases `Rgb`/`Rgba` for the `RGB`/`RGBA` structs.
 
 # 0.8.40
 

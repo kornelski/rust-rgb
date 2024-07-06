@@ -51,6 +51,18 @@ pub(crate) mod formats {
     pub mod rgba;
 }
 
+#[cfg(feature = "argb")]
+pub use formats::abgr::Abgr;
+#[cfg(feature = "argb")]
+pub use formats::argb::Argb;
+pub use formats::bgr::Bgr;
+pub use formats::bgra::Bgra;
+pub use formats::gray_alpha::GrayAlpha_v08 as GrayAlpha;
+#[cfg(feature = "grb")]
+pub use formats::grb::Grb;
+pub use formats::rgb::Rgb;
+pub use formats::rgba::Rgba;
+
 pub(crate) mod legacy {
     pub(crate) mod internal {
         pub mod convert;
@@ -80,7 +92,11 @@ pub use ::bytemuck::Zeroable;
 pub use crate::legacy::internal::convert::*;
 pub use crate::legacy::internal::pixel::*;
 
+#[doc(hidden)]
+/// Renamed to `Rgb`
 pub use formats::rgb::Rgb as RGB;
+#[doc(hidden)]
+/// Renamed to `Rgba`
 pub use formats::rgba::Rgba as RGBA;
 
 #[cfg(feature = "unstable-experimental")]

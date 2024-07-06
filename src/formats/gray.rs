@@ -2,7 +2,7 @@
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// A `Grayscale` pixel.
+/// A `Grayscale` pixel (rgb crate v0.8)
 #[allow(non_camel_case_types)]
 pub struct Gray_v08<T>(
     /// Grayscale Component. This field will be renamed to `v`.
@@ -10,8 +10,12 @@ pub struct Gray_v08<T>(
 );
 
 #[cfg(feature = "unstable-experimental")]
-/// A `Grayscale` pixel.
+/// A `Grayscale` pixel (rgb crate v0.9)
 #[allow(non_camel_case_types)]
+#[repr(C)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
+#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Gray_v09<T>{
     /// Grayscale Component
     pub v: T,

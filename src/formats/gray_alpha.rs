@@ -5,7 +5,7 @@ use crate::formats::gray_a::GrayA;
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-/// A pixel for grayscale value + alpha components.
+/// A pixel for grayscale value + alpha components (rgb crate v0.8)
 ///
 /// Through a `Deref` hack it renames the fields from `.0` and `.1`
 /// to `.v` (value) and `.a` (alpha)
@@ -22,6 +22,7 @@ pub struct GrayAlpha_v08<T, A = T>(
 impl<T, A> Deref for GrayAlpha_v08<T, A> {
     type Target = GrayA<T, A>;
 
+    /// A trick that allows using `.v` and `.a` on the old `GrayAlpha` type.
     fn deref(&self) -> &GrayA<T, A> {
         unsafe {
             &*(self as *const Self as *const GrayA::<T, A>)
