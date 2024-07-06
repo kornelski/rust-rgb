@@ -38,9 +38,9 @@ macro_rules! impl_rgb {
             fn map<F>(&self, mut f: F) -> $RGB<B>
                 where F: FnMut(T) -> B {
                 $RGB {
-                    r:f(self.r),
-                    g:f(self.g),
-                    b:f(self.b),
+                    r: f(self.r),
+                    g: f(self.g),
+                    b: f(self.b),
                 }
             }
         }
@@ -50,9 +50,9 @@ macro_rules! impl_rgb {
             fn map_c<F>(&self, mut f: F) -> $RGB<B>
                 where F: FnMut(T) -> B {
                 $RGB {
-                    r:f(self.r),
-                    g:f(self.g),
-                    b:f(self.b),
+                    r: f(self.r),
+                    g: f(self.g),
+                    b: f(self.b),
                 }
             }
         }

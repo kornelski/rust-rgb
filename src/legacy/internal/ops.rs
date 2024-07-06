@@ -1,8 +1,8 @@
-use super::pixel::ComponentMap;
-use crate::formats::gray::Gray_v08;
-use crate::formats::gray_alpha::GrayAlpha_v08;
 use core::iter::Sum;
 use core::ops::*;
+use crate::formats::gray::Gray_v08;
+use crate::formats::gray_alpha::GrayAlpha_v08;
+use crate::pixel_traits::pixel::Pixel;
 
 #[cfg(feature = "checked_fns")]
 macro_rules! impl_struct_checked {
@@ -223,89 +223,89 @@ macro_rules! impl_scalar {
     ($ty:ident) => {
         /// `px - 1`
         impl<T> Sub<T> for $ty<T>
-        where T: Copy + Sub<Output = T>
+        where T: Copy + Sub<Output = T> + 'static
         {
             type Output = $ty<<T as Sub>::Output>;
 
             #[inline(always)]
             fn sub(self, r: T) -> Self::Output {
-                self.map(|l| l - r)
+                self.map_same(|l| l - r)
             }
         }
 
         /// `px - 1`
         impl<T> SubAssign<T> for $ty<T>
-        where T: Copy + Sub<Output = T>
+        where T: Copy + Sub<Output = T> + 'static
         {
             #[inline(always)]
             fn sub_assign(&mut self, r: T) {
-                *self = self.map(|l| l - r);
+                *self = self.map_same(|l| l - r);
             }
         }
 
         /// `px + 1`
         impl<T> Add<T> for $ty<T>
-        where T: Copy + Add<Output = T>
+        where T: Copy + Add<Output = T> + 'static
         {
             type Output = $ty<T>;
 
             #[inline(always)]
             fn add(self, r: T) -> Self::Output {
-                self.map(|l| l + r)
+                self.map_same(|l| l + r)
             }
         }
 
         /// `px + 1`
         impl<T> AddAssign<T> for $ty<T>
-        where T: Copy + Add<Output = T>
+        where T: Copy + Add<Output = T> + 'static
         {
             #[inline(always)]
             fn add_assign(&mut self, r: T) {
-                *self = self.map(|l| l + r);
+                *self = self.map_same(|l| l + r);
             }
         }
 
         /// `px * 1`
         impl<T> Mul<T> for $ty<T>
-        where T: Copy + Mul<Output = T>
+        where T: Copy + Mul<Output = T> + 'static
         {
             type Output = $ty<T>;
 
             #[inline(always)]
             fn mul(self, r: T) -> Self::Output {
-                self.map(|l| l * r)
+                self.map_same(|l| l * r)
             }
         }
 
         /// `px * 1`
         impl<T> MulAssign<T> for $ty<T>
-        where T: Copy + Mul<Output = T>
+        where T: Copy + Mul<Output = T> + 'static
         {
             #[inline(always)]
             fn mul_assign(&mut self, r: T) {
-                *self = self.map(|l| l * r);
+                *self = self.map_same(|l| l * r);
             }
         }
 
         /// `px / 1`
         impl<T> Div<T> for $ty<T>
-        where T: Copy + Div<Output = T>
+        where T: Copy + Div<Output = T> + 'static
         {
             type Output = $ty<T>;
 
             #[inline(always)]
             fn div(self, r: T) -> Self::Output {
-                self.map(|l| l / r)
+                self.map_same(|l| l / r)
             }
         }
 
         /// `px * 1`
         impl<T> DivAssign<T> for $ty<T>
-        where T: Copy + Div<Output = T>
+        where T: Copy + Div<Output = T> + 'static
         {
             #[inline(always)]
             fn div_assign(&mut self, r: T) {
-                *self = self.map(|l| l / r);
+                *self = self.map_same(|l| l / r);
             }
         }
     };
