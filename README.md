@@ -4,13 +4,25 @@ Operating on pixels as weakly-typed vectors of `u8` is error-prone and inconveni
 
 [<img src="https://imgs.xkcd.com/comics/standards_2x.png" alt="xkcd: …there are 15 competing standards" width="500">](https://xkcd.com/927/)
 
+# v0.9 is a transitional/preview release
+
+The RGB crate is getting a major update. We welcome your feedback about the crate!
+
+* Are the names of the traits and their methods good?
+* Are there any standard library traits you'd like implemented on the pixel types?
+* Is the split between `Pixel`, `HetPixel`, `HasAlpha` sensible? (pixels support a different type for the alpha channel, and there's `Rgbw` without alpha).
+* With the `legacy` feature enabled, is the crate sufficiently backwards compatible? (later we're going to use semver trick to provide interoperability with other v0.8 crates)
+* Without the `legacy` feature enabled, is the upgrade easy? Anything missing?
+
+[Please open issues in the repo with the feedback](https://github.com/kornelski/rust-rgb/issues) or message [@kornel@mastodon.social](https://mastodon.social/@kornel).
+
 ## Installation
 
-Add this to your `Cargo.toml`:
+Run `cargo add rgb@0.9-alpha.1` or add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rgb = "0.9"
+rgb = "0.9-alpha.1"
 ```
 
 ## Usage
@@ -212,3 +224,5 @@ Planned changes:
 
 2. Change field access on `GrayAlpha` from `.0` and `.1` to `.v` and `.a` where possible.
 3. Use the `bytemuck` crate for conversions from/to bytes.
+3. Use the `num-traits` crate for `.checked_add()`, don't enable `checked_fns` feature.
+4. Don't enable `gbr` and `argb` features. All pixel types are enabled by default.
