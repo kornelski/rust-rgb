@@ -2,7 +2,7 @@
 
 Operating on pixels as weakly-typed vectors of `u8` is error-prone and inconvenient. It's better to use vectors of pixel structs. However, Rust is so strongly typed that _your_ `Rgb` pixel struct is not compatible with _my_ `Rgb` pixel struct. So let's all use mine :P
 
-[![xkcd standards](https://imgs.xkcd.com/comics/standards.png)](https://xkcd.com/927/)
+[<img src="https://imgs.xkcd.com/comics/standards_2x.png" alt="xkcd: …there are 15 competing standards" width="500">](https://xkcd.com/927/)
 
 ## Installation
 
@@ -169,12 +169,13 @@ the `v0.8` release so as to be non-breaking, however, once migrated to
 `v0.9` you should no longer be using any of these features. They are
 going to be removed in the next major release after `v0.9`.
 
+```toml
 legacy = ["as-bytes"]
 argb = []
 grb = []
 checked_fns = []
 as-bytes = ["bytemuck"]
-
+```
 
 ## Color-Space Agnostic
 
