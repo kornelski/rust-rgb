@@ -9,6 +9,7 @@
 
 mod formats;
 mod from;
+mod tuples;
 mod pixel_traits {
     pub mod arraylike;
     pub mod gain_alpha;
@@ -66,5 +67,4 @@ pub use pixel_traits::{
 pub mod error {
     pub use crate::pixel_traits::het_pixel::TryFromColorsAlphaError;
     pub use crate::pixel_traits::pixel::TryFromComponentsError;
-
 }
