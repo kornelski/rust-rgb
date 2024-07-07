@@ -33,25 +33,25 @@ pub trait ComponentSlice<T> {
 ///
 /// Plain types are not allowed to contain struct padding, booleans, chars, enums, references or pointers.
 #[cfg(feature = "as-bytes")]
-pub trait ComponentBytes<T: crate::Pod> where Self: ComponentSlice<T> {
+pub trait ComponentBytes<T: ::bytemuck::Pod> {
     /// The components interpreted as raw bytes, in machine's native endian. In `RGB` bytes of the red component are first.
-    #[inline]
-    fn as_bytes(&self) -> &[u8] {
-        assert_ne!(0, core::mem::size_of::<T>());
-        let slice = self.as_slice();
-        unsafe {
-            core::slice::from_raw_parts(slice.as_ptr().cast(), core::mem::size_of_val(slice))
-        }
-    }
+    fn as_bytes(&self) -> &[u8];
 
     /// The components interpreted as raw bytes, in machine's native endian. In `RGB` bytes of the red component are first.
+    fn as_bytes_mut(&mut self) -> &mut [u8];
+}
+
+impl<T: ::bytemuck::Pod> ComponentBytes<T> for [T] {
+    #[inline]
+    fn as_bytes(&self) -> &[u8] {
+       assert_ne!(0, core::mem::size_of::<T>());
+       ::bytemuck::cast_slice(self)
+    }
+
     #[inline]
     fn as_bytes_mut(&mut self) -> &mut [u8] {
         assert_ne!(0, core::mem::size_of::<T>());
-        let slice = self.as_mut_slice();
-        unsafe {
-            core::slice::from_raw_parts_mut(slice.as_mut_ptr().cast(), core::mem::size_of_val(slice))
-        }
+        ::bytemuck::cast_slice_mut(self)
     }
 }
 

@@ -2,8 +2,8 @@ use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba, Rgbw};
 
 macro_rules! bytemuck {
     ($name:ident) => {
-        unsafe impl<T> bytemuck::Zeroable for $name<T> where T: bytemuck::Zeroable {}
-        unsafe impl<T> bytemuck::Pod for $name<T> where T: bytemuck::Pod {}
+        unsafe impl<T: bytemuck::Zeroable> bytemuck::Zeroable for $name<T> {}
+        unsafe impl<T: bytemuck::Pod> bytemuck::Pod for $name<T> {}
     };
 }
 
