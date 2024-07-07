@@ -17,8 +17,15 @@ mod pixel_traits {
     pub mod pixel;
 }
 
+/// Re-export of the [`bytemuck` crate](https://lib.rs/bytemuck). [See docs](https://docs.rs/bytemuck).
+///
+/// Use [`::bytemuck::cast_slice()`] or [`::bytemuck::from_bytes()`] to convert
+/// pixels to/from `&[u8]`.
 #[cfg(feature = "bytemuck")]
-mod bytemuck;
+#[doc(alias = "ComponentSlice")]
+#[doc(alias = "as_bytes")]
+#[doc(alias = "Pod")]
+pub mod bytemuck;
 #[cfg(feature = "legacy")]
 mod legacy;
 #[cfg(feature = "legacy")]
