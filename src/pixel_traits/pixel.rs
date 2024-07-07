@@ -32,7 +32,7 @@ pub trait Pixel:
     /// An generic associated type used to return the array of
     /// components despite rust's lack of const generic expressions.
     ///
-    /// Used in functions like [`Pixel::component_array()`].
+    /// Used in functions like [`Pixel::to_array()`].
     ///
     /// For example, [`Rgb`] has `ComponentArray<U> = [U; 3]` wheareas
     /// [`Rgba`] has `ComponentArray<U> = [U; 4]`.
@@ -48,11 +48,11 @@ pub trait Pixel:
     /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
     /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
     ///
-    /// assert_eq!(rgb.component_array(), [0, 10, 100]);
-    /// assert_eq!(rgba.component_array(), [0, 10, 100, 50]);
+    /// assert_eq!(rgb.to_array(), [0, 10, 100]);
+    /// assert_eq!(rgba.to_array(), [0, 10, 100, 50]);
     /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
-    fn component_array(&self) -> Self::ComponentArray<Self::Component>
+    fn to_array(&self) -> Self::ComponentArray<Self::Component>
     where
         Self::ComponentArray<Self::Component>: Copy;
     /// Returns an owned array of the pixel's mutably borrowed components.
@@ -65,14 +65,14 @@ pub trait Pixel:
     /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
     /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
     ///
-    /// *rgb.component_array_mut()[1] = 40;
-    /// *rgba.component_array_mut()[2] = 40;
+    /// *rgb.each_mut()[1] = 40;
+    /// *rgba.each_mut()[2] = 40;
     ///
-    /// assert_eq!(rgb.component_array(), [0, 40, 100]);
-    /// assert_eq!(rgba.component_array(), [0, 10, 40, 50]);
+    /// assert_eq!(rgb.to_array(), [0, 40, 100]);
+    /// assert_eq!(rgba.to_array(), [0, 10, 40, 50]);
     /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
-    fn component_array_mut(&mut self) -> Self::ComponentArray<&mut Self::Component>;
+    fn each_mut(&mut self) -> Self::ComponentArray<&mut Self::Component>;
 
     /// Tries to create new instance given an iterator of its components.
     ///
@@ -151,13 +151,13 @@ macro_rules! without_alpha {
             type Component = T;
 			type ComponentArray<U> = [U; $length];
 
-			fn component_array(&self) -> Self::ComponentArray<Self::Component>
+			fn to_array(&self) -> Self::ComponentArray<Self::Component>
 			where
 				Self::ComponentArray<Self::Component>: Copy
 			{
                 [$(self.$bit),*]
             }
-			fn component_array_mut(&mut self) -> Self::ComponentArray<&mut Self::Component> {
+			fn each_mut(&mut self) -> Self::ComponentArray<&mut Self::Component> {
                 [$(&mut self.$bit),*]
             }
 
@@ -189,13 +189,13 @@ macro_rules! with_alpha {
             type Component = T;
 			type ComponentArray<U> = [U; $length];
 
-			fn component_array(&self) -> Self::ComponentArray<Self::Component>
+			fn to_array(&self) -> Self::ComponentArray<Self::Component>
 			where
 				Self::ComponentArray<Self::Component>: Copy
 			{
                 [$(self.$bit),*]
             }
-			fn component_array_mut(&mut self) -> Self::ComponentArray<&mut Self::Component> {
+			fn each_mut(&mut self) -> Self::ComponentArray<&mut Self::Component> {
                 [$(&mut self.$bit),*]
             }
 
