@@ -1,5 +1,4 @@
 use crate::HetPixel;
-use crate::PixelComponent;
 use crate::{Abgr, Argb, Bgra, GrayA, Rgba};
 
 /// A pixel which has an alpha component.
@@ -43,8 +42,8 @@ macro_rules! has_alpha {
     ($name:ident, $alpha_bit: tt) => {
         impl<T, A> HasAlpha for $name<T, A>
         where
-            T: PixelComponent,
-            A: PixelComponent,
+            T: Copy + 'static,
+            A: Copy + 'static,
         {
             fn alpha(&self) -> Self::AlphaComponent {
                 self.$alpha_bit

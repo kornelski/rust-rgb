@@ -9,7 +9,13 @@
 
 mod formats;
 mod from;
-mod pixel_traits;
+mod pixel_traits {
+    pub mod arraylike;
+    pub mod gain_alpha;
+    pub mod has_alpha;
+    pub mod het_pixel;
+    pub mod pixel;
+}
 
 #[cfg(feature = "bytemuck")]
 mod bytemuck;
@@ -37,5 +43,4 @@ pub use pixel_traits::{
     has_alpha::HasAlpha,
     het_pixel::{HetPixel, TryFromColorsAlphaError},
     pixel::{Pixel, TryFromComponentsError},
-    pixel_component::PixelComponent,
 };

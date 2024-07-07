@@ -1,5 +1,4 @@
 use core::fmt::Display;
-use crate::PixelComponent;
 use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba, Rgbw};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
@@ -28,9 +27,9 @@ impl Display for TryFromColorsAlphaError {
 /// of four components, three color components and one alpha component.
 pub trait HetPixel: Copy + 'static {
     /// The component type of the pixel used the color component(s).
-    type ColorComponent: PixelComponent;
+    type ColorComponent: Copy + 'static;
     /// The component type of the pixel used the alpha component if any.
-    type AlphaComponent: PixelComponent;
+    type AlphaComponent: Copy + 'static;
 
     /// The total number of components in the pixel.
     ///
@@ -50,7 +49,7 @@ pub trait HetPixel: Copy + 'static {
     ///
     /// For example, [`Rgb`] has `SelfType<U, V> = Rgb<U>` whereas
     /// [`Rgba`] has `SelfType<U, V> = Rgba<U, V>`.
-    type SelfType<U: PixelComponent, V: PixelComponent>: HetPixel<
+    type SelfType<U: Copy + 'static, V: Copy + 'static>: HetPixel<
         SelfType<Self::ColorComponent, Self::AlphaComponent> = Self,
     >;
 
@@ -187,7 +186,7 @@ pub trait HetPixel: Copy + 'static {
         f: impl FnMut(Self::ColorComponent) -> U,
     ) -> Self::SelfType<U, Self::AlphaComponent>
     where
-        U: PixelComponent;
+        U: Copy + 'static;
     /// Maps each of the pixels color components with a function `f` to the same type.
     ///
     /// See [`HetPixel::map_colors()`] if you want to map the color components to a
@@ -237,7 +236,7 @@ pub trait HetPixel: Copy + 'static {
         f: impl FnMut(Self::AlphaComponent) -> U,
     ) -> Self::SelfType<Self::ColorComponent, U>
     where
-        U: PixelComponent;
+        U: Copy + 'static;
     /// Maps the pixels alpha component with a function `f` to the same type.
     ///
     /// If the pixel has no alpha component then the pixel is returned unchanged.
@@ -267,14 +266,14 @@ macro_rules! without_alpha {
     ($name:ident, $length:literal, [$($color_bit:tt),*]) => {
         impl<T> HetPixel for $name<T>
         where
-            T: PixelComponent,
+            T: Copy + 'static,
         {
             type ColorComponent = T;
             type AlphaComponent = T;
 
             const COMPONENT_COUNT: u8 = $length;
 
-            type SelfType<U: PixelComponent, V: PixelComponent> = $name<U>;
+            type SelfType<U: Copy + 'static, V: Copy + 'static> = $name<U>;
 			type ColorArray<U> = [U; $length];
 
 			fn color_array(&self) -> Self::ColorArray<Self::ColorComponent>
@@ -308,7 +307,7 @@ macro_rules! without_alpha {
                 mut f: impl FnMut(Self::ColorComponent) -> U,
             ) -> Self::SelfType<U, Self::AlphaComponent>
             where
-                U: PixelComponent
+                U: Copy + 'static
             {
                 $name {$($color_bit: f(self.$color_bit),)*}
             }
@@ -322,7 +321,7 @@ macro_rules! without_alpha {
                 _: impl FnMut(Self::AlphaComponent) -> U,
             ) -> Self::SelfType<Self::ColorComponent, U>
             where
-                U: PixelComponent
+                U: Copy + 'static
             {
                 *self
             }
@@ -337,15 +336,15 @@ macro_rules! with_alpha {
     ($name:tt, $length:literal, [$($color_bit:tt),*], $alpha_bit:tt) => {
         impl<T, A> HetPixel for $name<T, A>
         where
-            T: PixelComponent,
-            A: PixelComponent,
+            T: Copy + 'static,
+            A: Copy + 'static,
         {
             type ColorComponent = T;
             type AlphaComponent = A;
 
             const COMPONENT_COUNT: u8 = $length;
 
-            type SelfType<U: PixelComponent, V: PixelComponent> = $name<U, V>;
+            type SelfType<U: Copy + 'static, V: Copy + 'static> = $name<U, V>;
 			type ColorArray<U> = [U; $length - 1];
 
 			fn color_array(&self) -> Self::ColorArray<Self::ColorComponent>
@@ -379,7 +378,7 @@ macro_rules! with_alpha {
                 mut f: impl FnMut(Self::ColorComponent) -> U,
             ) -> Self::SelfType<U, Self::AlphaComponent>
             where
-                U: PixelComponent
+                U: Copy + 'static
             {
                 $name {$($color_bit: f(self.$color_bit),)* $alpha_bit: self.$alpha_bit}
             }
@@ -393,7 +392,7 @@ macro_rules! with_alpha {
                 mut f: impl FnMut(Self::AlphaComponent) -> U,
             ) -> Self::SelfType<Self::ColorComponent, U>
             where
-                U: PixelComponent
+                U: Copy + 'static
             {
                 $name {$($color_bit: self.$color_bit,)* $alpha_bit: f(self.$alpha_bit)}
             }

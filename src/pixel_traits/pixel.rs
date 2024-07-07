@@ -1,5 +1,5 @@
 use core::fmt::Display;
-use crate::{HetPixel, PixelComponent};
+use crate::HetPixel;
 use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, Gray, GrayA, Grb,Rgb, Rgba, Rgbw};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
@@ -28,7 +28,7 @@ pub trait Pixel:
     + IntoIterator<Item = Self::Component>
 {
     /// The component type of the pixel used for both color and alpha components if any.
-    type Component: PixelComponent;
+    type Component: Copy + 'static;
 
     /// An generic associated type used to return the array of
     /// components despite rust's lack of const generic expressions.
@@ -119,7 +119,7 @@ pub trait Pixel:
     /// ```
     fn map_components<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
     where
-        U: PixelComponent;
+        U: Copy;
     /// Maps each of the pixels components with a function `f` to the same component type.
     ///
     /// See [`Pixel::map_components()`] if you want to map the components to a
@@ -147,7 +147,7 @@ macro_rules! without_alpha {
     ($name:tt, $length:literal, [$($bit:tt),*]) => {
         impl<T> Pixel for $name<T>
         where
-            T: PixelComponent,
+            T: Copy + 'static,
         {
             type Component = T;
 			type ComponentArray<U> = [U; $length];
@@ -170,7 +170,7 @@ macro_rules! without_alpha {
             }
 
             fn map_components<U>(&self, mut f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
-                where U: PixelComponent
+                where U: Copy + 'static
             {
                 $name {$($bit: f(self.$bit),)*}
             }
@@ -185,7 +185,7 @@ macro_rules! with_alpha {
     ($name:tt, $length:literal, [$($bit:tt),*]) => {
         impl<T> Pixel for $name<T, T>
         where
-            T: PixelComponent,
+            T: Copy + 'static,
         {
             type Component = T;
 			type ComponentArray<U> = [U; $length];
@@ -208,7 +208,7 @@ macro_rules! with_alpha {
             }
 
             fn map_components<U>(&self, mut f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
-                where U: PixelComponent
+                where U: Copy + 'static
             {
                 $name {$($bit: f(self.$bit),)*}
             }

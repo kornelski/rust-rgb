@@ -1,6 +1,5 @@
 use crate::HasAlpha;
 use crate::HetPixel;
-use crate::PixelComponent;
 use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Rgb, Rgba};
 
 /// A pixel which can gain an alpha component.
@@ -12,25 +11,6 @@ pub trait GainAlpha: HetPixel {
     /// 
     /// For example, for `Rgb`: `GainAlpha = Rgba`.
     type GainAlpha: HasAlpha;
-
-    /// Returns the pixel type after gaining an alpha component.
-    ///
-    /// If an alpha is already contained then it remains at the same value. If
-    /// no alpha component is already contained then it is set to the maximum
-    /// value via [`PixelComponent`].
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use rgb::{Rgb, Rgba, GainAlpha};
-    ///
-    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
-    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
-    ///
-    /// assert_eq!(rgb.gain_alpha(), Rgba {r: 0, g: 10, b: 100, a: 255});
-    /// assert_eq!(rgba.gain_alpha(), Rgba {r: 0, g: 10, b: 100, a: 50});
-    /// ```
-    fn gain_alpha(self) -> Self::GainAlpha;
 
     /// Returns the pixel type after gaining an alpha component.
     ///
@@ -75,21 +55,16 @@ pub trait GainAlpha: HetPixel {
 
 macro_rules! lower_upper {
     ($lower:ident, $upper:ident, {$($color_bit:tt),*}, $alpha_bit:tt) => {
-        impl<T> GainAlpha for $lower<T> where T: PixelComponent {
+        impl<T> GainAlpha for $lower<T> where T: Copy + 'static {
             type GainAlpha = $upper<T>;
 
-            fn gain_alpha(self) -> Self::GainAlpha {
-                $upper {
-                    $($color_bit: self.$color_bit),*,
-                    $alpha_bit: <$lower<T> as HetPixel>::AlphaComponent::COMPONENT_MAX,
-                }
-            }
             fn with_default_alpha(self, alpha: Self::AlphaComponent) -> Self::GainAlpha {
                 $upper {
                     $($color_bit: self.$color_bit),*,
                     $alpha_bit: alpha,
                 }
             }
+
             fn with_alpha(self, alpha: Self::AlphaComponent) -> Self::GainAlpha {
                 $upper {
                     $($color_bit: self.$color_bit),*,
@@ -103,16 +78,14 @@ macro_rules! gain_already_alpha {
     ($original:ident, $alpha_bit: tt) => {
         impl<T> GainAlpha for $original<T>
         where
-            T: PixelComponent,
+            T: Copy + 'static ,
         {
             type GainAlpha = $original<T>;
 
-            fn gain_alpha(self) -> Self::GainAlpha {
-                self
-            }
             fn with_default_alpha(self, _: Self::AlphaComponent) -> Self::GainAlpha {
                 self
             }
+
             fn with_alpha(mut self, alpha: Self::AlphaComponent) -> Self::GainAlpha {
                 self.$alpha_bit = alpha;
                 self

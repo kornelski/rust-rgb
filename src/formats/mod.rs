@@ -11,7 +11,6 @@ pub mod rgb;
 pub mod rgba;
 pub mod rgbw;
 
-use crate::PixelComponent;
 use crate::{Abgr, Argb, Bgr, Bgra, Grb, Gray, GrayA, Rgb, Rgba, Rgbw};
 use core::array::TryFromSliceError;
 use core::fmt;
@@ -91,7 +90,7 @@ macro_rules! trait_impls_with_alpha {
 
         impl<T> TryFrom<&[T]> for $name<T>
         where
-            T: PixelComponent,
+            T: Copy + 'static,
         {
             type Error = TryFromSliceError;
 
@@ -379,7 +378,7 @@ macro_rules! trait_impls_without_alpha {
 
         impl<T> TryFrom<&[T]> for $name<T>
         where
-            T: PixelComponent,
+            T: Copy + 'static,
         {
             type Error = TryFromSliceError;
 
