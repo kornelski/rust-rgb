@@ -145,19 +145,6 @@ macro_rules! impl_rgba {
             }
         }
 
-        impl<T: Copy, B> ComponentMap<$RGBA<B>, T, B> for $RGBA<T> {
-            #[inline(always)]
-            fn map<F>(&self, mut f: F) -> $RGBA<B>
-            where F: FnMut(T) -> B {
-                $RGBA {
-                    r: f(self.r),
-                    g: f(self.g),
-                    b: f(self.b),
-                    a: f(self.a),
-                }
-            }
-        }
-
         impl<T: Copy, A: Copy, B> ColorComponentMap<$RGBA<B, A>, T, B> for $RGBA<T, A> {
             #[inline(always)]
             fn map_c<F>(&self, mut f: F) -> $RGBA<B, A>
@@ -342,6 +329,8 @@ impl_alpha_conv! {BGR, ARGB}
 impl_alpha_conv! {RGB, ARGB}
 #[test]
 fn rgba_test() {
+    use crate::Pixel;
+
     let neg = RGBA::new(1,2,3i32,1000).map(|x| -x);
     assert_eq!(neg.r, -1);
     assert_eq!(neg.rgb().r, -1);

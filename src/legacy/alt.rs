@@ -138,25 +138,10 @@ impl<T: Copy, A: Clone> GrayAlpha<T, A> {
     }
 }
 
-impl<T: Copy, B> ComponentMap<Gray<B>, T, B> for Gray<T> {
-    #[inline(always)]
-    fn map<F>(&self, mut f: F) -> Gray<B> where F: FnMut(T) -> B {
-        Gray(f(self.0))
-    }
-}
-
 impl<T: Copy, B> ColorComponentMap<Gray<B>, T, B> for Gray<T> {
     #[inline(always)]
     fn map_c<F>(&self, mut f: F) -> Gray<B> where F: FnMut(T) -> B {
         Gray(f(self.0))
-    }
-}
-
-impl<T: Copy, B> ComponentMap<GrayAlpha<B>, T, B> for GrayAlpha<T> {
-    #[inline(always)]
-    fn map<F>(&self, mut f: F) -> GrayAlpha<B>
-    where F: FnMut(T) -> B {
-        GrayAlpha(f(self.0), f(self.1))
     }
 }
 
@@ -246,6 +231,8 @@ impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u16> {
 
 #[test]
 fn gray() {
+    use crate::Pixel;
+
     let rgb: crate::RGB<_> = Gray(1).into();
     assert_eq!(rgb.r, 1);
     assert_eq!(rgb.g, 1);

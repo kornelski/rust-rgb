@@ -55,26 +55,7 @@ impl<T: ::bytemuck::Pod> ComponentBytes<T> for [T] {
     }
 }
 
-/// Applying operation to every component
-///
-/// ```rust
-/// use rgb::ComponentMap;
-/// # let pixel = rgb::RGB::new(0u8,0,0);
-/// let inverted = pixel.map(|c| 255 - c);
-///
-/// // For simple math there are Add/Sub/Mul implementations:
-/// let halved = pixel.map(|c| c / 2);
-/// let doubled = pixel * 2;
-/// ```
-pub trait ComponentMap<DestPixel, SrcComponent, DestComponent> {
-    /// Convenience function (equivalent of `self.iter().map().collect()`) for applying the same formula to every component.
-    ///
-    /// Note that it returns the pixel directly, not an Interator.
-    fn map<Callback>(&self, f: Callback) -> DestPixel
-        where Callback: FnMut(SrcComponent) -> DestComponent;
-}
-
-/// Same as `ComponentMap`, but doesn't change the alpha channel (if there's any alpha).
+/// Same as `Pixel::map`, but doesn't change the alpha channel (if there's any alpha).
 pub trait ColorComponentMap<DestPixel, SrcComponent, DestComponent> {
     /// Convenience function for applying the same formula to every rgb/gray component, but skipping the alpha component.
     ///

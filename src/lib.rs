@@ -26,10 +26,20 @@ mod pixel_traits {
 #[doc(alias = "as_bytes")]
 #[doc(alias = "Pod")]
 pub mod bytemuck;
+
 #[cfg(feature = "legacy")]
 mod legacy;
 #[cfg(feature = "legacy")]
 pub use legacy::*;
+#[cfg(feature = "legacy")]
+pub use ::bytemuck::{Pod, Zeroable};
+#[cfg(feature = "legacy")]
+pub use legacy::internal::pixel::{ComponentSlice, ComponentBytes, ColorComponentMap};
+#[cfg(feature = "legacy")]
+pub use pixel_traits::pixel::Pixel as ComponentMap;
+#[cfg(feature = "legacy")]
+pub use legacy::internal::convert::{AsPixels, FromSlice};
+
 #[cfg(feature = "num-traits")]
 mod num_traits;
 

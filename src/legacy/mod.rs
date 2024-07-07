@@ -6,10 +6,6 @@ pub(crate) mod internal {
     pub mod rgba;
 }
 
-pub use bytemuck::Pod;
-pub use internal::pixel::{ComponentSlice, ComponentBytes, ComponentMap, ColorComponentMap};
-pub use internal::convert::{AsPixels, FromSlice};
-
 /// BGR/BGRA alernative layouts & grayscale
 ///
 /// BGR might be useful for some Windows or OpenGL APIs.

@@ -1,7 +1,8 @@
-use super::pixel::*;
+use super::pixel::ComponentSlice;
 use crate::alt::*;
 use crate::{RGB, RGBA};
 use core::{mem, slice};
+use crate::pixel_traits::pixel::Pixel;
 
 /// Casts a slice of bytes into a slice of pixels, e.g. `[u8]` to `[RGB8]`.
 ///
