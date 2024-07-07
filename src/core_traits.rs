@@ -583,8 +583,18 @@ trait_impls_without_alpha!(Grb, 3, [g, r, b], "grb({}, {}, {})", "grb(#{:02X}{:0
 trait_impls_without_alpha!(Gray, 1, [v], "gray({})", "gray(#{:02X})", "gray(#{:02x})");
 trait_impls_without_alpha!(Rgbw, 4, [r, g, b, w], "rgbw({}, {}, {}, {})", "rgbw(#{:02X}{:02X}{:02X}{:02X})", "rgbw(#{:02x}{:02x}{:02x}{:02x})");
 
+#[cfg(feature = "legacy")]
+use crate::formats::gray::Gray_v08;
+#[cfg(feature = "legacy")]
+trait_impls_without_alpha!(Gray_v08, 1, [0], "gray_v0.8({})", "gray_v0.8(#{:02X})", "gray_v0.8(#{:02x})");
+
 trait_impls_with_alpha!(Rgba, 4, [r, g, b, a], "rgba({}, {}, {}, {})", "rgba(#{:02X}{:02X}{:02X}{:02X})", "rgba(#{:02x}{:02x}{:02x}{:02x})");
 trait_impls_with_alpha!(Argb, 4, [a, r, g, b], "argb({}, {}, {}, {})", "argb(#{:02X}{:02X}{:02X}{:02X})", "argb(#{:02x}{:02x}{:02x}{:02x})");
 trait_impls_with_alpha!(Bgra, 4, [b, g, r, a], "bgra({}, {}, {}, {})", "bgra(#{:02X}{:02X}{:02X}{:02X})", "bgra(#{:02x}{:02x}{:02x}{:02x})");
 trait_impls_with_alpha!(Abgr, 4, [a, b, g, r], "abgr({}, {}, {}, {})", "abgr(#{:02X}{:02X}{:02X}{:02X})", "abgr(#{:02x}{:02x}{:02x}{:02x})");
 trait_impls_with_alpha!(GrayA, 2, [v, a], "graya({}, {})", "graya(#{:02X}{:02X})", "graya(#{:02x}{:02x})");
+
+#[cfg(feature = "legacy")]
+use crate::formats::gray_alpha::GrayAlpha_v08;
+#[cfg(feature = "legacy")]
+trait_impls_with_alpha!(GrayAlpha_v08, 2, [0, 1], "graya_v0.8({}, {})", "graya_v0.8(#{:02X}{:02X})", "graya_v0.8(#{:02x}{:02x})");

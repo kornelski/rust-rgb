@@ -72,6 +72,12 @@ pub type GRAYA8 = GrayAlpha<u8>;
 pub type GRAYA16 = GrayAlpha<u16>;
 
 
+/// These are deprecated, use `[val; 1]` as the source if you must
+impl From<u8> for Gray<u8> { fn from(v: u8) -> Self { Self(v) } }
+impl From<u16> for Gray<u16> { fn from(v: u16) -> Self { Self(v) } }
+impl From<u32> for Gray<u32> { fn from(v: u32) -> Self { Self(v) } }
+impl From<i32> for Gray<i32> { fn from(v: i32) -> Self { Self(v) } }
+impl From<f32> for Gray<f32> { fn from(v: f32) -> Self { Self(v) } }
 
 impl<T: Clone, A> GrayAlpha<T, A> {
     /// Copy `Gray` component out of the `GrayAlpha` struct
