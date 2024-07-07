@@ -52,6 +52,8 @@ pub trait Pixel:
     /// assert_eq!(rgba.to_array(), [0, 10, 100, 50]);
     /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
+    #[doc(alias = "as_array")]
+    #[doc(alias = "component_array")]
     fn to_array(&self) -> Self::ComponentArray<Self::Component>
     where
         Self::ComponentArray<Self::Component>: Copy;
@@ -72,6 +74,7 @@ pub trait Pixel:
     /// assert_eq!(rgba.to_array(), [0, 10, 40, 50]);
     /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
+    #[doc(alias = "as_array_mut")]
     fn each_mut(&mut self) -> Self::ComponentArray<&mut Self::Component>;
 
     /// Tries to create new instance given an iterator of its components.
@@ -98,7 +101,7 @@ pub trait Pixel:
 
     /// Maps each of the pixels components with a function `f` to any other component type.
     ///
-    /// See [`Pixel::map_components_same()`] if you want to map the components to the
+    /// See [`Pixel::map_same()`] if you want to map the components to the
     /// same type.
     ///
     /// # Examples
@@ -113,15 +116,15 @@ pub trait Pixel:
     ///     u16::from(color) * 10
     /// };
     ///
-    /// assert_eq!(rgb.map_components(f), Rgb {r: 0, g: 100, b: 1000});
-    /// assert_eq!(rgba.map_components(f), Rgba {r: 0, g: 100, b: 1000, a: 500});
+    /// assert_eq!(rgb.map(f), Rgb {r: 0, g: 100, b: 1000});
+    /// assert_eq!(rgba.map(f), Rgba {r: 0, g: 100, b: 1000, a: 500});
     /// ```
-    fn map_components<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
+    fn map<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
     where
         U: Copy;
     /// Maps each of the pixels components with a function `f` to the same component type.
     ///
-    /// See [`Pixel::map_components()`] if you want to map the components to a
+    /// See [`Pixel::map()`] if you want to map the components to a
     /// different type.
     ///
     /// # Examples
@@ -136,10 +139,10 @@ pub trait Pixel:
     ///     color / 2
     /// };
     ///
-    /// assert_eq!(rgb.map_components_same(f), Rgb {r: 0, g: 5, b: 50});
-    /// assert_eq!(rgba.map_components_same(f), Rgba {r: 0, g: 5, b: 50, a: 25});
+    /// assert_eq!(rgb.map_same(f), Rgb {r: 0, g: 5, b: 50});
+    /// assert_eq!(rgba.map_same(f), Rgba {r: 0, g: 5, b: 50, a: 25});
     /// ```
-    fn map_components_same(&self, f: impl FnMut(Self::Component) -> Self::Component) -> Self;
+    fn map_same(&self, f: impl FnMut(Self::Component) -> Self::Component) -> Self;
 }
 
 macro_rules! without_alpha {
@@ -168,12 +171,12 @@ macro_rules! without_alpha {
                 Ok(Self {$($bit: iter.next().ok_or(TryFromComponentsError)?),*})
             }
 
-            fn map_components<U>(&self, mut f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
+            fn map<U>(&self, mut f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
                 where U: Copy + 'static
             {
                 $name {$($bit: f(self.$bit),)*}
             }
-            fn map_components_same(&self, mut f: impl FnMut(Self::Component) -> Self::Component) -> Self
+            fn map_same(&self, mut f: impl FnMut(Self::Component) -> Self::Component) -> Self
             {
                 $name {$($bit: f(self.$bit),)*}
             }
@@ -206,12 +209,12 @@ macro_rules! with_alpha {
                 Ok(Self {$($bit: iter.next().ok_or(TryFromComponentsError)?),*})
             }
 
-            fn map_components<U>(&self, mut f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
+            fn map<U>(&self, mut f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
                 where U: Copy + 'static
             {
                 $name {$($bit: f(self.$bit),)*}
             }
-            fn map_components_same(&self, mut f: impl FnMut(Self::Component) -> Self::Component) -> Self
+            fn map_same(&self, mut f: impl FnMut(Self::Component) -> Self::Component) -> Self
             {
                 $name {$($bit: f(self.$bit),)*}
             }

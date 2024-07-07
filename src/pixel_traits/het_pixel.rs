@@ -191,6 +191,8 @@ pub trait HetPixel: Copy + 'static {
     /// assert_eq!(rgb.map_colors(f), Rgb {r: 0, g: 100, b: 1000});
     /// assert_eq!(rgba.map_colors(f), Rgba {r: 0, g: 100, b: 1000, a: 50});
     /// ```
+    #[doc(alias = "map_c")]
+    #[doc(alias = "map_gray")]
     fn map_colors<U>(
         &self,
         f: impl FnMut(Self::ColorComponent) -> U,
