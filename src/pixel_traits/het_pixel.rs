@@ -108,10 +108,13 @@ pub trait HetPixel: Copy + 'static {
     /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
     /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
     ///
-    /// assert_eq!(rgb.alpha_checked(), None);
-    /// assert_eq!(rgba.alpha_checked(), Some(50));
+    /// assert_eq!(rgb.alpha_opt(), None);
+    /// assert_eq!(rgba.alpha_opt(), Some(50));
     /// ```
-    fn alpha_checked(&self) -> Option<Self::AlphaComponent>;
+    #[doc(alias="alpha")]
+    #[doc(alias="try_alpha")]
+    #[doc(alias="alpha_checked")]
+    fn alpha_opt(&self) -> Option<Self::AlphaComponent>;
     /// Returns a mutable borrow of the pixel's alpha alpha component if it has one.
     ///
     /// # Examples
@@ -128,13 +131,14 @@ pub trait HetPixel: Copy + 'static {
     ///     }
     /// };
     ///
-    /// f(rgb.alpha_checked_mut());
-    /// f(rgba.alpha_checked_mut());
+    /// f(rgb.alpha_opt_mut());
+    /// f(rgba.alpha_opt_mut());
     ///
-    /// assert_eq!(rgb.alpha_checked(), None);
-    /// assert_eq!(rgba.alpha_checked(), Some(40));
+    /// assert_eq!(rgb.alpha_opt(), None);
+    /// assert_eq!(rgba.alpha_opt(), Some(40));
     /// ```
-    fn alpha_checked_mut(&mut self) -> Option<&mut Self::AlphaComponent>;
+    #[doc(alias="alpha_checked_mut")]
+    fn alpha_opt_mut(&mut self) -> Option<&mut Self::AlphaComponent>;
 
     /// Tries to create new instance given an iterator of color components and an alpha component.
     ///
@@ -287,10 +291,10 @@ macro_rules! without_alpha {
                 [$(&mut self.$color_bit),*]
             }
 
-            fn alpha_checked(&self) -> Option<Self::AlphaComponent> {
+            fn alpha_opt(&self) -> Option<Self::AlphaComponent> {
                 None
             }
-            fn alpha_checked_mut(&mut self) -> Option<&mut Self::AlphaComponent> {
+            fn alpha_opt_mut(&mut self) -> Option<&mut Self::AlphaComponent> {
                 None
             }
 
@@ -358,10 +362,10 @@ macro_rules! with_alpha {
                 [$(&mut self.$color_bit),*]
             }
 
-            fn alpha_checked(&self) -> Option<Self::AlphaComponent> {
+            fn alpha_opt(&self) -> Option<Self::AlphaComponent> {
                 Some(self.$alpha_bit)
             }
-            fn alpha_checked_mut(&mut self) -> Option<&mut Self::AlphaComponent> {
+            fn alpha_opt_mut(&mut self) -> Option<&mut Self::AlphaComponent> {
                 Some(&mut self.$alpha_bit)
             }
 
