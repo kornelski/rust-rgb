@@ -23,6 +23,9 @@ pub struct Gray_v08<T>(
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[doc(alias = "Luma")]
+#[doc(alias = "GRAY8")]
+#[doc(alias = "GRAY16")]
 pub struct Gray_v09<T> {
     /// Grayscale Component
     pub v: T,

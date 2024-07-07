@@ -11,6 +11,8 @@
 ///
 /// let pixel: Abgr<u8> = Abgr { a: 255, b: 0, g: 0, r: 0 };
 /// ```
+#[doc(alias = "ABGR8")]
+#[doc(alias = "ABGR16")]
 pub struct Abgr<T, A = T> {
     /// Alpha Component
     pub a: A,

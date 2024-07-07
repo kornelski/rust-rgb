@@ -11,6 +11,8 @@
 ///
 /// let pixel: Argb<u8> = Argb { a: 255, r: 0, g: 0, b: 0 };
 /// ```
+#[doc(alias = "ARGB8")]
+#[doc(alias = "ARGB16")]
 pub struct Argb<T, A = T> {
     /// Alpha Component
     pub a: A,

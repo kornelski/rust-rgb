@@ -15,6 +15,9 @@
 ///
 /// let pixel: GrayA<u8> = GrayA { v: 0, a: 255 };
 /// ```
+#[doc(alias = "GrayAlpha")]
+#[doc(alias = "GRAYA8")]
+#[doc(alias = "GRAYA16")]
 pub struct GrayA<T, A = T> {
     /// Value - the brightness component. May be luma or luminance.
     pub v: T,

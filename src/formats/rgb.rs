@@ -11,6 +11,8 @@
 ///
 /// let pixel: Rgb<u8> = Rgb { r: 0, g: 0, b: 0 };
 /// ```
+#[doc(alias = "RGB8")]
+#[doc(alias = "RGB16")]
 pub struct Rgb<T> {
     /// Red Component
     pub r: T,

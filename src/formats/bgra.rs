@@ -11,6 +11,8 @@
 ///
 /// let pixel: Bgra<u8> = Bgra { b: 0, g: 0, r: 0, a: 255 };
 /// ```
+#[doc(alias = "BGRA8")]
+#[doc(alias = "BGRA16")]
 pub struct Bgra<T, A = T> {
     /// Blue Component
     pub b: T,

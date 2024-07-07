@@ -11,6 +11,8 @@
 ///
 /// let pixel: Rgba<u8> = Rgba { r: 0, g: 0, b: 0, a: 255 };
 /// ```
+#[doc(alias = "RGBA8")]
+#[doc(alias = "RGBA16")]
 pub struct Rgba<T, A = T> {
     /// Red Component
     pub r: T,
