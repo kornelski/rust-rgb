@@ -1,6 +1,7 @@
 use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba, Rgbw};
 
-use num_traits::ops::checked::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
+/// Re-exports from [the `num-traits` crate](https://lib.rs/crates/num-traits).
+pub use num_traits::ops::checked::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
 
 macro_rules! num_traits_without_alpha {
 ($name:ident, [$($bit:tt),*]) => {

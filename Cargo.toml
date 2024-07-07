@@ -19,6 +19,7 @@ edition = "2021"
 [features]
 default = []
 
+# Implements some of the traits, see `rgb::num_traits` module for details.
 num-traits = ["dep:num-traits"]
 # support for the `defmt` crate
 defmt-03 = ["dep:defmt"]
@@ -29,6 +30,7 @@ bytemuck = ["dep:bytemuck"]
 legacy = ["as-bytes"]
 argb = []
 grb = []
+# Deprecated: use `num-traits` feature instead, and import `rgb::num_traits::*`
 checked_fns = []
 as-bytes = ["bytemuck"]
 

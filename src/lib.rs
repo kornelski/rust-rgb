@@ -56,8 +56,9 @@ pub use pixel_traits::pixel::Pixel as ComponentMap;
 #[cfg(feature = "legacy")]
 pub use legacy::internal::convert::{AsPixels, FromSlice};
 
+/// If the `num-traits` feature is enabled, the implemented traits are in this module
 #[cfg(feature = "num-traits")]
-mod num_traits;
+pub mod num_traits;
 
 pub use formats::abgr::Abgr;
 pub use formats::argb::Argb;
