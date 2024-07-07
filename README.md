@@ -2,7 +2,7 @@
 
 Operating on pixels as weakly-typed vectors of `u8` is error-prone and inconvenient. It's better to use vectors of pixel structs. However, Rust is so strongly typed that *your* RGB pixel struct is not compatible with *my* RGB pixel struct. So let's all use mine :P
 
-[![xkcd standards](https://imgs.xkcd.com/comics/standards.png)](https://xkcd.com/927/)
+[<img src="https://imgs.xkcd.com/comics/standards_2x.png" alt="xkcd: …there are 15 competing standards" width="500">](https://xkcd.com/927/)
 
 ## Installation
 
@@ -81,3 +81,5 @@ Planned changes:
    - rename `.alpha()` to `.with_alpha()`
 
 2. Change field access on `GrayAlpha` from `.0` and `.1` to `.v` and `.a` where possible.
+3. Use the `bytemuck` crate for conversions from/to bytes.
+4. Don't enable `gbr` and `argb` features. All pixel types are enabled by default.
