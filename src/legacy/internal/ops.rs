@@ -1,16 +1,14 @@
-use core::iter::Sum;
-use core::ops::*;
 use crate::formats::gray::Gray_v08;
 use crate::formats::gray_alpha::GrayAlpha_v08;
-use crate::pixel_traits::pixel::Pixel;
+use crate::{Abgr, Argb, Bgr, Bgra, Grb,Rgb, Rgba};
 
-#[cfg(feature = "checked_fns")]
 macro_rules! impl_struct_checked {
     ($ty:ident, $field_ty:ident, => $($field:tt)+) => {
         impl $ty<$field_ty>
         {
             /// `px.checked_add(px)`
             #[inline(always)]
+            #[cfg_attr(feature = "num-traits", deprecated(note = "import `num_traits::CheckedAdd` instead, disable rgb's checked_fns feature"))]
             pub fn checked_add(self, rhs: $ty<$field_ty>) -> Option<Self> {
                 Some($ty {
                     $(
@@ -21,6 +19,7 @@ macro_rules! impl_struct_checked {
 
             /// `px.checked_sub(px)`
             #[inline(always)]
+            #[cfg_attr(feature = "num-traits", deprecated(note = "import `num_traits::CheckedSub` instead, disable rgb's checked_fns feature"))]
             pub fn checked_sub(self, rhs: $ty<$field_ty>) -> Option<Self> {
                 Some($ty {
                     $(
@@ -32,12 +31,7 @@ macro_rules! impl_struct_checked {
     }
 }
 
-#[cfg(not(feature = "checked_fns"))]
-macro_rules! impl_struct_checked {
-    ($ty:ident, $field_ty:ident, => $($field:tt)+) => {};
-}
-
-macro_rules! impl_struct_ops_opaque {
+macro_rules! impl_legacy_checked {
     ($ty:ident => $($field:tt)+) => {
         impl_struct_checked!($ty, u8, => $($field)+);
         impl_struct_checked!($ty, u16, => $($field)+);
@@ -50,6 +44,26 @@ macro_rules! impl_struct_ops_opaque {
     };
 }
 
+#[cfg(feature = "checked_fns")]
+impl_legacy_checked! {Rgba => r g b a}
+#[cfg(feature = "checked_fns")]
+impl_legacy_checked! {Abgr => a b g r}
+#[cfg(feature = "checked_fns")]
+impl_legacy_checked! {Argb => a r g b}
+#[cfg(feature = "checked_fns")]
+impl_legacy_checked! {Bgra => b g r a}
+
+#[cfg(feature = "checked_fns")]
+impl_legacy_checked! {Bgr => b g r}
+#[cfg(feature = "checked_fns")]
+impl_legacy_checked! {Rgb => r g b}
+#[cfg(feature = "checked_fns")]
+impl_legacy_checked! {Grb => r g b}
+
+#[cfg(feature = "checked_fns")]
+impl_legacy_checked! {Gray_v08 => 0}
+#[cfg(feature = "checked_fns")]
+impl_legacy_checked! {GrayAlpha_v08 => 0 1}
 
 #[cfg(test)]
 mod test {

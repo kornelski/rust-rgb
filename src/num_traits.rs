@@ -109,3 +109,18 @@ num_traits_with_alpha!(Argb, [a, r, g, b]);
 num_traits_with_alpha!(Bgra, [b, g, r, a]);
 num_traits_with_alpha!(Abgr, [a, b, g, r]);
 num_traits_with_alpha!(GrayA, [v, a]);
+
+
+#[test]
+#[cfg(not(feature = "checked_fns"))]
+fn test_checked_sub() {
+    assert_eq!(Rgba::<u8>::new(2,4,6,111).checked_sub(&Rgba::<u8>::new(3,4,6,0)), None);
+    assert_eq!(Rgb::<u8>::new(2,4,6).checked_sub(&Rgb::<u8>::new(2,5,6)), None);
+    assert_eq!(Rgb::<u8>::new(2,4,6).checked_sub(&Rgb::<u8>::new(2,4,7)), None);
+    assert_eq!(Rgb::<u8>::new(2,4,6).checked_sub(&Rgb::<u8>::new(2,4,6)), Some([0,0,0].into()));
+
+    assert_eq!(Rgb::<i8>::new(-128,4,6).checked_sub(&Rgb::<i8>::new(1,4,7)), None);
+    assert_eq!(Rgb::<i8>::new(2,-128,6).checked_sub(&Rgb::<i8>::new(2,1,7)), None);
+    assert_eq!(Rgb::<i8>::new(2,4,-128).checked_sub(&Rgb::<i8>::new(2,4,1)), None);
+    assert_eq!(Rgb::<i8>::new(2,4,6).checked_sub(&Rgb::<i8>::new(-2,4,6)), Some(Rgb::<i8>::new(4,0,0)));
+}
