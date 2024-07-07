@@ -14,10 +14,12 @@ categories = ["graphics", "rust-patterns", "multimedia::images"]
 edition = "2021"
 
 [features]
-default = ["as-bytes"]
+default = ["as-bytes", "argb", "grb"]
 # safe as_bytes() casts require a marker trait for non-padded, non-pointery types.
 as-bytes = ["bytemuck"]
+# Deprecated: all pixel types are enabled by default. No-op.
 argb = []
+# Deprecated: all pixel types are enabled by default. No-op.
 grb = []
 # Enable `checked_add` and `checked_sub` methods on `RGB<u8>`
 checked_fns = []
@@ -48,5 +50,5 @@ required-features = ["as-bytes"]
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
-features = [ "argb", "serde", "as-bytes" ]
+features = ["bytemuck", "serde", "num-traits"]
 rustdoc-args = ["--generate-link-to-definition"]

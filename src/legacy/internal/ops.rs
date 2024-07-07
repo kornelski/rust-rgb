@@ -1,9 +1,7 @@
 use crate::formats::gray::Gray_v08 as Gray;
 use super::pixel::ComponentMap;
 use crate::alt::GrayAlpha;
-#[cfg(feature = "argb")]
 use crate::alt::ARGB;
-#[cfg(feature = "grb")]
 use crate::alt::GRB;
 use crate::{RGB, RGBA};
 use core::iter::Sum;
@@ -318,20 +316,16 @@ macro_rules! impl_scalar {
 
 impl_scalar! {RGB}
 impl_scalar! {RGBA}
-#[cfg(feature = "argb")]
 impl_scalar! {ARGB}
-#[cfg(feature = "grb")]
 impl_scalar! {GRB}
 impl_scalar! {Gray}
 impl_scalar! {GrayAlpha}
 
 impl_struct_ops_opaque! {RGB => r g b}
-#[cfg(feature = "grb")]
 impl_struct_ops_opaque! {GRB => g r b}
 impl_struct_ops_opaque! {Gray => 0}
 
 impl_struct_ops_alpha! {RGBA => r g b a}
-#[cfg(feature = "argb")]
 impl_struct_ops_alpha! {ARGB => a r g b}
 impl_struct_ops_alpha! {GrayAlpha => 0 1}
 

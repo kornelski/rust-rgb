@@ -61,13 +61,7 @@ type LinearRGB = RGB<LinearLight>;
 
 ### `BGRA`, `ARGB`, `Gray`, etc.
 
-There are other color types in `rgb::alt::*`. To enable `ARGB` and `ABGR`, use the "argb" feature:
-
-```toml
-rgb = { version = "0.8", features = ["argb"] }
-```
-
-There's also an optional `serde` feature that makes all types (de)serializable.
+There are other color types in `rgb::alt::*`. There's also an optional `serde` feature that makes all types (de)serializable.
 
 ## Roadmap to 1.0
 

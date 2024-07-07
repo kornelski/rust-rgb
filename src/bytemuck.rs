@@ -1,6 +1,5 @@
 use crate::{RGB, RGBA};
 use crate::alt::{Gray, GrayAlpha, BGR, BGRA};
-#[cfg(feature = "argb")]
 use crate::alt::{ARGB, ABGR};
 use crate::ComponentBytes;
 
@@ -13,7 +12,7 @@ unsafe impl<T> crate::Zeroable for RGB<T> where T: crate::Zeroable {}
 #[cfg(feature = "as-bytes")]
 unsafe impl<T> crate::Zeroable for BGR<T> where T: crate::Zeroable {}
 
-#[cfg(all(feature = "as-bytes", feature = "argb"))]
+#[cfg(feature = "as-bytes")]
 unsafe impl<T, A> crate::Zeroable for ABGR<T, A> where T: crate::Zeroable, A: crate::Zeroable {
     #[track_caller]
     #[inline(always)]
@@ -50,13 +49,13 @@ unsafe impl<T, A> crate::Zeroable for RGBA<T, A> where T: crate::Zeroable, A: cr
     }
 }
 
-#[cfg(all(feature = "as-bytes", feature = "argb"))]
+#[cfg(feature = "as-bytes")]
 unsafe impl<T, A> crate::Pod for ARGB<T, A> where T: crate::Pod, A: crate::Pod {}
 
-#[cfg(all(feature = "as-bytes", feature = "argb"))]
+#[cfg(feature = "as-bytes")]
 unsafe impl<T, A> crate::Pod for ABGR<T, A> where T: crate::Pod, A: crate::Pod {}
 
-#[cfg(all(feature = "as-bytes", feature = "argb"))]
+#[cfg(feature = "as-bytes")]
 unsafe impl<T, A> crate::Zeroable for ARGB<T, A> where T: crate::Zeroable, A: crate::Zeroable {
     #[track_caller]
     #[inline(always)]

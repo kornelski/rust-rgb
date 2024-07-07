@@ -44,7 +44,6 @@ impl<T, A> BGRA<T, A> {
     }
 }
 
-#[cfg(feature = "argb")]
 impl<T> ARGB<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
@@ -55,7 +54,6 @@ impl<T> ARGB<T> {
     }
 }
 
-#[cfg(feature = "argb")]
 impl<T, A> ARGB<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
@@ -66,7 +64,6 @@ impl<T, A> ARGB<T, A> {
     }
 }
 
-#[cfg(feature = "argb")]
 impl<T> ABGR<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
@@ -77,7 +74,6 @@ impl<T> ABGR<T> {
     }
 }
 
-#[cfg(feature = "argb")]
 impl<T, A> ABGR<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
@@ -301,7 +297,6 @@ impl<T: Clone, A> RGBA<T, A> {
     }
 }
 
-#[cfg(feature = "argb")]
 impl<T: Clone, A> ARGB<T, A> {
     /// Copy RGB components out of the ARGB struct
     ///
@@ -333,22 +328,16 @@ impl<T: Clone, A> BGRA<T, A> {
 
 impl_rgba! {RGBA}
 impl_rgba! {BGRA}
-#[cfg(feature = "argb")]
 impl_rgba! {ARGB}
-#[cfg(feature = "argb")]
 impl_rgba! {ABGR}
 
 impl_alpha_conv! {BGR, BGRA}
 impl_alpha_conv! {RGB, BGRA}
 impl_alpha_conv! {BGR, RGBA}
 impl_alpha_conv! {RGB, RGBA}
-#[cfg(feature = "argb")]
 impl_alpha_conv! {BGR, ABGR}
-#[cfg(feature = "argb")]
 impl_alpha_conv! {RGB, ABGR}
-#[cfg(feature = "argb")]
 impl_alpha_conv! {BGR, ARGB}
-#[cfg(feature = "argb")]
 impl_alpha_conv! {RGB, ARGB}
 
 impl<T: fmt::Display, A: fmt::Display> fmt::Display for RGBA<T, A> {
@@ -400,7 +389,7 @@ fn rgba_test() {
 }
 
 #[test]
-#[cfg(all(feature = "as-bytes", feature = "argb"))]
+#[cfg(feature = "as-bytes")]
 fn abgr_test() {
     let abgr = ABGR {r:1,g:2,b:3,a:4};
     assert_eq!(4, abgr.as_slice()[0]);

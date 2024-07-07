@@ -35,29 +35,23 @@
 #[macro_use] extern crate std;
 
 pub(crate) mod formats {
-    #[cfg(feature = "argb")]
     pub mod abgr;
-    #[cfg(feature = "argb")]
     pub mod argb;
     pub mod bgr;
     pub mod bgra;
     pub mod gray;
     pub mod gray_a;
     pub mod gray_alpha;
-    #[cfg(feature = "grb")]
     pub mod grb;
     pub mod rgb;
     pub mod rgba;
 }
 
-#[cfg(feature = "argb")]
 pub use formats::abgr::Abgr;
-#[cfg(feature = "argb")]
 pub use formats::argb::Argb;
 pub use formats::bgr::Bgr;
 pub use formats::bgra::Bgra;
 pub use formats::gray_alpha::GrayAlpha_v08 as GrayAlpha;
-#[cfg(feature = "grb")]
 pub use formats::grb::Grb;
 pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
