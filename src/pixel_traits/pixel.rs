@@ -25,7 +25,6 @@ impl Display for TryFromComponentsError {
 /// All types which implement [`Pixel`] also implement [`HetPixel`] due to the super-trait trait bound.
 pub trait Pixel:
     HetPixel<ColorComponent = Self::Component, AlphaComponent = Self::Component>
-    + IntoIterator<Item = Self::Component>
 {
     /// The component type of the pixel used for both color and alpha components if any.
     type Component: Copy + 'static;
