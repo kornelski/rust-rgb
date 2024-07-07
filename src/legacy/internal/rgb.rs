@@ -4,15 +4,6 @@ use crate::alt::{BGR, BGRA};
 use crate::{RGB, RGBA};
 use core::fmt;
 
-impl<T> RGB<T> {
-    /// Convenience function for creating a new pixel
-    /// The order of arguments is R,G,B
-    #[inline(always)]
-    pub const fn new(r: T, g: T, b: T) -> Self {
-        Self { r, g, b }
-    }
-}
-
 impl<T> BGR<T> {
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B

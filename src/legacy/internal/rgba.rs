@@ -3,15 +3,6 @@ use crate::alt::*;
 use crate::{RGB, RGBA};
 use core::fmt;
 
-impl<T> RGBA<T> {
-    #[inline(always)]
-    /// Convenience function for creating a new pixel
-    /// The order of arguments is R,G,B,A
-    pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self { r, g, b, a }
-    }
-}
-
 impl<T, A> RGBA<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel

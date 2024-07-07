@@ -63,13 +63,6 @@ pub type GRAYA8 = GrayAlpha<u8>;
 /// 16-bit gray with alpha in machine's native endian
 pub type GRAYA16 = GrayAlpha<u16>;
 
-impl<T> Gray<T> {
-    /// New grayscale pixel
-    #[inline(always)]
-    pub const fn new(brightness: T) -> Self {
-        Self(brightness)
-    }
-}
 
 #[cfg(not(feature = "unstable-experimental"))]
 impl<T> core::ops::Deref for Gray<T> {
@@ -97,12 +90,6 @@ impl<T: Clone, A> GrayAlpha<T, A> {
 }
 
 impl<T, A> GrayAlpha<T, A> {
-    /// New grayscale+alpha pixel
-    #[inline(always)]
-    pub const fn new(brightness: T, alpha: A) -> Self {
-        Self(brightness, alpha)
-    }
-
     /// Provide a mutable view of only `Gray` component (leaving out alpha).
     #[inline(always)]
     pub fn gray_mut(&mut self) -> &mut Gray<T> {
