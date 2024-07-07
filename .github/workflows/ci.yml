@@ -15,6 +15,6 @@ jobs:
         run: cargo test --all --all-features
       - uses: taiki-e/install-action@cargo-hack
       - name: Check all feature combinations
-        run: cargo hack check --feature-powerset --no-dev-deps --exclude-features unstable-experimental --exclude-all-features --exclude-no-default-features
+        run: cargo hack check --feature-powerset --no-dev-deps --exclude-features unstable-experimental,defmt-03,grb,argb --exclude-all-features --exclude-no-default-features
       - name: Test individual features
         run: cargo hack test --each-feature --exclude-features unstable-experimental --exclude-all-features --exclude-no-default-features

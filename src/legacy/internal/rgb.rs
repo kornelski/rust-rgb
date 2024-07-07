@@ -1,5 +1,4 @@
 use super::pixel::*;
-#[cfg(feature = "grb")]
 use crate::alt::GRB;
 use crate::alt::{BGR, BGRA};
 use crate::{RGB, RGBA};
@@ -117,7 +116,6 @@ impl_rgb! {RGB}
 impl_rgb_to_alpha! {RGB, RGBA}
 impl_rgb! {BGR}
 impl_rgb_to_alpha! {BGR, BGRA}
-#[cfg(feature = "grb")]
 impl_rgb! {GRB}
 
 #[cfg(test)]
@@ -126,7 +124,6 @@ mod rgb_test {
     use crate::alt::*;
 
     #[test]
-    #[cfg(feature = "grb")]
     fn grb_test() {
         let grb = GRB {g:1,r:2,b:3}.map(|c| c * 2) + 1;
         let rgb: crate::RGB8 = grb.into();

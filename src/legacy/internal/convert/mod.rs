@@ -50,13 +50,10 @@ as_pixels_impl! {RGB, 3}
 as_pixels_impl! {RGBA, 4}
 as_pixels_impl! {BGR, 3}
 as_pixels_impl! {BGRA, 4}
-#[cfg(feature = "grb")]
 as_pixels_impl! {GRB, 3}
 as_pixels_impl! {Gray, 1}
 as_pixels_impl! {GrayAlpha, 2}
-#[cfg(feature = "argb")]
 as_pixels_impl! {ARGB, 4}
-#[cfg(feature = "argb")]
 as_pixels_impl! {ABGR, 4}
 
 /// Cast a slice of component values (bytes) as a slice of RGB/RGBA pixels
@@ -68,14 +65,12 @@ pub trait FromSlice<T: Copy> {
     /// Reinterpert slice as RGBA pixels
     fn as_rgba(&self) -> &[RGBA<T>];
     /// Reinterpert slice as alpha-first ARGB pixels
-    #[cfg(feature = "argb")]
     fn as_argb(&self) -> &[ARGB<T>];
     /// Reinterpert mutable slice as RGB pixels
     fn as_rgb_mut(&mut self) -> &mut [RGB<T>];
     /// Reinterpert mutable slice as RGBA pixels
     fn as_rgba_mut(&mut self) -> &mut [RGBA<T>];
     /// Reinterpert mutable slice as alpha-first ARGB pixels
-    #[cfg(feature = "argb")]
     fn as_argb_mut(&mut self) -> &mut [ARGB<T>];
 
     /// Reinterpert mutable slice as grayscale pixels
@@ -92,14 +87,12 @@ pub trait FromSlice<T: Copy> {
     /// Reinterpert slice as reverse-order BGRA pixels
     fn as_bgra(&self) -> &[BGRA<T>];
     /// Reinterpert slice as reverse-order ABGR pixels
-    #[cfg(feature = "argb")]
     fn as_abgr(&self) -> &[ABGR<T>];
     /// Reinterpert ntable slice as reverse-order BGR pixels
     fn as_bgr_mut(&mut self) -> &mut [BGR<T>];
     /// Reinterpert mutable slice as reverse-order alpha-last BGRA pixels
     fn as_bgra_mut(&mut self) -> &mut [BGRA<T>];
     /// Reinterpert mutable slice as reverse-order alpha-first ABGR pixels
-    #[cfg(feature = "argb")]
     fn as_abgr_mut(&mut self) -> &mut [ABGR<T>];
 }
 
@@ -115,7 +108,6 @@ impl<T: Copy> FromSlice<T> for [T] {
     }
 
     #[inline]
-    #[cfg(feature = "argb")]
     fn as_argb(&self) -> &[ARGB<T>] {
         unsafe { from_items_to_struct(self) }
     }
@@ -131,7 +123,6 @@ impl<T: Copy> FromSlice<T> for [T] {
     }
 
     #[inline]
-    #[cfg(feature = "argb")]
     fn as_argb_mut(&mut self) -> &mut [ARGB<T>] {
         unsafe { from_items_to_struct_mut(self) }
     }
@@ -162,7 +153,6 @@ impl<T: Copy> FromSlice<T> for [T] {
     }
 
     #[inline]
-    #[cfg(feature = "argb")]
     fn as_abgr(&self) -> &[ABGR<T>] {
         unsafe { from_items_to_struct(self) }
     }
@@ -183,7 +173,6 @@ impl<T: Copy> FromSlice<T> for [T] {
     }
 
     #[inline]
-    #[cfg(feature = "argb")]
     fn as_abgr_mut(&mut self) -> &mut [ABGR<T>] {
         unsafe { from_items_to_struct_mut(self) }
     }
@@ -342,7 +331,6 @@ impl<T> AsMut<T> for GrayAlpha<T> {
     }
 }
 
-#[cfg(feature = "argb")]
 #[test]
 fn argb_converts() {
     let argb = ARGB { a: 0xffu8, r: 0xfa, g: 0xfb, b: 0xfc };

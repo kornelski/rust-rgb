@@ -13,17 +13,14 @@ pub use crate::formats::bgra::Bgra as BGRA;
 pub use crate::formats::bgr::Bgr as BGR;
 
 /// Renamed to `Abgr`
-#[cfg(feature = "argb")]
 #[doc(hidden)]
 pub use crate::formats::abgr::Abgr as ABGR;
 
 /// Renamed to `Argb`
-#[cfg(feature = "argb")]
 #[doc(hidden)]
 pub use crate::formats::argb::Argb as ARGB;
 
 /// Renamed to `Grb`
-#[cfg(feature = "grb")]
 #[doc(hidden)]
 pub use crate::formats::grb::Grb as GRB;
 
@@ -37,26 +34,21 @@ pub type BGR16 = crate::formats::bgr::Bgr<u16>;
 pub type BGRA8 = crate::formats::bgra::Bgra<u8>;
 
 /// 8-bit ABGR, alpha is first. 0 = transparent, 255 = opaque.
-#[cfg(feature = "argb")]
 pub type ABGR8 = crate::formats::abgr::Abgr<u8>;
 
 /// 8-bit ARGB, alpha is first. 0 = transparent, 255 = opaque.
-#[cfg(feature = "argb")]
 pub type ARGB8 = crate::Argb<u8>;
 
 /// 16-bit BGR in machine's native endian
 pub type BGRA16 = crate::formats::bgra::Bgra<u16>;
 
 /// 16-bit ABGR in machine's native endian. 0 = transparent, 65535 = opaque.
-#[cfg(feature = "argb")]
 pub type ABGR16 = crate::formats::abgr::Abgr<u16>;
 
 /// 16-bit ARGB in machine's native endian. 0 = transparent, 65535 = opaque.
-#[cfg(feature = "argb")]
 pub type ARGB16 = crate::Argb<u16>;
 
 /// 8-bit GRB
-#[cfg(feature = "grb")]
 pub type GRB8 = crate::formats::grb::Grb<u8>;
 
 /// 8-bit gray
