@@ -84,7 +84,7 @@ pub trait Pixel:
     /// # Examples
     ///
     /// ```
-    /// use rgb::{Pixel, Rgb, Rgba, TryFromComponentsError};
+    /// use rgb::{Pixel, Rgb, Rgba, error::TryFromComponentsError};
     ///
     /// let mut values2 = [0_u8, 10];
     /// let mut values4 = [0_u8, 10, 100, 40];

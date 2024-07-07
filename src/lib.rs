@@ -48,6 +48,13 @@ pub use pixel_traits::{
     arraylike::ArrayLike,
     gain_alpha::GainAlpha,
     has_alpha::HasAlpha,
-    het_pixel::{HetPixel, TryFromColorsAlphaError},
-    pixel::{Pixel, TryFromComponentsError},
+    het_pixel::HetPixel,
+    pixel::Pixel,
 };
+
+/// TryFrom errors
+pub mod error {
+    pub use crate::pixel_traits::het_pixel::TryFromColorsAlphaError;
+    pub use crate::pixel_traits::pixel::TryFromComponentsError;
+
+}
