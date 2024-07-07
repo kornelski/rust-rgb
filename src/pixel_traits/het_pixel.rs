@@ -424,8 +424,18 @@ with_alpha!(Argb, 4, [r, g, b], a);
 with_alpha!(Bgra, 4, [b, g, r], a);
 with_alpha!(GrayA, 2, [v], a);
 
+#[cfg(feature = "legacy")]
+use crate::formats::gray_alpha::GrayAlpha_v08;
+#[cfg(feature = "legacy")]
+with_alpha!(GrayAlpha_v08, 2, [0], 1);
+
 without_alpha!(Bgr, 3, [b, g, r]);
 without_alpha!(Rgb, 3, [r, g, b]);
 without_alpha!(Grb, 3, [r, g, b]);
 without_alpha!(Gray, 1, [v]);
 without_alpha!(Rgbw, 4, [r, g, b, w]);
+
+#[cfg(feature = "legacy")]
+use crate::formats::gray::Gray_v08;
+#[cfg(feature = "legacy")]
+without_alpha!(Gray_v08, 1, [0]);

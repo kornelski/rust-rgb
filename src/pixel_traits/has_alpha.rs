@@ -60,3 +60,8 @@ has_alpha!(Argb, a);
 has_alpha!(Bgra, a);
 has_alpha!(Abgr, a);
 has_alpha!(GrayA, a);
+
+#[cfg(feature = "legacy")]
+use crate::formats::gray_alpha::GrayAlpha_v08;
+#[cfg(feature = "legacy")]
+has_alpha!(GrayAlpha_v08, 1);
