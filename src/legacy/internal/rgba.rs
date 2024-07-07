@@ -388,7 +388,7 @@ fn abgr_test() {
 #[test]
 #[allow(deprecated)]
 fn bgra_test() {
-    use crate::*;
+    use crate::ComponentMap;
 
     let neg = BGRA::new(1, 2, 3i32, 1000).map(|x| -x);
     let _ = neg.as_slice();

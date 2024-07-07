@@ -1,6 +1,6 @@
 use super::pixel::ComponentMap;
-use crate::alt::Gray;
-use crate::alt::GrayAlpha;
+use crate::formats::gray::Gray_v08;
+use crate::formats::gray_alpha::GrayAlpha_v08;
 use core::iter::Sum;
 use core::ops::*;
 
@@ -311,11 +311,11 @@ macro_rules! impl_scalar {
     };
 }
 
-impl_scalar! {Gray}
-impl_scalar! {GrayAlpha}
+impl_scalar! {Gray_v08}
+impl_scalar! {GrayAlpha_v08}
 
-impl_struct_ops_opaque! {Gray => 0}
-impl_struct_ops_alpha! {GrayAlpha => 0 1}
+impl_struct_ops_opaque! {Gray_v08 => 0}
+impl_struct_ops_alpha! {GrayAlpha_v08 => 0 1}
 
 #[cfg(test)]
 mod test {

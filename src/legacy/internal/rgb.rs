@@ -189,13 +189,12 @@ mod rgb_test {
     fn test_fmt() {
         let red_rgb = RGB::new(255, 0, 0);
         let red_bgr = BGR::new(255, 0, 0);
-        assert_eq!("RGB { #FF0000 }", &format!("{:X}", red_rgb));
-        assert_eq!("BGR { #0000FF }", &format!("{:X}", red_bgr));
+        assert_eq!("rgb(#FF0000)", &format!("{:X}", red_rgb));
+        assert_eq!("bgr(#0000FF)", &format!("{:X}", red_bgr));
+        assert_eq!("rgb(#ff0000)", &format!("{:x}", red_rgb));
+        assert_eq!("bgr(#0000ff)", &format!("{:x}", red_bgr));
 
-        assert_eq!("RGB { #ff0000 }", &format!("{:x}", red_rgb));
-        assert_eq!("BGR { #0000ff }", &format!("{:x}", red_bgr));
-
-        assert_eq!("rgb(255,0,0)", &format!("{}", red_rgb));
-        assert_eq!("bgr(0,0,255)", &format!("{}", red_bgr));
+        assert_eq!("rgb(255, 0, 0)", &format!("{}", red_rgb));
+        assert_eq!("bgr(0, 0, 255)", &format!("{}", red_bgr));
     }
 }

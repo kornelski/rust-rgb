@@ -1,7 +1,8 @@
-use rgb::*;
+use rgb::{Rgb, Pixel};
 
 #[cfg(feature = "legacy")]
 fn main() {
+    use rgb::{ComponentSlice, ComponentBytes};
 
     let px = Rgb{r:255_u8,g:0,b:100};
     assert_eq!([px].as_bytes()[0], 255);
