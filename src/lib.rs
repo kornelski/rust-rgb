@@ -7,7 +7,21 @@
 #[cfg(all(test, feature = "legacy"))]
 #[macro_use] extern crate std;
 
-mod formats;
+mod formats {
+    pub mod abgr;
+    pub mod argb;
+    pub mod bgr;
+    pub mod bgra;
+    pub mod gray;
+    pub mod gray_a;
+    #[cfg(feature = "legacy")]
+    pub mod gray_alpha;
+    pub mod grb;
+    pub mod rgb;
+    pub mod rgba;
+    pub mod rgbw;
+}
+mod core_traits;
 mod from;
 mod tuples;
 mod pixel_traits {

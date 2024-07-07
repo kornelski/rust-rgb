@@ -1,15 +1,3 @@
-pub mod abgr;
-pub mod argb;
-pub mod bgr;
-pub mod bgra;
-pub mod gray;
-pub mod gray_a;
-#[cfg(feature = "legacy")]
-pub mod gray_alpha;
-pub mod grb;
-pub mod rgb;
-pub mod rgba;
-pub mod rgbw;
 
 use crate::{Abgr, Argb, Bgr, Bgra, Grb, Gray, GrayA, Rgb, Rgba, Rgbw};
 use core::array::TryFromSliceError;
