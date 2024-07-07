@@ -6,10 +6,14 @@ use core::{mem, slice};
 mod array;
 mod tuple;
 
+/// Use [`::bytemuck::cast_slice()`] instead.
+///
 /// Casts a slice of bytes into a slice of pixels, e.g. `[u8]` to `[RGB8]`.
 ///
 /// See also `FromSlice`
 pub trait AsPixels<PixelType> {
+    /// Use [`::bytemuck::cast_slice()`] instead.
+    ///
     /// Reinterpret the slice as a read-only/shared slice of pixels.
     /// Multiple consecutive elements in the slice are intepreted as a single pixel
     /// (depending on format, e.g. 3 for RGB, 4 for RGBA).
@@ -19,6 +23,8 @@ pub trait AsPixels<PixelType> {
     /// Use this method only when the type is known from context.
     /// See also `FromSlice`.
     fn as_pixels(&self) -> &[PixelType];
+    /// Use [`::bytemuck::cast_slice_mut()`] instead.
+    ///
     /// Reinterpret the slice as a mutable/exclusive slice of pixels.
     /// Multiple consecutive elements in the slice are intepreted as a single pixel
     /// (depending on format, e.g. 3 for RGB, 4 for RGBA).
@@ -58,6 +64,8 @@ as_pixels_impl! {GrayAlpha, 2}
 as_pixels_impl! {ARGB, 4}
 as_pixels_impl! {ABGR, 4}
 
+/// Use [`::bytemuck::cast_slice()`] or [`::bytemuck::from_bytes()`] to convert
+///
 /// Cast a slice of component values (bytes) as a slice of RGB/RGBA pixels
 ///
 /// If there's any incomplete pixel at the end of the slice it is ignored.

@@ -19,6 +19,8 @@ pub trait ComponentSlice<T> {
     fn as_mut_slice(&mut self) -> &mut [T];
 }
 
+/// Use [`::bytemuck::cast_slice()`] instead.
+///
 /// Casting a slice of `RGB/A` values to a slice of `u8`
 ///
 /// If instead of `RGB8` you use `RGB<MyCustomType>`, and you want to cast from/to that custom type,

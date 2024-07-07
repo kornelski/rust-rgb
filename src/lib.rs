@@ -33,6 +33,15 @@
 // std is required to run unit tests
 #[cfg(test)]
 #[macro_use] extern crate std;
+/// Re-export of the [`bytemuck` crate](https://lib.rs/bytemuck). [See docs](https://docs.rs/bytemuck).
+///
+/// Use [`::bytemuck::cast_slice()`] or [`::bytemuck::from_bytes()`] to convert
+/// pixels to/from `&[u8]`.
+#[cfg(feature = "bytemuck")]
+#[doc(alias = "ComponentSlice")]
+#[doc(alias = "as_bytes")]
+#[doc(alias = "Pod")]
+pub use ::bytemuck;
 
 pub(crate) mod formats {
     pub mod abgr;
@@ -72,8 +81,9 @@ pub(crate) mod legacy {
 
 pub use legacy::alt;
 
-#[cfg(feature = "as-bytes")]
-mod bytemuck;
+#[cfg(feature = "bytemuck")]
+#[path = "bytemuck.rs"]
+mod bytemuck_impl;
 
 /// Re-export from `bytemuck` crate
 #[cfg(feature = "as-bytes")]
