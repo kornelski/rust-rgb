@@ -17,25 +17,28 @@ categories = ["graphics", "rust-patterns", "multimedia::images"]
 edition = "2021"
 
 [features]
-default = []
+# Since v0.9 all pixel formats are enabled by default, beacause it has negligible impact on compilation time
+default = ["grb", "argb"]
 
 # Implements some of the traits, see `rgb::num_traits` module for details.
 num-traits = ["dep:num-traits"]
-# support for the `defmt` crate
+# Support for the `defmt` crate
 defmt-03 = ["dep:defmt"]
 serde = ["dep:serde"]
 bytemuck = ["dep:bytemuck"]
 
 # Legacy features to be removed after `v0.10`
 legacy = ["as-bytes"]
+# Deprecated: it's always enabled anyway
 argb = []
+# Deprecated: it's always enabled anyway
 grb = []
 # Deprecated: use `num-traits` feature instead, and import `rgb::num_traits::*`
 checked_fns = []
+# Deprecated: use `bytemuck` feature instead, and use `rgb::bytemuck::*`
 as-bytes = ["bytemuck"]
 
 [badges]
-travis-ci = { repository = "kornelski/rust-rgb" }
 maintenance = { status = "actively-developed" }
 
 [dependencies]
