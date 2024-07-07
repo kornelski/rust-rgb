@@ -46,10 +46,12 @@ pub trait GainAlpha: HetPixel {
     /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
     /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
     ///
-    /// assert_eq!(rgb.gain_alpha_with(0), Rgba {r: 0, g: 10, b: 100, a: 0});
-    /// assert_eq!(rgba.gain_alpha_with(0), Rgba {r: 0, g: 10, b: 100, a: 50});
+    /// assert_eq!(rgb.with_default_alpha(0), Rgba {r: 0, g: 10, b: 100, a: 0});
+    /// assert_eq!(rgba.with_default_alpha(0), Rgba {r: 0, g: 10, b: 100, a: 50});
     /// ```
-    fn gain_alpha_with(self, alpha: Self::AlphaComponent) -> Self::GainAlpha;
+    #[doc(alias = "gain_alpha_with")]
+    #[doc(alias = "gain_alpha")]
+    fn with_default_alpha(self, alpha: Self::AlphaComponent) -> Self::GainAlpha;
 
     /// Returns the pixel type after gaining an alpha component.
     ///
@@ -64,10 +66,11 @@ pub trait GainAlpha: HetPixel {
     /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
     /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
     ///
-    /// assert_eq!(rgb.gain_alpha_exact(0), Rgba {r: 0, g: 10, b: 100, a: 0});
-    /// assert_eq!(rgba.gain_alpha_exact(0), Rgba {r: 0, g: 10, b: 100, a: 0});
+    /// assert_eq!(rgb.with_alpha(0), Rgba {r: 0, g: 10, b: 100, a: 0});
+    /// assert_eq!(rgba.with_alpha(0), Rgba {r: 0, g: 10, b: 100, a: 0});
     /// ```
-    fn gain_alpha_exact(self, alpha: Self::AlphaComponent) -> Self::GainAlpha;
+    #[doc(alias = "gain_alpha_exact")]
+    fn with_alpha(self, alpha: Self::AlphaComponent) -> Self::GainAlpha;
 }
 
 macro_rules! lower_upper {
@@ -81,13 +84,13 @@ macro_rules! lower_upper {
                     $alpha_bit: <$lower<T> as HetPixel>::AlphaComponent::COMPONENT_MAX,
                 }
             }
-            fn gain_alpha_with(self, alpha: Self::AlphaComponent) -> Self::GainAlpha {
+            fn with_default_alpha(self, alpha: Self::AlphaComponent) -> Self::GainAlpha {
                 $upper {
                     $($color_bit: self.$color_bit),*,
                     $alpha_bit: alpha,
                 }
             }
-            fn gain_alpha_exact(self, alpha: Self::AlphaComponent) -> Self::GainAlpha {
+            fn with_alpha(self, alpha: Self::AlphaComponent) -> Self::GainAlpha {
                 $upper {
                     $($color_bit: self.$color_bit),*,
                     $alpha_bit: alpha,
@@ -107,10 +110,10 @@ macro_rules! gain_already_alpha {
             fn gain_alpha(self) -> Self::GainAlpha {
                 self
             }
-            fn gain_alpha_with(self, _: Self::AlphaComponent) -> Self::GainAlpha {
+            fn with_default_alpha(self, _: Self::AlphaComponent) -> Self::GainAlpha {
                 self
             }
-            fn gain_alpha_exact(mut self, alpha: Self::AlphaComponent) -> Self::GainAlpha {
+            fn with_alpha(mut self, alpha: Self::AlphaComponent) -> Self::GainAlpha {
                 self.$alpha_bit = alpha;
                 self
             }
