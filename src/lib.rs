@@ -22,7 +22,7 @@ mod formats {
     pub mod rgbw;
 }
 mod core_traits;
-mod impls;
+mod inherent_impls;
 mod from;
 mod tuples;
 mod pixel_traits {
