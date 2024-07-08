@@ -1,5 +1,5 @@
-use core::fmt::Display;
 use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba, Rgbw};
+use core::fmt::Display;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 /// Error returned from the [`HetPixel::try_from_colors_alpha()`] function.
@@ -41,16 +41,16 @@ pub trait HetPixel: Copy + 'static {
     /// [`Rgba`] has a `COMPONENTS` == 4.
     const COMPONENTS: u8;
 
-    /// Number of components minus alpha
+    /// The number of components in the pixel minus alpha.
     ///
-    /// * `Rgba` has `COLOR_COMPONENTS` == 3.
-    /// * `Rgbw` has `COLOR_COMPONENTS` == 4.
+    /// For example, [`Rgb`] has a `COLOR_COMPONENTS` == 3 whereas
+    /// [`Rgbw`] has a `COLOR_COMPONENTS` == 4.
     const COLOR_COMPONENTS: u8;
 
     /// The same pixel type as `Self` but with a different component type `U`.
     ///
     /// This is used to allow the implementation of
-    /// [`HetPixel::map_colors`] and similar methods due to rust's
+    /// [`HetPixel::map_colors()`] and similar methods due to rust's
     /// current lack of higher kinded types.
     ///
     /// For example, [`Rgb`] has `SelfType<U, V> = Rgb<U>` whereas
@@ -117,9 +117,9 @@ pub trait HetPixel: Copy + 'static {
     /// assert_eq!(rgb.alpha_opt(), None);
     /// assert_eq!(rgba.alpha_opt(), Some(50));
     /// ```
-    #[doc(alias="alpha")]
-    #[doc(alias="try_alpha")]
-    #[doc(alias="alpha_checked")]
+    #[doc(alias = "alpha")]
+    #[doc(alias = "try_alpha")]
+    #[doc(alias = "alpha_checked")]
     fn alpha_opt(&self) -> Option<Self::AlphaComponent>;
     /// Returns a mutable borrow of the pixel's alpha alpha component if it has one.
     ///
@@ -143,7 +143,7 @@ pub trait HetPixel: Copy + 'static {
     /// assert_eq!(rgb.alpha_opt(), None);
     /// assert_eq!(rgba.alpha_opt(), Some(40));
     /// ```
-    #[doc(alias="alpha_checked_mut")]
+    #[doc(alias = "alpha_checked_mut")]
     fn alpha_opt_mut(&mut self) -> Option<&mut Self::AlphaComponent>;
 
     /// Tries to create new instance given an iterator of color components and an alpha component.

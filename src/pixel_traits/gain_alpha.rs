@@ -29,7 +29,6 @@ pub trait GainAlpha: HetPixel {
     /// assert_eq!(rgb.with_default_alpha(0), Rgba {r: 0, g: 10, b: 100, a: 0});
     /// assert_eq!(rgba.with_default_alpha(0), Rgba {r: 0, g: 10, b: 100, a: 50});
     /// ```
-    #[doc(alias = "gain_alpha_with")]
     #[doc(alias = "gain_alpha")]
     fn with_default_alpha(self, alpha: Self::AlphaComponent) -> Self::GainAlpha;
 
@@ -49,7 +48,7 @@ pub trait GainAlpha: HetPixel {
     /// assert_eq!(rgb.with_alpha(0), Rgba {r: 0, g: 10, b: 100, a: 0});
     /// assert_eq!(rgba.with_alpha(0), Rgba {r: 0, g: 10, b: 100, a: 0});
     /// ```
-    #[doc(alias = "gain_alpha_exact")]
+    #[doc(alias = "gain_alpha")]
     fn with_alpha(self, alpha: Self::AlphaComponent) -> Self::GainAlpha;
 }
 
