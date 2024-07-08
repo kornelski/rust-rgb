@@ -1,13 +1,16 @@
 use super::pixel::*;
 use crate::alt::GRB;
 use crate::alt::{BGR, BGRA};
+use crate::ComponentSlice;
 use crate::{RGB, RGBA};
 use core::fmt;
 
 impl<T> BGR<T> {
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B
-    #[deprecated(note = "This function has a misleading order of arguments. Use BGR{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use BGR{} literal instead"
+    )]
     #[inline(always)]
     pub const fn new(r: T, g: T, b: T) -> Self {
         Self { b, g, r }
@@ -27,11 +30,13 @@ macro_rules! impl_rgb {
         impl<T: Copy, B> ComponentMap<$RGB<B>, T, B> for $RGB<T> {
             #[inline(always)]
             fn map<F>(&self, mut f: F) -> $RGB<B>
-                where F: FnMut(T) -> B {
+            where
+                F: FnMut(T) -> B,
+            {
                 $RGB {
-                    r:f(self.r),
-                    g:f(self.g),
-                    b:f(self.b),
+                    r: f(self.r),
+                    g: f(self.g),
+                    b: f(self.b),
                 }
             }
         }
@@ -39,11 +44,13 @@ macro_rules! impl_rgb {
         impl<T: Copy, B> ColorComponentMap<$RGB<B>, T, B> for $RGB<T> {
             #[inline(always)]
             fn map_c<F>(&self, mut f: F) -> $RGB<B>
-                where F: FnMut(T) -> B {
+            where
+                F: FnMut(T) -> B,
+            {
                 $RGB {
-                    r:f(self.r),
-                    g:f(self.g),
-                    b:f(self.b),
+                    r: f(self.r),
+                    g: f(self.g),
+                    b: f(self.b),
                 }
             }
         }
@@ -51,25 +58,19 @@ macro_rules! impl_rgb {
         impl<T> ComponentSlice<T> for $RGB<T> {
             #[inline(always)]
             fn as_slice(&self) -> &[T] {
-                unsafe {
-                    core::slice::from_raw_parts(self as *const Self as *const T, 3)
-                }
+                unsafe { core::slice::from_raw_parts(self as *const Self as *const T, 3) }
             }
 
             #[inline(always)]
             fn as_mut_slice(&mut self) -> &mut [T] {
-                unsafe {
-                    core::slice::from_raw_parts_mut(self as *mut Self as *mut T, 3)
-                }
+                unsafe { core::slice::from_raw_parts_mut(self as *mut Self as *mut T, 3) }
             }
         }
 
         impl<T> ComponentSlice<T> for [$RGB<T>] {
             #[inline]
             fn as_slice(&self) -> &[T] {
-                unsafe {
-                    core::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 3)
-                }
+                unsafe { core::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 3) }
             }
 
             #[inline]
@@ -80,6 +81,20 @@ macro_rules! impl_rgb {
             }
         }
 
+        #[cfg(feature = "as-bytes")]
+        impl<T: crate::Pod> ComponentBytes<T> for [$RGB<T>] {
+            #[inline]
+            fn as_bytes(&self) -> &[u8] {
+                assert_ne!(0, core::mem::size_of::<T>());
+                ::bytemuck::cast_slice(self)
+            }
+
+            #[inline]
+            fn as_bytes_mut(&mut self) -> &mut [u8] {
+                assert_ne!(0, core::mem::size_of::<T>());
+                ::bytemuck::cast_slice_mut(self)
+            }
+        }
     };
 }
 
@@ -181,40 +196,42 @@ mod rgb_test {
 
     #[test]
     fn grb_test() {
-        let grb = GRB {g:1,r:2,b:3}.map(|c| c * 2) + 1;
+        let grb = GRB { g: 1, r: 2, b: 3 }.map(|c| c * 2) + 1;
         let rgb: crate::RGB8 = grb.into();
-        assert_eq!(rgb, RGB::new(5,3,7));
+        assert_eq!(rgb, RGB::new(5, 3, 7));
     }
 
     #[test]
     fn sanity_check() {
-        let neg = RGB::new(1,2,3i32).map(|x| -x);
+        let neg = RGB::new(1, 2, 3i32).map(|x| -x);
         assert_eq!(neg.r, -1);
         assert_eq!(neg.g, -2);
         assert_eq!(neg.b, -3);
 
-        let mut px = RGB::new(3,4,5);
+        let mut px = RGB::new(3, 4, 5);
         px.as_mut_slice()[1] = 111;
         assert_eq!(111, px.g);
 
-        assert_eq!(RGBA::new(250,251,252,253), RGB::new(250,251,252).with_alpha(253));
+        assert_eq!(
+            RGBA::new(250, 251, 252, 253),
+            RGB::new(250, 251, 252).with_alpha(253)
+        );
 
-        assert_eq!(RGB{r:1u8,g:2,b:3}, RGB::new(1u8,2,3));
-        assert!(RGB{r:1u8,g:1,b:2} < RGB::new(2,1,1));
+        assert_eq!(RGB { r: 1u8, g: 2, b: 3 }, RGB::new(1u8, 2, 3));
+        assert!(RGB { r: 1u8, g: 1, b: 2 } < RGB::new(2, 1, 1));
 
         let mut h = std::collections::HashSet::new();
         h.insert(px);
-        assert!(h.contains(&RGB::new(3,111,5)));
-        assert!(!h.contains(&RGB::new(111,5,3)));
-
+        assert!(h.contains(&RGB::new(3, 111, 5)));
+        assert!(!h.contains(&RGB::new(111, 5, 3)));
 
         #[cfg(feature = "as-bytes")]
         {
-            let v = vec![RGB::new(1u8,2,3), RGB::new(4,5,6)];
-            assert_eq!(&[1,2,3,4,5,6], v.as_bytes());
+            let v = vec![RGB::new(1u8, 2, 3), RGB::new(4, 5, 6)];
+            assert_eq!(&[1, 2, 3, 4, 5, 6], v.as_bytes());
         }
 
-        assert_eq!(RGB::new(0u8,0,0), Default::default());
+        assert_eq!(RGB::new(0u8, 0, 0), Default::default());
     }
 
     #[test]

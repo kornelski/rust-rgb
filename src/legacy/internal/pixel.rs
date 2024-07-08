@@ -35,27 +35,12 @@ pub trait ComponentSlice<T> {
 ///
 /// Plain types are not allowed to contain struct padding, booleans, chars, enums, references or pointers.
 #[cfg(feature = "as-bytes")]
-pub trait ComponentBytes<T: ::bytemuck::Pod> {
+pub trait ComponentBytes<T: crate::Pod> {
     /// The components interpreted as raw bytes, in machine's native endian. In `RGB` bytes of the red component are first.
     fn as_bytes(&self) -> &[u8];
 
     /// The components interpreted as raw bytes, in machine's native endian. In `RGB` bytes of the red component are first.
     fn as_bytes_mut(&mut self) -> &mut [u8];
-}
-
-#[cfg(feature = "as-bytes")]
-impl<T: ::bytemuck::Pod> ComponentBytes<T> for [T] {
-    #[inline]
-    fn as_bytes(&self) -> &[u8] {
-       assert_ne!(0, core::mem::size_of::<T>());
-       ::bytemuck::cast_slice(self)
-    }
-
-    #[inline]
-    fn as_bytes_mut(&mut self) -> &mut [u8] {
-        assert_ne!(0, core::mem::size_of::<T>());
-        ::bytemuck::cast_slice_mut(self)
-    }
 }
 
 /// Applying operation to every component
@@ -74,7 +59,8 @@ pub trait ComponentMap<DestPixel, SrcComponent, DestComponent> {
     ///
     /// Note that it returns the pixel directly, not an Interator.
     fn map<Callback>(&self, f: Callback) -> DestPixel
-        where Callback: FnMut(SrcComponent) -> DestComponent;
+    where
+        Callback: FnMut(SrcComponent) -> DestComponent;
 }
 
 /// Same as `ComponentMap`, but doesn't change the alpha channel (if there's any alpha).
@@ -83,5 +69,6 @@ pub trait ColorComponentMap<DestPixel, SrcComponent, DestComponent> {
     ///
     /// Note that it returns the pixel directly, not an Interator.
     fn map_c<Callback>(&self, f: Callback) -> DestPixel
-        where Callback: FnMut(SrcComponent) -> DestComponent;
+    where
+        Callback: FnMut(SrcComponent) -> DestComponent;
 }

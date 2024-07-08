@@ -17,8 +17,6 @@ edition = "2021"
 default = ["as-bytes", "argb", "grb"]
 # safe as_bytes() casts require a marker trait for non-padded, non-pointery types.
 as-bytes = ["bytemuck"]
-# Preferred over as-bytes
-bytemuck = ["dep:bytemuck"]
 # Deprecated: all pixel types are enabled by default. No-op.
 argb = []
 # Deprecated: all pixel types are enabled by default. No-op.
