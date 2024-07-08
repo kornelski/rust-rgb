@@ -49,3 +49,26 @@ pub trait ColorComponentMap<DestPixel, SrcComponent, DestComponent> {
     fn map_c<Callback>(&self, f: Callback) -> DestPixel
         where Callback: FnMut(SrcComponent) -> DestComponent;
 }
+
+#[test]
+#[allow(dead_code)]
+#[cfg(feature = "as-bytes")]
+fn shared_impl() {
+    struct SharedPixelBuffer<Pixel> {
+        data: [Pixel; 1],
+    }
+
+    impl<Pixel: Clone + crate::Pod> SharedPixelBuffer<Pixel>
+    where
+        [Pixel]: crate::ComponentBytes<u8>,
+    {
+        pub fn as_bytes(&self) -> &[u8] {
+            self.data.as_slice().as_bytes()
+        }
+    }
+
+    let b = SharedPixelBuffer {
+        data: [crate::RGB8::new(0,0,0)],
+    };
+    let _ = b.as_bytes();
+}
