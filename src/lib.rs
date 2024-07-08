@@ -83,6 +83,8 @@ pub(crate) mod legacy {
 
 pub use legacy::alt;
 
+#[cfg(all(feature = "bytemuck", not(feature = "as-bytes")))]
+mod bytemuck_impl;
 #[cfg(feature = "as-bytes")]
 mod as_bytes;
 
