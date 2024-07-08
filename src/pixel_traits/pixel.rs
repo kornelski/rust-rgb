@@ -29,7 +29,7 @@ pub trait Pixel:
     /// The component type of the pixel used for both color and alpha components if any.
     type Component: Copy + 'static;
 
-    /// An generic associated type used to return the array of
+    /// A generic associated type used to return the array of
     /// components despite rust's lack of const generic expressions.
     ///
     /// Used in functions like [`Pixel::to_array()`].

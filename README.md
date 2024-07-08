@@ -122,7 +122,7 @@ let rgba = rgba.map_same(|c| c * 2);
 assert_eq!(rgba, Rgba::<u16> {r: 0, g: 0, b: 510, a: 0});
 ```
 
-#### GainAlpha
+### GainAlpha
 
 A way to add alpha to a pixel type in various ways.
 
@@ -136,7 +136,7 @@ assert_eq!(Rgb {r: 0, g: 0, b: 0}.with_alpha(255), expected);
 assert_eq!(Rgba {r: 0, g: 0, b: 0, a: 0}.with_alpha(255), expected);
 ```
 
-#### HasAlpha
+### HasAlpha
 
 A trait only implemented on pixels that have an alpha
 component.

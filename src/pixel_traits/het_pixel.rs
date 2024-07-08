@@ -59,7 +59,7 @@ pub trait HetPixel: Copy + 'static {
         SelfType<Self::ColorComponent, Self::AlphaComponent> = Self,
     >;
 
-    /// An generic associated type used to return the array of color
+    /// A generic associated type used to return the array of color
     /// components despite rust's lack of const generic expressions.
     ///
     /// Used in functions like [`HetPixel::color_array()`].
