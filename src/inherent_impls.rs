@@ -19,7 +19,7 @@ inherent_impls!(Rgb, new, [r red, g green, b blue]);
 inherent_impls!(Bgr, new_bgr, [b blue, g green, r red]);
 inherent_impls!(Grb, new_grb, [g green, r red, b blue]);
 inherent_impls!(Gray, new, [v value]);
-inherent_impls!(Rgbw, new, [r red, g green, b blue, w white]);
+inherent_impls!(Rgbw, new_rgbw, [r red, g green, b blue, w white]);
 
 #[cfg(feature = "legacy")]
 use crate::formats::gray::Gray_v08;
