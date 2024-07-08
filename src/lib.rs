@@ -65,7 +65,7 @@ pub use formats::grb::Grb;
 pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
 
-mod impls;
+mod inherent_impls;
 
 pub(crate) mod legacy {
     pub(crate) mod internal {
