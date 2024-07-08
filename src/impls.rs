@@ -1,13 +1,17 @@
-
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, Gray, GrayA, Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba, Rgbw};
 
 macro_rules! inherent_impls {
     ($name:ident, $new_fn:ident, [$($field:tt $var:ident),*]) => {
         impl<T: Copy + 'static> $name<T> {
-            #[doc=concat!("`", stringify!($name))]
-            /// {
-            #[doc=stringify!($($field,)*)]
-            /// }`
+            #[doc=concat!("Creates a new [`", stringify!($name), "`] pixel type from its components.")]
+            ///
+            /// Alternatively, you can use struct literal syntax to
+            /// create the new pixel type:
+            ///```not_rust
+            #[doc=concat!("use rgb::", stringify!($name), ";")]
+            ///
+            #[doc=concat!("let pixel = ", stringify!($name), " {", stringify!($($field: $var),*), "};")]
+            ///```
             pub const fn $new_fn($($var: T),*) -> Self {
                 Self {$($field: $var),*}
             }
