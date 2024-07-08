@@ -80,6 +80,8 @@ macro_rules! impl_rgb {
             }
         }
 
+        #[cfg(feature = "as-bytes")]
+        impl<T: crate::Pod> ComponentBytes<T> for [$RGB<T>] {}
     };
 }
 

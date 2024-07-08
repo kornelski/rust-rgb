@@ -198,6 +198,8 @@ macro_rules! impl_rgba {
             }
         }
 
+        #[cfg(feature = "as-bytes")]
+        impl<T: crate::Pod> ComponentBytes<T> for [$RGBA<T>] {}
     };
 }
 

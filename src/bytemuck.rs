@@ -1,6 +1,7 @@
 use crate::{RGB, RGBA};
 use crate::alt::{Gray, GrayAlpha, BGR, BGRA};
 use crate::alt::{ARGB, ABGR};
+use crate::ComponentBytes;
 
 #[cfg(feature = "as-bytes")]
 unsafe impl<T> crate::Pod for RGB<T> where T: crate::Pod {}
@@ -97,3 +98,9 @@ unsafe impl<T, A> crate::Zeroable for GrayAlpha<T, A> where T: crate::Zeroable, 
         }
     }
 }
+
+#[cfg(feature = "as-bytes")]
+impl<T: crate::Pod> ComponentBytes<T> for [Gray<T>] {}
+
+#[cfg(feature = "as-bytes")]
+impl<T: crate::Pod> ComponentBytes<T> for [GrayAlpha<T>] {}
