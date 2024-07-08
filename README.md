@@ -10,7 +10,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rgb = "0.8.40"
+rgb = "0.8.43"
 ```
 
 ## Usage
@@ -81,5 +81,6 @@ Planned changes:
    - rename `.alpha()` to `.with_alpha()`
 
 2. Change field access on `GrayAlpha` from `.0` and `.1` to `.v` and `.a` where possible.
-3. Use the `bytemuck` crate for conversions from/to bytes.
+3. Use the `bytemuck` crate for conversions from/to bytes instead of `ComponentBytes` trait. Disable the `as-bytes` feature if possible.
 4. Don't enable `gbr` and `argb` features. All pixel types are enabled by default.
+5. In generic code operating on pixels, add `Copy + 'static` bounds to the pixel types and/or their components.
