@@ -67,6 +67,18 @@ macro_rules! impl_rgb {
             }
         }
 
+        #[cfg(feature = "as-bytes")]
+        impl<T: crate::Pod> ComponentBytes<T> for [$RGB<T>] {
+             fn as_bytes(&self) -> &[u8] {
+                 assert_ne!(0, core::mem::size_of::<T>());
+                 ::bytemuck::cast_slice(self)
+             }
+
+             fn as_bytes_mut(&mut self) -> &mut [u8] {
+                 assert_ne!(0, core::mem::size_of::<T>());
+                 ::bytemuck::cast_slice_mut(self)
+             }
+        }
     };
 }
 

@@ -41,20 +41,6 @@ pub trait ComponentBytes<T: ::bytemuck::Pod> {
     fn as_bytes_mut(&mut self) -> &mut [u8];
 }
 
-impl<T: ::bytemuck::Pod> ComponentBytes<T> for [T] {
-    #[inline]
-    fn as_bytes(&self) -> &[u8] {
-       assert_ne!(0, core::mem::size_of::<T>());
-       ::bytemuck::cast_slice(self)
-    }
-
-    #[inline]
-    fn as_bytes_mut(&mut self) -> &mut [u8] {
-        assert_ne!(0, core::mem::size_of::<T>());
-        ::bytemuck::cast_slice_mut(self)
-    }
-}
-
 /// Same as `Pixel::map`, but doesn't change the alpha channel (if there's any alpha).
 pub trait ColorComponentMap<DestPixel, SrcComponent, DestComponent> {
     /// Convenience function for applying the same formula to every rgb/gray component, but skipping the alpha component.
