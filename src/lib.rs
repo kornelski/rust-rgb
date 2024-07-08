@@ -83,9 +83,8 @@ pub(crate) mod legacy {
 
 pub use legacy::alt;
 
-#[cfg(feature = "bytemuck")]
-#[path = "bytemuck.rs"]
-mod bytemuck_impl;
+#[cfg(feature = "as-bytes")]
+mod as_bytes;
 
 /// Re-export from `bytemuck` crate
 #[cfg(feature = "as-bytes")]
