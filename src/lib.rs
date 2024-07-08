@@ -79,8 +79,5 @@ pub use pixel_traits::{
     pixel::Pixel,
 };
 
-/// TryFrom errors
-pub mod error {
-    pub use crate::pixel_traits::het_pixel::TryFromColorsAlphaError;
-    pub use crate::pixel_traits::pixel::TryFromComponentsError;
-}
+pub use crate::pixel_traits::het_pixel::TryFromColorsAlphaError;
+pub use crate::pixel_traits::pixel::TryFromComponentsError;

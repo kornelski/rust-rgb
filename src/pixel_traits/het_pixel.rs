@@ -153,7 +153,7 @@ pub trait HetPixel: Copy + 'static {
     /// # Examples
     ///
     /// ```
-    /// use rgb::{HetPixel, Rgb, Rgba, error::TryFromColorsAlphaError};
+    /// use rgb::{HetPixel, Rgb, Rgba, TryFromColorsAlphaError};
     ///
     /// let mut values2 = [0_u8, 10];
     /// let mut values4 = [0_u8, 10, 100, 40];
