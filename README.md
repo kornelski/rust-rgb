@@ -8,6 +8,18 @@ Operating on pixels as weakly-typed vectors of `u8` is error-prone and inconveni
 
 The RGB crate is getting a major update, which will eventually be stablized as v1.0.0.
 
+For **testing**, use:
+
+```toml
+[dependencies]
+rgb = "0.8.90"
+# or: rgb = { version = "0.8.90", features = ["legacy"] }
+
+# this is required, because v0.8.90 is not on crates.io
+[patch.crates-io]
+rgb.git = "https://github.com/kornelski/rust-rgb"
+```
+
 We welcome your feedback about the crate!
 
 * Are the names of the traits and their methods good?
@@ -20,11 +32,12 @@ We welcome your feedback about the crate!
 
 ## Installation
 
-Run `cargo add rgb@0.8.90-alpha.1` or add this to your `Cargo.toml`:
+If you want to run a stable, compatible version, run `cargo add rgb@0.8.43`. If you want to try unstable experimental version, run `cargo add rgb@0.8.90-alpha.1` or add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rgb = "0.8.90-alpha.1"
+rgb = "0.8.90-alpha.1" # unstable experimental version
+# rgb = "0.8.43" # older, stable
 ```
 
 ## Usage

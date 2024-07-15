@@ -1,6 +1,6 @@
 [package]
 name = "rgb"
-version = "0.8.90-alpha.1"
+version = "0.8.90" # this must be set to stable, because Cargo won't unify 0.8.90-alpha with 0.8.0
 authors = [
 	"Kornel Lesiński <kornel@geekhood.net>",
 	"James Forster <james.forsterer@gmail.com>",
