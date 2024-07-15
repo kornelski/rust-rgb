@@ -211,7 +211,7 @@ The plan is to provide easy migration to v1.0. There will be a transitional v0.9
 
 Planned changes:
 
- * Types will be renamed to follow Rust's naming convention: `RGBA` → `Rgba`. The old names will continue to work as hidden aliases.
+ * Types will be renamed to follow Rust's naming convention: `RGBA` → `Rgba`. The names with an `8` or `16` suffix (`RGBA8`) will continue to work.
  * The `Gray` and `GrayAlpha` types will change from tuple structs with `.0` to structs with named fields `.v` (value) and `.a` (alpha). Through a `Deref` trick both field names will work, but `.0` is going to be deprecated.
  * `bytemuck::Pod` (conversions from/to raw bytes) will require color and alpha components to be the same type (i.e. it will work with `Rgba<u8>`, but not `Rgba<Newtype, DifferentType>`). Currently it's unsound if the alpha has a different size than color components.
  * Many inherent methods will be moved to a new `Pixel` trait.
