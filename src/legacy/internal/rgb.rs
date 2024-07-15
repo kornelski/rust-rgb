@@ -1,7 +1,6 @@
 use super::pixel::*;
-use crate::alt::GRB;
-use crate::alt::{BGR, BGRA};
-use crate::{RGB, RGBA};
+use crate::alt::*;
+use crate::*;
 
 impl<T> BGR<T> {
     /// Convenience function for creating a new pixel
@@ -110,7 +109,7 @@ macro_rules! impl_rgb_to_alpha {
     };
 }
 
-impl<T> core::iter::FromIterator<T> for RGB<T> {
+impl<T> core::iter::FromIterator<T> for Rgb<T> {
     /// Takes exactly 3 elements from the iterator and creates a new instance.
     /// Panics if there are fewer elements in the iterator.
     #[inline(always)]
@@ -124,13 +123,14 @@ impl<T> core::iter::FromIterator<T> for RGB<T> {
     }
 }
 
-impl_rgb! {RGB}
-impl_rgb_to_alpha! {RGB, RGBA}
-impl_rgb! {BGR}
-impl_rgb_to_alpha! {BGR, BGRA}
-impl_rgb! {GRB}
+impl_rgb! {Rgb}
+impl_rgb_to_alpha! {Rgb, Rgba}
+impl_rgb! {Bgr}
+impl_rgb_to_alpha! {Bgr, Bgra}
+impl_rgb! {Grb}
 
 #[cfg(test)]
+#[allow(deprecated)]
 mod rgb_test {
     use crate::*;
     use crate::alt::*;

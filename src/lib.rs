@@ -99,9 +99,11 @@ pub type GRAY8 = formats::gray::Gray_v09<u8>;
 pub type GRAYA8 = formats::gray_a::GrayA<u8>;
 /// [`Grb<u8>`]
 pub type GRB8 = formats::grb::Grb<u8>;
-/// [`Rgb<u8>`]
+/// [`Rgb<u8>`] 8-bit RGB
+///
+/// The colorspace is technically undefined, but generally sRGB is assumed.
 pub type RGB8 = formats::rgb::Rgb<u8>;
-/// [`Rgba<u8>`]
+/// [`Rgba<u8>`] 8-bit RGBA, alpha is last. 0 = transparent, 255 = opaque.
 pub type RGBA8 = formats::rgba::Rgba<u8>;
 /// [`Rgbw<u8>`]
 pub type RGBW8 = formats::rgbw::Rgbw<u8>;
@@ -120,9 +122,13 @@ pub type GRAY16 = formats::gray::Gray_v09<u16>;
 pub type GRAYA16 = formats::gray_a::GrayA<u16>;
 /// [`Grb<u16>`]
 pub type GRB16 = formats::grb::Grb<u16>;
-/// [`Rgb<u16>`]
+/// [`Rgb<u16>`] 16-bit RGB in machine's native endian
+///
+/// Be careful to perform byte-swapping when reading from files.
 pub type RGB16 = formats::rgb::Rgb<u16>;
-/// [`Rgba<u16>`]
+/// [`Rgba<u16>`] 16-bit RGB in machine's native endian. 0 = transparent, 65535 = opaque.
+///
+/// Alpha is last.
 pub type RGBA16 = formats::rgba::Rgba<u16>;
 /// [`Rgbw<u16>`]
 pub type RGBW16 = formats::rgbw::Rgbw<u16>;

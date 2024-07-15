@@ -1,8 +1,10 @@
+#![allow(deprecated)]
 use super::pixel::ComponentSlice;
 use crate::alt::*;
-use crate::{RGB, RGBA};
+use crate::*;
 use core::{mem, slice};
 use crate::pixel_traits::pixel::Pixel;
+use crate::formats::gray::Gray_v08;
 
 /// Casts a slice of bytes into a slice of pixels, e.g. `[u8]` to `[RGB8]`.
 ///
@@ -46,15 +48,15 @@ macro_rules! as_pixels_impl {
     };
 }
 
-as_pixels_impl! {RGB, 3}
-as_pixels_impl! {RGBA, 4}
-as_pixels_impl! {BGR, 3}
-as_pixels_impl! {BGRA, 4}
-as_pixels_impl! {GRB, 3}
-as_pixels_impl! {Gray, 1}
+as_pixels_impl! {Rgb, 3}
+as_pixels_impl! {Rgba, 4}
+as_pixels_impl! {Bgr, 3}
+as_pixels_impl! {Bgra, 4}
+as_pixels_impl! {Grb, 3}
+as_pixels_impl! {Gray_v08, 1}
 as_pixels_impl! {GrayAlpha, 2}
-as_pixels_impl! {ARGB, 4}
-as_pixels_impl! {ABGR, 4}
+as_pixels_impl! {Argb, 4}
+as_pixels_impl! {Abgr, 4}
 
 /// Cast a slice of component values (bytes) as a slice of RGB/RGBA pixels
 ///
@@ -74,12 +76,16 @@ pub trait FromSlice<T: Copy> {
     fn as_argb_mut(&mut self) -> &mut [ARGB<T>];
 
     /// Reinterpert mutable slice as grayscale pixels
-    fn as_gray(&self) -> &[Gray<T>];
+    #[deprecated(note = "use bytemuck::cast_slice()")]
+    fn as_gray(&self) -> &[Gray_v08<T>];
     /// Reinterpert mutable slice as grayscale pixels with alpha
+    #[deprecated(note = "use bytemuck::cast_slice()")]
     fn as_gray_alpha(&self) -> &[GrayAlpha<T>];
     /// Reinterpert mutable slice as grayscale pixels
-    fn as_gray_mut(&mut self) -> &mut [Gray<T>];
+    #[deprecated(note = "use bytemuck::cast_slice()")]
+    fn as_gray_mut(&mut self) -> &mut [Gray_v08<T>];
     /// Reinterpert mutable slice as grayscale pixels with alpha
+    #[deprecated(note = "use bytemuck::cast_slice()")]
     fn as_gray_alpha_mut(&mut self) -> &mut [GrayAlpha<T>];
 
     /// Reinterpert slice as reverse-order BGR pixels
@@ -128,7 +134,7 @@ impl<T: Copy> FromSlice<T> for [T] {
     }
 
     #[inline]
-    fn as_gray(&self) -> &[Gray<T>] {
+    fn as_gray(&self) -> &[Gray_v08<T>] {
         unsafe { from_items_to_struct(self) }
     }
 
@@ -138,7 +144,7 @@ impl<T: Copy> FromSlice<T> for [T] {
     }
 
     #[inline]
-    fn as_gray_mut(&mut self) -> &mut [Gray<T>] {
+    fn as_gray_mut(&mut self) -> &mut [Gray_v08<T>] {
         unsafe { from_items_to_struct_mut(self) }
     }
 
@@ -240,9 +246,9 @@ rgb_impl_from! {RGBA, i16,f64}
 rgb_impl_from! {RGBA, i32,f64}
 rgb_impl_from! {RGBA, f32,f64}
 
-impl<T: Clone> From<Gray<T>> for RGB<T> {
+impl<T: Clone> From<Gray_v08<T>> for Rgb<T> {
     #[inline(always)]
-    fn from(other: Gray<T>) -> Self {
+    fn from(other: Gray_v08<T>) -> Self {
         Self {
             r: other.0.clone(),
             g: other.0.clone(),
@@ -251,9 +257,9 @@ impl<T: Clone> From<Gray<T>> for RGB<T> {
     }
 }
 
-impl<T: Clone> From<Gray<T>> for RGBA<T, u8> {
+impl<T: Clone> From<Gray_v08<T>> for Rgba<T, u8> {
     #[inline(always)]
-    fn from(other: Gray<T>) -> Self {
+    fn from(other: Gray_v08<T>) -> Self {
         Self {
             r: other.0.clone(),
             g: other.0.clone(),
@@ -275,7 +281,7 @@ impl<T: Clone, A> From<GrayAlpha<T, A>> for RGBA<T, A> {
     }
 }
 
-impl<T> AsRef<T> for Gray<T> {
+impl<T> AsRef<T> for Gray_v08<T> {
     #[inline(always)]
     fn as_ref(&self) -> &T {
         &self.0
@@ -303,7 +309,7 @@ impl<T> AsRef<T> for GrayAlpha<T> {
     }
 }
 
-impl<T> AsMut<T> for Gray<T> {
+impl<T> AsMut<T> for Gray_v08<T> {
     #[inline(always)]
     fn as_mut(&mut self) -> &mut T {
         &mut self.0
@@ -349,8 +355,8 @@ fn argb_converts() {
 
 #[test]
 fn converts() {
-    assert_eq!([1,2].as_gray(), [Gray::new(1), Gray::new(2)]);
-    assert_eq!([3].as_gray_mut(), [Gray::new(3)]);
+    assert_eq!([1,2].as_gray(), [Gray_v08::new(1), Gray_v08::new(2)]);
+    assert_eq!([3].as_gray_mut(), [Gray_v08::new(3)]);
     assert_eq!([1,2].as_gray_alpha(), [GrayAlpha::new(1, 2)]);
     // excess bytes are ignored
     assert_eq!([1,2,3].as_gray_alpha_mut(), [GrayAlpha::new(1, 2)]);

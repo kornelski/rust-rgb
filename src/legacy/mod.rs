@@ -12,35 +12,20 @@ pub(crate) mod internal {
 pub mod alt;
 
 #[doc(hidden)]
+#[deprecated(note = "Renamed to `Rgb`")]
 /// Renamed to `Rgb`
-pub use crate::Rgb as RGB;
+pub type RGB<T> = crate::Rgb<T>;
 #[doc(hidden)]
+#[deprecated(note = "Renamed to `Rgba`")]
 /// Renamed to `Rgba`
-pub use crate::Rgba as RGBA;
-
-/// 8-bit RGB
-///
-/// The colorspace is technically undefined, but generally sRGB is assumed.
-pub type RGB8 = RGB<u8>;
-
-/// 16-bit RGB in machine's native endian
-///
-/// Be careful to perform byte-swapping when reading from files.
-pub type RGB16 = RGB<u16>;
-
-/// 8-bit RGBA, alpha is last. 0 = transparent, 255 = opaque.
-pub type RGBA8 = RGBA<u8>;
-
-/// 16-bit RGB in machine's native endian. 0 = transparent, 65535 = opaque.
-///
-/// Alpha is last.
-pub type RGBA16 = RGBA<u16>;
+pub type RGBA<T, A = T> = crate::Rgba<T, A>;
 
 #[test]
+#[allow(deprecated)]
 fn rgb_works() {
     use crate::*;
 
-    let rgb = RGB{r:0u8,g:128,b:255}.clone();
+    let rgb = Rgb{r:0u8,g:128,b:255}.clone();
     assert_eq!(rgb.b, 255);
 
     assert_eq!(rgb, rgb.iter().map(|ch| ch).collect());
@@ -70,13 +55,15 @@ fn rgb_works() {
 }
 
 #[test]
+#[allow(deprecated)]
 fn sub_floats() {
     assert_eq!(RGBA{r:2.5_f64, g:-1.5, b:0., a:5.}, RGBA{r:3.5_f64, g:-0.5, b:-2., a:0.} - RGBA{r:1.0_f64, g:1., b:-2., a:-5.});
 }
 
 #[test]
+#[allow(deprecated)]
 fn into() {
-    let a:RGB8 = RGB{r:0,g:1,b:2};
+    let a:crate::RGB8 = crate::Rgb{r:0,g:1,b:2};
     let b:RGB<i16> = a.into();
     let c:RGB<f32> = b.into();
     let d:RGB<f32> = a.into();
@@ -84,6 +71,7 @@ fn into() {
 }
 
 #[test]
+#[allow(deprecated)]
 fn rgba_works() {
     let rgba = RGBA{r:0u8,g:128,b:255,a:33}.clone();
     assert_eq!(rgba.b, 255);
@@ -97,6 +85,7 @@ fn rgba_works() {
 }
 
 #[test]
+#[allow(deprecated)]
 fn bytes() {
     use crate::*;
 

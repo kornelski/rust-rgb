@@ -66,6 +66,7 @@ impl_legacy_checked! {Gray_v08 => 0}
 impl_legacy_checked! {GrayAlpha_v08 => 0 1}
 
 #[cfg(test)]
+#[allow(deprecated)]
 mod test {
     use crate::*;
     use core::num::Wrapping;
@@ -103,6 +104,7 @@ mod test {
 
     #[test]
     #[cfg(feature = "checked_fns")]
+    #[allow(deprecated)]
     fn test_checked_add() {
         assert_eq!(WHITE_RGB.checked_add(WHITE_RGB), None);
         assert_eq!(RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(255, 0, 0)), None);

@@ -209,6 +209,7 @@ impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u16> {
 }
 
 #[test]
+#[allow(deprecated)]
 fn gray() {
     use crate::Pixel;
 

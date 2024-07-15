@@ -1,8 +1,8 @@
 use super::pixel::*;
 use crate::alt::*;
-use crate::{RGB, RGBA};
+use crate::*;
 
-impl<T, A> RGBA<T, A> {
+impl<T, A> Rgba<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
@@ -34,7 +34,7 @@ impl<T, A> BGRA<T, A> {
     }
 }
 
-impl<T> ARGB<T> {
+impl<T> Argb<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
@@ -44,7 +44,7 @@ impl<T> ARGB<T> {
     }
 }
 
-impl<T, A> ARGB<T, A> {
+impl<T, A> Argb<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
@@ -54,7 +54,7 @@ impl<T, A> ARGB<T, A> {
     }
 }
 
-impl<T> ABGR<T> {
+impl<T> Abgr<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
@@ -64,7 +64,7 @@ impl<T> ABGR<T> {
     }
 }
 
-impl<T, A> ABGR<T, A> {
+impl<T, A> Abgr<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
@@ -89,7 +89,7 @@ macro_rules! impl_rgba {
             ///
             /// Note: you can use `.into()` to convert between other types
             #[inline(always)]
-            pub fn bgr(&self) -> BGR<T> {
+            pub fn bgr(&self) -> Bgr<T> {
                 BGR {
                     r: self.r.clone(),
                     g: self.g.clone(),
@@ -222,12 +222,12 @@ macro_rules! impl_alpha_conv {
     };
 }
 
-impl<T, A> RGBA<T, A> {
+impl<T, A> Rgba<T, A> {
     /// Provide a mutable view of only RGB components (leaving out alpha).
     /// Useful to change color without changing opacity.
     #[inline(always)]
-    pub fn rgb_mut(&mut self) -> &mut RGB<T> {
-        unsafe { &mut *(self as *mut _ as *mut RGB<T>) }
+    pub fn rgb_mut(&mut self) -> &mut Rgb<T> {
+        unsafe { &mut *(self as *mut _ as *mut Rgb<T>) }
     }
 }
 
@@ -236,19 +236,19 @@ impl<T, A> BGRA<T, A> {
     /// Useful to change color without changing opacity.
     #[inline(always)]
     #[deprecated(note = "This function will change. Use bgr_mut()")]
-    pub fn rgb_mut(&mut self) -> &mut BGR<T> {
-        unsafe { &mut *(self as *mut _ as *mut BGR<T>) }
+    pub fn rgb_mut(&mut self) -> &mut Bgr<T> {
+        unsafe { &mut *(self as *mut _ as *mut Bgr<T>) }
     }
 
     /// Provide a mutable view of only RGB components (leaving out alpha).
     /// Useful to change color without changing opacity.
     #[inline(always)]
-    pub fn bgr_mut(&mut self) -> &mut BGR<T> {
-        unsafe { &mut *(self as *mut _ as *mut BGR<T>) }
+    pub fn bgr_mut(&mut self) -> &mut Bgr<T> {
+        unsafe { &mut *(self as *mut _ as *mut Bgr<T>) }
     }
 }
 
-impl<T> core::iter::FromIterator<T> for RGBA<T> {
+impl<T> core::iter::FromIterator<T> for Rgba<T> {
     #[inline(always)]
     /// Takes exactly 4 elements from the iterator and creates a new instance.
     /// Panics if there are fewer elements in the iterator.
@@ -263,13 +263,13 @@ impl<T> core::iter::FromIterator<T> for RGBA<T> {
     }
 }
 
-impl<T: Clone, A> RGBA<T, A> {
+impl<T: Clone, A> Rgba<T, A> {
     /// Copy RGB components out of the RGBA struct
     ///
     /// Note: you can use `.into()` to convert between other types
     #[inline(always)]
-    pub fn rgb(&self) -> RGB<T> {
-        RGB {
+    pub fn rgb(&self) -> Rgb<T> {
+        Rgb {
             r: self.r.clone(),
             g: self.g.clone(),
             b: self.b.clone(),
@@ -277,13 +277,13 @@ impl<T: Clone, A> RGBA<T, A> {
     }
 }
 
-impl<T: Clone, A> ARGB<T, A> {
+impl<T: Clone, A> Argb<T, A> {
     /// Copy RGB components out of the ARGB struct
     ///
     /// Note: you can use `.into()` to convert between other types
     #[inline(always)]
-    pub fn rgb(&self) -> RGB<T> {
-        RGB {
+    pub fn rgb(&self) -> Rgb<T> {
+        Rgb {
             r: self.r.clone(),
             g: self.g.clone(),
             b: self.b.clone(),
@@ -297,7 +297,7 @@ impl<T: Clone, A> BGRA<T, A> {
     /// Note: you can use `.into()` to convert between other types
     #[inline(always)]
     #[deprecated(note = "This function will change. Use bgr()")]
-    pub fn rgb(&self) -> BGR<T> {
+    pub fn rgb(&self) -> Bgr<T> {
         BGR {
             r: self.r.clone(),
             g: self.g.clone(),
@@ -306,21 +306,22 @@ impl<T: Clone, A> BGRA<T, A> {
     }
 }
 
-impl_rgba! {RGBA}
-impl_rgba! {BGRA}
-impl_rgba! {ARGB}
-impl_rgba! {ABGR}
+impl_rgba! {Rgba}
+impl_rgba! {Bgra}
+impl_rgba! {Argb}
+impl_rgba! {Abgr}
 
-impl_alpha_conv! {BGR, BGRA}
-impl_alpha_conv! {RGB, BGRA}
-impl_alpha_conv! {BGR, RGBA}
-impl_alpha_conv! {RGB, RGBA}
-impl_alpha_conv! {BGR, ABGR}
-impl_alpha_conv! {RGB, ABGR}
-impl_alpha_conv! {BGR, ARGB}
-impl_alpha_conv! {RGB, ARGB}
+impl_alpha_conv! {Bgr, Bgra}
+impl_alpha_conv! {Rgb, Bgra}
+impl_alpha_conv! {Bgr, Rgba}
+impl_alpha_conv! {Rgb, Rgba}
+impl_alpha_conv! {Bgr, Abgr}
+impl_alpha_conv! {Rgb, Abgr}
+impl_alpha_conv! {Bgr, Argb}
+impl_alpha_conv! {Rgb, Argb}
 
 #[test]
+#[allow(deprecated)]
 fn rgba_test() {
     use crate::Pixel;
 
