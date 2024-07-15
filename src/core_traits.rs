@@ -612,3 +612,20 @@ fn test_16_fmt() {
     let a = Argb::<u16>::new_argb(1, 0x1234, 3, 65535);
     assert_eq!("argb(#000112340003FFFF)", &std::format!("{:X}", a));
 }
+
+
+#[test]
+#[allow(deprecated)]
+fn convert_array() {
+    use crate::{BGR8, BGRA8};
+    use crate::{RGB8, RGBA8};
+
+    assert_eq!(RGB8::from([1, 2, 3]), RGB8::new(1, 2, 3));
+    assert_eq!(Into::<[u8; 3]>::into(RGB8::new(1, 2, 3)), [1, 2, 3]);
+    assert_eq!(RGBA8::from([1, 2, 3, 4]), RGBA8::new(1, 2, 3, 4));
+    assert_eq!(Into::<[u8; 4]>::into(RGBA8::new(1, 2, 3, 4)), [1, 2, 3, 4]);
+    assert_eq!(BGR8::from([3, 2, 1]), BGR8::new_bgr(3, 2, 1));
+    assert_eq!(Into::<[u8; 3]>::into(BGR8::new_bgr(3, 2, 1)), [3, 2, 1]);
+    assert_eq!(BGRA8::from([4, 3, 2, 1]), BGRA8::new_bgra(4, 3, 2, 1));
+    assert_eq!(Into::<[u8; 4]>::into(BGRA8::new_bgra(4, 3, 2, 1)), [4, 3, 2, 1]);
+}
