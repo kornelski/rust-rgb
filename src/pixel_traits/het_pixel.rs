@@ -25,7 +25,7 @@ impl Display for TryFromColorsAlphaError {
 ///
 /// Component = An element of a pixel, inclusive of alpha. For example, [`Rgba`](crate::Rgba) is a pixel made up
 /// of four components, three color components and one alpha component.
-pub trait HetPixel: Copy + 'static {
+pub trait HetPixel: Copy {
     /// The component type of the pixel used the color component(s).
     type ColorComponent: Copy + 'static;
     /// The component type of the pixel used the alpha component if any.

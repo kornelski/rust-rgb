@@ -27,7 +27,7 @@ pub trait Pixel:
     HetPixel<ColorComponent = Self::Component, AlphaComponent = Self::Component>
 {
     /// The component type of the pixel used for both color and alpha components if any.
-    type Component: Copy + 'static;
+    type Component: Copy;
 
     /// A generic associated type used to return the array of
     /// components despite rust's lack of const generic expressions.
