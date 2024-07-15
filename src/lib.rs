@@ -60,7 +60,10 @@ pub use formats::abgr::Abgr;
 pub use formats::argb::Argb;
 pub use formats::bgr::Bgr;
 pub use formats::bgra::Bgra;
+#[cfg(not(feature = "unstable-experimental"))]
 pub use formats::gray_alpha::GrayAlpha_v08 as GrayAlpha;
+#[cfg(not(feature = "unstable-experimental"))]
+pub use formats::gray::Gray_v08 as Gray;
 pub use formats::grb::Grb;
 pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
