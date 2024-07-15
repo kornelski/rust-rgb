@@ -1,6 +1,6 @@
 [package]
 name = "rgb"
-version = "0.9.0-alpha.1"
+version = "0.8.90-alpha.1"
 authors = [
 	"Kornel Lesiński <kornel@geekhood.net>",
 	"James Forster <james.forsterer@gmail.com>",

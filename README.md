@@ -4,9 +4,11 @@ Operating on pixels as weakly-typed vectors of `u8` is error-prone and inconveni
 
 [<img src="https://imgs.xkcd.com/comics/standards_2x.png" alt="xkcd: …there are 15 competing standards" width="500">](https://xkcd.com/927/)
 
-# v0.9 is a transitional/preview release
+# v0.8.90 is a transitional/preview release
 
-The RGB crate is getting a major update. We welcome your feedback about the crate!
+The RGB crate is getting a major update, which will eventually be stablized as v1.0.0.
+
+We welcome your feedback about the crate!
 
 * Are the names of the traits and their methods good?
 * Are there any standard library traits you'd like implemented on the pixel types?
@@ -18,11 +20,11 @@ The RGB crate is getting a major update. We welcome your feedback about the crat
 
 ## Installation
 
-Run `cargo add rgb@0.9-alpha.1` or add this to your `Cargo.toml`:
+Run `cargo add rgb@0.8.90-alpha.1` or add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rgb = "0.9-alpha.1"
+rgb = "0.8.90-alpha.1"
 ```
 
 ## Usage
