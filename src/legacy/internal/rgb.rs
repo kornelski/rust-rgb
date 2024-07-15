@@ -176,8 +176,8 @@ mod rgb_test {
     #[test]
     #[allow(deprecated)]
     fn test_fmt() {
-        let red_rgb = RGB::new(255, 0, 0);
-        let red_bgr = BGR::new(255, 0, 0);
+        let red_rgb = RGB::new(255u8, 0, 0);
+        let red_bgr = BGR::new(255u8, 0, 0);
         assert_eq!("rgb(#FF0000)", &format!("{:X}", red_rgb));
         assert_eq!("bgr(#0000FF)", &format!("{:X}", red_bgr));
         assert_eq!("rgb(#ff0000)", &format!("{:x}", red_rgb));
