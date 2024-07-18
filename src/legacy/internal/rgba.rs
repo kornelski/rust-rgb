@@ -112,8 +112,16 @@ macro_rules! impl_rgba {
                 }
             }
 
+            /// Deprecated convenience function for converting to RGBA
+            #[doc(hidden)]
+            #[deprecated(note = "use .with_alpha(a) instead")]
             #[inline(always)]
+            pub fn alpha(&self, a: A) -> Self {
+                Self { r: self.r, g: self.g, b: self.b, a }
+            }
+
             /// Create a new RGBA with the new alpha value, but same RGB values
+            #[inline(always)]
             pub fn with_alpha(&self, a: A) -> Self {
                 Self { r: self.r, g: self.g, b: self.b, a }
             }
