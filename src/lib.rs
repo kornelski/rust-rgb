@@ -78,6 +78,13 @@ pub use pixel_traits::{
     het_pixel::HetPixel,
     pixel::Pixel,
 };
+pub mod prelude {
+    pub use crate::ArrayLike;
+    pub use crate::GainAlpha;
+    pub use crate::HasAlpha;
+    pub use crate::HetPixel;
+    pub use crate::Pixel;
+}
 
 /// TryFrom errors
 pub mod error {
