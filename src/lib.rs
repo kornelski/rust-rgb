@@ -5,7 +5,8 @@
 #![no_std]
 
 #[cfg(all(test, feature = "legacy"))]
-#[macro_use] extern crate std;
+#[macro_use]
+extern crate std;
 
 mod formats {
     pub mod abgr;
@@ -22,8 +23,8 @@ mod formats {
     pub mod rgbw;
 }
 mod core_traits;
-mod inherent_impls;
 mod from;
+mod inherent_impls;
 mod tuples;
 mod pixel_traits {
     pub mod arraylike;
@@ -46,15 +47,15 @@ pub mod bytemuck;
 #[cfg(feature = "legacy")]
 mod legacy;
 #[cfg(feature = "legacy")]
-pub use legacy::*;
-#[cfg(feature = "legacy")]
 pub use ::bytemuck::{Pod, Zeroable};
 #[cfg(feature = "legacy")]
-pub use legacy::internal::pixel::{ComponentSlice, ComponentBytes, ColorComponentMap};
+pub use legacy::internal::convert::{AsPixels, FromSlice};
+#[cfg(feature = "legacy")]
+pub use legacy::internal::pixel::{ColorComponentMap, ComponentBytes, ComponentSlice};
+#[cfg(feature = "legacy")]
+pub use legacy::*;
 #[cfg(feature = "legacy")]
 pub use pixel_traits::pixel::Pixel as ComponentMap;
-#[cfg(feature = "legacy")]
-pub use legacy::internal::convert::{AsPixels, FromSlice};
 
 /// If the `num-traits` feature is enabled, the implemented traits are in this module
 #[cfg(feature = "num-traits")]
@@ -72,12 +73,19 @@ pub use formats::rgba::Rgba;
 pub use formats::rgbw::Rgbw;
 
 pub use pixel_traits::{
-    arraylike::ArrayLike,
-    gain_alpha::GainAlpha,
-    has_alpha::HasAlpha,
-    het_pixel::HetPixel,
+    arraylike::ArrayLike, gain_alpha::GainAlpha, has_alpha::HasAlpha, het_pixel::HetPixel,
     pixel::Pixel,
 };
+/// A module of re-exports of all the traits provided by this crate
+/// for use with glob imports instead of importing relevant pixel
+/// traits individually.
+///
+/// ```
+/// use rgb::Rgb;
+/// use rgb::prelude::*;
+///
+/// let pixel = Rgb::try_from_components([0, 0, 0]).unwrap();
+/// ```
 pub mod prelude {
     pub use crate::ArrayLike;
     pub use crate::GainAlpha;
