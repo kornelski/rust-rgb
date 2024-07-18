@@ -5,7 +5,8 @@
 #![no_std]
 
 #[cfg(all(test, feature = "legacy"))]
-#[macro_use] extern crate std;
+#[macro_use]
+extern crate std;
 
 mod formats {
     pub mod abgr;
@@ -22,8 +23,8 @@ mod formats {
     pub mod rgbw;
 }
 mod core_traits;
-mod inherent_impls;
 mod from;
+mod inherent_impls;
 mod tuples;
 mod pixel_traits {
     pub mod arraylike;
@@ -35,26 +36,29 @@ mod pixel_traits {
 
 /// Re-export of the [`bytemuck` crate](https://lib.rs/bytemuck). [See docs](https://docs.rs/bytemuck).
 ///
-/// Use [`::bytemuck::cast_slice()`] or [`::bytemuck::from_bytes()`] to convert
+/// Use [`bytemuck::cast_slice()`] or [`bytemuck::from_bytes()`] to convert
 /// pixels to/from `&[u8]`.
 #[cfg(feature = "bytemuck")]
 #[doc(alias = "ComponentSlice")]
 #[doc(alias = "as_bytes")]
 #[doc(alias = "Pod")]
-pub mod bytemuck;
+pub use bytemuck;
+
+#[cfg(feature = "bytemuck")]
+mod bytemuck_traits;
 
 #[cfg(feature = "legacy")]
 mod legacy;
 #[cfg(feature = "legacy")]
-pub use legacy::*;
-#[cfg(feature = "legacy")]
-pub use ::bytemuck::{Pod, Zeroable};
-#[cfg(feature = "legacy")]
-pub use legacy::internal::pixel::{ComponentSlice, ComponentBytes, ColorComponentMap};
-#[cfg(feature = "legacy")]
-pub use pixel_traits::pixel::Pixel as ComponentMap;
+pub use bytemuck::{Pod, Zeroable};
 #[cfg(feature = "legacy")]
 pub use legacy::internal::convert::{AsPixels, FromSlice};
+#[cfg(feature = "legacy")]
+pub use legacy::internal::pixel::{ColorComponentMap, ComponentBytes, ComponentSlice};
+#[cfg(feature = "legacy")]
+pub use legacy::*;
+#[cfg(feature = "legacy")]
+pub use pixel_traits::pixel::Pixel as ComponentMap;
 
 /// If the `num-traits` feature is enabled, the implemented traits are in this module
 #[cfg(feature = "num-traits")]
@@ -72,10 +76,7 @@ pub use formats::rgba::Rgba;
 pub use formats::rgbw::Rgbw;
 
 pub use pixel_traits::{
-    arraylike::ArrayLike,
-    gain_alpha::GainAlpha,
-    has_alpha::HasAlpha,
-    het_pixel::HetPixel,
+    arraylike::ArrayLike, gain_alpha::GainAlpha, has_alpha::HasAlpha, het_pixel::HetPixel,
     pixel::Pixel,
 };
 

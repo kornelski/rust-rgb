@@ -33,7 +33,7 @@ pub trait ComponentSlice<T> {
 ///
 /// Plain types are not allowed to contain struct padding, booleans, chars, enums, references or pointers.
 #[cfg(feature = "as-bytes")]
-pub trait ComponentBytes<T: ::bytemuck::Pod> {
+pub trait ComponentBytes<T: bytemuck::Pod> {
     /// The components interpreted as raw bytes, in machine's native endian. In `RGB` bytes of the red component are first.
     fn as_bytes(&self) -> &[u8];
 
