@@ -4,7 +4,6 @@
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
 #![no_std]
 
-#[cfg(all(test, feature = "legacy"))]
 #[macro_use]
 extern crate std;
 
@@ -15,7 +14,6 @@ mod formats {
     pub mod bgra;
     pub mod gray;
     pub mod gray_a;
-    #[cfg(feature = "legacy")]
     pub mod gray_alpha;
     pub mod grb;
     pub mod rgb;
@@ -44,17 +42,11 @@ mod pixel_traits {
 #[doc(alias = "Pod")]
 pub mod bytemuck;
 
-#[cfg(feature = "legacy")]
 mod legacy;
-#[cfg(feature = "legacy")]
 pub use ::bytemuck::{Pod, Zeroable};
-#[cfg(feature = "legacy")]
 pub use legacy::internal::convert::{AsPixels, FromSlice};
-#[cfg(feature = "legacy")]
 pub use legacy::internal::pixel::{ColorComponentMap, ComponentBytes, ComponentSlice};
-#[cfg(feature = "legacy")]
 pub use legacy::*;
-#[cfg(feature = "legacy")]
 pub use pixel_traits::pixel::Pixel as ComponentMap;
 
 /// If the `num-traits` feature is enabled, the implemented traits are in this module

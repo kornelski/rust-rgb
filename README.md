@@ -13,7 +13,6 @@ For **testing**, use:
 ```toml
 [dependencies]
 rgb = "0.8.90"
-# or: rgb = { version = "0.8.90", features = ["legacy"] }
 
 # this is required, because v0.8.90 is not on crates.io
 [patch.crates-io]
@@ -25,8 +24,6 @@ We welcome your feedback about the crate!
 - Are the names of the traits and their methods good?
 - Are there any standard library traits you'd like implemented on the pixel types?
 - Is the split between `Pixel`, `HetPixel`, `HasAlpha` sensible? (pixels support a different type for the alpha channel, and there's `Rgbw` without alpha).
-- With the `legacy` feature enabled, is the crate sufficiently backwards compatible? (later we're going to use semver trick to provide interoperability with other v0.8 crates)
-- Without the `legacy` feature enabled, is the upgrade easy? Anything missing?
 
 [Please open issues in the repo with the feedback](https://github.com/kornelski/rust-rgb/issues) or message [@kornel@mastodon.social](https://mastodon.social/@kornel).
 
@@ -203,7 +200,6 @@ the `v0.8` release so as to be non-breaking, however, once migrated to
 going to be removed in the next major release after `v0.9`.
 
 ```toml
-legacy = ["as-bytes"]
 argb = []
 grb = []
 checked_fns = []

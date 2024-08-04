@@ -20,17 +20,13 @@ bytemuck!(Bgra);
 bytemuck!(Abgr);
 bytemuck!(GrayA);
 
-#[cfg(feature = "legacy")]
 use crate::formats::gray_alpha::GrayAlpha_v08;
-#[cfg(feature = "legacy")]
 bytemuck!(GrayAlpha_v08);
 
-#[cfg(feature = "legacy")]
 use crate::formats::gray::Gray_v08;
-#[cfg(feature = "legacy")]
 bytemuck!(Gray_v08);
 
-#[cfg(all(feature = "legacy", feature = "as-bytes"))]
+#[cfg(feature = "as-bytes")]
 impl<T: ::bytemuck::Pod> crate::ComponentBytes<T> for [Gray<T>] {
     #[inline]
     fn as_bytes(&self) -> &[u8] {
@@ -45,7 +41,7 @@ impl<T: ::bytemuck::Pod> crate::ComponentBytes<T> for [Gray<T>] {
     }
 }
 
-#[cfg(all(feature = "legacy", feature = "as-bytes"))]
+#[cfg(feature = "as-bytes")]
 impl<T: ::bytemuck::Pod> crate::ComponentBytes<T> for [GrayAlpha_v08<T>] {
     #[inline]
     fn as_bytes(&self) -> &[u8] {

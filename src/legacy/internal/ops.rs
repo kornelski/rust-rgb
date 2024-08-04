@@ -1,7 +1,11 @@
+#[allow(unused_imports)]
 use crate::formats::gray::Gray_v08;
+#[allow(unused_imports)]
 use crate::formats::gray_alpha::GrayAlpha_v08;
+#[allow(unused_imports)]
 use crate::{Abgr, Argb, Bgr, Bgra, Grb,Rgb, Rgba};
 
+#[allow(unused_macros)]
 macro_rules! impl_struct_checked {
     ($ty:ident, $field_ty:ident, => $($field:tt)+) => {
         impl $ty<$field_ty>
@@ -31,6 +35,7 @@ macro_rules! impl_struct_checked {
     }
 }
 
+#[allow(unused_macros)]
 macro_rules! impl_legacy_checked {
     ($ty:ident => $($field:tt)+) => {
         impl_struct_checked!($ty, u8, => $($field)+);
