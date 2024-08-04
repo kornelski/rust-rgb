@@ -56,6 +56,12 @@ pub(crate) mod formats {
     pub mod rgba;
 }
 
+/// traits for forward compatibility with the next major version of the crate
+pub mod prelude {
+    pub use crate::legacy::internal::pixel::ComponentMap;
+    pub use crate::legacy::internal::pixel::ColorComponentMap;
+}
+
 pub use formats::abgr::Abgr;
 pub use formats::argb::Argb;
 pub use formats::bgr::Bgr;
