@@ -145,6 +145,20 @@ macro_rules! trait_impls_common {
                 };
             }
         }
+
+        impl<T> AsRef<[T; $length]> for $name<T> where T: Copy + 'static {
+            #[inline]
+            fn as_ref(&self) -> &[T; $length] {
+                crate::Pixel::as_array(self)
+            }
+        }
+
+        impl<T> AsMut<[T; $length]> for $name<T> where T: Copy + 'static {
+            #[inline]
+            fn as_mut(&mut self) -> &mut [T; $length] {
+                crate::Pixel::as_array_mut(self)
+            }
+        }
     };
 }
 

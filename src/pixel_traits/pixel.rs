@@ -50,11 +50,20 @@ pub trait Pixel:
     /// assert_eq!(rgba.to_array(), [0, 10, 100, 50]);
     /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
-    #[doc(alias = "as_array")]
+    #[doc(alias = "into_array")]
     #[doc(alias = "component_array")]
     fn to_array(&self) -> Self::ComponentArray<Self::Component>
     where
         Self::ComponentArray<Self::Component>: Copy;
+
+    /// Cast `self` to array reference of the pixel's components
+    #[doc(alias = "as_ref")]
+    fn as_array(&self) -> &Self::ComponentArray<Self::Component>;
+
+    /// Cast `self` to array reference of the pixel's components
+    #[doc(alias = "as_mut")]
+    fn as_array_mut(&mut self) -> &mut Self::ComponentArray<Self::Component>;
+
     /// Returns an owned array of the pixel's mutably borrowed components.
     ///
     /// # Examples
@@ -72,7 +81,7 @@ pub trait Pixel:
     /// assert_eq!(rgba.to_array(), [0, 10, 40, 50]);
     /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
-    #[doc(alias = "as_array_mut")]
+    #[doc(alias = "to_array_mut")]
     fn each_mut(&mut self) -> Self::ComponentArray<&mut Self::Component>;
 
     /// Tries to create new instance given an iterator of its components.
@@ -154,6 +163,20 @@ macro_rules! without_alpha {
             }
 
             #[inline]
+            fn as_array(&self) -> &Self::ComponentArray<Self::Component> {
+                unsafe {
+                    &*(self as *const Self).cast()
+                }
+            }
+
+            #[inline]
+            fn as_array_mut(&mut self) -> &mut Self::ComponentArray<Self::Component> {
+                unsafe {
+                    &mut *(self as *mut Self).cast()
+                }
+            }
+
+            #[inline]
             fn each_mut(&mut self) -> Self::ComponentArray<&mut Self::Component> {
                 [$(&mut self.$bit),*]
             }
@@ -176,6 +199,7 @@ macro_rules! without_alpha {
         }
     }
 }
+
 macro_rules! with_alpha {
     ($name:tt, $length:literal, [$($bit:tt),*]) => {
         impl<T> Pixel for $name<T, T> where T: Copy + 'static {
@@ -185,6 +209,20 @@ macro_rules! with_alpha {
             #[inline]
             fn to_array(&self) -> Self::ComponentArray<Self::Component> where Self::ComponentArray<Self::Component>: Copy {
                 [$(self.$bit),*]
+            }
+
+            #[inline]
+            fn as_array(&self) -> &Self::ComponentArray<Self::Component> {
+                unsafe {
+                    &*(self as *const Self).cast()
+                }
+            }
+
+            #[inline]
+            fn as_array_mut(&mut self) -> &mut Self::ComponentArray<Self::Component> {
+                unsafe {
+                    &mut *(self as *mut Self).cast()
+                }
             }
 
             #[inline]
@@ -234,4 +272,21 @@ use crate::formats::gray_alpha::GrayAlpha_v08;
 with_alpha!(GrayAlpha_v08, 2, [0, 1]);
 
 
+#[test]
+fn as_refs() {
+    let mut r = Rgba::new(1u8,2,3,4u8);
+    assert_eq!(&[1,2,3,4], r.as_array());
+    assert_eq!(&[1,2,3,4], AsRef::<[u8; 4]>::as_ref(&r));
+    assert_eq!(&[1,2,3,4], r.as_ref());
+    assert_eq!([1,2,3,4], *r.as_array_mut());
+    assert_eq!([1,2,3,4], *AsMut::<[u8; 4]>::as_mut(&mut r));
+    assert_eq!([1,2,3,4], *r.as_mut());
 
+    let mut r = GrayA::new(1u8,4u8);
+    assert_eq!(&[1,4], r.as_array());
+    assert_eq!(&[1,4], AsRef::<[u8; 2]>::as_ref(&r));
+    assert_eq!(&[1,4], r.as_ref());
+    assert_eq!([1,4], *r.as_array_mut());
+    assert_eq!([1,4], *AsMut::<[u8; 2]>::as_mut(&mut r));
+    assert_eq!([1,4], *r.as_mut());
+}

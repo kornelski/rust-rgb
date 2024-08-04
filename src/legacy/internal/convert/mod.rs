@@ -1,5 +1,3 @@
-#![allow(deprecated)]
-use super::pixel::ComponentSlice;
 use crate::alt::*;
 use crate::*;
 use core::{mem, slice};
@@ -288,20 +286,6 @@ impl<T> AsRef<T> for Gray_v08<T> {
     }
 }
 
-impl<T> AsRef<[T]> for RGB<T> {
-    #[inline(always)]
-    fn as_ref(&self) -> &[T] {
-        self.as_slice()
-    }
-}
-
-impl<T> AsRef<[T]> for RGBA<T> {
-    #[inline(always)]
-    fn as_ref(&self) -> &[T] {
-        self.as_slice()
-    }
-}
-
 impl<T> AsRef<T> for GrayAlpha<T> {
     #[inline(always)]
     fn as_ref(&self) -> &T {
@@ -313,20 +297,6 @@ impl<T> AsMut<T> for Gray_v08<T> {
     #[inline(always)]
     fn as_mut(&mut self) -> &mut T {
         &mut self.0
-    }
-}
-
-impl<T> AsMut<[T]> for RGB<T> {
-    #[inline(always)]
-    fn as_mut(&mut self) -> &mut [T] {
-        self.as_mut_slice()
-    }
-}
-
-impl<T> AsMut<[T]> for RGBA<T> {
-    #[inline(always)]
-    fn as_mut(&mut self) -> &mut [T] {
-        self.as_mut_slice()
     }
 }
 
@@ -355,6 +325,9 @@ fn argb_converts() {
 
 #[test]
 fn converts() {
+    #![allow(deprecated)]
+    use super::pixel::ComponentSlice;
+
     assert_eq!([1,2].as_gray(), [Gray_v08::new(1), Gray_v08::new(2)]);
     assert_eq!([3].as_gray_mut(), [Gray_v08::new(3)]);
     assert_eq!([1,2].as_gray_alpha(), [GrayAlpha::new(1, 2)]);

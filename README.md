@@ -247,3 +247,4 @@ Planned changes:
 3. Use the `bytemuck` crate for conversions from/to bytes.
 4. Use the `num-traits` crate for `.checked_add()`, don't enable `checked_fns` feature.
 5. Don't enable `gbr` and `argb` features. All pixel types are enabled by default.
+6. `AsRef<[T]>` implementations have changed to `AsRef<[T; N]>`. In most cases `.as_ref()`/`.as_mut()` calls should coerce to a slice anyway.
