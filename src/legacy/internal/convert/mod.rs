@@ -61,15 +61,15 @@ as_pixels_impl! {Abgr, 4}
 /// If there's any incomplete pixel at the end of the slice it is ignored.
 pub trait FromSlice<T: Copy> {
     /// Reinterpert slice as RGB pixels
-    fn as_rgb(&self) -> &[RGB<T>];
+    fn as_rgb(&self) -> &[Rgb<T>];
     /// Reinterpert slice as RGBA pixels
-    fn as_rgba(&self) -> &[RGBA<T>];
+    fn as_rgba(&self) -> &[Rgba<T>];
     /// Reinterpert slice as alpha-first ARGB pixels
     fn as_argb(&self) -> &[ARGB<T>];
     /// Reinterpert mutable slice as RGB pixels
-    fn as_rgb_mut(&mut self) -> &mut [RGB<T>];
+    fn as_rgb_mut(&mut self) -> &mut [Rgb<T>];
     /// Reinterpert mutable slice as RGBA pixels
-    fn as_rgba_mut(&mut self) -> &mut [RGBA<T>];
+    fn as_rgba_mut(&mut self) -> &mut [Rgba<T>];
     /// Reinterpert mutable slice as alpha-first ARGB pixels
     fn as_argb_mut(&mut self) -> &mut [ARGB<T>];
 
@@ -87,27 +87,27 @@ pub trait FromSlice<T: Copy> {
     fn as_gray_alpha_mut(&mut self) -> &mut [GrayAlpha<T>];
 
     /// Reinterpert slice as reverse-order BGR pixels
-    fn as_bgr(&self) -> &[BGR<T>];
+    fn as_bgr(&self) -> &[Bgr<T>];
     /// Reinterpert slice as reverse-order BGRA pixels
-    fn as_bgra(&self) -> &[BGRA<T>];
+    fn as_bgra(&self) -> &[Bgra<T>];
     /// Reinterpert slice as reverse-order ABGR pixels
-    fn as_abgr(&self) -> &[ABGR<T>];
+    fn as_abgr(&self) -> &[Abgr<T>];
     /// Reinterpert ntable slice as reverse-order BGR pixels
-    fn as_bgr_mut(&mut self) -> &mut [BGR<T>];
+    fn as_bgr_mut(&mut self) -> &mut [Bgr<T>];
     /// Reinterpert mutable slice as reverse-order alpha-last BGRA pixels
-    fn as_bgra_mut(&mut self) -> &mut [BGRA<T>];
+    fn as_bgra_mut(&mut self) -> &mut [Bgra<T>];
     /// Reinterpert mutable slice as reverse-order alpha-first ABGR pixels
-    fn as_abgr_mut(&mut self) -> &mut [ABGR<T>];
+    fn as_abgr_mut(&mut self) -> &mut [Abgr<T>];
 }
 
 impl<T: Copy> FromSlice<T> for [T] {
     #[inline]
-    fn as_rgb(&self) -> &[RGB<T>] {
+    fn as_rgb(&self) -> &[Rgb<T>] {
         unsafe { from_items_to_struct(self) }
     }
 
     #[inline]
-    fn as_rgba(&self) -> &[RGBA<T>] {
+    fn as_rgba(&self) -> &[Rgba<T>] {
         unsafe { from_items_to_struct(self) }
     }
 
@@ -117,12 +117,12 @@ impl<T: Copy> FromSlice<T> for [T] {
     }
 
     #[inline]
-    fn as_rgb_mut(&mut self) -> &mut [RGB<T>] {
+    fn as_rgb_mut(&mut self) -> &mut [Rgb<T>] {
         unsafe { from_items_to_struct_mut(self) }
     }
 
     #[inline]
-    fn as_rgba_mut(&mut self) -> &mut [RGBA<T>] {
+    fn as_rgba_mut(&mut self) -> &mut [Rgba<T>] {
         unsafe { from_items_to_struct_mut(self) }
     }
 
@@ -152,32 +152,32 @@ impl<T: Copy> FromSlice<T> for [T] {
     }
 
     #[inline]
-    fn as_bgr(&self) -> &[BGR<T>] {
+    fn as_bgr(&self) -> &[Bgr<T>] {
         unsafe { from_items_to_struct(self) }
     }
 
     #[inline]
-    fn as_abgr(&self) -> &[ABGR<T>] {
+    fn as_abgr(&self) -> &[Abgr<T>] {
         unsafe { from_items_to_struct(self) }
     }
 
     #[inline]
-    fn as_bgra(&self) -> &[BGRA<T>] {
+    fn as_bgra(&self) -> &[Bgra<T>] {
         unsafe { from_items_to_struct(self) }
     }
 
     #[inline]
-    fn as_bgr_mut(&mut self) -> &mut [BGR<T>] {
+    fn as_bgr_mut(&mut self) -> &mut [Bgr<T>] {
         unsafe { from_items_to_struct_mut(self) }
     }
 
     #[inline]
-    fn as_bgra_mut(&mut self) -> &mut [BGRA<T>] {
+    fn as_bgra_mut(&mut self) -> &mut [Bgra<T>] {
         unsafe { from_items_to_struct_mut(self) }
     }
 
     #[inline]
-    fn as_abgr_mut(&mut self) -> &mut [ABGR<T>] {
+    fn as_abgr_mut(&mut self) -> &mut [Abgr<T>] {
         unsafe { from_items_to_struct_mut(self) }
     }
 }
@@ -207,42 +207,42 @@ macro_rules! rgb_impl_from {
     };
 }
 
-rgb_impl_from! {RGB, u8,i16}
-rgb_impl_from! {RGB, u8,i32}
-rgb_impl_from! {RGB, u8,u16}
-rgb_impl_from! {RGB, u8,u32}
-rgb_impl_from! {RGB, u16,i32}
-rgb_impl_from! {RGB, u16,u32}
-rgb_impl_from! {RGB, u16,u64}
+rgb_impl_from! {Rgb, u8,i16}
+rgb_impl_from! {Rgb, u8,i32}
+rgb_impl_from! {Rgb, u8,u16}
+rgb_impl_from! {Rgb, u8,u32}
+rgb_impl_from! {Rgb, u16,i32}
+rgb_impl_from! {Rgb, u16,u32}
+rgb_impl_from! {Rgb, u16,u64}
 
-rgb_impl_from! {RGB, u8,f32}
-rgb_impl_from! {RGB, u8,f64}
-rgb_impl_from! {RGB, u16,f32}
-rgb_impl_from! {RGB, u16,f64}
+rgb_impl_from! {Rgb, u8,f32}
+rgb_impl_from! {Rgb, u8,f64}
+rgb_impl_from! {Rgb, u16,f32}
+rgb_impl_from! {Rgb, u16,f64}
 
-rgb_impl_from! {RGB, i16,f32}
-rgb_impl_from! {RGB, i16,f64}
+rgb_impl_from! {Rgb, i16,f32}
+rgb_impl_from! {Rgb, i16,f64}
 
-rgb_impl_from! {RGB, i32,f64}
-rgb_impl_from! {RGB, f32,f64}
+rgb_impl_from! {Rgb, i32,f64}
+rgb_impl_from! {Rgb, f32,f64}
 
-rgb_impl_from! {RGBA, u16,i32}
-rgb_impl_from! {RGBA, u16,u32}
-rgb_impl_from! {RGBA, u16,u64}
+rgb_impl_from! {Rgba, u16,i32}
+rgb_impl_from! {Rgba, u16,u32}
+rgb_impl_from! {Rgba, u16,u64}
 
-rgb_impl_from! {RGBA, u8,i16}
-rgb_impl_from! {RGBA, u8,u16}
-rgb_impl_from! {RGBA, u8,u32}
-rgb_impl_from! {RGBA, u8,f32}
-rgb_impl_from! {RGBA, u8,f64}
-rgb_impl_from! {RGBA, u16,f32}
-rgb_impl_from! {RGBA, u16,f64}
+rgb_impl_from! {Rgba, u8,i16}
+rgb_impl_from! {Rgba, u8,u16}
+rgb_impl_from! {Rgba, u8,u32}
+rgb_impl_from! {Rgba, u8,f32}
+rgb_impl_from! {Rgba, u8,f64}
+rgb_impl_from! {Rgba, u16,f32}
+rgb_impl_from! {Rgba, u16,f64}
 
-rgb_impl_from! {RGBA, i16,f32}
-rgb_impl_from! {RGBA, i16,f64}
+rgb_impl_from! {Rgba, i16,f32}
+rgb_impl_from! {Rgba, i16,f64}
 
-rgb_impl_from! {RGBA, i32,f64}
-rgb_impl_from! {RGBA, f32,f64}
+rgb_impl_from! {Rgba, i32,f64}
+rgb_impl_from! {Rgba, f32,f64}
 
 impl<T: Clone> From<Gray_v08<T>> for Rgb<T> {
     #[inline(always)]
@@ -267,7 +267,7 @@ impl<T: Clone> From<Gray_v08<T>> for Rgba<T, u8> {
     }
 }
 
-impl<T: Clone, A> From<GrayAlpha<T, A>> for RGBA<T, A> {
+impl<T: Clone, A> From<GrayAlpha<T, A>> for Rgba<T, A> {
     #[inline(always)]
     fn from(other: GrayAlpha<T, A>) -> Self {
         Self {
@@ -309,18 +309,18 @@ impl<T> AsMut<T> for GrayAlpha<T> {
 
 #[test]
 fn argb_converts() {
-    let argb = ARGB { a: 0xffu8, r: 0xfa, g: 0xfb, b: 0xfc };
-    let rgba = RGBA { a: 0xffu8, r: 0xfa, g: 0xfb, b: 0xfc };
+    let argb = Argb { a: 0xffu8, r: 0xfa, g: 0xfb, b: 0xfc };
+    let rgba = Rgba { a: 0xffu8, r: 0xfa, g: 0xfb, b: 0xfc };
 
-    assert_eq!(RGBA::from(argb), rgba);
-    assert_eq!(ARGB::from(rgba), argb);
+    assert_eq!(Rgba::from(argb), rgba);
+    assert_eq!(Argb::from(rgba), argb);
     assert_eq!(rgba.rgb(), argb.rgb());
 
-    let bgra = BGRA { a: 0xffu8, r: 0x1f, g: 0x2f, b: 0x3f };
-    let abgr = ABGR { a: 0xffu8, r: 0x1f, g: 0x2f, b: 0x3f };
+    let bgra = Bgra { a: 0xffu8, r: 0x1f, g: 0x2f, b: 0x3f };
+    let abgr = Abgr { a: 0xffu8, r: 0x1f, g: 0x2f, b: 0x3f };
 
-    assert_eq!(BGRA::from(abgr), bgra);
-    assert_eq!(ABGR::from(bgra), abgr);
+    assert_eq!(Bgra::from(abgr), bgra);
+    assert_eq!(Abgr::from(bgra), abgr);
 }
 
 #[test]
