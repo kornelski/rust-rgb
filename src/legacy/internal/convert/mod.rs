@@ -354,6 +354,24 @@ impl<T> AsRef<[T; 4]> for RGBA<T> {
     }
 }
 
+impl<T> AsRef<[T; 4]> for ARGB<T> {
+    fn as_ref(&self) -> &[T; 4] {
+        unsafe { &*(self as *const Self).cast() }
+    }
+}
+
+impl<T> AsRef<[T; 4]> for BGRA<T> {
+    fn as_ref(&self) -> &[T; 4] {
+        unsafe { &*(self as *const Self).cast() }
+    }
+}
+
+impl<T> AsRef<[T; 4]> for ABGR<T> {
+    fn as_ref(&self) -> &[T; 4] {
+        unsafe { &*(self as *const Self).cast() }
+    }
+}
+
 #[cfg(not(feature = "unstable-experimental"))]
 impl<T> AsRef<T> for GrayAlpha<T> {
     #[inline(always)]
