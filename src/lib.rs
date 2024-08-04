@@ -108,7 +108,8 @@ pub use formats::rgb::Rgb as RGB;
 /// Renamed to `Rgba`
 pub use formats::rgba::Rgba as RGBA;
 
-#[cfg(feature = "unstable-experimental")]
+#[doc(hidden)]
+/// Incompatible replacement for the `GrayAlpha` type
 pub use formats::gray_a::GrayA;
 
 #[cfg(feature = "unstable-experimental")]
