@@ -5,6 +5,12 @@ use crate::{Abgr, Argb, Bgra, GrayA, Rgba};
 ///
 /// This trait is implemented only for those types in the crate that
 /// contain an alpha component, such as [`Rgba`].
+///
+/// There are no geneirc methods for dropping of the alpha component,
+/// because doing that correctly requires alpha-blending of the
+/// color components with some background color. Otherwise
+/// meaningless garbage values of the RGB channels of fully-transparent
+/// pixels may be uncovered.
 pub trait HasAlpha: HetPixel {
     /// Returns a copy of the pixel's alpha component.
     ///
