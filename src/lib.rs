@@ -46,7 +46,7 @@ mod legacy;
 #[cfg(feature = "bytemuck")]
 pub use ::bytemuck::{Pod, Zeroable};
 pub use legacy::internal::convert::{AsPixels, FromSlice};
-#[cfg(feature = "bytemuck")]
+#[cfg(feature = "as-bytes")]
 pub use legacy::internal::pixel::ComponentBytes;
 pub use legacy::internal::pixel::{ColorComponentMap, ComponentSlice};
 pub use legacy::*;
