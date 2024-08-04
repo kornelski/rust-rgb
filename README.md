@@ -22,11 +22,11 @@ rgb.git = "https://github.com/kornelski/rust-rgb"
 
 We welcome your feedback about the crate!
 
-* Are the names of the traits and their methods good?
-* Are there any standard library traits you'd like implemented on the pixel types?
-* Is the split between `Pixel`, `HetPixel`, `HasAlpha` sensible? (pixels support a different type for the alpha channel, and there's `Rgbw` without alpha).
-* With the `legacy` feature enabled, is the crate sufficiently backwards compatible? (later we're going to use semver trick to provide interoperability with other v0.8 crates)
-* Without the `legacy` feature enabled, is the upgrade easy? Anything missing?
+- Are the names of the traits and their methods good?
+- Are there any standard library traits you'd like implemented on the pixel types?
+- Is the split between `Pixel`, `HetPixel`, `HasAlpha` sensible? (pixels support a different type for the alpha channel, and there's `Rgbw` without alpha).
+- With the `legacy` feature enabled, is the crate sufficiently backwards compatible? (later we're going to use semver trick to provide interoperability with other v0.8 crates)
+- Without the `legacy` feature enabled, is the upgrade easy? Anything missing?
 
 [Please open issues in the repo with the feedback](https://github.com/kornelski/rust-rgb/issues) or message [@kornel@mastodon.social](https://mastodon.social/@kornel).
 
@@ -156,6 +156,12 @@ assert_eq!(Rgba {r: 0, g: 0, b: 0, a: 0}.with_alpha(255), expected);
 A trait only implemented on pixels that have an alpha
 component.
 
+Due to a naming conflict with several now-deprecated inherent
+functions with the same name (such as `Rgb::alpha()`) the
+`HasAlpha::alpha()` method requires fully qualified syntax for
+disambiguation. The deprecated functions are due to be removed in a
+future release which will solve this issue.
+
 ```rust
 use rgb::{Rgba, HasAlpha};
 
@@ -163,7 +169,7 @@ let mut rgba: Rgba<u8> = Rgba {r: 0, g: 0, b: 0, a: 255};
 
 *rgba.alpha_mut() -= 50;
 
-assert_eq!(rgba.alpha(), 205);
+assert_eq!(HasAlpha::alpha(&rgba), 205);
 ```
 
 ## Bytemuck
@@ -210,7 +216,7 @@ This crate is purposefully agnostic about the color-spaces of the
 pixel types. For example, `Gray<u8>` could be either linear lightness or
 gamma-corrected luma, etc.
 
-*Correct* color management is a complex problem, and this crate aims to be the lowest common denominator, so it's intentionally agnostic about it.
+_Correct_ color management is a complex problem, and this crate aims to be the lowest common denominator, so it's intentionally agnostic about it.
 
 However, this library supports any subpixel type for `RGB<T>`, and `RGBA<RGBType, AlphaType>`, so you can use them with a newtype, e.g.:
 
@@ -226,10 +232,10 @@ The plan is to provide easy migration to v1.0. There will be a transitional v0.9
 
 Planned changes:
 
- * Types will be renamed to follow Rust's naming convention: `RGBA` → `Rgba`. The names with an `8` or `16` suffix (`RGBA8`) will continue to work.
- * The `Gray` and `GrayAlpha` types will change from tuple structs with `.0` to structs with named fields `.v` (value) and `.a` (alpha). Through a `Deref` trick both field names will work, but `.0` is going to be deprecated.
- * `bytemuck::Pod` (conversions from/to raw bytes) will require color and alpha components to be the same type (i.e. it will work with `Rgba<u8>`, but not `Rgba<Newtype, DifferentType>`). Currently it's unsound if the alpha has a different size than color components.
- * Many inherent methods will be moved to a new `Pixel` trait.
+- Types will be renamed to follow Rust's naming convention: `RGBA` → `Rgba`. The names with an `8` or `16` suffix (`RGBA8`) will continue to work.
+- The `Gray` and `GrayAlpha` types will change from tuple structs with `.0` to structs with named fields `.v` (value) and `.a` (alpha). Through a `Deref` trick both field names will work, but `.0` is going to be deprecated.
+- `bytemuck::Pod` (conversions from/to raw bytes) will require color and alpha components to be the same type (i.e. it will work with `Rgba<u8>`, but not `Rgba<Newtype, DifferentType>`). Currently it's unsound if the alpha has a different size than color components.
+- Many inherent methods will be moved to a new `Pixel` trait.
 
 ## Migration from 0.8 to 0.9
 
@@ -239,5 +245,5 @@ Planned changes:
 
 2. Change field access on `GrayAlpha` from `.0` and `.1` to `.v` and `.a` where possible.
 3. Use the `bytemuck` crate for conversions from/to bytes.
-3. Use the `num-traits` crate for `.checked_add()`, don't enable `checked_fns` feature.
-4. Don't enable `gbr` and `argb` features. All pixel types are enabled by default.
+4. Use the `num-traits` crate for `.checked_add()`, don't enable `checked_fns` feature.
+5. Don't enable `gbr` and `argb` features. All pixel types are enabled by default.
