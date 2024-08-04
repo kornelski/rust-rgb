@@ -68,7 +68,7 @@ fn shared_impl() {
     }
 
     let b = SharedPixelBuffer {
-        data: [crate::RGB8::new(0,0,0)],
+        data: [crate::RGB8::new(0, 0, 0)],
     };
     let _ = b.as_bytes();
 }

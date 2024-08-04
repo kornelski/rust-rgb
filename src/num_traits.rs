@@ -111,7 +111,6 @@ num_traits_with_alpha!(Bgra, [b, g, r, a]);
 num_traits_with_alpha!(Abgr, [a, b, g, r]);
 num_traits_with_alpha!(GrayA, [v, a]);
 
-
 #[test]
 #[cfg(not(feature = "checked_fns"))]
 fn test_checked_sub() {

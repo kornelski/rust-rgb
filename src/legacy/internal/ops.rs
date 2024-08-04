@@ -3,7 +3,7 @@ use crate::formats::gray::Gray_v08;
 #[allow(unused_imports)]
 use crate::formats::gray_alpha::GrayAlpha_v08;
 #[allow(unused_imports)]
-use crate::{Abgr, Argb, Bgr, Bgra, Grb,Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Grb, Rgb, Rgba};
 
 #[allow(unused_macros)]
 macro_rules! impl_struct_checked {
@@ -98,12 +98,12 @@ mod test {
         assert_eq!(RGBA::new_alpha(2f32,4.,6.,8u32), RGBA::new_alpha(1f32,2.,3.,4u32) + RGBA{r:1f32,g:2.0,b:3.0,a:4u32});
         assert_eq!(RGBA::new(2i16,4,6,8), RGBA::new(1,3,5,7) + 1);
 
-        assert_eq!(RGB::new(255, 255, 0), RED_RGB+GREEN_RGB);
-        assert_eq!(RGB::new(255, 0, 0), RED_RGB+RGB::new(0, 0, 0));
+        assert_eq!(RGB::new(255, 255, 0), RED_RGB + GREEN_RGB);
+        assert_eq!(RGB::new(255, 0, 0), RED_RGB + RGB::new(0, 0, 0));
         assert_eq!(WHITE_RGB, BLACK_RGB + 255);
 
-        assert_eq!(RGBA::new(255, 255, 0, 255), RED_RGBA+GREEN_RGBA);
-        assert_eq!(RGBA::new(255, 0, 0, 255), RED_RGBA+RGBA::new(0, 0, 0, 0));
+        assert_eq!(RGBA::new(255, 255, 0, 255), RED_RGBA + GREEN_RGBA);
+        assert_eq!(RGBA::new(255, 0, 0, 255), RED_RGBA + RGBA::new(0, 0, 0, 0));
         assert_eq!(WHITE_RGBA, BLACK_RGBA + 255);
     }
 
