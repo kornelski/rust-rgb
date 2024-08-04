@@ -136,7 +136,7 @@ impl<T: Copy, B> ComponentMap<Gray<B>, T, B> for Gray<T> {
 
 impl<T: Copy, B> ColorComponentMap<Gray<B>, T, B> for Gray<T> {
     #[inline(always)]
-    fn map_c<F>(&self, mut f: F) -> Gray<B> where F: FnMut(T) -> B {
+    fn map_colors<F>(&self, mut f: F) -> Gray<B> where F: FnMut(T) -> B {
         Gray(f(self.0))
     }
 }
@@ -151,7 +151,7 @@ impl<T: Copy, B> ComponentMap<GrayAlpha<B>, T, B> for GrayAlpha<T> {
 
 impl<T: Copy, A: Copy, B> ColorComponentMap<GrayAlpha<B, A>, T, B> for GrayAlpha<T, A> {
     #[inline(always)]
-    fn map_c<F>(&self, mut f: F) -> GrayAlpha<B, A>
+    fn map_colors<F>(&self, mut f: F) -> GrayAlpha<B, A>
     where F: FnMut(T) -> B {
         GrayAlpha(f(self.0), self.1)
     }

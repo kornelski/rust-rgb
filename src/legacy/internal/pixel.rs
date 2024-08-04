@@ -81,6 +81,17 @@ pub trait ColorComponentMap<DestPixel, SrcComponent, DestComponent> {
     /// Convenience function for applying the same formula to every rgb/gray component, but skipping the alpha component.
     ///
     /// Note that it returns the pixel directly, not an Interator.
+    #[doc(alias = "map_colors_same")]
+    fn map_colors<Callback>(&self, f: Callback) -> DestPixel
+        where Callback: FnMut(SrcComponent) -> DestComponent {
+            #[allow(deprecated)]
+            self.map_c(f)
+        }
+
+    /// Alias of `map_colors`
+    #[deprecated(note = "renamed to map_colors")]
     fn map_c<Callback>(&self, f: Callback) -> DestPixel
-        where Callback: FnMut(SrcComponent) -> DestComponent;
+        where Callback: FnMut(SrcComponent) -> DestComponent {
+            self.map_colors(f)
+    }
 }

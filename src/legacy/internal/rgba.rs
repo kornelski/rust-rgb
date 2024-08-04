@@ -155,7 +155,7 @@ macro_rules! impl_rgba {
 
         impl<T: Copy, A: Copy, B> ColorComponentMap<$RGBA<B, A>, T, B> for $RGBA<T, A> {
             #[inline(always)]
-            fn map_c<F>(&self, mut f: F) -> $RGBA<B, A>
+            fn map_colors<F>(&self, mut f: F) -> $RGBA<B, A>
             where F: FnMut(T) -> B {
                 $RGBA {
                     r: f(self.r),
@@ -360,7 +360,7 @@ fn rgba_test() {
     let neg = RGBA::new(1u8,2,3,4).map_rgb(|c| -(c as i16));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4i16, neg.a);
-    let neg = RGBA::new(1u8,2,3,4).map_c(|c| -(c as i16));
+    let neg = RGBA::new(1u8,2,3,4).map_colors(|c| -(c as i16));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4u8, neg.a);
 
@@ -411,6 +411,7 @@ fn bgra_test() {
     let neg = BGRA::new(1u8, 2u8, 3u8, 4u8).map_rgb(|c| -(c as i16));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4i16, neg.a);
+    #[allow(deprecated)]
     let neg = BGRA::new(1u8, 2u8, 3u8, 4u8).map_c(|c| -(c as i16));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4u8, neg.a);

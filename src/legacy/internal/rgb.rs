@@ -38,7 +38,7 @@ macro_rules! impl_rgb {
 
         impl<T: Copy, B> ColorComponentMap<$RGB<B>, T, B> for $RGB<T> {
             #[inline(always)]
-            fn map_c<F>(&self, mut f: F) -> $RGB<B>
+            fn map_colors<F>(&self, mut f: F) -> $RGB<B>
                 where F: FnMut(T) -> B {
                 $RGB {
                     r:f(self.r),
