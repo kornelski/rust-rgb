@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray_v09, GrayA, Grb, Rgb, Rgba, Rgbw};
 
 /// Re-exports from [the `num-traits` crate](https://lib.rs/crates/num-traits).
 pub use num_traits::ops::checked::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
@@ -102,7 +102,7 @@ macro_rules! num_traits_with_alpha {
 num_traits_without_alpha!(Rgb, [r, g, b]);
 num_traits_without_alpha!(Bgr, [b, g, r]);
 num_traits_without_alpha!(Grb, [g, r, b]);
-num_traits_without_alpha!(Gray, [v]);
+num_traits_without_alpha!(Gray_v09, [v]);
 num_traits_without_alpha!(Rgbw, [r, g, b, w]);
 
 num_traits_with_alpha!(Rgba, [r, g, b, a]);

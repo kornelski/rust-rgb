@@ -1,6 +1,6 @@
 use core::fmt::Display;
 use crate::HetPixel;
-use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, Gray, GrayA, Grb,Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, Gray_v09, GrayA, Grb,Rgb, Rgba, Rgbw};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 /// Error returned from the [`Pixel::try_from_components()`] function.
@@ -258,7 +258,7 @@ with_alpha!(GrayA, 2, [v, a]);
 without_alpha!(Bgr, 3, [b, g, r]);
 without_alpha!(Rgb, 3, [r, g, b]);
 without_alpha!(Grb, 3, [r, g, b]);
-without_alpha!(Gray, 1, [v]);
+without_alpha!(Gray_v09, 1, [v]);
 without_alpha!(Rgbw, 4, [r, g, b, w]);
 
 use crate::formats::gray::Gray_v08;

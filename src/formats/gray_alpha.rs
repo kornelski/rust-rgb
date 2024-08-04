@@ -7,6 +7,12 @@ use core::ops::Deref;
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// A pixel for grayscale value + alpha components (rgb crate v0.8)
 ///
+/// This is the legacy gray+alpha pixel type as opposed to the new gray+alpha type
+/// (`rgb::GrayA`). This type is kept for backwards-compatibility.
+///
+/// You should transition to the new gray+alpha pixel type as this type is
+/// due to be removed in a future release.
+///
 /// Through a `Deref` hack it renames the fields from `.0` and `.1`
 /// to `.v` (value) and `.a` (alpha)
 #[allow(non_camel_case_types)]

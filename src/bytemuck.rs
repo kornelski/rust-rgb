@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray_v09, GrayA, Grb, Rgb, Rgba, Rgbw};
 
 pub use ::bytemuck::*;
 
@@ -12,7 +12,7 @@ macro_rules! bytemuck {
 bytemuck!(Rgb);
 bytemuck!(Bgr);
 bytemuck!(Grb);
-bytemuck!(Gray);
+bytemuck!(Gray_v09);
 bytemuck!(Rgbw);
 bytemuck!(Rgba);
 bytemuck!(Argb);
@@ -27,7 +27,7 @@ use crate::formats::gray::Gray_v08;
 bytemuck!(Gray_v08);
 
 #[cfg(feature = "as-bytes")]
-impl<T: ::bytemuck::Pod> crate::ComponentBytes<T> for [Gray<T>] {
+impl<T: ::bytemuck::Pod> crate::ComponentBytes<T> for [Gray_v08<T>] {
     #[inline]
     fn as_bytes(&self) -> &[u8] {
         assert_ne!(0, core::mem::size_of::<T>());

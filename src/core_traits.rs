@@ -1,5 +1,5 @@
 
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, Gray, GrayA, Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, Bgr, Bgra, Grb, Gray_v09, GrayA, Rgb, Rgba, Rgbw};
 use core::array::TryFromSliceError;
 use core::fmt;
 use core::iter::Sum;
@@ -454,7 +454,7 @@ macro_rules! trait_impls_without_alpha {
 trait_impls_without_alpha!(Rgb, 3, [r, g, b], "rgb({}, {}, {})", "rgb(#{:0w$X}{:0w$X}{:0w$X})", "rgb(#{:0w$x}{:0w$x}{:0w$x})");
 trait_impls_without_alpha!(Bgr, 3, [b, g, r], "bgr({}, {}, {})", "bgr(#{:0w$X}{:0w$X}{:0w$X})", "bgr(#{:0w$x}{:0w$x}{:0w$x})");
 trait_impls_without_alpha!(Grb, 3, [g, r, b], "grb({}, {}, {})", "grb(#{:0w$X}{:0w$X}{:0w$X})", "grb(#{:0w$x}{:0w$x}{:0w$x})");
-trait_impls_without_alpha!(Gray, 1, [v], "gray({})", "gray(#{:0w$X})", "gray(#{:0w$x})");
+trait_impls_without_alpha!(Gray_v09, 1, [v], "gray({})", "gray(#{:0w$X})", "gray(#{:0w$x})");
 trait_impls_without_alpha!(Rgbw, 4, [r, g, b, w], "rgbw({}, {}, {}, {})", "rgbw(#{:0w$X}{:0w$X}{:0w$X}{:0w$X})", "rgbw(#{:0w$x}{:0w$x}{:0w$x}{:0w$x})");
 
 use crate::formats::gray::Gray_v08;
