@@ -1,5 +1,4 @@
-
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, Gray_v09, GrayA, Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, Bgr, Bgra, GrayA, Gray_v09, Grb, Rgb, Rgba, Rgbw};
 use core::array::TryFromSliceError;
 use core::fmt;
 use core::iter::Sum;

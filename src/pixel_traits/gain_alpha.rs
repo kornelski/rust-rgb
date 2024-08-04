@@ -8,7 +8,7 @@ use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Rgb, Rgba};
 /// already have an alpha component.
 pub trait GainAlpha: HetPixel {
     /// The pixel type after gaining an alpha component.
-    /// 
+    ///
     /// For example, for `Rgb`: `GainAlpha = Rgba`.
     type GainAlpha: HasAlpha;
 

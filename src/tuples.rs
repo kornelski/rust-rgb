@@ -1,6 +1,5 @@
-
-use crate::formats::gray::Gray_v09;
 use crate::formats::gray::Gray_v08;
+use crate::formats::gray::Gray_v09;
 use crate::formats::gray_alpha::GrayAlpha_v08;
 use crate::{Abgr, Argb, Bgr, Bgra, Grb, GrayA, Rgb, Rgba, Rgbw};
 
@@ -66,7 +65,6 @@ macro_rules! tuple_conversion {
         }
     };
 }
-
 
 tuple_conversion!(Rgb, 3, [r:0, g:1, b:2]);
 tuple_conversion!(Bgr, 3, [b:0, g:1, r:2]);

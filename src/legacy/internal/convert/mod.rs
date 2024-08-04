@@ -1,8 +1,8 @@
 use crate::alt::*;
+use crate::formats::gray::Gray_v08;
+use crate::pixel_traits::pixel::Pixel;
 use crate::*;
 use core::{mem, slice};
-use crate::pixel_traits::pixel::Pixel;
-use crate::formats::gray::Gray_v08;
 
 /// Casts a slice of bytes into a slice of pixels, e.g. `[u8]` to `[RGB8]`.
 ///

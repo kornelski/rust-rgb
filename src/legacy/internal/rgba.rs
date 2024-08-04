@@ -395,7 +395,7 @@ fn bgra_test() {
     assert_eq!(neg.b, -3);
     assert_eq!(neg.bgr().b, -3);
     assert_eq!(neg.a, -1000);
-    assert_eq!(&[-3,-2,-1,-1000], neg.as_slice());
+    assert_eq!(&[-3, -2, -1, -1000], neg.as_slice());
     assert!(neg < BGRA::new(0, 0, 0, 0));
 
     let neg = BGRA::new(1u8, 2u8, 3u8, 4u8).map_rgb(|c| -(c as i16));
@@ -413,10 +413,9 @@ fn bgra_test() {
     assert_eq!(4, px.bgr_mut().b);
     assert_eq!(100, px.a);
 
-
     #[cfg(feature = "as-bytes")]
     {
         let v = vec![BGRA::new(3u8, 2, 1, 4), BGRA::new(7, 6, 5, 8)];
-        assert_eq!(&[1,2,3,4,5,6,7,8], v.as_bytes());
+        assert_eq!(&[1, 2, 3, 4, 5, 6, 7, 8], v.as_bytes());
     }
 }
