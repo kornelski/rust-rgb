@@ -1,6 +1,7 @@
 # Pixel types for [Rust](https://www.rust-lang.org) [![crate](https://img.shields.io/crates/v/rgb.svg)](https://lib.rs/crates/rgb)
 
-Operating on pixels as weakly-typed vectors of `u8` is error-prone and inconvenient. It's better to use vectors of pixel structs. However, Rust is so strongly typed that _your_ `Rgb` pixel struct is not compatible with _my_ `Rgb` pixel struct. So let's all use mine :P
+Operating on pixels as weakly-typed vectors of `u8` is error-prone and inconvenient. It's better to use vectors of pixel structs.
+However, Rust is so strongly typed that _your_ `Rgb` pixel struct is not compatible with _my_ `Rgb` pixel struct. So let's all use mine :P
 
 [<img src="https://imgs.xkcd.com/comics/standards_2x.png" alt="xkcd: …there are 15 competing standards" width="500">](https://xkcd.com/927/)
 
@@ -23,18 +24,21 @@ We welcome your feedback about the crate!
 
 - Are the names of the traits and their methods good?
 - Are there any standard library traits you'd like implemented on the pixel types?
-- Is the split between `Pixel`, `HetPixel`, `HasAlpha` sensible? (pixels support a different type for the alpha channel, and there's `Rgbw` without alpha).
+- Is the split between `Pixel`, `HetPixel`, `HasAlpha` sensible?
+  (pixels support a different type for the alpha channel, and there's `Rgbw` without alpha).
 
-[Please open issues in the repo with the feedback](https://github.com/kornelski/rust-rgb/issues) or message [@kornel@mastodon.social](https://mastodon.social/@kornel).
+[Please open issues in the repo with the feedback](https://github.com/kornelski/rust-rgb/issues)
+or message [@kornel@mastodon.social](https://mastodon.social/@kornel).
 
 ## Installation
 
-If you want to run a stable, compatible version, run `cargo add rgb@0.8.43`. If you want to try unstable experimental version, run `cargo add rgb@0.8.90-alpha.1` or add this to your `Cargo.toml`:
+If you want to run a stable, compatible version, run `cargo add rgb@0.8.47`.
+If you want to try unstable experimental version, run `cargo add rgb@0.8.90-alpha.1` or add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
 rgb = "0.8.90-alpha.1" # unstable experimental version
-# rgb = "0.8.43" # older, stable
+# rgb = "0.8.47" # older, stable
 ```
 
 ## Usage
@@ -212,9 +216,12 @@ This crate is purposefully agnostic about the color-spaces of the
 pixel types. For example, `Gray<u8>` could be either linear lightness or
 gamma-corrected luma, etc.
 
-_Correct_ color management is a complex problem, and this crate aims to be the lowest common denominator, so it's intentionally agnostic about it.
+_Correct_ color management is a complex problem, and this crate aims
+to be the lowest common denominator, so it's intentionally agnostic
+about it.
 
-However, this library supports any subpixel type for `RGB<T>`, and `RGBA<RGBType, AlphaType>`, so you can use them with a newtype, e.g.:
+However, this library supports any subpixel type for `RGB<T>`, and
+`RGBA<RGBType, AlphaType>`, so you can use them with a newtype, e.g.:
 
 ```rust
 # use rgb::Rgb;
@@ -224,13 +231,21 @@ type LinearRGB = Rgb<LinearLight>;
 
 ## Roadmap to 1.0
 
-The plan is to provide easy migration to v1.0. There will be a transitional v0.9 version released that will be mostly backwards-compatible with 0.8, and forwards-compatible with 1.0.
+The plan is to provide easy migration to v1.0. There will be a
+transitional v0.9 version released that will be mostly
+backwards-compatible with 0.8, and forwards-compatible with 1.0.
 
 Planned changes:
 
-- Types will be renamed to follow Rust's naming convention: `RGBA` → `Rgba`. The names with an `8` or `16` suffix (`RGBA8`) will continue to work.
-- The `Gray` and `GrayAlpha` types will change from tuple structs with `.0` to structs with named fields `.v` (value) and `.a` (alpha). Through a `Deref` trick both field names will work, but `.0` is going to be deprecated.
-- `bytemuck::Pod` (conversions from/to raw bytes) will require color and alpha components to be the same type (i.e. it will work with `Rgba<u8>`, but not `Rgba<Newtype, DifferentType>`). Currently it's unsound if the alpha has a different size than color components.
+- Types will be renamed to follow Rust's naming convention: `RGBA` → `Rgba`.
+  The names with an `8` or `16` suffix (`RGBA8`) will continue to work.
+- The `Gray` and `GrayAlpha` types will change from tuple structs with
+  `.0` to structs with named fields `.v` (value) and `.a` (alpha).
+  Through a `Deref` trick both field names will work, but `.0` is going to be deprecated.
+- `bytemuck::Pod` (conversions from/to raw bytes) will require color
+  and alpha components to be the same type (i.e. it will work with
+  `Rgba<u8>`, but not `Rgba<Newtype, DifferentType>`).
+  Currently it's unsound if the alpha has a different size than color components.
 - Many inherent methods will be moved to a new `Pixel` trait.
 
 ## Migrating away from deprecated items
@@ -241,11 +256,10 @@ may need to do.
 
 1. Update to the latest version of 0.8, and fix all deprecation warnings.
    - rename `.alpha()` to `.with_alpha()`
-2. Change field access on `GrayAlpha` from `.0` and `.1` to `.v` and `.a` where possible.
-3. Use the `bytemuck` crate for conversions from/to bytes.
-4. Use the `num-traits` crate for `.checked_add()`, don't enable `checked_fns` feature.
-5. Don't enable `gbr` and `argb` features. All pixel types are enabled by default.
-6. `AsRef<[T]>` implementations have changed to `AsRef<[T; N]>`. In most cases `.as_ref()`/`.as_mut()` calls should coerce to a slice anyway.
-7. Instead of `pixel.as_slice()` use `pixel.as_ref()`.
-6. Stop using the `rgb::Gray`/`rgb::GrayAlpha` types and switch to
-   `rgb::Gray_v09 as Gray`/`rgb::GrayA` instead respectively.
+1. Change field access on `GrayAlpha` from `.0` and `.1` to `.v` and `.a` where possible.
+1. Use the `bytemuck` crate for conversions from/to bytes.
+1. Use the `num-traits` crate for `.checked_add()`, don't enable `checked_fns` feature.
+1. Don't enable `gbr` and `argb` features. All pixel types are enabled by default.
+1. `AsRef<[T]>` implementations have changed to `AsRef<[T; N]>`. In most cases `.as_ref()`/`.as_mut()` calls should coerce to a slice anyway.
+1. Instead of `pixel.as_slice()` use `pixel.as_ref()`.
+1. Stop using the `rgb::Gray`/`rgb::GrayAlpha` types and switch to `rgb::Gray_v09 as Gray`/`rgb::GrayA` instead respectively.
