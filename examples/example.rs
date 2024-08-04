@@ -1,6 +1,5 @@
 use rgb::{Rgb, Pixel};
 
-#[cfg(feature = "legacy")]
 fn main() {
     use rgb::{ComponentSlice, ComponentBytes};
 
@@ -15,6 +14,3 @@ fn main() {
 
     println!("{inverted}"); // rgb(0,255,0)
 }
-
-#[cfg(not(feature = "legacy"))]
-fn main() {}
