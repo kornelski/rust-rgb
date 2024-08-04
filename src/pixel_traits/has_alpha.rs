@@ -46,14 +46,13 @@ pub trait HasAlpha: HetPixel {
 
 macro_rules! has_alpha {
     ($name:ident, $alpha_bit: tt) => {
-        impl<T, A> HasAlpha for $name<T, A>
-        where
-            T: Copy + 'static,
-            A: Copy + 'static,
-        {
+        impl<T, A> HasAlpha for $name<T, A> where T: Copy + 'static, A: Copy + 'static {
+            #[inline]
             fn alpha(&self) -> Self::AlphaComponent {
                 self.$alpha_bit
             }
+
+            #[inline]
             fn alpha_mut(&mut self) -> &mut Self::AlphaComponent {
                 &mut self.$alpha_bit
             }

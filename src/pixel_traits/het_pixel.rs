@@ -5,11 +5,9 @@ use core::fmt::Display;
 /// Error returned from the [`HetPixel::try_from_colors_alpha()`] function.
 pub struct TryFromColorsAlphaError;
 impl Display for TryFromColorsAlphaError {
+    #[cold]
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        write!(
-            f,
-            "the colors iterator did not contain enough items to create this pixel"
-        )
+        f.write_str("the colors iterator did not contain enough items to create this pixel")
     }
 }
 
@@ -55,9 +53,8 @@ pub trait HetPixel: Copy {
     ///
     /// For example, [`Rgb`] has `SelfType<U, V> = Rgb<U>` whereas
     /// [`Rgba`] has `SelfType<U, V> = Rgba<U, V>`.
-    type SelfType<U: Copy + 'static, V: Copy + 'static>: HetPixel<
-        SelfType<Self::ColorComponent, Self::AlphaComponent> = Self,
-    >;
+    type SelfType<U: Copy + 'static, V: Copy + 'static>:
+        HetPixel<SelfType<Self::ColorComponent, Self::AlphaComponent> = Self>;
 
     /// A generic associated type used to return the array of color
     /// components despite rust's lack of const generic expressions.
@@ -82,9 +79,8 @@ pub trait HetPixel: Copy {
     /// assert_eq!(rgba.color_array(), [0, 10, 100]);
     /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
-    fn color_array(&self) -> Self::ColorArray<Self::ColorComponent>
-    where
-        Self::ColorArray<Self::ColorComponent>: Copy;
+    fn color_array(&self) -> Self::ColorArray<Self::ColorComponent> where Self::ColorArray<Self::ColorComponent>: Copy;
+
     /// Returns an owned array of the pixel's mutably borrowed color components.
     ///
     /// # Examples
@@ -276,10 +272,7 @@ pub trait HetPixel: Copy {
 
 macro_rules! without_alpha {
     ($name:ident, $length:literal, [$($color_bit:tt),*]) => {
-        impl<T> HetPixel for $name<T>
-        where
-            T: Copy + 'static,
-        {
+        impl<T> HetPixel for $name<T> where T: Copy + 'static {
             type ColorComponent = T;
             type AlphaComponent = T;
 
@@ -287,59 +280,52 @@ macro_rules! without_alpha {
             const COLOR_COMPONENTS: u8 = $length;
 
             type SelfType<U: Copy + 'static, V: Copy + 'static> = $name<U>;
-			type ColorArray<U> = [U; $length];
+            type ColorArray<U> = [U; $length];
 
-			fn color_array(&self) -> Self::ColorArray<Self::ColorComponent>
-			where
-				Self::ColorArray<Self::ColorComponent>: Copy
-			{
+            #[inline]
+            fn color_array(&self) -> Self::ColorArray<Self::ColorComponent> where Self::ColorArray<Self::ColorComponent>: Copy {
                 [$(self.$color_bit),*]
             }
-			fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent>
-			{
+
+            #[inline]
+            fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent> {
                 [$(&mut self.$color_bit),*]
             }
 
+            #[inline]
             fn alpha_opt(&self) -> Option<Self::AlphaComponent> {
                 None
             }
+
+            #[inline]
             fn alpha_opt_mut(&mut self) -> Option<&mut Self::AlphaComponent> {
                 None
             }
 
-            fn try_from_colors_alpha(
-                colors: impl IntoIterator<Item = Self::ColorComponent>,
-                _: Self::AlphaComponent,
-            ) -> Result<Self, TryFromColorsAlphaError> {
+            #[inline]
+            fn try_from_colors_alpha(colors: impl IntoIterator<Item = Self::ColorComponent>, _: Self::AlphaComponent) -> Result<Self, TryFromColorsAlphaError> {
                 let mut iter = colors.into_iter();
                 Ok(Self {$($color_bit: iter.next().ok_or(TryFromColorsAlphaError)?),*})
             }
 
-            fn map_colors<U>(
-                &self,
-                mut f: impl FnMut(Self::ColorComponent) -> U,
-            ) -> Self::SelfType<U, Self::AlphaComponent>
-            where
-                U: Copy + 'static
-            {
+            #[inline]
+            fn map_colors<U>(&self, mut f: impl FnMut(Self::ColorComponent) -> U) -> Self::SelfType<U, Self::AlphaComponent> where U: Copy + 'static {
                 $name {$($color_bit: f(self.$color_bit),)*}
             }
+
+            #[inline]
             fn map_colors_same(&self, mut f: impl FnMut(Self::ColorComponent) -> Self::ColorComponent) -> Self
             {
                 Self {$($color_bit: f(self.$color_bit),)*}
             }
 
-            fn map_alpha<U>(
-                &self,
-                _: impl FnMut(Self::AlphaComponent) -> U,
-            ) -> Self::SelfType<Self::ColorComponent, U>
-            where
-                U: Copy + 'static
-            {
+            #[inline]
+            fn map_alpha<U>(&self, _: impl FnMut(Self::AlphaComponent) -> U) -> Self::SelfType<Self::ColorComponent, U> where U: Copy + 'static {
                 *self
             }
-            fn map_alpha_same(&self, _: impl FnMut(Self::AlphaComponent) -> Self::AlphaComponent) -> Self
-            {
+
+            #[inline]
+            fn map_alpha_same(&self, _: impl FnMut(Self::AlphaComponent) -> Self::AlphaComponent) -> Self {
                 *self
             }
         }
@@ -347,11 +333,7 @@ macro_rules! without_alpha {
 }
 macro_rules! with_alpha {
     ($name:tt, $length:literal, [$($color_bit:tt),*], $alpha_bit:tt) => {
-        impl<T, A> HetPixel for $name<T, A>
-        where
-            T: Copy + 'static,
-            A: Copy + 'static,
-        {
+        impl<T, A> HetPixel for $name<T, A> where T: Copy + 'static, A: Copy + 'static {
             type ColorComponent = T;
             type AlphaComponent = A;
 
@@ -359,59 +341,52 @@ macro_rules! with_alpha {
             const COLOR_COMPONENTS: u8 = $length - 1;
 
             type SelfType<U: Copy + 'static, V: Copy + 'static> = $name<U, V>;
-			type ColorArray<U> = [U; $length - 1];
+            type ColorArray<U> = [U; $length - 1];
 
-			fn color_array(&self) -> Self::ColorArray<Self::ColorComponent>
-			where
-				Self::ColorArray<Self::ColorComponent>: Copy
-			{
+            #[inline]
+            fn color_array(&self) -> Self::ColorArray<Self::ColorComponent> where Self::ColorArray<Self::ColorComponent>: Copy {
                 [$(self.$color_bit),*]
             }
-			fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent>
-			{
+
+            #[inline]
+            fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent> {
                 [$(&mut self.$color_bit),*]
             }
 
+            #[inline]
             fn alpha_opt(&self) -> Option<Self::AlphaComponent> {
                 Some(self.$alpha_bit)
             }
+
+            #[inline]
             fn alpha_opt_mut(&mut self) -> Option<&mut Self::AlphaComponent> {
                 Some(&mut self.$alpha_bit)
             }
 
-            fn try_from_colors_alpha(
-                colors: impl IntoIterator<Item = Self::ColorComponent>,
-                alpha: Self::AlphaComponent,
-            ) -> Result<Self, TryFromColorsAlphaError> {
+            #[inline]
+            fn try_from_colors_alpha(colors: impl IntoIterator<Item = Self::ColorComponent>, alpha: Self::AlphaComponent) -> Result<Self, TryFromColorsAlphaError> {
                 let mut iter = colors.into_iter();
                 Ok(Self {$($color_bit: iter.next().ok_or(TryFromColorsAlphaError)?),*, $alpha_bit: alpha})
             }
 
-            fn map_colors<U>(
-                &self,
-                mut f: impl FnMut(Self::ColorComponent) -> U,
-            ) -> Self::SelfType<U, Self::AlphaComponent>
-            where
-                U: Copy + 'static
-            {
+            #[inline]
+            fn map_colors<U>(&self, mut f: impl FnMut(Self::ColorComponent) -> U) -> Self::SelfType<U, Self::AlphaComponent> where U: Copy + 'static {
                 $name {$($color_bit: f(self.$color_bit),)* $alpha_bit: self.$alpha_bit}
             }
+
+            #[inline]
             fn map_colors_same(&self, mut f: impl FnMut(Self::ColorComponent) -> Self::ColorComponent) -> Self
             {
                 Self {$($color_bit: f(self.$color_bit),)* $alpha_bit: self.$alpha_bit}
             }
 
-            fn map_alpha<U>(
-                &self,
-                mut f: impl FnMut(Self::AlphaComponent) -> U,
-            ) -> Self::SelfType<Self::ColorComponent, U>
-            where
-                U: Copy + 'static
-            {
+            #[inline]
+            fn map_alpha<U>(&self, mut f: impl FnMut(Self::AlphaComponent) -> U) -> Self::SelfType<Self::ColorComponent, U> where U: Copy + 'static {
                 $name {$($color_bit: self.$color_bit,)* $alpha_bit: f(self.$alpha_bit)}
             }
-            fn map_alpha_same(&self, mut f: impl FnMut(Self::AlphaComponent) -> Self::AlphaComponent) -> Self
-            {
+
+            #[inline]
+            fn map_alpha_same(&self, mut f: impl FnMut(Self::AlphaComponent) -> Self::AlphaComponent) -> Self {
                 $name {$($color_bit: self.$color_bit,)* $alpha_bit: f(self.$alpha_bit)}
             }
         }

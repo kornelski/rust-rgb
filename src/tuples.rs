@@ -9,49 +9,61 @@ use crate::{Abgr, Argb, Bgr, Bgra, Grb, GrayA, Rgb, Rgba, Rgbw};
 macro_rules! tuple_conversion {
     ($name:ident, 1, [$($bit:tt:$num:tt),*]) => {
         impl<R, S> From<$name<R>> for (S,) where R: Into<S> {
+            #[inline]
             fn from(value: $name<R>) -> Self {
                 ($(value.$bit.into()),*,)
             }
         }
+
         impl<R, S> From<(R,)> for $name<S> where R: Into<S> {
+            #[inline]
             fn from(value: (R,)) -> Self {
-                Self{$($bit: value.$num.into()),*}
+                Self { $($bit: value.$num.into()),* }
             }
         }
     };
     ($name:ident, 2, [$($bit:tt:$num:tt),*]) => {
         impl<R, S> From<$name<R>> for (S, S) where R: Into<S> {
+            #[inline]
             fn from(value: $name<R>) -> Self {
                 ($(value.$bit.into()),*)
             }
         }
+
         impl<R, S> From<(R, R)> for $name<S> where R: Into<S> {
+            #[inline]
             fn from(value: (R, R)) -> Self {
-                Self{$($bit: value.$num.into()),*}
+                Self { $($bit: value.$num.into()),* }
             }
         }
     };
     ($name:ident, 3, [$($bit:tt:$num:tt),*]) => {
         impl<R, S> From<$name<R>> for (S, S, S) where R: Into<S> {
+            #[inline]
             fn from(value: $name<R>) -> Self {
                 ($(value.$bit.into()),*)
             }
         }
+
         impl<R, S> From<(R, R, R)> for $name<S> where R: Into<S> {
+            #[inline]
             fn from(value: (R, R, R)) -> Self {
-                Self{$($bit: value.$num.into()),*}
+                Self { $($bit: value.$num.into()),* }
             }
         }
     };
     ($name:ident, 4, [$($bit:tt:$num:tt),*]) => {
         impl<R, S> From<$name<R>> for (S, S, S, S) where R: Into<S> {
+            #[inline]
             fn from(value: $name<R>) -> Self {
                 ($(value.$bit.into()),*)
             }
         }
+
         impl<R, S> From<(R, R, R, R)> for $name<S> where R: Into<S> {
+            #[inline]
             fn from(value: (R, R, R, R)) -> Self {
-                Self{$($bit: value.$num.into()),*}
+                Self { $($bit: value.$num.into()),* }
             }
         }
     };

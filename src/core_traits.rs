@@ -8,12 +8,14 @@ use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 macro_rules! trait_impls_common {
     ($name:ident, $length:literal, [$($bit:tt),*]) => {
         impl<R, S> From<$name<R>> for [S; $length] where R: Into<S> {
+            #[inline]
             fn from(value: $name<R>) -> Self {
                 [$(value.$bit.into()),*]
             }
         }
 
         impl<R, S> From<[R; $length]> for $name<S> where R: Into<S> {
+            #[inline]
             fn from(value: [R; $length]) -> Self {
                 let mut iter = value.into_iter();
                 Self { $($bit: iter.next().unwrap().into()),* }
@@ -23,6 +25,7 @@ macro_rules! trait_impls_common {
         impl<T> TryFrom<&[T]> for $name<T> where T: Copy + 'static {
             type Error = TryFromSliceError;
 
+            #[inline]
             fn try_from(slice: &[T]) -> Result<Self, Self::Error> {
                 let array: [T; $length] = slice.try_into()?;
                 Ok(Self::from(array))
@@ -33,6 +36,7 @@ macro_rules! trait_impls_common {
             type Item = T;
             type IntoIter = core::array::IntoIter<T, $length>;
 
+            #[inline]
             fn into_iter(self) -> Self::IntoIter {
                 [$(self.$bit.into()),*].into_iter()
             }
@@ -149,12 +153,14 @@ macro_rules! trait_impls_with_alpha {
         trait_impls_common!($name, $length, [$($bit),*]);
 
         impl<T: fmt::Display, A: fmt::Display> fmt::Display for $name<T, A> {
+            #[cold]
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 write!(f, $display, $(self.$bit),*)
             }
         }
 
         impl<T: fmt::UpperHex, A: fmt::UpperHex> fmt::UpperHex for $name<T, A> {
+            #[cold]
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 let w = 2 * core::mem::size_of::<T>();
                 write!(f, $upperhex, $(self.$bit),* , w = w)
@@ -162,6 +168,7 @@ macro_rules! trait_impls_with_alpha {
         }
 
         impl<T: fmt::LowerHex, A: fmt::LowerHex> fmt::LowerHex for $name<T, A> {
+            #[cold]
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 let w = 2 * core::mem::size_of::<T>();
                 write!(f, $lowerhex, $(self.$bit),* , w = w)

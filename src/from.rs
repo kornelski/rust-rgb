@@ -3,8 +3,9 @@ use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba};
 macro_rules! without_alpha {
     ($from_type:ident, $self_type:ident, {$($bit:tt),*}) => {
         impl<T> From<$from_type<T>> for $self_type<T> {
+            #[inline]
             fn from(value: $from_type<T>) -> Self {
-                Self{$($bit: value.$bit.into()),*}
+                Self { $($bit: value.$bit.into()),* }
             }
         }
     };
@@ -12,8 +13,9 @@ macro_rules! without_alpha {
 macro_rules! with_alpha {
     ($from_type:ident, $self_type:ident, {$($bit:tt),*}) => {
         impl<T, A> From<$from_type<T, A>> for $self_type<T, A> {
+            #[inline]
             fn from(value: $from_type<T, A>) -> Self {
-                Self{$($bit: value.$bit.into()),*}
+                Self { $($bit: value.$bit.into()),* }
             }
         }
     };
@@ -21,8 +23,9 @@ macro_rules! with_alpha {
 macro_rules! alpha_to_no_alpha {
     ($from_type:ident, $self_type:ident, {$($bit:tt),*}) => {
         impl<T, A> From<$from_type<T, A>> for $self_type<T> {
+            #[inline]
             fn from(value: $from_type<T, A>) -> Self {
-                Self{$($bit: value.$bit.into()),*}
+                Self { $($bit: value.$bit.into()),* }
             }
         }
     };

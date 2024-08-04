@@ -6,11 +6,9 @@ use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, Gray, GrayA, Grb,Rgb, Rgba, Rgbw};
 /// Error returned from the [`Pixel::try_from_components()`] function.
 pub struct TryFromComponentsError;
 impl Display for TryFromComponentsError {
+    #[cold]
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        write!(
-            f,
-            "the components iterator did not contain enough items to create this pixel"
-        )
+        f.write_str("the components iterator did not contain enough items to create this pixel")
     }
 }
 
@@ -119,9 +117,8 @@ pub trait Pixel:
     /// assert_eq!(rgb.map(f), Rgb {r: 0, g: 100, b: 1000});
     /// assert_eq!(rgba.map(f), Rgba {r: 0, g: 100, b: 1000, a: 500});
     /// ```
-    fn map<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
-    where
-        U: Copy;
+    fn map<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U> where U: Copy;
+
     /// Maps each of the pixels components with a function `f` to the same component type.
     ///
     /// See [`Pixel::map()`] if you want to map the components to a
@@ -147,76 +144,68 @@ pub trait Pixel:
 
 macro_rules! without_alpha {
     ($name:tt, $length:literal, [$($bit:tt),*]) => {
-        impl<T> Pixel for $name<T>
-        where
-            T: Copy + 'static,
-        {
+        impl<T> Pixel for $name<T> where T: Copy + 'static {
             type Component = T;
-			type ComponentArray<U> = [U; $length];
+            type ComponentArray<U> = [U; $length];
 
-			fn to_array(&self) -> Self::ComponentArray<Self::Component>
-			where
-				Self::ComponentArray<Self::Component>: Copy
-			{
+            #[inline]
+            fn to_array(&self) -> Self::ComponentArray<Self::Component> where Self::ComponentArray<Self::Component>: Copy {
                 [$(self.$bit),*]
             }
-			fn each_mut(&mut self) -> Self::ComponentArray<&mut Self::Component> {
+
+            #[inline]
+            fn each_mut(&mut self) -> Self::ComponentArray<&mut Self::Component> {
                 [$(&mut self.$bit),*]
             }
 
-            fn try_from_components(
-                components: impl IntoIterator<Item = Self::Component>,
-            ) -> Result<Self, TryFromComponentsError> {
+            #[inline]
+            fn try_from_components(components: impl IntoIterator<Item = Self::Component>) -> Result<Self, TryFromComponentsError> {
                 let mut iter = components.into_iter();
                 Ok(Self {$($bit: iter.next().ok_or(TryFromComponentsError)?),*})
             }
 
-            fn map<U>(&self, mut f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
-                where U: Copy + 'static
-            {
-                $name {$($bit: f(self.$bit),)*}
+            #[inline]
+            fn map<U>(&self, mut f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U> where U: Copy + 'static {
+                $name { $($bit: f(self.$bit),)* }
             }
-            fn map_same(&self, mut f: impl FnMut(Self::Component) -> Self::Component) -> Self
-            {
-                $name {$($bit: f(self.$bit),)*}
+
+            #[inline]
+            fn map_same(&self, mut f: impl FnMut(Self::Component) -> Self::Component) -> Self {
+                $name { $($bit: f(self.$bit),)* }
             }
         }
     }
 }
 macro_rules! with_alpha {
     ($name:tt, $length:literal, [$($bit:tt),*]) => {
-        impl<T> Pixel for $name<T, T>
-        where
-            T: Copy + 'static,
-        {
+        impl<T> Pixel for $name<T, T> where T: Copy + 'static {
             type Component = T;
-			type ComponentArray<U> = [U; $length];
+            type ComponentArray<U> = [U; $length];
 
-			fn to_array(&self) -> Self::ComponentArray<Self::Component>
-			where
-				Self::ComponentArray<Self::Component>: Copy
-			{
+            #[inline]
+            fn to_array(&self) -> Self::ComponentArray<Self::Component> where Self::ComponentArray<Self::Component>: Copy {
                 [$(self.$bit),*]
             }
-			fn each_mut(&mut self) -> Self::ComponentArray<&mut Self::Component> {
+
+            #[inline]
+            fn each_mut(&mut self) -> Self::ComponentArray<&mut Self::Component> {
                 [$(&mut self.$bit),*]
             }
 
-            fn try_from_components(
-                components: impl IntoIterator<Item = Self::Component>,
-            ) -> Result<Self, TryFromComponentsError> {
+            #[inline]
+            fn try_from_components(components: impl IntoIterator<Item = Self::Component>) -> Result<Self, TryFromComponentsError> {
                 let mut iter = components.into_iter();
                 Ok(Self {$($bit: iter.next().ok_or(TryFromComponentsError)?),*})
             }
 
-            fn map<U>(&self, mut f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
-                where U: Copy + 'static
-            {
-                $name {$($bit: f(self.$bit),)*}
+            #[inline]
+            fn map<U>(&self, mut f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U> where U: Copy + 'static {
+                $name { $($bit: f(self.$bit),)* }
             }
-            fn map_same(&self, mut f: impl FnMut(Self::Component) -> Self::Component) -> Self
-            {
-                $name {$($bit: f(self.$bit),)*}
+
+            #[inline]
+            fn map_same(&self, mut f: impl FnMut(Self::Component) -> Self::Component) -> Self {
+                $name { $($bit: f(self.$bit),)* }
             }
         }
     }

@@ -57,6 +57,7 @@ macro_rules! lower_upper {
         impl<T> GainAlpha for $lower<T> where T: Copy + 'static {
             type GainAlpha = $upper<T>;
 
+            #[inline]
             fn with_default_alpha(self, alpha: Self::AlphaComponent) -> Self::GainAlpha {
                 $upper {
                     $($color_bit: self.$color_bit),*,
@@ -64,6 +65,7 @@ macro_rules! lower_upper {
                 }
             }
 
+            #[inline]
             fn with_alpha(self, alpha: Self::AlphaComponent) -> Self::GainAlpha {
                 $upper {
                     $($color_bit: self.$color_bit),*,
@@ -73,18 +75,18 @@ macro_rules! lower_upper {
         }
     };
 }
+
 macro_rules! gain_already_alpha {
     ($original:ident, $alpha_bit: tt) => {
-        impl<T> GainAlpha for $original<T>
-        where
-            T: Copy + 'static ,
-        {
+        impl<T> GainAlpha for $original<T> where T: Copy + 'static {
             type GainAlpha = $original<T>;
 
+            #[inline]
             fn with_default_alpha(self, _: Self::AlphaComponent) -> Self::GainAlpha {
                 self
             }
 
+            #[inline]
             fn with_alpha(mut self, alpha: Self::AlphaComponent) -> Self::GainAlpha {
                 self.$alpha_bit = alpha;
                 self
