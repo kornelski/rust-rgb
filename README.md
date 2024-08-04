@@ -40,7 +40,7 @@ rgb = "0.8.90-alpha.1" # unstable experimental version
 ## Usage
 
 ```rust
-use rgb::{Rgb, Rgba, Argb, Bgr, Bgra, Abgr, Grb, Gray, GrayA};
+use rgb::{Rgb, Rgba, Argb, Bgr, Bgra, Abgr, Grb, Gray_v09 as Gray, GrayA};
 
 let rgb = Rgb {r: 0, g: 0, b: 0};
 let rbga = Rgba {r: 0, g: 0, b: 0, a: 0};
@@ -233,15 +233,19 @@ Planned changes:
 - `bytemuck::Pod` (conversions from/to raw bytes) will require color and alpha components to be the same type (i.e. it will work with `Rgba<u8>`, but not `Rgba<Newtype, DifferentType>`). Currently it's unsound if the alpha has a different size than color components.
 - Many inherent methods will be moved to a new `Pixel` trait.
 
-## Migration from 0.8 to 0.9
+## Migrating away from deprecated items
+
+Many items in this crate have become deprecated in preparation for a
+future release which removes them. Here is a checklist of things you
+may need to do.
 
 1. Update to the latest version of 0.8, and fix all deprecation warnings.
-
    - rename `.alpha()` to `.with_alpha()`
-
 2. Change field access on `GrayAlpha` from `.0` and `.1` to `.v` and `.a` where possible.
 3. Use the `bytemuck` crate for conversions from/to bytes.
 4. Use the `num-traits` crate for `.checked_add()`, don't enable `checked_fns` feature.
 5. Don't enable `gbr` and `argb` features. All pixel types are enabled by default.
 6. `AsRef<[T]>` implementations have changed to `AsRef<[T; N]>`. In most cases `.as_ref()`/`.as_mut()` calls should coerce to a slice anyway.
 7. Instead of `pixel.as_slice()` use `pixel.as_ref()`.
+6. Stop using the `rgb::Gray`/`rgb::GrayAlpha` types and switch to
+   `rgb::Gray_v09 as Gray`/`rgb::GrayA` instead respectively.

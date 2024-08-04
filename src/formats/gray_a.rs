@@ -8,6 +8,9 @@
 /// grayscale images can also be represented using `GrayA<u8, bool>`,
 /// but this won't reduce the storage size.
 ///
+/// This is the new gray+alpha pixel type as opposed to the legacy gray+alpha type
+/// (`rgb::GrayAlpha`) which is kept for backwards-compatibility.
+///
 /// # Examples
 ///
 /// ```

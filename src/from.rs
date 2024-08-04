@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray_v09, GrayA, Grb, Rgb, Rgba};
 
 macro_rules! without_alpha {
     ($from_type:ident, $self_type:ident, {$($bit:tt),*}) => {
@@ -68,4 +68,4 @@ with_alpha!(Rgba, Abgr, {r, g, b, a});
 with_alpha!(Argb, Abgr, {r, g, b, a});
 with_alpha!(Bgra, Abgr, {r, g, b, a});
 
-alpha_to_no_alpha!(GrayA, Gray, { v });
+alpha_to_no_alpha!(GrayA, Gray_v09, { v });

@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Grb, Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, Bgr, Bgra, Gray_v09, GrayA, Grb, Rgb, Rgba, Rgbw};
 
 macro_rules! inherent_impls {
     ($name:ident, $new_fn:ident, [$($field:tt $var:ident),*]) => {
@@ -22,7 +22,7 @@ macro_rules! inherent_impls {
 inherent_impls!(Rgb, new, [r red, g green, b blue]);
 inherent_impls!(Bgr, new_bgr, [b blue, g green, r red]);
 inherent_impls!(Grb, new_grb, [g green, r red, b blue]);
-inherent_impls!(Gray, new, [v value]);
+inherent_impls!(Gray_v09, new, [v value]);
 inherent_impls!(Rgbw, new, [r red, g green, b blue, w white]);
 
 use crate::formats::gray::Gray_v08;

@@ -46,9 +46,9 @@ mod legacy;
 #[cfg(feature = "bytemuck")]
 pub use ::bytemuck::{Pod, Zeroable};
 pub use legacy::internal::convert::{AsPixels, FromSlice};
-pub use legacy::internal::pixel::{ColorComponentMap, ComponentSlice};
 #[cfg(feature = "bytemuck")]
 pub use legacy::internal::pixel::ComponentBytes;
+pub use legacy::internal::pixel::{ColorComponentMap, ComponentSlice};
 pub use legacy::*;
 pub use pixel_traits::pixel::Pixel as ComponentMap;
 
@@ -60,8 +60,10 @@ pub use formats::abgr::Abgr;
 pub use formats::argb::Argb;
 pub use formats::bgr::Bgr;
 pub use formats::bgra::Bgra;
-pub use formats::gray::Gray_v09 as Gray;
+pub use formats::gray::Gray_v08 as Gray;
+pub use formats::gray::Gray_v09;
 pub use formats::gray_a::GrayA;
+pub use formats::gray_alpha::GrayAlpha_v08 as GrayAlpha;
 pub use formats::grb::Grb;
 pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
