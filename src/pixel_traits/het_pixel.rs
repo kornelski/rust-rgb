@@ -79,6 +79,9 @@ pub trait HetPixel: Copy {
     /// assert_eq!(rgba.color_array(), [0, 10, 100]);
     /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
+    #[doc(alias = "rgb")]
+    #[doc(alias = "to_rgb")]
+    #[doc(alias = "as_rgb")]
     fn color_array(&self) -> Self::ColorArray<Self::ColorComponent> where Self::ColorArray<Self::ColorComponent>: Copy;
 
     /// Returns an owned array of the pixel's mutably borrowed color components.
@@ -98,6 +101,7 @@ pub trait HetPixel: Copy {
     /// assert_eq!(rgba.color_array(), [0, 10, 40]);
     /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
+    #[doc(alias = "rgb_mut")]
     fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent>;
 
     /// Returns a copy of the pixel's alpha alpha component if it has one.
