@@ -316,6 +316,7 @@ impl<T: Clone, A> From<GrayAlpha<T, A>> for RGBA<T, A> {
     }
 }
 
+#[cfg(not(feature = "unstable-experimental"))]
 impl<T> AsRef<T> for Gray<T> {
     #[inline(always)]
     fn as_ref(&self) -> &T {
@@ -323,6 +324,7 @@ impl<T> AsRef<T> for Gray<T> {
     }
 }
 
+#[cfg(not(feature = "unstable-experimental"))]
 impl<T> AsRef<[T]> for RGB<T> {
     #[inline(always)]
     fn as_ref(&self) -> &[T] {
@@ -330,6 +332,14 @@ impl<T> AsRef<[T]> for RGB<T> {
     }
 }
 
+#[cfg(feature = "unstable-experimental")]
+impl<T> AsRef<[T; 3]> for RGB<T> {
+    fn as_ref(&self) -> &[T; 3] {
+        unsafe { &*(self as *const Self).cast() }
+    }
+}
+
+#[cfg(not(feature = "unstable-experimental"))]
 impl<T> AsRef<[T]> for RGBA<T> {
     #[inline(always)]
     fn as_ref(&self) -> &[T] {
@@ -337,6 +347,14 @@ impl<T> AsRef<[T]> for RGBA<T> {
     }
 }
 
+#[cfg(feature = "unstable-experimental")]
+impl<T> AsRef<[T; 4]> for RGBA<T> {
+    fn as_ref(&self) -> &[T; 4] {
+        unsafe { &*(self as *const Self).cast() }
+    }
+}
+
+#[cfg(not(feature = "unstable-experimental"))]
 impl<T> AsRef<T> for GrayAlpha<T> {
     #[inline(always)]
     fn as_ref(&self) -> &T {
@@ -344,6 +362,14 @@ impl<T> AsRef<T> for GrayAlpha<T> {
     }
 }
 
+#[cfg(feature = "unstable-experimental")]
+impl<T> AsRef<[T; 2]> for GrayAlpha<T> {
+    fn as_ref(&self) -> &[T; 2] {
+        unsafe { &*(self as *const Self).cast() }
+    }
+}
+
+#[cfg(not(feature = "unstable-experimental"))]
 impl<T> AsMut<T> for Gray<T> {
     #[inline(always)]
     fn as_mut(&mut self) -> &mut T {
@@ -351,6 +377,7 @@ impl<T> AsMut<T> for Gray<T> {
     }
 }
 
+#[cfg(not(feature = "unstable-experimental"))]
 impl<T> AsMut<[T]> for RGB<T> {
     #[inline(always)]
     fn as_mut(&mut self) -> &mut [T] {
@@ -358,6 +385,14 @@ impl<T> AsMut<[T]> for RGB<T> {
     }
 }
 
+#[cfg(feature = "unstable-experimental")]
+impl<T> AsMut<[T; 3]> for RGB<T> {
+    fn as_mut(&mut self) -> &mut [T; 3] {
+        unsafe { &mut *(self as *mut Self).cast() }
+    }
+}
+
+#[cfg(not(feature = "unstable-experimental"))]
 impl<T> AsMut<[T]> for RGBA<T> {
     #[inline(always)]
     fn as_mut(&mut self) -> &mut [T] {
@@ -365,10 +400,25 @@ impl<T> AsMut<[T]> for RGBA<T> {
     }
 }
 
+#[cfg(feature = "unstable-experimental")]
+impl<T> AsMut<[T; 4]> for RGBA<T> {
+    fn as_mut(&mut self) -> &mut [T; 4] {
+        unsafe { &mut *(self as *mut Self).cast() }
+    }
+}
+
+#[cfg(not(feature = "unstable-experimental"))]
 impl<T> AsMut<T> for GrayAlpha<T> {
     #[inline(always)]
     fn as_mut(&mut self) -> &mut T {
         &mut self.0
+    }
+}
+
+#[cfg(feature = "unstable-experimental")]
+impl<T> AsMut<[T; 2]> for GrayAlpha<T> {
+    fn as_mut(&mut self) -> &mut [T; 2] {
+        unsafe { &mut *(self as *mut Self).cast() }
     }
 }
 
@@ -415,3 +465,15 @@ fn converts() {
     assert_eq!(&[1u8,2,3], RGB {r:1u8,g:2,b:3}.as_mut());
 }
 
+
+#[test]
+#[cfg(feature = "unstable-experimental")]
+fn as_refs() {
+    let mut r = RGBA::new(1u8,2,3,4u8);
+    assert_eq!(&[1,2,3,4], AsRef::<[u8; 4]>::as_ref(&r));
+    assert_eq!([1,2,3,4], *AsMut::<[u8; 4]>::as_mut(&mut r));
+
+    let mut r = GrayAlpha::new(1u8,4u8);
+    assert_eq!(&[1,4], AsRef::<[u8; 2]>::as_ref(&r));
+    assert_eq!([1,4], *AsMut::<[u8; 2]>::as_mut(&mut r));
+}

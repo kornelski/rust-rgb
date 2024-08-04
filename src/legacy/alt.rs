@@ -250,6 +250,7 @@ fn gray() {
     let g = g.map(|c| c / 2);
     #[cfg(not(feature = "unstable-experimental"))]
     assert_eq!(110, *g + 10);
+    #[cfg(not(feature = "unstable-experimental"))]
     assert_eq!(110, 10 + Gray(100).as_ref());
 
     let ga: GRAYA8 = GrayAlpha(1, 2);
