@@ -5,42 +5,22 @@ use core::fmt;
 use core::iter::Sum;
 use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
-macro_rules! trait_impls_with_alpha {
-    ($name:ident, $length:literal, [$($bit:tt),*], $display:literal, $upperhex:literal, $lowerhex:literal) => {
-        impl<T: fmt::Display> fmt::Display for $name<T> {
-            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                write!(f, $display, $(self.$bit),*)
-            }
-        }
-        impl<T: fmt::UpperHex> fmt::UpperHex for $name<T> {
-            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                let w = 2 * core::mem::size_of::<T>();
-                write!(f, $upperhex, $(self.$bit),* , w = w)
-            }
-        }
-        impl<T: fmt::LowerHex> fmt::LowerHex for $name<T> {
-            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                let w = 2 * core::mem::size_of::<T>();
-                write!(f, $lowerhex, $(self.$bit),* , w = w)
-            }
-        }
-
+macro_rules! trait_impls_common {
+    ($name:ident, $length:literal, [$($bit:tt),*]) => {
         impl<R, S> From<$name<R>> for [S; $length] where R: Into<S> {
             fn from(value: $name<R>) -> Self {
                 [$(value.$bit.into()),*]
             }
         }
+
         impl<R, S> From<[R; $length]> for $name<S> where R: Into<S> {
             fn from(value: [R; $length]) -> Self {
                 let mut iter = value.into_iter();
-                Self{$($bit: iter.next().unwrap().into()),*}
+                Self { $($bit: iter.next().unwrap().into()),* }
             }
         }
 
-        impl<T> TryFrom<&[T]> for $name<T>
-        where
-            T: Copy + 'static,
-        {
+        impl<T> TryFrom<&[T]> for $name<T> where T: Copy + 'static {
             type Error = TryFromSliceError;
 
             fn try_from(slice: &[T]) -> Result<Self, Self::Error> {
@@ -55,6 +35,136 @@ macro_rules! trait_impls_with_alpha {
 
             fn into_iter(self) -> Self::IntoIter {
                 [$(self.$bit.into()),*].into_iter()
+            }
+        }
+
+        /// Allows writing `pixel + 1`
+        impl<T> Add<T> for $name<T> where T: Copy + Add<Output=T> {
+            type Output = $name<T>;
+
+            #[inline(always)]
+            fn add(self, r: T) -> Self::Output {
+                Self::Output {
+                    $(
+                        $bit: self.$bit + r,
+                    )+
+                }
+            }
+        }
+
+        /// Allows writing `pixel += 1`
+        impl<T> AddAssign<T> for $name<T> where T: Copy + Add<Output=T> {
+            #[inline(always)]
+            fn add_assign(&mut self, r: T) {
+                *self = Self {
+                    $(
+                        $bit: self.$bit + r,
+                    )+
+                };
+            }
+        }
+
+        /// Allows writing `pixel - 1`
+        impl<T> Sub<T> for $name<T> where T: Copy + Sub<Output=T> {
+            type Output = $name<T::Output>;
+
+            #[inline(always)]
+            fn sub(self, r: T) -> Self::Output {
+                Self::Output {
+                    $(
+                        $bit: self.$bit - r,
+                    )+
+                }
+            }
+        }
+
+        /// Allows writing `pixel -= 1`
+        impl<T> SubAssign<T> for $name<T> where T: Copy + Sub<Output=T> {
+            #[inline(always)]
+            fn sub_assign(&mut self, r: T) {
+                *self = Self {
+                    $(
+                        $bit: self.$bit - r,
+                    )+
+                };
+            }
+        }
+
+        /// Allows writing `pixel * 2`
+        impl<T> Mul<T> for $name<T> where T: Copy + Mul<Output=T> {
+            type Output = $name<T>;
+
+            #[inline(always)]
+            fn mul(self, r: T) -> Self::Output {
+                Self::Output {
+                    $(
+                        $bit: self.$bit * r,
+                    )+
+                }
+            }
+        }
+
+        /// Allows writing `pixel *= 2`
+        impl<T> MulAssign<T> for $name<T> where T: Copy + Mul<Output=T> {
+            #[inline(always)]
+            fn mul_assign(&mut self, r: T) {
+                *self = Self {
+                    $(
+                        $bit: self.$bit * r,
+                    )+
+                };
+            }
+        }
+
+        /// Allows writing `pixel / 2`
+        impl<T> Div<T> for $name<T> where T: Copy + Div<Output=T> {
+            type Output = $name<T>;
+
+            #[inline(always)]
+            fn div(self, r: T) -> Self::Output {
+                Self::Output {
+                    $(
+                        $bit: self.$bit / r,
+                    )+
+                }
+            }
+        }
+
+        /// Allows writing `pixel /= 2`
+        impl<T> DivAssign<T> for $name<T> where T: Copy + Div<Output=T> {
+            #[inline(always)]
+            fn div_assign(&mut self, r: T) {
+                *self = $name {
+                    $(
+                        $bit: self.$bit / r,
+                    )+
+                };
+            }
+        }
+    };
+}
+
+macro_rules! trait_impls_with_alpha {
+    ($name:ident, $length:literal, [$($bit:tt),*], $display:literal, $upperhex:literal, $lowerhex:literal) => {
+        trait_impls_common!($name, $length, [$($bit),*]);
+
+        impl<T: fmt::Display, A: fmt::Display> fmt::Display for $name<T, A> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                write!(f, $display, $(self.$bit),*)
+            }
+        }
+
+        impl<T: fmt::UpperHex, A: fmt::UpperHex> fmt::UpperHex for $name<T, A> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                let w = 2 * core::mem::size_of::<T>();
+                write!(f, $upperhex, $(self.$bit),* , w = w)
+            }
+        }
+
+        impl<T: fmt::LowerHex, A: fmt::LowerHex> fmt::LowerHex for $name<T, A> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                let w = 2 * core::mem::size_of::<T>();
+                write!(f, $lowerhex, $(self.$bit),* , w = w)
             }
         }
 
@@ -78,21 +188,6 @@ macro_rules! trait_impls_with_alpha {
                 }
             }
         }
-        /// Allows writing `pixel + 1`
-        impl<T> Add<T> for $name<T> where
-            T: Copy + Add<Output=T>
-        {
-            type Output = $name<T>;
-
-            #[inline(always)]
-            fn add(self, r: T) -> Self::Output {
-                Self::Output {
-                    $(
-                        $bit: self.$bit + r,
-                    )+
-                }
-            }
-        }
 
         /// Allows writing `pixel += pixel`
         impl<T, A> AddAssign for $name<T, A> where
@@ -108,19 +203,6 @@ macro_rules! trait_impls_with_alpha {
                 };
             }
         }
-        /// Allows writing `pixel += 1`
-        impl<T> AddAssign<T> for $name<T> where
-            T: Copy + Add<Output=T>
-        {
-            #[inline(always)]
-            fn add_assign(&mut self, r: T) {
-                *self = Self {
-                    $(
-                        $bit: self.$bit + r,
-                    )+
-                };
-            }
-        }
 
         /// Allows writing `pixel - pixel`
         impl<T: Sub, A: Sub> Sub for $name<T, A> {
@@ -131,21 +213,6 @@ macro_rules! trait_impls_with_alpha {
                 Self::Output {
                     $(
                         $bit: self.$bit - other.$bit,
-                    )+
-                }
-            }
-        }
-        /// Allows writing `pixel - 1`
-        impl<T> Sub<T> for $name<T> where
-            T: Copy + Sub<Output=T>
-        {
-            type Output = $name<T::Output>;
-
-            #[inline(always)]
-            fn sub(self, r: T) -> Self::Output {
-                Self::Output {
-                    $(
-                        $bit: self.$bit - r,
                     )+
                 }
             }
@@ -165,19 +232,6 @@ macro_rules! trait_impls_with_alpha {
                 };
             }
         }
-        /// Allows writing `pixel -= 1`
-        impl<T> SubAssign<T> for $name<T> where
-            T: Copy + Sub<Output=T>
-        {
-            #[inline(always)]
-            fn sub_assign(&mut self, r: T) {
-                *self = Self {
-                    $(
-                        $bit: self.$bit - r,
-                    )+
-                };
-            }
-        }
 
         /// Allows writing `pixel * pixel`
         impl<T: Mul, A: Mul> Mul for $name<T, A> {
@@ -188,21 +242,6 @@ macro_rules! trait_impls_with_alpha {
                 Self::Output {
                     $(
                         $bit: self.$bit * other.$bit,
-                    )+
-                }
-            }
-        }
-        /// Allows writing `pixel * 2`
-        impl<T> Mul<T> for $name<T> where
-            T: Copy + Mul<Output=T>
-        {
-            type Output = $name<T>;
-
-            #[inline(always)]
-            fn mul(self, r: T) -> Self::Output {
-                Self::Output {
-                    $(
-                        $bit: self.$bit * r,
                     )+
                 }
             }
@@ -222,19 +261,6 @@ macro_rules! trait_impls_with_alpha {
                 };
             }
         }
-        /// Allows writing `pixel *= 2`
-        impl<T> MulAssign<T> for $name<T> where
-            T: Copy + Mul<Output=T>
-        {
-            #[inline(always)]
-            fn mul_assign(&mut self, r: T) {
-                *self = Self {
-                    $(
-                        $bit: self.$bit * r,
-                    )+
-                };
-            }
-        }
 
         /// Allows writing `pixel / pixel`
         impl<T: Div, A: Div> Div for $name<T, A> {
@@ -245,21 +271,6 @@ macro_rules! trait_impls_with_alpha {
                 Self::Output {
                     $(
                         $bit: self.$bit / other.$bit,
-                    )+
-                }
-            }
-        }
-        /// Allows writing `pixel / 2`
-        impl<T> Div<T> for $name<T> where
-            T: Copy + Div<Output=T>
-        {
-            type Output = $name<T>;
-
-            #[inline(always)]
-            fn div(self, r: T) -> Self::Output {
-                Self::Output {
-                    $(
-                        $bit: self.$bit / r,
                     )+
                 }
             }
@@ -279,72 +290,30 @@ macro_rules! trait_impls_with_alpha {
                 };
             }
         }
-        /// Allows writing `pixel /= 2`
-        impl<T> DivAssign<T> for $name<T> where
-            T: Copy + Div<Output=T>
-        {
-            #[inline(always)]
-            fn div_assign(&mut self, r: T) {
-                *self = $name {
-                    $(
-                        $bit: self.$bit / r,
-                    )+
-                };
-            }
-        }
     };
 }
 
 macro_rules! trait_impls_without_alpha {
     ($name:ident, $length:literal, [$($bit:tt),*], $display:literal, $upperhex:literal, $lowerhex:literal) => {
+        trait_impls_common!($name, $length, [$($bit),*]);
+
         impl<T: fmt::Display> fmt::Display for $name<T> {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 write!(f, $display, $(self.$bit),*)
             }
         }
+
         impl<T: fmt::UpperHex> fmt::UpperHex for $name<T> {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 let w = 2 * core::mem::size_of::<T>();
                 write!(f, $upperhex, $(self.$bit),*, w = w)
             }
         }
+
         impl<T: fmt::LowerHex> fmt::LowerHex for $name<T> {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 let w = 2 * core::mem::size_of::<T>();
                 write!(f, $lowerhex, $(self.$bit),*, w = w)
-            }
-        }
-
-        impl<R, S> From<$name<R>> for [S; $length] where R: Into<S> {
-            fn from(value: $name<R>) -> Self {
-                [$(value.$bit.into()),*]
-            }
-        }
-        impl<R, S> From<[R; $length]> for $name<S> where R: Into<S> {
-            fn from(value: [R; $length]) -> Self {
-                let mut iter = value.into_iter();
-                Self{$($bit: iter.next().unwrap().into()),*}
-            }
-        }
-
-        impl<T> TryFrom<&[T]> for $name<T>
-        where
-            T: Copy + 'static,
-        {
-            type Error = TryFromSliceError;
-
-            fn try_from(slice: &[T]) -> Result<Self, Self::Error> {
-                let array: [T; $length] = slice.try_into()?;
-                Ok(Self::from(array))
-            }
-        }
-
-        impl<T> IntoIterator for $name<T> {
-            type Item = T;
-            type IntoIter = core::array::IntoIter<T, $length>;
-
-            fn into_iter(self) -> Self::IntoIter {
-                [$(self.$bit.into()),*].into_iter()
             }
         }
 
@@ -368,44 +337,14 @@ macro_rules! trait_impls_without_alpha {
                 }
             }
         }
-        /// Allows writing `pixel + 1`
-        impl<T> Add<T> for $name<T> where
-            T: Copy + Add<Output=T>
-        {
-            type Output = $name<T>;
-
-            #[inline(always)]
-            fn add(self, r: T) -> Self::Output {
-                Self::Output {
-                    $(
-                        $bit: self.$bit + r,
-                    )+
-                }
-            }
-        }
 
         /// Allows writing `pixel += pixel`
-        impl<T> AddAssign for $name<T> where
-            T: Add<Output = T> + Copy
-        {
+        impl<T> AddAssign for $name<T> where T: Add<Output = T> + Copy {
             #[inline(always)]
             fn add_assign(&mut self, other: Self) {
                 *self = Self {
                     $(
                         $bit: self.$bit + other.$bit,
-                    )+
-                };
-            }
-        }
-        /// Allows writing `pixel += 1`
-        impl<T> AddAssign<T> for $name<T> where
-            T: Copy + Add<Output=T>
-        {
-            #[inline(always)]
-            fn add_assign(&mut self, r: T) {
-                *self = Self {
-                    $(
-                        $bit: self.$bit + r,
                     )+
                 };
             }
@@ -424,44 +363,14 @@ macro_rules! trait_impls_without_alpha {
                 }
             }
         }
-        /// Allows writing `pixel - 1`
-        impl<T> Sub<T> for $name<T> where
-            T: Copy + Sub<Output=T>
-        {
-            type Output = $name<T::Output>;
-
-            #[inline(always)]
-            fn sub(self, r: T) -> Self::Output {
-                Self::Output {
-                    $(
-                        $bit: self.$bit - r,
-                    )+
-                }
-            }
-        }
 
         /// Allows writing `pixel -= pixel`
-        impl<T> SubAssign for $name<T> where
-            T: Sub<Output = T> + Copy
-        {
+        impl<T> SubAssign for $name<T> where T: Sub<Output = T> + Copy {
             #[inline(always)]
             fn sub_assign(&mut self, other: Self) {
                 *self = Self {
                     $(
                         $bit: self.$bit - other.$bit,
-                    )+
-                };
-            }
-        }
-        /// Allows writing `pixel -= 1`
-        impl<T> SubAssign<T> for $name<T> where
-            T: Copy + Sub<Output=T>
-        {
-            #[inline(always)]
-            fn sub_assign(&mut self, r: T) {
-                *self = Self {
-                    $(
-                        $bit: self.$bit - r,
                     )+
                 };
             }
@@ -480,44 +389,14 @@ macro_rules! trait_impls_without_alpha {
                 }
             }
         }
-        /// Allows writing `pixel * 2`
-        impl<T> Mul<T> for $name<T> where
-            T: Copy + Mul<Output=T>
-        {
-            type Output = $name<T>;
-
-            #[inline(always)]
-            fn mul(self, r: T) -> Self::Output {
-                Self::Output {
-                    $(
-                        $bit: self.$bit * r,
-                    )+
-                }
-            }
-        }
 
         /// Allows writing `pixel *= pixel`
-        impl<T> MulAssign for $name<T> where
-            T: Mul<Output = T> + Copy
-        {
+        impl<T> MulAssign for $name<T> where T: Mul<Output = T> + Copy {
             #[inline(always)]
             fn mul_assign(&mut self, other: Self) {
                 *self = Self {
                     $(
                         $bit: self.$bit * other.$bit,
-                    )+
-                };
-            }
-        }
-        /// Allows writing `pixel *= 2`
-        impl<T> MulAssign<T> for $name<T> where
-            T: Copy + Mul<Output=T>
-        {
-            #[inline(always)]
-            fn mul_assign(&mut self, r: T) {
-                *self = Self {
-                    $(
-                        $bit: self.$bit * r,
                     )+
                 };
             }
@@ -536,44 +415,14 @@ macro_rules! trait_impls_without_alpha {
                 }
             }
         }
-        /// Allows writing `pixel / 2`
-        impl<T> Div<T> for $name<T> where
-            T: Copy + Div<Output=T>
-        {
-            type Output = $name<T>;
-
-            #[inline(always)]
-            fn div(self, r: T) -> Self::Output {
-                Self::Output {
-                    $(
-                        $bit: self.$bit / r,
-                    )+
-                }
-            }
-        }
 
         /// Allows writing `pixel /= pixel`
-        impl<T> DivAssign for $name<T> where
-            T: Div<Output = T> + Copy
-        {
+        impl<T> DivAssign for $name<T> where T: Div<Output = T> + Copy {
             #[inline(always)]
             fn div_assign(&mut self, other: Self) {
                 *self = Self {
                     $(
                         $bit: self.$bit / other.$bit,
-                    )+
-                };
-            }
-        }
-        /// Allows writing `pixel /= 2`
-        impl<T> DivAssign<T> for $name<T> where
-            T: Copy + Div<Output=T>
-        {
-            #[inline(always)]
-            fn div_assign(&mut self, r: T) {
-                *self = $name {
-                    $(
-                        $bit: self.$bit / r,
                     )+
                 };
             }
