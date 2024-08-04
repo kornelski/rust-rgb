@@ -15,7 +15,7 @@ edition = "2021"
 rust-version = "1.63"
 
 [features]
-# Since v0.9 all pixel formats are enabled by default, beacause it has negligible impact on compilation time
+# Since all pixel formats are enabled by default, because it has negligible impact on compilation time
 default = ["grb", "argb", "as-bytes"]
 
 # Implements some of the traits, see `rgb::num_traits` module for details.

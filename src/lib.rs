@@ -43,9 +43,12 @@ mod pixel_traits {
 pub mod bytemuck;
 
 mod legacy;
+#[cfg(feature = "bytemuck")]
 pub use ::bytemuck::{Pod, Zeroable};
 pub use legacy::internal::convert::{AsPixels, FromSlice};
-pub use legacy::internal::pixel::{ColorComponentMap, ComponentBytes, ComponentSlice};
+pub use legacy::internal::pixel::{ColorComponentMap, ComponentSlice};
+#[cfg(feature = "bytemuck")]
+pub use legacy::internal::pixel::ComponentBytes;
 pub use legacy::*;
 pub use pixel_traits::pixel::Pixel as ComponentMap;
 
