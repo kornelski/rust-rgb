@@ -84,8 +84,8 @@ pub trait Pixel:
     /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
     /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
     ///
-    /// *rgb.as_array_mut()[1] = 40;
-    /// *rgba.as_array_mut()[2] = 40;
+    /// rgb.as_array_mut()[1] = 40;
+    /// rgba.as_array_mut()[2] = 40;
     ///
     /// assert_eq!(rgb.as_array(), &[0, 40, 100]);
     /// assert_eq!(rgba.as_array(), &[0, 10, 40, 50]);
