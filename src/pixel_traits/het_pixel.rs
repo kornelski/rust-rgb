@@ -65,7 +65,7 @@ pub trait HetPixel: Copy {
     /// [`Rgba`] has `ColorArray<U> = [U; 3]` also.
     type ColorArray<U>: ArrayLike<U>;
 
-    /// Returns an owned array of copies of the pixels color components.
+    /// Returns an owned array of copies of the pixel's color components.
     ///
     /// # Examples
     ///
@@ -104,7 +104,7 @@ pub trait HetPixel: Copy {
     #[doc(alias = "rgb_mut")]
     fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent>;
 
-    /// Returns a copy of the pixel's alpha alpha component if it has one.
+    /// Returns a copy of the pixel's alpha component if it has one.
     ///
     /// # Examples
     ///
@@ -121,7 +121,7 @@ pub trait HetPixel: Copy {
     #[doc(alias = "try_alpha")]
     #[doc(alias = "alpha_checked")]
     fn alpha_opt(&self) -> Option<Self::AlphaComponent>;
-    /// Returns a mutable borrow of the pixel's alpha alpha component if it has one.
+    /// Returns a mutable reference of the pixel's alpha component if it has one.
     ///
     /// # Examples
     ///
@@ -171,7 +171,7 @@ pub trait HetPixel: Copy {
         alpha: Self::AlphaComponent,
     ) -> Result<Self, TryFromColorsAlphaError>;
 
-    /// Maps each of the pixels color components with a function `f` to any other type.
+    /// Maps each of the pixel's color components with a function `f` to any other type.
     ///
     /// See [`HetPixel::map_colors_same()`] if you want to map the color components to the
     /// same type.
@@ -199,7 +199,7 @@ pub trait HetPixel: Copy {
     ) -> Self::SelfType<U, Self::AlphaComponent>
     where
         U: Copy + 'static;
-    /// Maps each of the pixels color components with a function `f` to the same type.
+    /// Maps each of the pixel's color components with a function `f` to the same type.
     ///
     /// See [`HetPixel::map_colors()`] if you want to map the color components to a
     /// different type.
@@ -221,7 +221,7 @@ pub trait HetPixel: Copy {
     /// ```
     fn map_colors_same(&self, f: impl FnMut(Self::ColorComponent) -> Self::ColorComponent) -> Self;
 
-    /// Maps the pixels alpha component with a function `f` to any other type.
+    /// Maps the pixel's alpha component with a function `f` to any other type.
     ///
     /// If the pixel has no alpha component then the pixel is returned unchanged.
     ///
@@ -249,7 +249,7 @@ pub trait HetPixel: Copy {
     ) -> Self::SelfType<Self::ColorComponent, U>
     where
         U: Copy + 'static;
-    /// Maps the pixels alpha component with a function `f` to the same type.
+    /// Maps the pixel's alpha component with a function `f` to the same type.
     ///
     /// If the pixel has no alpha component then the pixel is returned unchanged.
     ///
