@@ -9,7 +9,7 @@ use core::{mem, slice};
 /// See also `FromSlice`
 pub trait AsPixels<PixelType> {
     /// Reinterpret the slice as a read-only/shared slice of pixels.
-    /// Multiple consecutive elements in the slice are intepreted as a single pixel
+    /// Multiple consecutive elements in the slice are interpreted as a single pixel
     /// (depending on format, e.g. 3 for RGB, 4 for RGBA).
     ///
     /// Leftover elements are ignored if the slice isn't evenly divisible into pixels.
@@ -18,7 +18,7 @@ pub trait AsPixels<PixelType> {
     /// See also `FromSlice`.
     fn as_pixels(&self) -> &[PixelType];
     /// Reinterpret the slice as a mutable/exclusive slice of pixels.
-    /// Multiple consecutive elements in the slice are intepreted as a single pixel
+    /// Multiple consecutive elements in the slice are interpreted as a single pixel
     /// (depending on format, e.g. 3 for RGB, 4 for RGBA).
     ///
     /// Leftover elements are ignored if the slice isn't evenly divisible into pixels.

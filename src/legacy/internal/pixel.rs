@@ -45,7 +45,7 @@ pub trait ComponentBytes<T: ::bytemuck::Pod> {
 pub trait ColorComponentMap<DestPixel, SrcComponent, DestComponent> {
     /// Convenience function for applying the same formula to every rgb/gray component, but skipping the alpha component.
     ///
-    /// Note that it returns the pixel directly, not an Interator.
+    /// Note that it returns the pixel directly, not an Iterator.
     fn map_c<Callback>(&self, f: Callback) -> DestPixel
         where Callback: FnMut(SrcComponent) -> DestComponent;
 }

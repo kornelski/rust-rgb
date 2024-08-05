@@ -36,7 +36,7 @@ pub trait Pixel:
     /// [`Rgba`] has `ComponentArray<U> = [U; 4]`.
     type ComponentArray<U>: ArrayLike<U>;
 
-    /// Returns an owned array of copies of the pixels components.
+    /// Returns an owned array of copies of the pixel's components.
     ///
     /// # Examples
     ///
@@ -56,11 +56,40 @@ pub trait Pixel:
     where
         Self::ComponentArray<Self::Component>: Copy;
 
-    /// Cast `self` to array reference of the pixel's components
+    /// Casts a reference of the pixel to an array reference of the pixel's
+    /// components.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{Pixel, Rgb, Rgba};
+    ///
+    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// assert_eq!(rgb.as_array(), &[0, 10, 100]);
+    /// assert_eq!(rgba.as_array(), &[0, 10, 100, 50]);
+    /// ```
     #[doc(alias = "as_ref")]
     fn as_array(&self) -> &Self::ComponentArray<Self::Component>;
 
-    /// Cast `self` to array reference of the pixel's components
+    /// Casts a mutable reference of the pixel to an mutable array reference of the pixel's
+    /// components.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rgb::{Pixel, Rgb, Rgba};
+    ///
+    /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
+    /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    ///
+    /// *rgb.as_array_mut()[1] = 40;
+    /// *rgba.as_array_mut()[2] = 40;
+    ///
+    /// assert_eq!(rgb.as_array(), &[0, 40, 100]);
+    /// assert_eq!(rgba.as_array(), &[0, 10, 40, 50]);
+    /// ```
     #[doc(alias = "as_mut")]
     fn as_array_mut(&mut self) -> &mut Self::ComponentArray<Self::Component>;
 
@@ -106,7 +135,7 @@ pub trait Pixel:
         components: impl IntoIterator<Item = Self::Component>,
     ) -> Result<Self, TryFromComponentsError>;
 
-    /// Maps each of the pixels components with a function `f` to any other component type.
+    /// Maps each of the pixel's components with a function `f` to any other component type.
     ///
     /// See [`Pixel::map_same()`] if you want to map the components to the
     /// same type.
@@ -128,7 +157,7 @@ pub trait Pixel:
     /// ```
     fn map<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U> where U: Copy;
 
-    /// Maps each of the pixels components with a function `f` to the same component type.
+    /// Maps each of the pixel's components with a function `f` to the same component type.
     ///
     /// See [`Pixel::map()`] if you want to map the components to a
     /// different type.
