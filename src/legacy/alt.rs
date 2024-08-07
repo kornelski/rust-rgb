@@ -52,15 +52,19 @@ pub type ARGB16 = crate::Argb<u16>;
 pub type GRB8 = crate::formats::grb::Grb<u8>;
 
 /// 8-bit gray
+#[deprecated(note = "Refer to ::rgb::alt::Gray<u8> directly (this type alias will change in the next major version)")]
 pub type GRAY8 = Gray<u8>;
 
 /// 16-bit gray in machine's native endian
+#[deprecated(note = "Refer to ::rgb::alt::Gray<u16> directly (this type alias will change in the next major version)")]
 pub type GRAY16 = Gray<u16>;
 
 /// 8-bit gray with alpha in machine's native endian
+#[deprecated(note = "Refer to ::rgb::alt::GrayAlpha<u8> directly (this type alias will change in the next major version)")]
 pub type GRAYA8 = GrayAlpha<u8>;
 
 /// 16-bit gray with alpha in machine's native endian
+#[deprecated(note = "Refer to ::rgb::alt::GrayAlpha<u16> directly (this type alias will change in the next major version)")]
 pub type GRAYA16 = GrayAlpha<u16>;
 
 
@@ -234,6 +238,7 @@ impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u16> {
 }
 
 #[test]
+#[allow(deprecated)]
 fn gray() {
     let rgb: crate::RGB<_> = Gray(1).into();
     assert_eq!(rgb.r, 1);

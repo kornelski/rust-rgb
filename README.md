@@ -86,3 +86,4 @@ Planned changes:
 4. Don't enable `gbr` and `argb` features. All pixel types are enabled by default.
 5. In generic code operating on pixels, add `Copy + 'static` bounds to the pixel types and/or their components.
 6. Test your code with `rgb = { version = "0.8.46", features = ["unstable-experimental"] }`, which enables some of the future breaking changes on the older version. This feature flag is only for testing, and will be changed/removed in the future.
+7. Avoid wildcard imports from `rgb::alt::*`, and avoid using `GRAY8`-`GRAYA16` type aliases.
