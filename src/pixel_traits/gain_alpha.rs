@@ -1,6 +1,8 @@
 use crate::HasAlpha;
 use crate::HetPixel;
-use crate::{Abgr, Argb, Bgr, Bgra, Gray, GrayA, Rgb, Rgba};
+use crate::{Abgr, Argb, Bgr, Bgra, GrayA, Rgb, Rgba};
+use crate::formats::gray::{Gray_v08, Gray_v09};
+use crate::formats::gray_alpha::GrayAlpha_v08;
 
 /// A pixel which can gain an alpha component.
 ///
@@ -100,7 +102,9 @@ gain_already_alpha!(Argb, a);
 gain_already_alpha!(Bgra, a);
 gain_already_alpha!(Abgr, a);
 gain_already_alpha!(GrayA, a);
+gain_already_alpha!(GrayAlpha_v08, 1);
 
 lower_upper!(Rgb, Rgba, {r, g, b}, a);
 lower_upper!(Bgr, Bgra, {r, g, b}, a);
-lower_upper!(Gray, GrayA, { v }, a);
+lower_upper!(Gray_v08, GrayAlpha_v08, { 0 }, 1);
+lower_upper!(Gray_v09, GrayA, { v }, a);
