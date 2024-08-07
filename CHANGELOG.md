@@ -1,4 +1,17 @@
 
+# 0.8.47
+
+* Renamed `map_c` to `map_colors`
+* Added `rgb::prelude::*` for imoporting traits without naming them (for forward-compatibilty)
+
+# 0.8.46
+
+* Changed `AsRef` to dereference as arrays instead of slices (AsRef<[C]>` → `AsRef<[C; 4]>`)
+
+# 0.8.45
+
+* Added `From` for 1-tuples
+
 # 0.8.43/0.8.44
 
 * Reverted changes to `ComponentBytes`. `bytemuck` is still recommended instead.

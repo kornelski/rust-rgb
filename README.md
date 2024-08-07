@@ -79,6 +79,7 @@ Planned changes:
 1. Update to the latest version of 0.8, and fix all deprecation warnings.
 
    - rename `.alpha()` to `.with_alpha()`
+   - rename `.map_c()` to `.map_colors()`
 
 2. Change field access on `GrayAlpha` from `.0` and `.1` to `.v` and `.a` where possible.
 3. Use the `bytemuck` crate for conversions from/to bytes instead of `ComponentBytes` trait. Disable the `as-bytes` feature if possible.
