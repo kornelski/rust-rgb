@@ -42,18 +42,9 @@ pub struct Gray_v09<T> {
 }
 
 impl<T> core::ops::Deref for Gray_v08<T> {
-    type Target = Gray_v09<T>;
+    type Target = T;
 
-    fn deref(&self) -> &Gray_v09<T> {
-        unsafe {
-            &*(self as *const Self as *const Gray_v09::<T>)
-        }
+    fn deref(&self) -> &T {
+        &self.0
     }
-}
-
-#[test]
-fn swizzle() {
-    let g = Gray_v08(10u8);
-    assert_eq!(10, g.v);
-    assert_eq!(10, g.0);
 }
