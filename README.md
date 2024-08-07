@@ -235,31 +235,30 @@ The plan is to provide easy migration to v1.0. There will be a
 transitional v0.9 version released that will be mostly
 backwards-compatible with 0.8, and forwards-compatible with 1.0.
 
-Planned changes:
+The changes:
 
-- Types will be renamed to follow Rust's naming convention: `RGBA` → `Rgba`.
-  The names with an `8` or `16` suffix (`RGBA8`) will continue to work.
-- The `Gray` and `GrayAlpha` types will change from tuple structs with
-  `.0` to structs with named fields `.v` (value) and `.a` (alpha).
-  Through a `Deref` trick both field names will work, but `.0` is going to be deprecated.
-- `bytemuck::Pod` (conversions from/to raw bytes) will require color
-  and alpha components to be the same type (i.e. it will work with
-  `Rgba<u8>`, but not `Rgba<Newtype, DifferentType>`).
-  Currently it's unsound if the alpha has a different size than color components.
-- Many inherent methods will be moved to a new `Pixel` trait.
+- Types were renamed to follow Rust's naming convention: `RGBA` → `Rgba`.
+  Type aliases with an `8` or `16` suffix (`RGBA8`) were kept as-is.
+- The grayscale types have changed from being tuple structs with
+  `.0`/`.1` to structs with named fields `.v` (value) and `.a` (alpha).
+- `GrayAlpha` has been renamed to `GrayA`.
+- `bytemuck::Pod` (conversions from/to raw bytes) require color and alpha components to be the same type
+  (i.e. it works with `Rgba<u8>`, but not `Rgba<Newtype, DifferentType>`).
+- Most inherent methods were moved to a new `Pixel` trait.
 
 ## Migrating away from deprecated items
 
 Many items in this crate have become deprecated in preparation for a
-future release which removes them. Here is a checklist of things you
-may need to do.
+future release which removes them. Here is a checklist of things you may need to do.
 
 1. Update to the latest version of 0.8, and fix all deprecation warnings.
    - rename `.alpha()` to `.with_alpha()`
+   - rename `.map_c()` to `.map_colors()`
 1. Change field access on `GrayAlpha` from `.0` and `.1` to `.v` and `.a` where possible.
-1. Use the `bytemuck` crate for conversions from/to bytes.
+1. Use the `bytemuck` crate for conversions from/to bytes instead of `ComponentBytes` trait. Disable the `as-bytes` feature if possible.
 1. Use the `num-traits` crate for `.checked_add()`, don't enable `checked_fns` feature.
 1. Don't enable `gbr` and `argb` features. All pixel types are enabled by default.
 1. `AsRef<[T]>` implementations have changed to `AsRef<[T; N]>`. In most cases `.as_ref()`/`.as_mut()` calls should coerce to a slice anyway.
 1. Instead of `pixel.as_slice()` use `pixel.as_ref()`.
 1. Stop using the `rgb::Gray`/`rgb::GrayAlpha` types and switch to `rgb::Gray_v09 as Gray`/`rgb::GrayA` instead respectively.
+1. In generic code operating on pixels, add `Copy + 'static` bounds to the pixel types and their components.
