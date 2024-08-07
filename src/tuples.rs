@@ -1,7 +1,6 @@
-use crate::formats::gray::Gray_v08;
-use crate::formats::gray::Gray_v09;
+use crate::formats::gray::{Gray_v08, Gray_v09};
 use crate::formats::gray_alpha::GrayAlpha_v08;
-use crate::{Abgr, Argb, Bgr, Bgra, Grb, GrayA, Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, Bgr, Bgra, GrayA, Grb, Rgb, Rgba, Rgbw};
 
 macro_rules! tuple_conversion {
     ($name:ident, 1, [$($bit:tt:$num:tt),*]) => {

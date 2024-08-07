@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, Gray_v09, GrayA, Grb, Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, Bgr, Bgra, GrayA, Gray_v09, Grb, Rgb, Rgba, Rgbw};
 
 pub use ::bytemuck::*;
 

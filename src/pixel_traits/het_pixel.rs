@@ -72,8 +72,8 @@ pub trait HetPixel: Copy {
     /// ```
     /// use rgb::{HetPixel, Rgb, Rgba};
     ///
-    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
-    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    /// let rgb = Rgb { r: 0_u8, g: 10, b: 100 };
+    /// let rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
     /// assert_eq!(rgb.color_array(), [0, 10, 100]);
     /// assert_eq!(rgba.color_array(), [0, 10, 100]);
@@ -91,8 +91,8 @@ pub trait HetPixel: Copy {
     /// ```
     /// use rgb::{HetPixel, Rgb, Rgba};
     ///
-    /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
-    /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    /// let mut rgb = Rgb { r: 0_u8, g: 10, b: 100 };
+    /// let mut rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
     /// *rgb.color_array_mut()[1] = 40;
     /// *rgba.color_array_mut()[2] = 40;
@@ -111,8 +111,8 @@ pub trait HetPixel: Copy {
     /// ```
     /// use rgb::{HetPixel, Rgb, Rgba};
     ///
-    /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
-    /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    /// let mut rgb = Rgb { r: 0_u8, g: 10, b: 100 };
+    /// let mut rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
     /// assert_eq!(rgb.alpha_opt(), None);
     /// assert_eq!(rgba.alpha_opt(), Some(50));
@@ -128,8 +128,8 @@ pub trait HetPixel: Copy {
     /// ```
     /// use rgb::{HetPixel, Rgb, Rgba};
     ///
-    /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
-    /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    /// let mut rgb = Rgb { r: 0_u8, g: 10, b: 100 };
+    /// let mut rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
     /// let f = |a: Option<&mut u8>| {
     ///     if let Some(a) = a {
@@ -153,7 +153,8 @@ pub trait HetPixel: Copy {
     /// # Examples
     ///
     /// ```
-    /// use rgb::{HetPixel, Rgb, Rgba, error::TryFromColorsAlphaError};
+    /// use rgb::error::TryFromColorsAlphaError;
+    /// use rgb::{HetPixel, Rgb, Rgba};
     ///
     /// let mut values2 = [0_u8, 10];
     /// let mut values4 = [0_u8, 10, 100, 40];
@@ -181,15 +182,15 @@ pub trait HetPixel: Copy {
     /// ```
     /// use rgb::{HetPixel, Rgb, Rgba};
     ///
-    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
-    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    /// let rgb = Rgb { r: 0_u8, g: 10, b: 100 };
+    /// let rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
     /// let f = |color: u8| {
     ///     u16::from(color) * 10
     /// };
     ///
-    /// assert_eq!(rgb.map_colors(f), Rgb {r: 0, g: 100, b: 1000});
-    /// assert_eq!(rgba.map_colors(f), Rgba {r: 0, g: 100, b: 1000, a: 50});
+    /// assert_eq!(rgb.map_colors(f), Rgb { r: 0, g: 100, b: 1000 });
+    /// assert_eq!(rgba.map_colors(f), Rgba { r: 0, g: 100, b: 1000, a: 50 });
     /// ```
     #[doc(alias = "map_c")]
     #[doc(alias = "map_gray")]
@@ -209,15 +210,15 @@ pub trait HetPixel: Copy {
     /// ```
     /// use rgb::{HetPixel, Rgb, Rgba};
     ///
-    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
-    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    /// let rgb = Rgb { r: 0_u8, g: 10, b: 100 };
+    /// let rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
     /// let f = |color: u8| {
     ///     color / 2
     /// };
     ///
-    /// assert_eq!(rgb.map_colors_same(f), Rgb {r: 0, g: 5, b: 50});
-    /// assert_eq!(rgba.map_colors_same(f), Rgba {r: 0, g: 5, b: 50, a: 50});
+    /// assert_eq!(rgb.map_colors_same(f), Rgb { r: 0, g: 5, b: 50 });
+    /// assert_eq!(rgba.map_colors_same(f), Rgba { r: 0, g: 5, b: 50, a: 50 });
     /// ```
     fn map_colors_same(&self, f: impl FnMut(Self::ColorComponent) -> Self::ColorComponent) -> Self;
 

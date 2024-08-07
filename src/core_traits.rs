@@ -468,7 +468,6 @@ trait_impls_with_alpha!(GrayA, 2, [v, a], "graya({}, {})", "graya(#{:0w$X}{:0w$X
 use crate::formats::gray_alpha::GrayAlpha_v08;
 trait_impls_with_alpha!(GrayAlpha_v08, 2, [0, 1], "graya_v0.8({}, {})", "graya_v0.8(#{:0w$X}{:0w$X})", "graya_v0.8(#{:0w$x}{:0w$x})");
 
-
 #[cfg(test)]
 #[test]
 fn test_16_fmt() {
@@ -478,12 +477,10 @@ fn test_16_fmt() {
     assert_eq!("argb(#000112340003FFFF)", &std::format!("{:X}", a));
 }
 
-
 #[test]
 #[allow(deprecated)]
 fn convert_array() {
-    use crate::{BGR8, BGRA8};
-    use crate::{RGB8, RGBA8};
+    use crate::{BGR8, BGRA8, RGB8, RGBA8};
 
     assert_eq!(RGB8::from([1, 2, 3]), RGB8::new(1, 2, 3));
     assert_eq!(Into::<[u8; 3]>::into(RGB8::new(1, 2, 3)), [1, 2, 3]);

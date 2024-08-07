@@ -26,9 +26,9 @@ pub trait HasAlpha: HetPixel {
     ///
     /// # Examples
     /// ```
-    /// use rgb::{Rgba, HasAlpha};
+    /// use rgb::{HasAlpha, Rgba};
     ///
-    /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    /// let mut rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
     /// assert_eq!(HasAlpha::alpha(&rgba), 50);
     ///
@@ -42,9 +42,9 @@ pub trait HasAlpha: HetPixel {
     ///
     /// # Examples
     /// ```
-    /// use rgb::{Rgba, HasAlpha};
+    /// use rgb::{HasAlpha, Rgba};
     ///
-    /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    /// let mut rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
     /// let alpha = rgba.alpha_mut();
     ///

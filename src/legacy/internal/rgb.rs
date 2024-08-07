@@ -5,9 +5,7 @@ use crate::*;
 impl<T> BGR<T> {
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B
-    #[deprecated(
-        note = "This function has a misleading order of arguments. Use BGR{} literal instead"
-    )]
+    #[deprecated(note = "This function has a misleading order of arguments. Use BGR{} literal instead")]
     #[inline(always)]
     pub const fn new(r: T, g: T, b: T) -> Self {
         Self { b, g, r }

@@ -43,8 +43,8 @@ pub trait Pixel:
     /// ```
     /// use rgb::{Pixel, Rgb, Rgba};
     ///
-    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
-    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    /// let rgb = Rgb { r: 0_u8, g: 10, b: 100 };
+    /// let rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
     /// assert_eq!(rgb.to_array(), [0, 10, 100]);
     /// assert_eq!(rgba.to_array(), [0, 10, 100, 50]);
@@ -53,8 +53,7 @@ pub trait Pixel:
     #[doc(alias = "into_array")]
     #[doc(alias = "component_array")]
     fn to_array(&self) -> Self::ComponentArray<Self::Component>
-    where
-        Self::ComponentArray<Self::Component>: Copy;
+    where Self::ComponentArray<Self::Component>: Copy;
 
     /// Casts a reference of the pixel to an array reference of the pixel's
     /// components.
@@ -100,8 +99,8 @@ pub trait Pixel:
     /// ```
     /// use rgb::{Pixel, Rgb, Rgba};
     ///
-    /// let mut rgb = Rgb {r: 0_u8, g: 10, b: 100};
-    /// let mut rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    /// let mut rgb = Rgb { r: 0_u8, g: 10, b: 100 };
+    /// let mut rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
     /// *rgb.each_mut()[1] = 40;
     /// *rgba.each_mut()[2] = 40;
@@ -120,7 +119,8 @@ pub trait Pixel:
     /// # Examples
     ///
     /// ```
-    /// use rgb::{Pixel, Rgb, Rgba, error::TryFromComponentsError};
+    /// use rgb::error::TryFromComponentsError;
+    /// use rgb::{Pixel, Rgb, Rgba};
     ///
     /// let mut values2 = [0_u8, 10];
     /// let mut values4 = [0_u8, 10, 100, 40];
@@ -128,8 +128,8 @@ pub trait Pixel:
     /// assert_eq!(Rgb::try_from_components(values2), Err(TryFromComponentsError));
     /// assert_eq!(Rgba::try_from_components(values2), Err(TryFromComponentsError));
     ///
-    /// assert_eq!(Rgb::try_from_components(values4), Ok(Rgb {r: 0, g: 10, b: 100}));
-    /// assert_eq!(Rgba::try_from_components(values4), Ok(Rgba {r: 0, g: 10, b: 100, a: 40}));
+    /// assert_eq!(Rgb::try_from_components(values4), Ok(Rgb { r: 0, g: 10, b: 100 }));
+    /// assert_eq!(Rgba::try_from_components(values4), Ok(Rgba { r: 0, g: 10, b: 100, a: 40 }));
     /// ```
     fn try_from_components(
         components: impl IntoIterator<Item = Self::Component>,
@@ -145,15 +145,15 @@ pub trait Pixel:
     /// ```
     /// use rgb::{Pixel, Rgb, Rgba};
     ///
-    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
-    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    /// let rgb = Rgb { r: 0_u8, g: 10, b: 100 };
+    /// let rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
     /// let f = |color: u8| {
     ///     u16::from(color) * 10
     /// };
     ///
-    /// assert_eq!(rgb.map(f), Rgb {r: 0, g: 100, b: 1000});
-    /// assert_eq!(rgba.map(f), Rgba {r: 0, g: 100, b: 1000, a: 500});
+    /// assert_eq!(rgb.map(f), Rgb { r: 0, g: 100, b: 1000 });
+    /// assert_eq!(rgba.map(f), Rgba { r: 0, g: 100, b: 1000, a: 500 });
     /// ```
     fn map<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U> where U: Copy;
 
@@ -167,15 +167,15 @@ pub trait Pixel:
     /// ```
     /// use rgb::{Pixel, Rgb, Rgba};
     ///
-    /// let rgb = Rgb {r: 0_u8, g: 10, b: 100};
-    /// let rgba = Rgba {r: 0_u8, g: 10, b: 100, a: 50};
+    /// let rgb = Rgb { r: 0_u8, g: 10, b: 100 };
+    /// let rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
     /// let f = |color: u8| {
     ///     color / 2
     /// };
     ///
-    /// assert_eq!(rgb.map_same(f), Rgb {r: 0, g: 5, b: 50});
-    /// assert_eq!(rgba.map_same(f), Rgba {r: 0, g: 5, b: 50, a: 25});
+    /// assert_eq!(rgb.map_same(f), Rgb { r: 0, g: 5, b: 50 });
+    /// assert_eq!(rgba.map_same(f), Rgba { r: 0, g: 5, b: 50, a: 25 });
     /// ```
     fn map_same(&self, f: impl FnMut(Self::Component) -> Self::Component) -> Self;
 }

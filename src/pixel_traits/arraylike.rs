@@ -1,7 +1,5 @@
-use core::{
-    borrow::{Borrow, BorrowMut},
-    ops::{Index, IndexMut},
-};
+use core::borrow::{Borrow, BorrowMut};
+use core::ops::{Index, IndexMut};
 
 /// A trait used when returning arrays from the two pixel traits due to the lack of the const
 /// generic expressions feature on stable rust.

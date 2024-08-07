@@ -59,8 +59,7 @@ fn shared_impl() {
     }
 
     impl<Pixel: Clone + crate::Pod> SharedPixelBuffer<Pixel>
-    where
-        [Pixel]: crate::ComponentBytes<u8>,
+    where [Pixel]: crate::ComponentBytes<u8>
     {
         pub fn as_bytes(&self) -> &[u8] {
             self.data.as_slice().as_bytes()
