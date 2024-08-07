@@ -91,7 +91,7 @@ pub mod prelude {
     pub use crate::Pixel;
 }
 
-/// TryFrom errors
+/// `TryFrom` errors
 pub mod error {
     pub use crate::pixel_traits::het_pixel::TryFromColorsAlphaError;
     pub use crate::pixel_traits::pixel::TryFromComponentsError;

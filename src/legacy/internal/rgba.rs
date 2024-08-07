@@ -1,6 +1,6 @@
-use super::pixel::*;
 use crate::alt::*;
 use crate::*;
+use super::pixel::{ColorComponentMap, ComponentSlice};
 
 impl<T, A> Rgba<T, A> {
     #[inline(always)]
@@ -40,7 +40,7 @@ impl<T> Argb<T> {
     /// The order of arguments is R,G,B,A
     #[deprecated(note = "This function has a misleading order of arguments. Use ARGB{} literal instead")]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self { r, g, b, a }
+        Self { a, r, g, b }
     }
 }
 
@@ -50,7 +50,7 @@ impl<T, A> Argb<T, A> {
     /// The order of arguments is R,G,B,A
     #[deprecated(note = "This function has a misleading order of arguments. Use ARGB{} literal instead")]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-        Self { r, g, b, a }
+        Self { a, r, g, b }
     }
 }
 
@@ -60,7 +60,7 @@ impl<T> Abgr<T> {
     /// The order of arguments is R,G,B,A
     #[deprecated(note = "This function has a misleading order of arguments. Use ABGR{} literal instead")]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self { r, g, b, a }
+        Self { a, b, g, r }
     }
 }
 
@@ -70,7 +70,7 @@ impl<T, A> Abgr<T, A> {
     /// The order of arguments is R,G,B,A
     #[deprecated(note = "This function has a misleading order of arguments. Use ABGR{} literal instead")]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-        Self { r, g, b, a }
+        Self { a, b, g, r }
     }
 }
 
@@ -122,7 +122,7 @@ macro_rules! impl_rgba {
 
             /// Create a new RGBA with the new alpha value, but same RGB values
             #[inline(always)]
-            pub fn with_alpha(&self, a: A) -> Self {
+            pub const fn with_alpha(&self, a: A) -> Self {
                 Self { r: self.r, g: self.g, b: self.b, a }
             }
 
@@ -235,7 +235,7 @@ impl<T, A> Rgba<T, A> {
     /// Useful to change color without changing opacity.
     #[inline(always)]
     pub fn rgb_mut(&mut self) -> &mut Rgb<T> {
-        unsafe { &mut *(self as *mut _ as *mut Rgb<T>) }
+        unsafe { &mut *(self as *mut Self).cast::<Rgb<T>>() }
     }
 }
 
@@ -245,14 +245,14 @@ impl<T, A> BGRA<T, A> {
     #[inline(always)]
     #[deprecated(note = "This function will change. Use bgr_mut()")]
     pub fn rgb_mut(&mut self) -> &mut Bgr<T> {
-        unsafe { &mut *(self as *mut _ as *mut Bgr<T>) }
+        unsafe { &mut *(self as *mut Self).cast::<Bgr<T>>() }
     }
 
     /// Provide a mutable view of only RGB components (leaving out alpha).
     /// Useful to change color without changing opacity.
     #[inline(always)]
     pub fn bgr_mut(&mut self) -> &mut Bgr<T> {
-        unsafe { &mut *(self as *mut _ as *mut Bgr<T>) }
+        unsafe { &mut *(self as *mut Self).cast::<Bgr<T>>() }
     }
 }
 
@@ -333,7 +333,7 @@ impl_alpha_conv! {Rgb, Argb}
 fn rgba_test() {
     use crate::Pixel;
 
-    let neg = RGBA::new(1,2,3i32,1000).map(|x| -x);
+    let neg = Rgba::new(1,2,3i32,1000).map(|x| -x);
     assert_eq!(neg.r, -1);
     assert_eq!(neg.rgb().r, -1);
     assert_eq!(neg.g, -2);
@@ -343,16 +343,16 @@ fn rgba_test() {
     assert_eq!(neg.a, -1000);
     assert_eq!(neg.map_alpha(|x| x+1).a, -999);
     assert_eq!(neg, neg.as_slice().iter().copied().collect());
-    assert!(neg < RGBA::new(0,0,0,0));
+    assert!(neg < Rgba::new(0,0,0,0));
 
-    let neg = RGBA::new(1u8,2,3,4).map_rgb(|c| -(c as i16));
+    let neg = Rgba::new(1u8,2,3,4).map_rgb(|c| -i16::from(c));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4i16, neg.a);
-    let neg = RGBA::new(1u8,2,3,4).map_c(|c| -(c as i16));
+    let neg = Rgba::new(1u8,2,3,4).map_c(|c| -i16::from(c));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4u8, neg.a);
 
-    let mut px = RGBA{r:1,g:2,b:3,a:4};
+    let mut px = Rgba{r:1,g:2,b:3,a:4};
     px.as_mut_slice()[3] = 100;
     assert_eq!(1, px.rgb_mut().r);
     assert_eq!(2, px.rgb_mut().g);
@@ -362,7 +362,7 @@ fn rgba_test() {
 
     #[cfg(feature = "as-bytes")]
     {
-        let v = vec![RGBA::new(1u8,2,3,4), RGBA::new(5,6,7,8)];
+        let v = [Rgba::new(1u8,2,3,4), Rgba::new(5,6,7,8)];
         assert_eq!(&[1,2,3,4,5,6,7,8], v.as_bytes());
     }
 }
@@ -396,16 +396,16 @@ fn bgra_test() {
     assert_eq!(neg.bgr().b, -3);
     assert_eq!(neg.a, -1000);
     assert_eq!(&[-3, -2, -1, -1000], neg.as_slice());
-    assert!(neg < BGRA::new(0, 0, 0, 0));
+    assert!(neg < Bgra::new(0, 0, 0, 0));
 
-    let neg = BGRA::new(1u8, 2u8, 3u8, 4u8).map_rgb(|c| -(c as i16));
+    let neg = Bgra::new(1u8, 2u8, 3u8, 4u8).map_rgb(|c| -i16::from(c));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4i16, neg.a);
-    let neg = BGRA::new(1u8, 2u8, 3u8, 4u8).map_c(|c| -(c as i16));
+    let neg = Bgra::new(1u8, 2u8, 3u8, 4u8).map_c(|c| -i16::from(c));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4u8, neg.a);
 
-    let mut px = BGRA{r:1,g:2,b:3,a:-9}.with_alpha(4);
+    let mut px = Bgra{r:1,g:2,b:3,a:-9}.with_alpha(4);
     px.as_mut_slice()[3] = 100;
     assert_eq!(1, px.bgr_mut().r);
     assert_eq!(2, px.bgr_mut().g);
@@ -415,6 +415,7 @@ fn bgra_test() {
 
     #[cfg(feature = "as-bytes")]
     {
+        use crate::ComponentBytes;
         let v = vec![BGRA::new(3u8, 2, 1, 4), BGRA::new(7, 6, 5, 8)];
         assert_eq!(&[1, 2, 3, 4, 5, 6, 7, 8], v.as_bytes());
     }

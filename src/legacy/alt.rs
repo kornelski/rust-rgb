@@ -1,4 +1,4 @@
-use crate::legacy::internal::pixel::*;
+use crate::legacy::internal::pixel::{ColorComponentMap, ComponentSlice};
 use core::slice;
 
 pub use crate::formats::gray::Gray_v08 as Gray;
@@ -83,7 +83,7 @@ impl<T, A> GrayAlpha<T, A> {
     /// Provide a mutable view of only `Gray` component (leaving out alpha).
     #[inline(always)]
     pub fn gray_mut(&mut self) -> &mut Gray<T> {
-        unsafe { &mut *(self as *mut _ as *mut _) }
+        unsafe { &mut *(self as *mut Self).cast() }
     }
 }
 
@@ -97,7 +97,7 @@ impl<T: Copy, A: Clone> GrayAlpha<T, A> {
 
     /// Create a new `GrayAlpha` with the new alpha value, but same gray value
     #[inline(always)]
-    pub fn with_alpha(&self, a: A) -> Self {
+    pub const fn with_alpha(&self, a: A) -> Self {
         Self(self.0, a)
     }
 
@@ -136,14 +136,14 @@ impl<T> ComponentSlice<T> for GrayAlpha<T> {
     #[inline(always)]
     fn as_slice(&self) -> &[T] {
         unsafe {
-            slice::from_raw_parts(self as *const Self as *const T, 2)
+            slice::from_raw_parts((self as *const Self).cast::<T>(), 2)
         }
     }
 
     #[inline(always)]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
-            slice::from_raw_parts_mut(self as *mut Self as *mut T, 2)
+            slice::from_raw_parts_mut((self as *mut Self).cast::<T>(), 2)
         }
     }
 }
@@ -196,7 +196,7 @@ impl<T> ComponentSlice<T> for [Gray<T>] {
 impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u8> {
     #[inline(always)]
     fn from(other: Gray<T>) -> Self {
-        GrayAlpha(other.0, 0xFF)
+        Self(other.0, 0xFF)
     }
 }
 
@@ -204,7 +204,7 @@ impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u8> {
 impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u16> {
     #[inline(always)]
     fn from(other: Gray<T>) -> Self {
-        GrayAlpha(other.0, 0xFFFF)
+        Self(other.0, 0xFFFF)
     }
 }
 
@@ -226,7 +226,7 @@ fn gray() {
 
     let g: GRAY8 = 200.into();
     let g = g.map(|c| c / 2);
-    assert_eq!(110, g.v + 10);
+    assert_eq!(110, g.0 + 10);
     assert_eq!(110, 10 + Gray(100).as_ref());
 
     let ga: GRAYA8 = GrayAlpha(1, 2);

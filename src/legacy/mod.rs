@@ -115,7 +115,7 @@ fn bytes() {
         assert_eq!(&[1,2,3,4], rgba_bytes);
         assert_eq!(&[rgba], rgba_bytes.as_rgba());
         rgba_bytes[3] = 99;
-        assert_eq!(RGBA8::new(1,2,3,99), rgba_arr.as_bytes().into_iter().cloned().collect());
+        assert_eq!(RGBA8::new(1,2,3,99), rgba_arr.as_bytes().iter().copied().collect());
     }
 
     let rgb = RGB16::new(1,2,3);

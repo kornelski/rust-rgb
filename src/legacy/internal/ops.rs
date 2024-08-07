@@ -13,7 +13,7 @@ macro_rules! impl_struct_checked {
             /// `px.checked_add(px)`
             #[inline(always)]
             #[cfg_attr(feature = "num-traits", deprecated(note = "import `num_traits::CheckedAdd` instead, disable rgb's checked_fns feature"))]
-            pub fn checked_add(self, rhs: $ty<$field_ty>) -> Option<Self> {
+            #[must_use] pub fn checked_add(self, rhs: $ty<$field_ty>) -> Option<Self> {
                 Some($ty {
                     $(
                         $field: self.$field.checked_add(rhs.$field)?,
@@ -24,7 +24,7 @@ macro_rules! impl_struct_checked {
             /// `px.checked_sub(px)`
             #[inline(always)]
             #[cfg_attr(feature = "num-traits", deprecated(note = "import `num_traits::CheckedSub` instead, disable rgb's checked_fns feature"))]
-            pub fn checked_sub(self, rhs: $ty<$field_ty>) -> Option<Self> {
+            #[must_use] pub fn checked_sub(self, rhs: $ty<$field_ty>) -> Option<Self> {
                 Some($ty {
                     $(
                         $field: self.$field.checked_sub(rhs.$field)?,

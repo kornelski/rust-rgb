@@ -1,6 +1,6 @@
-use super::pixel::*;
 use crate::alt::*;
 use crate::*;
+use super::pixel::{ColorComponentMap, ComponentSlice};
 
 impl<T> BGR<T> {
     /// Convenience function for creating a new pixel
@@ -177,6 +177,7 @@ mod rgb_test {
 
         #[cfg(feature = "as-bytes")]
         {
+            use crate::ComponentBytes;
             let v = vec![RGB::new(1u8, 2, 3), RGB::new(4, 5, 6)];
             assert_eq!(&[1, 2, 3, 4, 5, 6], v.as_bytes());
         }

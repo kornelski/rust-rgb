@@ -474,7 +474,7 @@ fn test_16_fmt() {
     extern crate std;
 
     let a = Argb::<u16>::new_argb(1, 0x1234, 3, 65535);
-    assert_eq!("argb(#000112340003FFFF)", &std::format!("{:X}", a));
+    assert_eq!("argb(#000112340003FFFF)", &std::format!("{a:X}"));
 }
 
 #[test]
