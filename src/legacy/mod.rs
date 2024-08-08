@@ -51,7 +51,7 @@ fn rgb_works() {
         assert_eq!(0xFF, [rgb].as_bytes()[5]);
     }
 
-    assert_eq!("rgb(1, 2, 3)", format!("{}", RGB::new(1, 2, 3)));
+    assert_eq!("rgb(1,2,3)", format!("{}", RGB::new(1, 2, 3)));
 }
 
 #[test]
@@ -79,7 +79,7 @@ fn rgba_works() {
 
     assert_eq!(rgba, rgba.iter().map(|ch| ch).collect());
 
-    assert_eq!("rgba(1, 2, 3, 4)", format!("{}", RGBA::new(1, 2, 3, 4)));
+    assert_eq!("rgba(1,2,3,4)", format!("{}", RGBA::new(1, 2, 3, 4)));
 
     assert_eq!(rgba - rgba, RGBA::new(0, 0, 0, 0));
 }
