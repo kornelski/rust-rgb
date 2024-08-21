@@ -6,7 +6,7 @@ pub(crate) mod internal {
     pub mod rgba;
 }
 
-/// BGR/BGRA alernative layouts & grayscale
+/// For backwards-compatibility only. This is where BGR/BGRA alernative layouts & grayscale used to be.
 ///
 /// BGR might be useful for some Windows or OpenGL APIs.
 pub mod alt;
