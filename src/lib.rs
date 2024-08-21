@@ -32,7 +32,7 @@ mod pixel_traits {
     pub mod pixel;
 }
 
-/// Re-export of the [`bytemuck` crate](https://lib.rs/bytemuck). [See docs](https://docs.rs/bytemuck).
+/// Re-export of the [`bytemuck` crate](https://lib.rs/bytemuck).
 ///
 /// Use [`::bytemuck::cast_slice()`] or [`::bytemuck::from_bytes()`] to convert
 /// pixels to/from `&[u8]`.
@@ -40,7 +40,11 @@ mod pixel_traits {
 #[doc(alias = "ComponentSlice")]
 #[doc(alias = "as_bytes")]
 #[doc(alias = "Pod")]
-pub mod bytemuck;
+#[doc(inline)]
+pub use ::bytemuck;
+
+#[cfg(feature = "bytemuck")]
+mod bytemuck_impl;
 
 mod legacy;
 #[cfg(feature = "bytemuck")]
