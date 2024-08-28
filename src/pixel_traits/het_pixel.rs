@@ -35,14 +35,14 @@ pub trait HetPixel: Copy {
     /// color components + 1. That is, you cannot have more than 1 alpha components, but you can
     /// have 0.
     ///
-    /// For example, [`Rgb`] has a `NUM_COMPONENTS` == 3 whereas
-    /// [`Rgba`] has a `NUM_COMPONENTS` == 4.
+    /// For example, [`Rgb`] has `NUM_COMPONENTS` == 3 whereas
+    /// [`Rgba`] has `NUM_COMPONENTS` == 4.
     const NUM_COMPONENTS: u8;
 
     /// The number of components in the pixel minus alpha.
     ///
-    /// For example, [`Rgb`] has a `NUM_COLOR_COMPONENTS` == 3 whereas
-    /// [`Rgbw`] has a `NUM_COLOR_COMPONENTS` == 4.
+    /// For example, [`Rgb`] has `NUM_COLOR_COMPONENTS` == 3 whereas
+    /// [`Rgbw`] has `NUM_COLOR_COMPONENTS` == 4.
     const NUM_COLOR_COMPONENTS: u8;
 
     /// The same pixel type as `Self` but with a different component type `U`.
