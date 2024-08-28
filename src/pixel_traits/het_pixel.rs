@@ -35,15 +35,15 @@ pub trait HetPixel: Copy {
     /// color components + 1. That is, you cannot have more than 1 alpha components, but you can
     /// have 0.
     ///
-    /// For example, [`Rgb`] has a `COMPONENTS` == 3 whereas
-    /// [`Rgba`] has a `COMPONENTS` == 4.
-    const COMPONENTS: u8;
+    /// For example, [`Rgb`] has a `NUM_COMPONENTS` == 3 whereas
+    /// [`Rgba`] has a `NUM_COMPONENTS` == 4.
+    const NUM_COMPONENTS: u8;
 
     /// The number of components in the pixel minus alpha.
     ///
-    /// For example, [`Rgb`] has a `COLOR_COMPONENTS` == 3 whereas
-    /// [`Rgbw`] has a `COLOR_COMPONENTS` == 4.
-    const COLOR_COMPONENTS: u8;
+    /// For example, [`Rgb`] has a `NUM_COLOR_COMPONENTS` == 3 whereas
+    /// [`Rgbw`] has a `NUM_COLOR_COMPONENTS` == 4.
+    const NUM_COLOR_COMPONENTS: u8;
 
     /// The same pixel type as `Self` but with a different component type `U`.
     ///
@@ -281,8 +281,8 @@ macro_rules! without_alpha {
             type ColorComponent = T;
             type AlphaComponent = T;
 
-            const COMPONENTS: u8 = $length;
-            const COLOR_COMPONENTS: u8 = $length;
+            const NUM_COMPONENTS: u8 = $length;
+            const NUM_COLOR_COMPONENTS: u8 = $length;
 
             type SelfType<U: Copy + 'static, V: Copy + 'static> = $name<U>;
             type ColorArray<U> = [U; $length];
@@ -342,8 +342,8 @@ macro_rules! with_alpha {
             type ColorComponent = T;
             type AlphaComponent = A;
 
-            const COMPONENTS: u8 = $length;
-            const COLOR_COMPONENTS: u8 = $length - 1;
+            const NUM_COMPONENTS: u8 = $length;
+            const NUM_COLOR_COMPONENTS: u8 = $length - 1;
 
             type SelfType<U: Copy + 'static, V: Copy + 'static> = $name<U, V>;
             type ColorArray<U> = [U; $length - 1];
