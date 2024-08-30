@@ -1,4 +1,8 @@
 
+# 0.8.49
+
+* Added `.value()` getter on grayscale pixel types to avoid direct field access.
+
 # 0.8.48
 
 * Deprecated `alt::GRAY8`-`alt::GRAYA16` type aliases, because they will be moved in the next major version.

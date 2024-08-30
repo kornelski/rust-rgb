@@ -20,6 +20,15 @@ pub struct GrayAlpha_v08<T, A = T>(
     pub A,
 );
 
+impl<T: Copy> GrayAlpha_v08<T> {
+    /// Reads the `.0` field
+    ///
+    /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
+    pub fn value(self) -> T {
+        self.0
+    }
+}
+
 impl<T, A> Deref for GrayAlpha_v08<T, A> {
     type Target = GrayA<T, A>;
 

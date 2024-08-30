@@ -9,8 +9,34 @@ pub struct Gray_v08<T>(
     pub T,
 );
 
+impl<T: Copy> Gray_v08<T> {
+    /// Reads the `.0` field
+    ///
+    /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
+    pub fn value(self) -> T {
+        self.0
+    }
+
+    /// Add alpha component to this pixel
+    #[allow(deprecated)]
+    pub fn with_alpha(self, add_alpha_value: T) -> crate::formats::gray_alpha::GrayAlpha_v08<T> {
+        crate::formats::gray_alpha::GrayAlpha_v08(self.0, add_alpha_value)
+    }
+}
+
 #[cfg(feature = "unstable-experimental")]
 /// A `Grayscale` pixel (rgb crate v0.9)
+///
+/// This is the new gray pixel type as opposed to the legacy gray type
+/// (`rgb::Gray`) which is kept for backwards-compatibility.
+///
+/// # Examples
+///
+/// ```
+/// use rgb::Gray;
+///
+/// let pixel: Gray<u8> = Gray { v: 0 };
+/// ```
 #[allow(non_camel_case_types)]
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -30,6 +56,21 @@ impl<T> core::ops::Deref for Gray_v08<T> {
         unsafe {
             &*(self as *const Self as *const Gray_v09::<T>)
         }
+    }
+}
+
+#[cfg(feature = "unstable-experimental")]
+impl<T: Copy> Gray_v09<T> {
+    /// Reads the `.v` field
+    ///
+    /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
+    pub fn value(self) -> T {
+        self.v
+    }
+
+    /// Add alpha component to this pixel
+    pub fn with_alpha(self, add_alpha_value: T) -> crate::formats::gray_a::GrayA<T> {
+        crate::formats::gray_a::GrayA { v: self.v, a: add_alpha_value }
     }
 }
 

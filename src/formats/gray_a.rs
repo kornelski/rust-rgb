@@ -11,3 +11,12 @@ pub struct GrayA<T, A = T> {
     /// Alpha Component
     pub a: A,
 }
+
+impl<T: Copy> GrayA<T> {
+    /// Reads the `.v` field
+    ///
+    /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
+    pub fn value(self) -> T {
+        self.v
+    }
+}

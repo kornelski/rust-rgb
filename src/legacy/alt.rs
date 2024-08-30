@@ -104,7 +104,7 @@ impl<T, A> GrayAlpha<T, A> {
 impl<T: Copy, A: Clone> GrayAlpha<T, A> {
     /// Create a new `GrayAlpha` with the new alpha value, but same gray value
     #[doc(hidden)]
-    #[deprecated(note = "use .with_alpha(a) instead")]
+    #[deprecated(note = "use .with_alpha(a) instead; this will become a getter in the future")]
     pub fn alpha(&self, a: A) -> Self {
         self.with_alpha(a)
     }

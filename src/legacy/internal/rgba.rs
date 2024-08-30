@@ -245,7 +245,6 @@ impl<T, A> RGBA<T, A> {
 impl<T, A> BGRA<T, A> {
     /// Provide a mutable view of only RGB components (leaving out alpha).
     /// Useful to change color without changing opacity.
-    #[inline(always)]
     #[deprecated(note = "This function will change. Use bgr_mut()")]
     pub fn rgb_mut(&mut self) -> &mut BGR<T> {
         unsafe { &mut *(self as *mut _ as *mut BGR<T>) }
@@ -306,7 +305,6 @@ impl<T: Clone, A> BGRA<T, A> {
     /// Copy RGB components out of the RGBA struct
     ///
     /// Note: you can use `.into()` to convert between other types
-    #[inline(always)]
     #[deprecated(note = "This function will change. Use bgr()")]
     pub fn rgb(&self) -> BGR<T> {
         BGR {

@@ -8,7 +8,6 @@ impl<T> BGR<T> {
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B
     #[deprecated(note = "This function has a misleading order of arguments. Use BGR{} literal instead")]
-    #[inline(always)]
     pub const fn new(r: T, g: T, b: T) -> Self {
         Self { b, g, r }
     }
@@ -90,7 +89,7 @@ macro_rules! impl_rgb_to_alpha {
         impl<T: Clone> $RGB<T> {
             /// Convenience function for converting to RGBA
             #[doc(hidden)]
-            #[deprecated(note = "use .with_alpha(a) instead")]
+            #[deprecated(note = "use .with_alpha(a) instead; this will become a getter in the future")]
             pub fn alpha(&self, a: T) -> $RGBA<T> {
                 self.with_alpha(a)
             }
@@ -108,7 +107,8 @@ macro_rules! impl_rgb_to_alpha {
             }
 
             /// Convenience function for converting to RGBA with alpha channel of a different type than type of the pixels
-            #[inline(always)]
+            #[inline(never)]
+            #[deprecated(note = "use .with_alpha(a) instead")]
             pub fn new_alpha<A>(&self, a: A) -> $RGBA<T, A> {
                 $RGBA {
                     r: self.r.clone(),
