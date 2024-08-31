@@ -1,6 +1,8 @@
 use crate::{Abgr, Argb, Bgr, Bgra, Grb, Rgb, Rgba};
 use crate::formats::gray_a::GrayA;
 use crate::formats::gray::Gray_v08;
+#[cfg(feature = "unstable-experimental")]
+use crate::formats::gray::Gray_v09;
 use crate::formats::gray_alpha::GrayAlpha_v08;
 
 macro_rules! inherent_impls {
@@ -27,6 +29,8 @@ inherent_impls!(Bgr, new_bgr, [b blue, g green, r red]);
 inherent_impls!(Grb, new_grb, [g green, r red, b blue]);
 
 inherent_impls!(Gray_v08, new, [0 value]);
+#[cfg(feature = "unstable-experimental")]
+inherent_impls!(Gray_v09, new, [v value]);
 
 inherent_impls!(Rgba, new, [r red, g green, b blue, a alpha]);
 inherent_impls!(Argb, new_argb, [a alpha, r red, g green, b blue]);

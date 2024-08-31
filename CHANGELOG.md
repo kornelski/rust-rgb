@@ -1,4 +1,9 @@
 
+# 0.8.50
+
+* Added `.value_mut()` getter on grayscale pixel types to avoid direct field access.
+* Deprecated `map_rgb()` which is yet another dupe of `map_colors()`.
+
 # 0.8.49
 
 * Added `.value()` getter on grayscale pixel types to avoid direct field access.

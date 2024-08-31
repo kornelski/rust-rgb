@@ -27,6 +27,13 @@ impl<T: Copy> GrayAlpha_v08<T> {
     pub fn value(self) -> T {
         self.0
     }
+
+    /// Exposes the `.0` field for writing
+    ///
+    /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
+    pub fn value_mut(&mut self) -> &mut T {
+        &mut self.0
+    }
 }
 
 impl<T, A> Deref for GrayAlpha_v08<T, A> {

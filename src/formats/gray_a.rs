@@ -19,4 +19,11 @@ impl<T: Copy> GrayA<T> {
     pub fn value(self) -> T {
         self.v
     }
+
+    /// Exposes the `.v` field for writing
+    ///
+    /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
+    pub fn value_mut(&mut self) -> &mut T {
+        &mut self.v
+    }
 }

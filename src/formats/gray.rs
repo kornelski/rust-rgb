@@ -17,6 +17,13 @@ impl<T: Copy> Gray_v08<T> {
         self.0
     }
 
+    /// Exposes the `.0` field for writing
+    ///
+    /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
+    pub fn value_mut(&mut self) -> &mut T {
+        &mut self.0
+    }
+
     /// Add alpha component to this pixel
     #[allow(deprecated)]
     pub fn with_alpha(self, add_alpha_value: T) -> crate::formats::gray_alpha::GrayAlpha_v08<T> {
@@ -66,6 +73,13 @@ impl<T: Copy> Gray_v09<T> {
     /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
     pub fn value(self) -> T {
         self.v
+    }
+
+    /// Exposes the `.v` field for writing
+    ///
+    /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
+    pub fn value_mut(&mut self) -> &mut T {
+        &mut self.v
     }
 
     /// Add alpha component to this pixel

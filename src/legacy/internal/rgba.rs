@@ -101,7 +101,7 @@ macro_rules! impl_rgba {
 
         impl<T: Copy, A: Clone> $RGBA<T, A> {
             /// Create new RGBA with the same alpha value, but different RGB values
-            #[inline(always)]
+            #[deprecated(note = "Renamed to map_colors()")]
             pub fn map_rgb<F, U, B>(&self, mut f: F) -> $RGBA<U, B>
                 where F: FnMut(T) -> U, U: Clone, B: From<A> + Clone
             {
