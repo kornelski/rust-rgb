@@ -59,7 +59,7 @@ pub trait HetPixel: Copy {
     /// A generic associated type used to return the array of color
     /// components despite rust's lack of const generic expressions.
     ///
-    /// Used in functions like [`HetPixel::color_array()`].
+    /// Used in functions like [`HetPixel::to_color_array()`].
     ///
     /// For example, [`Rgb`] has `ColorArray<U> = [U; 3]` and
     /// [`Rgba`] has `ColorArray<U> = [U; 3]` also.
@@ -75,14 +75,14 @@ pub trait HetPixel: Copy {
     /// let rgb = Rgb { r: 0_u8, g: 10, b: 100 };
     /// let rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
-    /// assert_eq!(rgb.color_array(), [0, 10, 100]);
-    /// assert_eq!(rgba.color_array(), [0, 10, 100]);
+    /// assert_eq!(rgb.to_color_array(), [0, 10, 100]);
+    /// assert_eq!(rgba.to_color_array(), [0, 10, 100]);
     /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
     #[doc(alias = "rgb")]
     #[doc(alias = "to_rgb")]
     #[doc(alias = "as_rgb")]
-    fn color_array(&self) -> Self::ColorArray<Self::ColorComponent> where Self::ColorArray<Self::ColorComponent>: Copy;
+    fn to_color_array(&self) -> Self::ColorArray<Self::ColorComponent> where Self::ColorArray<Self::ColorComponent>: Copy;
 
     /// Returns an owned array of the pixel's mutably borrowed color components.
     ///
@@ -94,15 +94,15 @@ pub trait HetPixel: Copy {
     /// let mut rgb = Rgb { r: 0_u8, g: 10, b: 100 };
     /// let mut rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
-    /// *rgb.color_array_mut()[1] = 40;
-    /// *rgba.color_array_mut()[2] = 40;
+    /// *rgb.each_color_mut()[1] = 40;
+    /// *rgba.each_color_mut()[2] = 40;
     ///
-    /// assert_eq!(rgb.color_array(), [0, 40, 100]);
-    /// assert_eq!(rgba.color_array(), [0, 10, 40]);
+    /// assert_eq!(rgb.to_color_array(), [0, 40, 100]);
+    /// assert_eq!(rgba.to_color_array(), [0, 10, 40]);
     /// ```
     //TODO switch to returning an plain array if const generic expressions ever stabilize
     #[doc(alias = "rgb_mut")]
-    fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent>;
+    fn each_color_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent>;
 
     /// Returns a copy of the pixel's alpha component if it has one.
     ///
@@ -288,12 +288,12 @@ macro_rules! without_alpha {
             type ColorArray<U> = [U; $length];
 
             #[inline]
-            fn color_array(&self) -> Self::ColorArray<Self::ColorComponent> where Self::ColorArray<Self::ColorComponent>: Copy {
+            fn to_color_array(&self) -> Self::ColorArray<Self::ColorComponent> where Self::ColorArray<Self::ColorComponent>: Copy {
                 [$(self.$color_bit),*]
             }
 
             #[inline]
-            fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent> {
+            fn each_color_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent> {
                 [$(&mut self.$color_bit),*]
             }
 
@@ -349,12 +349,12 @@ macro_rules! with_alpha {
             type ColorArray<U> = [U; $length - 1];
 
             #[inline]
-            fn color_array(&self) -> Self::ColorArray<Self::ColorComponent> where Self::ColorArray<Self::ColorComponent>: Copy {
+            fn to_color_array(&self) -> Self::ColorArray<Self::ColorComponent> where Self::ColorArray<Self::ColorComponent>: Copy {
                 [$(self.$color_bit),*]
             }
 
             #[inline]
-            fn color_array_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent> {
+            fn each_color_mut(&mut self) -> Self::ColorArray<&mut Self::ColorComponent> {
                 [$(&mut self.$color_bit),*]
             }
 

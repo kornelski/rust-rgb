@@ -105,8 +105,8 @@ use rgb::{Rgba, HetPixel};
 
 let mut rgba: Rgba<u8> = Rgba::try_from_colors_alpha([0, 0, 0], 0).unwrap();
 
-*rgba.color_array_mut()[2] = u8::MAX;
-assert_eq!(rgba.color_array(), [0, 0, 255]);
+*rgba.each_color_mut()[2] = u8::MAX;
+assert_eq!(rgba.to_color_array(), [0, 0, 255]);
 
 *rgba.alpha_opt_mut().unwrap() = 50;
 assert_eq!(rgba.alpha_opt(), Some(50));
