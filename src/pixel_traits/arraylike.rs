@@ -4,7 +4,7 @@ use core::ops::{Index, IndexMut};
 /// A trait used when returning arrays from the two pixel traits due to the lack of the const
 /// generic expressions feature on stable rust.
 ///
-/// See [`HetPixel::color_array()`](crate::HetPixel::color_array) as
+/// See [`HetPixel::to_color_array()`](crate::HetPixel::to_color_array) as
 /// an example.
 pub trait ArrayLike<T>:
     AsRef<[T]>
