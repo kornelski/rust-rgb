@@ -1,26 +1,68 @@
 # Pixel types for [Rust](https://www.rust-lang.org) [![crate](https://img.shields.io/crates/v/rgb.svg)](https://lib.rs/crates/rgb)
 
-Operating on pixels as weakly-typed vectors of `u8` is error-prone and inconvenient. It's better to use vectors of pixel structs.
-However, Rust is so strongly typed that _your_ `Rgb` pixel struct is not compatible with _my_ `Rgb` pixel struct. So let's all use mine :P
+Operating on pixels as weakly-typed vectors of `u8` is error-prone and inconvenient. It's better to use vectors and slices of pixel structs, like `&[Rgb<u8>]`.
 
-[<img src="https://imgs.xkcd.com/comics/standards_2x.png" alt="xkcd: …there are 15 competing standards" width="500">](https://xkcd.com/927/)
+However, Rust is so strongly typed that _your_ `Rgb` struct is not compatible with _my_ `Rgb` struct. This crate provides common structs to share between crates.
 
-# v0.8.90 is a transitional/preview release
+## Features
 
-The RGB crate is getting a major update, which will eventually be stablized as v1.0.0.
+ * It's a shared type [used in many crates](https://lib.rs/crates/rgb/rev), which allows you to seamlessly and reliably share pixel data between them.
 
-For **testing**, use:
+ * Compiles quickly and has low overhead. The dependencies are only for interoperability with the broader ecosystem, and are all optional.
+
+ * Implements standard Rust traits, and has convenience methods for operating on all channels of the pixels. Saves you from having to copy-paste the same lines for `r`, `g`, and `b`.
+
+ * It's unopinionated about color management, which lets it prepresent most RGB-related pixels without interfering. If you need more advanced conversions and non-RGB color spaces, use the [`palette` crate](https://lib.rs/crates/palette) instead.
+
+## Basic Usage
+
+```rust
+use rgb::{Rgb, Rgba, Argb, Bgr, Bgra, Abgr, Grb}; // and more
+use rgb::prelude::*; // traits with convenience methods
+
+let rgb_pixel = Rgb { r: 0u8, g: 100, b: 255 };
+let wider_pixel = rgb_pixel.map(u16::from);
+
+assert_eq!(rgb_pixel.to_color_array(), [0, 100, 255]);
+assert_eq!(rgb_pixel.with_alpha(128), Rgba::new(0, 100, 255, 128));
+```
+
+### Conversions from/to other types
+
+We defer to the `bytemuck` crate to have safe zero-cost conversions between types. See [`bytemuck::cast_slice()`][bslice] and [`cast_vec()`][bvec].
+
+[bslice]: https://docs.rs/bytemuck/latest/bytemuck/fn.cast_slice.html
+[bvec]: https://docs.rs/bytemuck/latest/bytemuck/allocation/fn.cast_vec.html
+
+```rust,ignore
+let pixels: Vec<u8> = vec![0u8; 3 * size];
+let rgb_pixels: Vec<Rgb<u8>> = rgb::bytemuck::allocation::cast_vec(pixels);
+
+for rgb_pixel in &rgb_pixels {
+}
+```
+
+If you'd like to work with 2D slices of pixels, see [the `imgvec` crate](https://lib.rs/crates/imgvec).
+
+# Stable and testing versions
+
+The version 0.8 is stable, and we plan to support it for a long time. You can use it, and rely on it.
 
 ```toml
 [dependencies]
-rgb = "0.8.90"
-
-# this is required, because v0.8.90 is not on crates.io
-[patch.crates-io]
-rgb.git = "https://github.com/kornelski/rust-rgb"
+rgb = "0.8.50"
 ```
 
-We welcome your feedback about the crate!
+We want to release a proper v1.0.0 eventually. We plan to have it backwards-compatible with crates using v0.8, except some deprecated cruft removed/fixed. We hope the migration will be seamless for most users. Please help us test it!
+
+```toml
+# This is required due to how version unification works in Cargo
+[patch.crates-io]
+rgb.git = "https://github.com/kornelski/rust-rgb"
+
+[dependencies]
+rgb = "0.8.90"
+```
 
 - Are the names of the traits and their methods good?
 - Are there any standard library traits you'd like implemented on the pixel types?
@@ -29,17 +71,6 @@ We welcome your feedback about the crate!
 
 [Please open issues in the repo with the feedback](https://github.com/kornelski/rust-rgb/issues)
 or message [@kornel@mastodon.social](https://mastodon.social/@kornel).
-
-## Installation
-
-If you want to run a stable, compatible version, run `cargo add rgb@0.8.47`.
-If you want to try unstable experimental version, run `cargo add rgb@0.8.90-alpha.1` or add this to your `Cargo.toml`:
-
-```toml
-[dependencies]
-rgb = "0.8.90-alpha.1" # unstable experimental version
-# rgb = "0.8.47" # older, stable
-```
 
 ## Usage
 
@@ -173,19 +204,8 @@ let mut rgba: Rgba<u8> = Rgba {r: 0, g: 0, b: 0, a: 255};
 assert_eq!(HasAlpha::alpha(&rgba), 205);
 ```
 
-## Bytemuck
-
-If you have a `&[u8]` or `Vec<u8>` type and you want a `&[Rgb<u8>]` or
-`Vec<Rgb<u8>>` type then you can safely achieve these type-casts via
-the `bytemuck` crate (see `cast_slice()` and `cast_vec()`).
-
-You will need to enable the `bytemuck` crate feature in order to use
-functions from the `bytemuck` library on the pixel types in this
-crate.
-
 ## Crate Features
 
-- `default`: The default feature which does nothing.
 - `num-traits`: Enables various
   [`num_traits`](https://docs.rs/num-traits) traits impls for the
   pixel types such as `CheckedAdd`.
@@ -196,14 +216,10 @@ crate.
 - `bytemuck` = Enables `Pod` and `Zeroable` trait impls from
   [`bytemuck`](https://docs.rs/serde) for the pixel types
 
-### Legacy Features
-
-The following crate features are only exposed for compatibility with
-the `v0.8` release so as to be non-breaking, however, once migrated to
-`v0.9` you should no longer be using any of these features. They are
-going to be removed in the next major release after `v0.9`.
+The following crate features are only kept for backwards compatibility, and will be removed in the next major version:
 
 ```toml
+# These are no longer used
 argb = []
 grb = []
 checked_fns = []
@@ -212,16 +228,11 @@ as-bytes = ["bytemuck"]
 
 ## Color-Space Agnostic
 
-This crate is purposefully agnostic about the color-spaces of the
-pixel types. For example, `Gray<u8>` could be either linear lightness or
-gamma-corrected luma, etc.
+This crate is purposefully a basic lowest-common-denominator, and it does not dictate what color spaces the pixel types are supposed to use.
+For example, `Gray<u8>` could be either linear lightness or gamma-corrected luma, however you wish to use it.
+_Correct_ color management is a complex problem, and this crate doesn't want to impose any specific solutions.
 
-_Correct_ color management is a complex problem, and this crate aims
-to be the lowest common denominator, so it's intentionally agnostic
-about it.
-
-However, this library supports any subpixel type for `RGB<T>`, and
-`RGBA<RGBType, AlphaType>`, so you can use them with a newtype, e.g.:
+If you need strongly-typed color spaces, you can use newtypes as component types for `Rgb<T>` and `Rgba<T, AlphaType>`, e.g.:
 
 ```rust
 # use rgb::Rgb;
@@ -246,9 +257,9 @@ The changes:
   (i.e. it works with `Rgba<u8>`, but not `Rgba<Newtype, DifferentType>`).
 - Most inherent methods were moved to a new `Pixel` trait.
 
-## Migrating away from deprecated items
+### Migrating away from deprecated items
 
-Many items in this crate have become deprecated in preparation for a
+Some items in this crate have become deprecated in preparation for a
 future release which removes them. Here is a checklist of things you may need to do.
 
 1. Update to the latest version of 0.8, and fix all deprecation warnings.
