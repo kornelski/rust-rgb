@@ -34,6 +34,9 @@ checked_fns = []
 # Deprecated: use `bytemuck` feature instead, and use `rgb::bytemuck::*`
 as-bytes = ["bytemuck"]
 
+# Enable for `cast_vec()`. Disable for no-std support.
+std = ["bytemuck?/extern_crate_alloc"]
+
 [badges]
 maintenance = { status = "actively-developed" }
 
