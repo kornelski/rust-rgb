@@ -162,29 +162,29 @@ macro_rules! trait_impls_common {
 }
 
 macro_rules! trait_impls_with_alpha {
-    ($name:ident, $length:literal, [$($bit:tt),*], $display:literal, $upperhex:literal, $lowerhex:literal) => {
+    ($name:ident, $length:literal, [$($printas:ident => $bit:tt),*], $display:literal, $upperhex:literal, $lowerhex:literal) => {
         trait_impls_common!($name, $length, [$($bit),*]);
 
         impl<T: fmt::Display, A: fmt::Display> fmt::Display for $name<T, A> {
             #[cold]
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                write!(f, $display, $(self.$bit),*)
+                write!(f, $display, $($printas = self.$bit),*)
             }
         }
 
         impl<T: fmt::UpperHex, A: fmt::UpperHex> fmt::UpperHex for $name<T, A> {
             #[cold]
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                let w = 2 * core::mem::size_of::<T>();
-                write!(f, $upperhex, $(self.$bit),* , w = w)
+                let width = 2 * core::mem::size_of::<T>();
+                write!(f, $upperhex, $($printas = self.$bit),* , w = width)
             }
         }
 
         impl<T: fmt::LowerHex, A: fmt::LowerHex> fmt::LowerHex for $name<T, A> {
             #[cold]
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                let w = 2 * core::mem::size_of::<T>();
-                write!(f, $lowerhex, $(self.$bit),* , w = w)
+                let width = 2 * core::mem::size_of::<T>();
+                write!(f, $lowerhex, $($printas = self.$bit),* , w = width)
             }
         }
 
@@ -314,26 +314,26 @@ macro_rules! trait_impls_with_alpha {
 }
 
 macro_rules! trait_impls_without_alpha {
-    ($name:ident, $length:literal, [$($bit:tt),*], $display:literal, $upperhex:literal, $lowerhex:literal) => {
+    ($name:ident, $length:literal, [$($printas:ident => $bit:tt),*], $display:literal, $upperhex:literal, $lowerhex:literal) => {
         trait_impls_common!($name, $length, [$($bit),*]);
 
         impl<T: fmt::Display> fmt::Display for $name<T> {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                write!(f, $display, $(self.$bit),*)
+                write!(f, $display, $($printas = self.$bit),*)
             }
         }
 
         impl<T: fmt::UpperHex> fmt::UpperHex for $name<T> {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                let w = 2 * core::mem::size_of::<T>();
-                write!(f, $upperhex, $(self.$bit),*, w = w)
+                let width = 2 * core::mem::size_of::<T>();
+                write!(f, $upperhex, $($printas = self.$bit),*, w = width)
             }
         }
 
         impl<T: fmt::LowerHex> fmt::LowerHex for $name<T> {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                let w = 2 * core::mem::size_of::<T>();
-                write!(f, $lowerhex, $(self.$bit),*, w = w)
+                let width = 2 * core::mem::size_of::<T>();
+                write!(f, $lowerhex, $($printas = self.$bit),*, w = width)
             }
         }
 
@@ -450,23 +450,23 @@ macro_rules! trait_impls_without_alpha {
     };
 }
 
-trait_impls_without_alpha!(Rgb, 3, [r, g, b], "rgb({},{},{})", "rgb(#{:0w$X}{:0w$X}{:0w$X})", "rgb(#{:0w$x}{:0w$x}{:0w$x})");
-trait_impls_without_alpha!(Bgr, 3, [b, g, r], "bgr({},{},{})", "bgr(#{:0w$X}{:0w$X}{:0w$X})", "bgr(#{:0w$x}{:0w$x}{:0w$x})");
-trait_impls_without_alpha!(Grb, 3, [g, r, b], "grb({},{},{})", "grb(#{:0w$X}{:0w$X}{:0w$X})", "grb(#{:0w$x}{:0w$x}{:0w$x})");
-trait_impls_without_alpha!(Gray_v09, 1, [v], "gray({})", "gray(#{:0w$X})", "gray(#{:0w$x})");
-trait_impls_without_alpha!(Rgbw, 4, [r, g, b, w], "rgbw({},{},{},{})", "rgbw(#{:0w$X}{:0w$X}{:0w$X}{:0w$X})", "rgbw(#{:0w$x}{:0w$x}{:0w$x}{:0w$x})");
+trait_impls_without_alpha!(Rgb, 3, [r => r, g => g, b => b], "rgb({r},{g},{b})", "#{r:0w$X}{g:0w$X}{b:0w$X}", "#{r:0w$x}{g:0w$x}{b:0w$x}");
+trait_impls_without_alpha!(Bgr, 3, [b => b, g => g, r => r], "bgr({b},{g},{r})", "#{r:0w$X}{g:0w$X}{b:0w$X}", "#{r:0w$x}{g:0w$x}{b:0w$x}");
+trait_impls_without_alpha!(Grb, 3, [g => g, r => r, b => b], "grb({g},{r},{b})", "#{r:0w$X}{g:0w$X}{b:0w$X}", "#{r:0w$x}{g:0w$x}{b:0w$x}");
+trait_impls_without_alpha!(Gray_v09, 1, [v => v], "gray({v})", "gray(#{v:0w$X})", "gray(#{v:0w$x})");
+trait_impls_without_alpha!(Rgbw, 4, [r => r, g => g, b => b, white => w], "rgbw({r},{g},{b},{white})", "#{r:0w$X}{g:0w$X}{b:0w$X}{white:0w$X}", "#{r:0w$x}{g:0w$x}{b:0w$x}{white:0w$x}");
 
 use crate::formats::gray::Gray_v08;
-trait_impls_without_alpha!(Gray_v08, 1, [0], "gray_v0.8({})", "gray_v0.8(#{:0w$X})", "gray_v0.8(#{:0w$x})");
+trait_impls_without_alpha!(Gray_v08, 1, [v => 0], "gray_v0.8({v})", "gray_v0.8(#{v:0w$X})", "gray_v0.8(#{v:0w$x})");
 
-trait_impls_with_alpha!(Rgba, 4, [r, g, b, a], "rgba({},{},{},{})", "rgba(#{:0w$X}{:0w$X}{:0w$X}{:0w$X})", "rgba(#{:0w$x}{:0w$x}{:0w$x}{:0w$x})");
-trait_impls_with_alpha!(Argb, 4, [a, r, g, b], "argb({},{},{},{})", "argb(#{:0w$X}{:0w$X}{:0w$X}{:0w$X})", "argb(#{:0w$x}{:0w$x}{:0w$x}{:0w$x})");
-trait_impls_with_alpha!(Bgra, 4, [b, g, r, a], "bgra({},{},{},{})", "bgra(#{:0w$X}{:0w$X}{:0w$X}{:0w$X})", "bgra(#{:0w$x}{:0w$x}{:0w$x}{:0w$x})");
-trait_impls_with_alpha!(Abgr, 4, [a, b, g, r], "abgr({},{},{},{})", "abgr(#{:0w$X}{:0w$X}{:0w$X}{:0w$X})", "abgr(#{:0w$x}{:0w$x}{:0w$x}{:0w$x})");
-trait_impls_with_alpha!(GrayA, 2, [v, a], "graya({},{})", "graya(#{:0w$X}{:0w$X})", "graya(#{:0w$x}{:0w$x})");
+trait_impls_with_alpha!(Rgba, 4, [r => r, g => g, b => b, a => a], "rgba({r},{g},{b},{a})", "#{r:0w$X}{g:0w$X}{b:0w$X}{a:0w$X}", "#{r:0w$x}{g:0w$x}{b:0w$x}{a:0w$x}");
+trait_impls_with_alpha!(Argb, 4, [a => a, r => r, g => g, b => b], "argb({a},{r},{g},{b})", "#{r:0w$X}{g:0w$X}{b:0w$X}{a:0w$X}", "#{r:0w$x}{g:0w$x}{b:0w$x}{a:0w$x}");
+trait_impls_with_alpha!(Bgra, 4, [b => b, g => g, r => r, a => a], "bgra({b},{g},{r},{a})", "#{r:0w$X}{g:0w$X}{b:0w$X}{a:0w$X}", "#{r:0w$x}{g:0w$x}{b:0w$x}{a:0w$x}");
+trait_impls_with_alpha!(Abgr, 4, [a => a, b => b, g => g, r => r], "abgr({a},{b},{g},{r})", "#{r:0w$X}{g:0w$X}{b:0w$X}{a:0w$X}", "#{r:0w$x}{g:0w$x}{b:0w$x}{a:0w$x}");
+trait_impls_with_alpha!(GrayA, 2, [v => v, a => a], "graya({v},{a})", "graya(#{v:0w$X}{a:0w$X})", "graya(#{v:0w$x}{a:0w$x})");
 
 use crate::formats::gray_alpha::GrayAlpha_v08;
-trait_impls_with_alpha!(GrayAlpha_v08, 2, [0, 1], "graya_v0.8({},{})", "graya_v0.8(#{:0w$X}{:0w$X})", "graya_v0.8(#{:0w$x}{:0w$x})");
+trait_impls_with_alpha!(GrayAlpha_v08, 2, [v => 0, a => 1], "graya_v0.8({v},{a})", "graya_v0.8(#{v:0w$X}{a:0w$X})", "graya_v0.8(#{v:0w$x}{a:0w$x})");
 
 #[cfg(test)]
 #[test]
@@ -474,7 +474,7 @@ fn test_16_fmt() {
     extern crate std;
 
     let a = Argb::<u16>::new_argb(1, 0x1234, 3, 65535);
-    assert_eq!("argb(#000112340003FFFF)", &std::format!("{a:X}"));
+    assert_eq!("#12340003FFFF0001", &std::format!("{a:X}"));
 }
 
 #[test]

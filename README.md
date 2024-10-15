@@ -23,6 +23,9 @@ use rgb::prelude::*; // traits with convenience methods
 let rgb_pixel = Rgb { r: 0u8, g: 100, b: 255 };
 let wider_pixel = rgb_pixel.map(u16::from);
 
+println!("{rgb_pixel}"); // prints rgb(0, 100, 255)
+println!("{rgb_pixel:X}"); // prints #0064FF
+
 assert_eq!(rgb_pixel.to_color_array(), [0, 100, 255]);
 assert_eq!(rgb_pixel.with_alpha(128), Rgba::new(0, 100, 255, 128));
 ```
