@@ -16,7 +16,7 @@ mod formats {
     pub mod gray;
     pub mod gray_a;
     pub mod gray_alpha;
-    pub mod gray_alpha44;
+    pub mod gray_a44;
     pub mod grb;
     pub mod rgb;
     pub mod rgba;
@@ -70,7 +70,7 @@ pub use formats::gray::Gray_v08 as Gray;
 pub use formats::gray::Gray_v09;
 pub use formats::gray_a::GrayA;
 pub use formats::gray_alpha::GrayAlpha_v08 as GrayAlpha;
-pub use formats::gray_alpha44::GrayAlpha44;
+pub use formats::gray_a44::GrayA44;
 pub use formats::grb::Grb;
 pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
@@ -102,6 +102,7 @@ pub mod prelude {
 pub mod error {
     pub use crate::pixel_traits::het_pixel::TryFromColorsAlphaError;
     pub use crate::pixel_traits::pixel::TryFromComponentsError;
+    pub use crate::formats::gray_a44::OutOfRangeError;
 }
 
 /// [`Abgr<u8>`]
@@ -115,7 +116,7 @@ pub type BGRA8 = formats::bgra::Bgra<u8>;
 /// [`Gray<u8>`]
 pub type GRAY8 = formats::gray::Gray_v09<u8>;
 /// 4 bit for gray and 4 bit for alpha
-pub type GRAYA4 = formats::gray_alpha44::GrayAlpha44;
+pub type GRAYA4 = formats::gray_a44::GrayA44;
 /// [`GrayA<u8>`]
 pub type GRAYA8 = formats::gray_a::GrayA<u8>;
 /// [`Grb<u8>`]

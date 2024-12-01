@@ -1,4 +1,4 @@
-use crate::{Abgr, Argb, Bgr, Bgra, GrayA, GrayAlpha44, Gray_v09, Grb, Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, Bgr, Bgra, GrayA, GrayA44, Gray_v09, Grb, Rgb, Rgba, Rgbw};
 
 macro_rules! bytemuck {
     ($name:ident) => {
@@ -24,7 +24,7 @@ bytemuck!(Argb);
 bytemuck!(Bgra);
 bytemuck!(Abgr);
 bytemuck!(GrayA);
-bytemuck_no_generic!(GrayAlpha44);
+bytemuck_no_generic!(GrayA44);
 
 use crate::formats::gray_alpha::GrayAlpha_v08;
 bytemuck!(GrayAlpha_v08);
@@ -78,7 +78,7 @@ impl<T: ::bytemuck::Pod> crate::ComponentBytes<T> for [GrayAlpha_v08<T>] {
 }
 
 #[cfg(feature = "as-bytes")]
-impl crate::ComponentBytes<u8> for [GrayAlpha44] {
+impl crate::ComponentBytes<u8> for [GrayA44] {
     #[inline]
     fn as_bytes(&self) -> &[u8] {
         ::bytemuck::cast_slice(self)
@@ -93,7 +93,7 @@ impl crate::ComponentBytes<u8> for [GrayAlpha44] {
 #[test]
 fn test_component_bytes_capable() {
     assert_eq!(
-        core::mem::size_of::<GrayAlpha44>(),
+        core::mem::size_of::<GrayA44>(),
         core::mem::size_of::<u8>()
     );
 }
