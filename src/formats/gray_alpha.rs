@@ -36,7 +36,7 @@ impl<T, A> Deref for GrayAlpha_v08<T, A> {
 
 #[test]
 fn swizzle() {
-    let g = GrayAlpha_v08(10u8, 20u8);
+    let g = GrayAlpha_v08(10_u8, 20_u8);
     assert_eq!(10, g.v);
     assert_eq!(20, g.a);
 }

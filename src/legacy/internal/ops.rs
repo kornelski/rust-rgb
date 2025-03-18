@@ -201,7 +201,7 @@ mod test {
 
     #[test]
     fn test_mult_assign() {
-        let mut green_rgb = RGB::new(0u16, 255, 0);
+        let mut green_rgb = RGB::new(0_u16, 255, 0);
         green_rgb *= 1;
         assert_eq!(RGB::new(0, 255, 0), green_rgb);
         green_rgb *= 2;
@@ -211,7 +211,7 @@ mod test {
         rgb *= RGB::new(1.,3.,5.);
         assert_eq!(rgb, RGB::new(0.5,4.5,12.5));
 
-        let mut green_rgba = RGBA::new(0u16, 255, 0, 0);
+        let mut green_rgba = RGBA::new(0_u16, 255, 0, 0);
         green_rgba *= 1;
         assert_eq!(RGBA::new(0, 255, 0, 0), green_rgba);
         green_rgba *= 2;
@@ -222,10 +222,11 @@ mod test {
     fn sum() {
         use crate::*;
 
-        let s1 = [RGB::new(1u8,1,1), RGB::new(2,3,4)].iter().copied().sum::<RGB<u8>>();
-        let s2 = [RGB::new(1u16,1,1), RGB::new(2,3,4)].iter().copied().sum::<RGB<u16>>();
-        let s3 = [RGBA::new_alpha(1u16,1,1,Wrapping(1u16)), RGBA::new_alpha(2,3,4,Wrapping(5))].iter().copied().sum::<RGBA<u16, Wrapping<u16>>>();
-        let s4 = [RGBA::new_alpha(1u16,1,1,1u16), RGBA::new_alpha(2,3,4,5)].iter().copied().sum::<RGBA<u16, u16>>();
+        let s1 = [RGB::new(1_u8, 1, 1), RGB::new(2, 3, 4)].iter().copied().sum::<RGB<u8>>();
+        let s2 = [RGB::new(1_u16, 1, 1), RGB::new(2, 3, 4)].iter().copied().sum::<RGB<u16>>();
+        let s3 = [RGBA::new_alpha(1_u16, 1, 1, Wrapping(1_u16)), RGBA::new_alpha(2, 3, 4, Wrapping(5))]
+            .iter().copied().sum::<RGBA<u16, Wrapping<u16>>>();
+        let s4 = [RGBA::new_alpha(1_u16, 1, 1, 1_u16), RGBA::new_alpha(2, 3, 4, 5)].iter().copied().sum::<RGBA<u16, u16>>();
         assert_eq!(s1, RGB::new(3, 4, 5));
         assert_eq!(s2, RGB::new(3, 4, 5));
         assert_eq!(s3, RGBA::new_alpha(3, 4, 5, Wrapping(6)));

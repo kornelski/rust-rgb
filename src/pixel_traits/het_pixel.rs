@@ -241,8 +241,8 @@ pub trait HetPixel: Copy {
     ///     u16::from(alpha) * 10
     /// };
     ///
-    /// assert_eq!(rgb.map_alpha(f), Rgb {r: 0, g: 10, b: 100});
-    /// assert_eq!(rgba.map_alpha(f), Rgba {r: 0, g: 10, b: 100, a: 500});
+    /// assert_eq!(rgb.map_alpha(f), Rgb { r: 0_u8, g: 10, b: 100 });
+    /// assert_eq!(rgba.map_alpha(f), Rgba { r: 0_u8, g: 10, b: 100, a: 500_u16 });
     /// ```
     fn map_alpha<U>(
         &self,

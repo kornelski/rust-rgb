@@ -167,8 +167,8 @@ mod rgb_test {
             RGB::new(250, 251, 252).with_alpha(253)
         );
 
-        assert_eq!(RGB { r: 1u8, g: 2, b: 3 }, RGB::new(1u8, 2, 3));
-        assert!(RGB { r: 1u8, g: 1, b: 2 } < RGB::new(2, 1, 1));
+        assert_eq!(RGB { r: 1_u8, g: 2, b: 3 }, RGB::new(1_u8, 2, 3));
+        assert!(RGB { r: 1_u8, g: 1, b: 2 } < RGB::new(2, 1, 1));
 
         let mut h = std::collections::HashSet::new();
         h.insert(px);
@@ -178,11 +178,11 @@ mod rgb_test {
         #[cfg(feature = "as-bytes")]
         {
             use crate::ComponentBytes;
-            let v = vec![RGB::new(1u8, 2, 3), RGB::new(4, 5, 6)];
+            let v = vec![RGB::new(1_u8, 2, 3), RGB::new(4, 5, 6)];
             assert_eq!(&[1, 2, 3, 4, 5, 6], v.as_bytes());
         }
 
-        assert_eq!(RGB::new(0u8, 0, 0), Default::default());
+        assert_eq!(RGB::new(0_u8, 0, 0), Default::default());
     }
 
     #[test]

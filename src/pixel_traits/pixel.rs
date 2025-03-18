@@ -148,19 +148,18 @@ pub trait Pixel:
     /// let rgb = Rgb { r: 0_u8, g: 10, b: 100 };
     /// let rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
-    /// let f = |color: u8| {
-    ///     u16::from(color) * 10
-    /// };
+    /// let widen = |b: u8| u16::from(b) << 8 | u16::from(b);
     ///
-    /// assert_eq!(rgb.map(f), Rgb { r: 0, g: 100, b: 1000 });
-    /// assert_eq!(rgba.map(f), Rgba { r: 0, g: 100, b: 1000, a: 500 });
+    /// assert_eq!(rgb.map(widen), Rgb { r: 0, g: 100, b: 1000 });
+    /// assert_eq!(rgba.map(widen), Rgba { r: 0, g: 100, b: 1000, a: 500 });
     /// ```
     fn map<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U> where U: Copy;
 
     /// Maps each of the pixel's components with a function `f` to the same component type.
     ///
-    /// See [`Pixel::map()`] if you want to map the components to a
-    /// different type.
+    /// Use [`Pixel::map()`] if you want to map the components to a
+    /// different type. `map()` can also be used to keep the same component type,
+    /// but due to limitations of Rust's type system,`map_same()` may be required in generic contexts.
     ///
     /// # Examples
     ///
@@ -170,12 +169,10 @@ pub trait Pixel:
     /// let rgb = Rgb { r: 0_u8, g: 10, b: 100 };
     /// let rgba = Rgba { r: 0_u8, g: 10, b: 100, a: 50 };
     ///
-    /// let f = |color: u8| {
-    ///     color / 2
-    /// };
+    /// let halved = |color: u8| color / 2;
     ///
-    /// assert_eq!(rgb.map_same(f), Rgb { r: 0, g: 5, b: 50 });
-    /// assert_eq!(rgba.map_same(f), Rgba { r: 0, g: 5, b: 50, a: 25 });
+    /// assert_eq!(rgb.map_same(halved), Rgb { r: 0, g: 5, b: 50 });
+    /// assert_eq!(rgba.map_same(halved), Rgba { r: 0, g: 5, b: 50, a: 25 });
     /// ```
     fn map_same(&self, f: impl FnMut(Self::Component) -> Self::Component) -> Self;
 }
@@ -299,19 +296,19 @@ with_alpha!(GrayAlpha_v08, 2, [0, 1]);
 
 #[test]
 fn as_refs() {
-    let mut r = Rgba::new(1u8,2,3,4u8);
-    assert_eq!(&[1,2,3,4], r.as_array());
-    assert_eq!(&[1,2,3,4], AsRef::<[u8; 4]>::as_ref(&r));
-    assert_eq!(&[1,2,3,4], r.as_ref());
-    assert_eq!([1,2,3,4], *r.as_array_mut());
-    assert_eq!([1,2,3,4], *AsMut::<[u8; 4]>::as_mut(&mut r));
-    assert_eq!([1,2,3,4], *r.as_mut());
+    let mut r = Rgba::new(1_u8, 2, 3, 4u8);
+    assert_eq!(&[1, 2, 3, 4], r.as_array());
+    assert_eq!(&[1, 2, 3, 4], AsRef::<[u8; 4]>::as_ref(&r));
+    assert_eq!(&[1, 2, 3, 4], r.as_ref());
+    assert_eq!([1, 2, 3, 4], *r.as_array_mut());
+    assert_eq!([1, 2, 3, 4], *AsMut::<[u8; 4]>::as_mut(&mut r));
+    assert_eq!([1, 2, 3, 4], *r.as_mut());
 
-    let mut r = GrayA::new(1u8,4u8);
-    assert_eq!(&[1,4], r.as_array());
-    assert_eq!(&[1,4], AsRef::<[u8; 2]>::as_ref(&r));
-    assert_eq!(&[1,4], r.as_ref());
-    assert_eq!([1,4], *r.as_array_mut());
-    assert_eq!([1,4], *AsMut::<[u8; 2]>::as_mut(&mut r));
-    assert_eq!([1,4], *r.as_mut());
+    let mut r = GrayA::new(1_u8, 4u8);
+    assert_eq!(&[1, 4], r.as_array());
+    assert_eq!(&[1, 4], AsRef::<[u8; 2]>::as_ref(&r));
+    assert_eq!(&[1, 4], r.as_ref());
+    assert_eq!([1, 4], *r.as_array_mut());
+    assert_eq!([1, 4], *AsMut::<[u8; 2]>::as_mut(&mut r));
+    assert_eq!([1, 4], *r.as_mut());
 }

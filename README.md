@@ -20,7 +20,7 @@ However, Rust is so strongly typed that _your_ `Rgb` struct is not compatible wi
 use rgb::{Rgb, Rgba, Argb, Bgr, Bgra, Abgr, Grb}; // and more
 use rgb::prelude::*; // traits with convenience methods
 
-let rgb_pixel = Rgb { r: 0u8, g: 100, b: 255 };
+let rgb_pixel = Rgb { r: 0_u8, g: 100, b: 255 };
 let wider_pixel = rgb_pixel.map(u16::from);
 
 println!("{rgb_pixel}"); // prints rgb(0, 100, 255)
@@ -38,7 +38,7 @@ We defer to the `bytemuck` crate to have safe zero-cost conversions between type
 [bvec]: https://docs.rs/bytemuck/latest/bytemuck/allocation/fn.cast_vec.html
 
 ```rust,ignore
-let pixels: Vec<u8> = vec![0u8; 3 * size];
+let pixels: Vec<u8> = vec![0_u8; 3 * size];
 let rgb_pixels: Vec<Rgb<u8>> = rgb::bytemuck::allocation::cast_vec(pixels);
 
 for rgb_pixel in &rgb_pixels {

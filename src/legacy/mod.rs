@@ -25,7 +25,7 @@ pub type RGBA<T, A = T> = crate::Rgba<T, A>;
 fn rgb_works() {
     use crate::*;
 
-    let rgb = Rgb{r:0u8,g:128,b:255}.clone();
+    let rgb = Rgb { r: 0_u8, g: 128, b: 255 }.clone();
     assert_eq!(rgb.b, 255);
 
     assert_eq!(rgb, rgb.iter().map(|ch| ch).collect());
@@ -37,7 +37,7 @@ fn rgb_works() {
         assert_eq!(255, [rgb].as_bytes()[2]);
     }
 
-    let rgb = RGB16{r:0u16,g:0x7F7F,b:65535};
+    let rgb = RGB16 { r: 0_u16, g: 0x7F7F, b: 65535 };
     assert_eq!(rgb.b, 65535);
     assert_eq!(rgb.as_slice()[1], 0x7F7F);
 
@@ -73,7 +73,7 @@ fn into() {
 #[test]
 #[allow(deprecated)]
 fn rgba_works() {
-    let rgba = RGBA{r:0u8,g:128,b:255,a:33}.clone();
+    let rgba = RGBA { r: 0_u8, g: 128, b: 255, a: 33 }.clone();
     assert_eq!(rgba.b, 255);
     assert_eq!(rgba.a, 33);
 
@@ -134,7 +134,7 @@ fn bytes() {
     let mut rgba2 = [rgba];
     assert_eq!(rgba2[..].as_mut_slice().as_rgba_mut(), &mut [rgba]);
 
-    let mut foo = vec![0u8; 8];
-    foo.as_rgba_mut()[1] = RGBA::new(1,2,3,4);
-    assert_eq!(&[0u8,0,0,0,1,2,3,4], &foo[..]);
+    let mut foo = vec![0_u8; 8];
+    foo.as_rgba_mut()[1] = RGBA::new(1, 2, 3, 4);
+    assert_eq!(&[0_u8, 0, 0, 0, 1, 2, 3, 4], &foo[..]);
 }

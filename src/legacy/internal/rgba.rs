@@ -345,10 +345,10 @@ fn rgba_test() {
     assert_eq!(neg, neg.as_slice().iter().copied().collect());
     assert!(neg < Rgba::new(0,0,0,0));
 
-    let neg = Rgba::new(1u8,2,3,4).map_rgb(|c| -i16::from(c));
+    let neg = Rgba::new(1_u8, 2, 3, 4).map_rgb(|c| -i16::from(c));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4i16, neg.a);
-    let neg = Rgba::new(1u8,2,3,4).map_c(|c| -i16::from(c));
+    let neg = Rgba::new(1_u8, 2, 3, 4).map_c(|c| -i16::from(c));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4u8, neg.a);
 
@@ -362,8 +362,8 @@ fn rgba_test() {
 
     #[cfg(feature = "as-bytes")]
     {
-        let v = [Rgba::new(1u8,2,3,4), Rgba::new(5,6,7,8)];
-        assert_eq!(&[1,2,3,4,5,6,7,8], v.as_bytes());
+        let v = [Rgba::new(1_u8, 2, 3, 4), Rgba::new(5, 6, 7, 8)];
+        assert_eq!(&[1, 2, 3, 4, 5, 6, 7, 8], v.as_bytes());
     }
 }
 
@@ -398,10 +398,10 @@ fn bgra_test() {
     assert_eq!(&[-3, -2, -1, -1000], neg.as_slice());
     assert!(neg < Bgra::new(0, 0, 0, 0));
 
-    let neg = Bgra::new(1u8, 2u8, 3u8, 4u8).map_rgb(|c| -i16::from(c));
+    let neg = Bgra::new(1_u8, 2u8, 3u8, 4u8).map_rgb(|c| -i16::from(c));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4i16, neg.a);
-    let neg = Bgra::new(1u8, 2u8, 3u8, 4u8).map_c(|c| -i16::from(c));
+    let neg = Bgra::new(1_u8, 2u8, 3u8, 4u8).map_c(|c| -i16::from(c));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4u8, neg.a);
 
