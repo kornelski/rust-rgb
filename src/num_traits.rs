@@ -2,6 +2,7 @@ use crate::{Abgr, Argb, Bgr, Bgra, GrayA, Gray_v09, Grb, Rgb, Rgba, Rgbw};
 
 /// Re-exports from [the `num-traits` crate](https://lib.rs/crates/num-traits).
 pub use num_traits::ops::checked::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
+pub use num_traits::ops::saturating::{SaturatingAdd, SaturatingMul, SaturatingSub};
 
 macro_rules! num_traits_without_alpha {
 ($name:ident, [$($bit:tt),*]) => {
@@ -48,22 +49,44 @@ macro_rules! num_traits_without_alpha {
             })
         }
     }
+
+    impl<T: SaturatingAdd> SaturatingAdd for $name<T> {
+        #[inline(always)]
+        fn saturating_add(&self, other: &Self) -> Self {
+            Self {
+                $(
+                    $bit: self.$bit.saturating_add(&other.$bit),
+                )+
+            }
+        }
+    }
+
+    impl<T: SaturatingSub> SaturatingSub for $name<T> {
+        #[inline(always)]
+        fn saturating_sub(&self, other: &Self) -> Self {
+            Self {
+                $(
+                    $bit: self.$bit.saturating_sub(&other.$bit),
+                )+
+            }
+        }
+    }
+
+    impl<T: SaturatingMul> SaturatingMul for $name<T> {
+        #[inline(always)]
+        fn saturating_mul(&self, other: &Self) -> Self {
+            Self {
+                $(
+                    $bit: self.$bit.saturating_mul(&other.$bit),
+                )+
+            }
+        }
+    }
 };
 }
 
 macro_rules! num_traits_with_alpha {
 ($name:ident, [$($bit:tt),*]) => {
-    impl<T: CheckedAdd, A: CheckedAdd> CheckedAdd for $name<T, A> {
-        #[inline(always)]
-        fn checked_add(&self, other: &Self) -> Option<Self> {
-            Some(Self {
-                $(
-                    $bit: self.$bit.checked_add(&other.$bit)?,
-                )+
-            })
-        }
-    }
-
     impl<T: CheckedSub, A: CheckedSub> CheckedSub for $name<T, A> {
         #[inline(always)]
         fn checked_sub(&self, other: &Self) -> Option<Self> {
@@ -94,6 +117,39 @@ macro_rules! num_traits_with_alpha {
                     $bit: self.$bit.checked_div(&other.$bit)?,
                 )+
             })
+        }
+    }
+
+    impl<T: SaturatingAdd, A: SaturatingAdd> SaturatingAdd for $name<T, A> {
+        #[inline(always)]
+        fn saturating_add(&self, other: &Self) -> Self {
+            Self {
+                $(
+                    $bit: self.$bit.saturating_add(&other.$bit),
+                )+
+            }
+        }
+    }
+
+    impl<T: SaturatingSub, A: SaturatingSub> SaturatingSub for $name<T, A> {
+        #[inline(always)]
+        fn saturating_sub(&self, other: &Self) -> Self {
+            Self {
+                $(
+                    $bit: self.$bit.saturating_sub(&other.$bit),
+                )+
+            }
+        }
+    }
+
+    impl<T: SaturatingMul, A: SaturatingMul> SaturatingMul for $name<T, A> {
+        #[inline(always)]
+        fn saturating_mul(&self, other: &Self) -> Self {
+            Self {
+                $(
+                    $bit: self.$bit.saturating_mul(&other.$bit),
+                )+
+            }
         }
     }
 };
