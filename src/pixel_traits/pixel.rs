@@ -305,6 +305,7 @@ fn as_refs() {
     assert_eq!([1, 2, 3, 4], *r.as_mut());
 
     let mut r = GrayA::new(1_u8, 4u8);
+    assert_eq!(1, r.value());
     assert_eq!(&[1, 4], r.as_array());
     assert_eq!(&[1, 4], AsRef::<[u8; 2]>::as_ref(&r));
     assert_eq!(&[1, 4], r.as_ref());

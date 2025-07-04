@@ -27,3 +27,12 @@ pub struct GrayA<T, A = T> {
     /// Alpha Component
     pub a: A,
 }
+
+impl<T: Copy, A> GrayA<T, A> {
+    /// Value - the brightness component. May be luma or luminance.
+    ///
+    /// Backwards-compatible getter for `self.v`
+    pub fn value(&self) -> T {
+        self.v
+    }
+}

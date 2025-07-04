@@ -1,6 +1,6 @@
 [package]
 name = "rgb"
-version = "0.8.90" # this must be set to stable, because Cargo won't unify 0.8.90-alpha with 0.8.0
+version = "0.8.91" # this must be set to stable, because Cargo won't unify 0.8.90-alpha with 0.8.0
 authors = ["Kornel Lesiński <kornel@geekhood.net>", "James Forster <james.forsterer@gmail.com>"]
 include = ["src/**/*", "Cargo.toml", "README.md", "examples/*.rs", "LICENSE"]
 description = "`struct RGB/RGBA/etc.` for sharing pixels between crates + convenience methods for color manipulation.\nAllows no-copy high-level interoperability. Also adds common convenience methods and implements standard Rust traits to make `RGB`/`RGBA` pixels and slices first-class Rust objects."
@@ -12,7 +12,7 @@ keywords = ["rgb", "rgba", "bgra", "pixel", "color"]
 license = "MIT"
 categories = ["graphics", "rust-patterns", "multimedia::images"]
 edition = "2021"
-rust-version = "1.63"
+rust-version = "1.64"
 
 [features]
 # Since all pixel formats are enabled by default, because it has negligible impact on compilation time

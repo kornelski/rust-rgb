@@ -34,6 +34,15 @@ impl<T, A> Deref for GrayAlpha_v08<T, A> {
     }
 }
 
+impl<T: Copy, A> GrayAlpha_v08<T, A> {
+    /// Value - the brightness component. May be luma or luminance.
+    ///
+    /// Backwards-compatible getter for `self.v`
+    pub fn value(&self) -> T {
+        self.0
+    }
+}
+
 #[test]
 fn swizzle() {
     let g = GrayAlpha_v08(10_u8, 20_u8);
