@@ -150,8 +150,8 @@ pub trait Pixel:
     ///
     /// let widen = |b: u8| u16::from(b) << 8 | u16::from(b);
     ///
-    /// assert_eq!(rgb.map(widen), Rgb { r: 0, g: 100, b: 1000 });
-    /// assert_eq!(rgba.map(widen), Rgba { r: 0, g: 100, b: 1000, a: 500 });
+    /// assert_eq!(rgb.map(widen), Rgb { r: 0, g: 2570, b: 25700 });
+    /// assert_eq!(rgba.map(widen), Rgba { r: 0, g: 2570, b: 25700, a: 50*256+50 });
     /// ```
     fn map<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U> where U: Copy;
 
