@@ -17,10 +17,10 @@
 //! let pixel = pixel_rgba.rgb();
 //!
 //! let pixels = vec![pixel; 100];
-//! use rgb::ComponentBytes; // Import byte conversion trait
-//! let bytes = pixels.as_bytes();
+//! /// Can be converted to a type-less slice without copying
+//! let bytes: &[u8] = rgb::bytemuck::cast_slice(&pixels);
 //!
-//! use rgb::ComponentMap; // Import pixel map trait
+//! use rgb::prelude::*; // Import pixel map trait
 //! let half_bright = pixel.map(|channel| channel / 2);
 //! let doubled = half_bright * 2;
 //! # let _ = doubled;
@@ -56,7 +56,11 @@ pub(crate) mod formats {
     pub mod rgba;
 }
 
-/// traits for forward compatibility with the next major version of the crate
+/// Use as `use rgb::prelude::*`
+///
+/// The prelude will contain commonly used traits, and will be expanded in the future.
+///
+/// Using a glob import is recommended for forward compatibility with the next major version of the crate.
 pub mod prelude {
     pub use crate::legacy::internal::pixel::ComponentMap;
     pub use crate::legacy::internal::pixel::ColorComponentMap;

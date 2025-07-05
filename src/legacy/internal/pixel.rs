@@ -60,7 +60,7 @@ pub trait ComponentBytes<T: crate::Pod> where Self: ComponentSlice<T> {
 /// Applying operation to every component
 ///
 /// ```rust
-/// use rgb::ComponentMap;
+/// use rgb::prelude::*;
 /// # let pixel = rgb::RGB::new(0u8,0,0);
 /// let inverted = pixel.map(|c| 255 - c);
 ///
@@ -77,6 +77,8 @@ pub trait ComponentMap<DestPixel, SrcComponent, DestComponent> {
 }
 
 /// Same as `ComponentMap`, but doesn't change the alpha channel (if there's any alpha).
+///
+/// Import via `use rgb::prelude::*;` instead of directly.
 pub trait ColorComponentMap<DestPixel, SrcComponent, DestComponent> {
     /// Convenience function for applying the same formula to every rgb/gray component, but skipping the alpha component.
     ///

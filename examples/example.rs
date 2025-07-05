@@ -1,6 +1,7 @@
 #[cfg(feature = "as-bytes")]
 fn main() {
-    use rgb::{ComponentBytes, ComponentSlice, ComponentMap};
+    use rgb::ComponentSlice;
+    use rgb::prelude::*;
     use rgb::Rgb;
 
     let px = Rgb {
@@ -8,7 +9,7 @@ fn main() {
         g: 0,
         b: 100,
     };
-    assert_eq!([px].as_bytes()[0], 255);
+    assert_eq!(rgb::bytemuck::cast_slice::<_, u8>(&[px])[0], 255);
 
     let bigpx = Rgb::<u16> {
         r: 65535_u16,
