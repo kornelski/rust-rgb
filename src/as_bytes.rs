@@ -19,7 +19,7 @@ unsafe impl<T, A> crate::Zeroable for ABGR<T, A> where T: crate::Zeroable, A: cr
     #[inline(always)]
     fn zeroed() -> Self {
         unsafe {
-            let _ = assert_no_padding::<T, A, Self>();
+            assert_no_padding::<T, A, Self>();
             core::mem::zeroed()
         }
     }
@@ -47,7 +47,7 @@ unsafe impl<T, A> crate::Zeroable for RGBA<T, A> where T: crate::Zeroable, A: cr
     #[inline(always)]
     fn zeroed() -> Self {
         unsafe {
-            let _ = assert_no_padding::<T, A, Self>();
+            assert_no_padding::<T, A, Self>();
             core::mem::zeroed()
         }
     }
@@ -68,7 +68,7 @@ unsafe impl<T, A> crate::Zeroable for ARGB<T, A> where T: crate::Zeroable, A: cr
     #[inline(always)]
     fn zeroed() -> Self {
         unsafe {
-            let _ = assert_no_padding::<T, A, Self>();
+            assert_no_padding::<T, A, Self>();
             core::mem::zeroed()
         }
     }
@@ -81,7 +81,7 @@ unsafe impl<T, A> crate::Zeroable for BGRA<T, A> where T: crate::Zeroable, A: cr
     #[inline(always)]
     fn zeroed() -> Self {
         unsafe {
-            let _ = assert_no_padding::<T, A, Self>();
+            assert_no_padding::<T, A, Self>();
             core::mem::zeroed()
         }
     }

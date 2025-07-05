@@ -1,5 +1,5 @@
-use super::pixel::*;
-use crate::alt::*;
+use super::pixel::{ComponentSlice, ComponentMap};
+use crate::alt::{BGR, BGRA, GRB, Gray, GrayAlpha, ARGB, ABGR};
 use crate::{RGB, RGBA};
 use core::{mem, slice};
 

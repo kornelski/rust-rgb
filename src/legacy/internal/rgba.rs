@@ -1,5 +1,7 @@
-use super::pixel::*;
-use crate::alt::*;
+use super::pixel::{ComponentSlice, ComponentMap, ColorComponentMap};
+#[cfg(feature = "as-bytes")]
+use super::pixel::{ComponentBytes};
+use crate::alt::{BGRA, ARGB, ABGR, BGR};
 use crate::{RGB, RGBA};
 use core::fmt;
 
@@ -41,7 +43,7 @@ impl<T> ARGB<T> {
     /// The order of arguments is R,G,B,A
     #[deprecated(note = "This function has a misleading order of arguments. Use ARGB{} literal instead")]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self { r, g, b, a }
+        Self { a, r, g, b }
     }
 }
 
@@ -51,7 +53,7 @@ impl<T, A> ARGB<T, A> {
     /// The order of arguments is R,G,B,A
     #[deprecated(note = "This function has a misleading order of arguments. Use ARGB{} literal instead")]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-        Self { r, g, b, a }
+        Self { a, r, g, b }
     }
 }
 
@@ -61,7 +63,7 @@ impl<T> ABGR<T> {
     /// The order of arguments is R,G,B,A
     #[deprecated(note = "This function has a misleading order of arguments. Use ABGR{} literal instead")]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
-        Self { r, g, b, a }
+        Self { a, b, g, r }
     }
 }
 
@@ -71,7 +73,7 @@ impl<T, A> ABGR<T, A> {
     /// The order of arguments is R,G,B,A
     #[deprecated(note = "This function has a misleading order of arguments. Use ABGR{} literal instead")]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
-        Self { r, g, b, a }
+        Self { a, b, g, r }
     }
 }
 

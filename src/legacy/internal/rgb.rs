@@ -1,4 +1,6 @@
-use super::pixel::*;
+use super::pixel::{ComponentSlice, ComponentMap, ColorComponentMap};
+#[cfg(feature = "as-bytes")]
+use super::pixel::{ComponentBytes};
 use crate::alt::GRB;
 use crate::alt::{BGR, BGRA};
 use crate::{RGB, RGBA};

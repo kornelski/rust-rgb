@@ -5,7 +5,7 @@ use crate::alt::ARGB;
 use crate::alt::GRB;
 use crate::{RGB, RGBA};
 use core::iter::Sum;
-use core::ops::*;
+use core::ops::{Sub, SubAssign, Add, AddAssign, Mul, MulAssign, Div, DivAssign};
 
 #[cfg(feature = "checked_fns")]
 macro_rules! impl_struct_checked {

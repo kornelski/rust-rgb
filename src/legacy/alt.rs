@@ -1,4 +1,4 @@
-use crate::legacy::internal::pixel::*;
+use crate::legacy::internal::pixel::{ComponentMap, ColorComponentMap, ComponentSlice};
 use core::slice;
 
 pub use crate::formats::gray::Gray_v08 as Gray;
@@ -82,7 +82,7 @@ impl<T> core::ops::Deref for Gray<T> {
 impl<T: Copy> From<T> for Gray<T> {
     #[inline(always)]
     fn from(component: T) -> Self {
-        Gray(component)
+        Self(component)
     }
 }
 
@@ -237,7 +237,7 @@ impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u8> {
     #[inline(always)]
     #[allow(deprecated)]
     fn from(other: Gray<T>) -> Self {
-        GrayAlpha(other.0, 0xFF)
+        Self(other.0, 0xFF)
     }
 }
 
@@ -246,7 +246,7 @@ impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u16> {
     #[inline(always)]
     #[allow(deprecated)]
     fn from(other: Gray<T>) -> Self {
-        GrayAlpha(other.0, 0xFFFF)
+        Self(other.0, 0xFFFF)
     }
 }
 
