@@ -1,4 +1,8 @@
 
+# 0.8.51
+
+* Added deprecated attribute to the `.0` field on gray types to encourage use of the forward-compatible `.value()` getter or a `.v` field where possible.
+
 # 0.8.50
 
 * Added `.value_mut()` getter on grayscale pixel types to avoid direct field access.
