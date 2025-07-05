@@ -46,7 +46,7 @@ impl<T, A> Deref for GrayAlpha_v08<T, A> {
     /// A trick that allows using `.v` and `.a` on the old `GrayAlpha` type.
     fn deref(&self) -> &GrayA<T, A> {
         unsafe {
-            &*(self as *const Self as *const GrayA::<T, A>)
+            &*(self as *const Self).cast::<GrayA::<T, A>>()
         }
     }
 }

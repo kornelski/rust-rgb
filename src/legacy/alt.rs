@@ -99,7 +99,7 @@ impl<T, A> GrayAlpha<T, A> {
     /// Provide a mutable view of only `Gray` component (leaving out alpha).
     #[inline(always)]
     pub fn gray_mut(&mut self) -> &mut Gray<T> {
-        unsafe { &mut *(self as *mut _ as *mut _) }
+        unsafe { &mut *(self as *mut Self).cast() }
     }
 }
 
@@ -174,14 +174,14 @@ impl<T> ComponentSlice<T> for GrayAlpha<T> {
     #[inline(always)]
     fn as_slice(&self) -> &[T] {
         unsafe {
-            slice::from_raw_parts(self as *const Self as *const T, 2)
+            slice::from_raw_parts((self as *const Self).cast::<T>(), 2)
         }
     }
 
     #[inline(always)]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
-            slice::from_raw_parts_mut(self as *mut Self as *mut T, 2)
+            slice::from_raw_parts_mut((self as *mut Self).cast::<T>(), 2)
         }
     }
 }
@@ -197,7 +197,7 @@ impl<T> ComponentSlice<T> for [GrayAlpha<T>] {
     #[inline]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
-            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * 2)
+            slice::from_raw_parts_mut(self.as_mut_ptr().cast::<T>(), self.len() * 2)
         }
     }
 }
@@ -227,7 +227,7 @@ impl<T> ComponentSlice<T> for [Gray<T>] {
     #[inline]
     fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {
-            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len())
+            slice::from_raw_parts_mut(self.as_mut_ptr().cast::<T>(), self.len())
         }
     }
 }

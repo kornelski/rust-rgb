@@ -238,7 +238,7 @@ impl<T, A> RGBA<T, A> {
     /// Useful to change color without changing opacity.
     #[inline(always)]
     pub fn rgb_mut(&mut self) -> &mut RGB<T> {
-        unsafe { &mut *(self as *mut _ as *mut RGB<T>) }
+        unsafe { &mut *(self as *mut Self).cast::<RGB<T>>() }
     }
 }
 
@@ -247,14 +247,14 @@ impl<T, A> BGRA<T, A> {
     /// Useful to change color without changing opacity.
     #[deprecated(note = "This function will change. Use bgr_mut()")]
     pub fn rgb_mut(&mut self) -> &mut BGR<T> {
-        unsafe { &mut *(self as *mut _ as *mut BGR<T>) }
+        unsafe { &mut *(self as *mut Self).cast::<BGR<T>>() }
     }
 
     /// Provide a mutable view of only RGB components (leaving out alpha).
     /// Useful to change color without changing opacity.
     #[inline(always)]
     pub fn bgr_mut(&mut self) -> &mut BGR<T> {
-        unsafe { &mut *(self as *mut _ as *mut BGR<T>) }
+        unsafe { &mut *(self as *mut Self).cast::<BGR<T>>() }
     }
 }
 
