@@ -308,6 +308,7 @@ impl<T: Clone> From<Gray<T>> for RGBA<T, u8> {
 
 impl<T: Clone, A> From<GrayAlpha<T, A>> for RGBA<T, A> {
     #[inline(always)]
+    #[allow(deprecated)]
     fn from(other: GrayAlpha<T, A>) -> Self {
         Self {
             r: other.0.clone(),
@@ -378,6 +379,7 @@ impl<T> AsRef<[T; 4]> for ABGR<T> {
 #[cfg(not(feature = "unstable-experimental"))]
 impl<T> AsRef<T> for GrayAlpha<T> {
     #[inline(always)]
+    #[allow(deprecated)]
     fn as_ref(&self) -> &T {
         &self.0
     }
@@ -432,6 +434,7 @@ impl<T> AsMut<[T; 4]> for RGBA<T> {
 #[cfg(not(feature = "unstable-experimental"))]
 impl<T> AsMut<T> for GrayAlpha<T> {
     #[inline(always)]
+    #[allow(deprecated)]
     fn as_mut(&mut self) -> &mut T {
         &mut self.0
     }

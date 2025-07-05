@@ -18,11 +18,13 @@ macro_rules! tuple_conversion {
     };
     ($name:ident, 2, [$($bit:tt:$num:tt),*]) => {
         impl<R, S> From<$name<R>> for (S, S) where R: Into<S> {
+            #[allow(deprecated)]
             fn from(value: $name<R>) -> Self {
                 ($(value.$bit.into()),*)
             }
         }
         impl<R, S> From<(R, R)> for $name<S> where R: Into<S> {
+            #[allow(deprecated)]
             fn from(value: (R, R)) -> Self {
                 Self{$($bit: value.$num.into()),*}
             }

@@ -15,22 +15,26 @@ pub struct GrayAlpha_v08<T, A = T>(
     /// Grayscale Component
     ///
     /// This field has been renamed to `.v`
+    #[deprecated(note = "Please use the .v field instaed (it's available through the magic of Deref to GrayA type)")]
     pub T,
     /// Alpha Component. This field has been renamed to `.a`.
+    #[deprecated(note = "Please use the .a field instead (it's available through the magic of Deref to GrayA type)")]
     pub A,
 );
 
 impl<T: Copy> GrayAlpha_v08<T> {
-    /// Reads the `.0` field
+    /// Reads the `.v` field
     ///
-    /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
+    /// Please use the `.v` field directly whenever possible. This function isn't necessary, and exists only to ease migration between major versions of the RGB crate.
+    #[allow(deprecated)]
     pub fn value(self) -> T {
         self.0
     }
 
-    /// Exposes the `.0` field for writing
+    /// Exposes the `.v` field for writing
     ///
-    /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
+    /// Please use the `.v` field directly whenever possible.  This function isn't necessary, and exists only to ease migration between major versions of the RGB crate.
+    #[allow(deprecated)]
     pub fn value_mut(&mut self) -> &mut T {
         &mut self.0
     }

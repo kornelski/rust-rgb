@@ -159,6 +159,7 @@ macro_rules! impl_struct_ops_alpha {
             type Output = $ty<<T as Add>::Output, <A as Add>::Output>;
 
             #[inline(always)]
+            #[allow(deprecated)]
             fn add(self, other: $ty<T, A>) -> Self::Output {
                 $ty {
                     $(
@@ -174,6 +175,7 @@ macro_rules! impl_struct_ops_alpha {
             A: Add<Output = A> + Copy
         {
             #[inline(always)]
+            #[allow(deprecated)]
             fn add_assign(&mut self, other: $ty<T, A>) {
                 *self = Self {
                     $(
@@ -188,6 +190,7 @@ macro_rules! impl_struct_ops_alpha {
             type Output = $ty<<T as Sub>::Output, <A as Sub>::Output>;
 
             #[inline(always)]
+            #[allow(deprecated)]
             fn sub(self, other: $ty<T, A>) -> Self::Output {
                 $ty {
                     $(
@@ -203,6 +206,7 @@ macro_rules! impl_struct_ops_alpha {
             A: Sub<Output = A> + Copy
         {
             #[inline(always)]
+            #[allow(deprecated)]
             fn sub_assign(&mut self, other: $ty<T, A>) {
                 *self = Self {
                     $(

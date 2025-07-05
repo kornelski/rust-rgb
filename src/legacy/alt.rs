@@ -89,6 +89,7 @@ impl<T: Copy> From<T> for Gray<T> {
 impl<T: Clone, A> GrayAlpha<T, A> {
     /// Copy `Gray` component out of the `GrayAlpha` struct
     #[inline(always)]
+    #[allow(deprecated)]
     pub fn gray(&self) -> Gray<T> {
         Gray(self.0.clone())
     }
@@ -112,12 +113,14 @@ impl<T: Copy, A: Clone> GrayAlpha<T, A> {
 
     /// Create a new `GrayAlpha` with the new alpha value, but same gray value
     #[inline(always)]
+    #[allow(deprecated)]
     pub fn with_alpha(&self, a: A) -> Self {
         Self(self.0, a)
     }
 
     /// Create a new `GrayAlpha` with a new alpha value created by the callback.
     #[inline(always)]
+    #[allow(deprecated)]
     pub fn map_alpha<F, B>(&self, f: F) -> GrayAlpha<T, B>
         where F: FnOnce(A) -> B
     {
@@ -126,6 +129,7 @@ impl<T: Copy, A: Clone> GrayAlpha<T, A> {
 
     /// Create new `GrayAlpha` with the same alpha value, but different `Gray` value
     #[inline(always)]
+    #[allow(deprecated)]
     pub fn map_gray<F, U, B>(&self, f: F) -> GrayAlpha<U, B>
         where F: FnOnce(T) -> U, U: Clone, B: From<A> + Clone {
         GrayAlpha(f(self.0), self.1.clone().into())
@@ -150,6 +154,7 @@ impl<T: Copy, B> ColorComponentMap<Gray<B>, T, B> for Gray<T> {
 
 impl<T: Copy, B> ComponentMap<GrayAlpha<B>, T, B> for GrayAlpha<T> {
     #[inline(always)]
+    #[allow(deprecated)]
     fn map<F>(&self, mut f: F) -> GrayAlpha<B>
     where F: FnMut(T) -> B {
         GrayAlpha(f(self.0), f(self.1))
@@ -158,6 +163,7 @@ impl<T: Copy, B> ComponentMap<GrayAlpha<B>, T, B> for GrayAlpha<T> {
 
 impl<T: Copy, A: Copy, B> ColorComponentMap<GrayAlpha<B, A>, T, B> for GrayAlpha<T, A> {
     #[inline(always)]
+    #[allow(deprecated)]
     fn map_colors<F>(&self, mut f: F) -> GrayAlpha<B, A>
     where F: FnMut(T) -> B {
         GrayAlpha(f(self.0), self.1)
