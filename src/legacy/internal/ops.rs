@@ -14,6 +14,7 @@ macro_rules! impl_struct_checked {
         {
             /// `px.checked_add(px)`
             #[inline(always)]
+            #[allow(deprecated)]
             pub fn checked_add(self, rhs: $ty<$field_ty>) -> Option<Self> {
                 Some($ty {
                     $(
@@ -24,6 +25,7 @@ macro_rules! impl_struct_checked {
 
             /// `px.checked_sub(px)`
             #[inline(always)]
+            #[allow(deprecated)]
             pub fn checked_sub(self, rhs: $ty<$field_ty>) -> Option<Self> {
                 Some($ty {
                     $(
@@ -47,6 +49,7 @@ macro_rules! impl_struct_ops_opaque {
             type Output = $ty<<T as Add>::Output>;
 
             #[inline(always)]
+            #[allow(deprecated)]
             fn add(self, other: $ty<T>) -> Self::Output {
                 $ty {
                     $(
@@ -61,6 +64,7 @@ macro_rules! impl_struct_ops_opaque {
             T: Add<Output = T> + Copy
         {
             #[inline(always)]
+            #[allow(deprecated)]
             fn add_assign(&mut self, other: $ty<T>) {
                 *self = Self {
                     $(
@@ -75,6 +79,7 @@ macro_rules! impl_struct_ops_opaque {
             type Output = $ty<<T as Mul>::Output>;
 
             #[inline(always)]
+            #[allow(deprecated)]
             fn mul(self, other: $ty<T>) -> Self::Output {
                 $ty {
                     $(
@@ -89,6 +94,7 @@ macro_rules! impl_struct_ops_opaque {
             T: Mul<Output = T> + Copy
         {
             #[inline(always)]
+            #[allow(deprecated)]
             fn mul_assign(&mut self, other: $ty<T>) {
                 *self = Self {
                     $(
@@ -103,6 +109,7 @@ macro_rules! impl_struct_ops_opaque {
             type Output = $ty<<T as Sub>::Output>;
 
             #[inline(always)]
+            #[allow(deprecated)]
             fn sub(self, other: $ty<T>) -> Self::Output {
                 $ty {
                     $(
@@ -117,6 +124,7 @@ macro_rules! impl_struct_ops_opaque {
             T: Sub<Output = T> + Copy
         {
             #[inline(always)]
+            #[allow(deprecated)]
             fn sub_assign(&mut self, other: $ty<T>) {
                 *self = Self {
                     $(

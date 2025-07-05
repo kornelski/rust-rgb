@@ -17,6 +17,7 @@ macro_rules! inherent_impls {
             ///
             #[doc=concat!("let pixel = ", stringify!($name), " {", stringify!($($field: $var),*), "};")]
             ///```
+            #[allow(deprecated)]
             pub const fn $new_fn($($var: T),*) -> Self {
                 Self {$($field: $var),*}
             }

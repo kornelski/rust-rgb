@@ -73,6 +73,7 @@ impl<T> core::ops::Deref for Gray<T> {
     type Target = T;
 
     #[inline(always)]
+    #[allow(deprecated)]
     fn deref(&self) -> &T {
         &self.0
     }
@@ -133,6 +134,7 @@ impl<T: Copy, A: Clone> GrayAlpha<T, A> {
 
 impl<T: Copy, B> ComponentMap<Gray<B>, T, B> for Gray<T> {
     #[inline(always)]
+    #[allow(deprecated)]
     fn map<F>(&self, mut f: F) -> Gray<B> where F: FnMut(T) -> B {
         Gray(f(self.0))
     }
@@ -140,6 +142,7 @@ impl<T: Copy, B> ComponentMap<Gray<B>, T, B> for Gray<T> {
 
 impl<T: Copy, B> ColorComponentMap<Gray<B>, T, B> for Gray<T> {
     #[inline(always)]
+    #[allow(deprecated)]
     fn map_colors<F>(&self, mut f: F) -> Gray<B> where F: FnMut(T) -> B {
         Gray(f(self.0))
     }
@@ -195,11 +198,13 @@ impl<T> ComponentSlice<T> for [GrayAlpha<T>] {
 
 impl<T> ComponentSlice<T> for Gray<T> {
     #[inline(always)]
+    #[allow(deprecated)]
     fn as_slice(&self) -> &[T] {
         slice::from_ref(&self.0)
     }
 
     #[inline(always)]
+    #[allow(deprecated)]
     fn as_mut_slice(&mut self) -> &mut [T] {
         slice::from_mut(&mut self.0)
     }
@@ -224,6 +229,7 @@ impl<T> ComponentSlice<T> for [Gray<T>] {
 /// Assumes 255 is opaque
 impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u8> {
     #[inline(always)]
+    #[allow(deprecated)]
     fn from(other: Gray<T>) -> Self {
         GrayAlpha(other.0, 0xFF)
     }
@@ -232,6 +238,7 @@ impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u8> {
 /// Assumes 65535 is opaque
 impl<T: Copy> From<Gray<T>> for GrayAlpha<T, u16> {
     #[inline(always)]
+    #[allow(deprecated)]
     fn from(other: Gray<T>) -> Self {
         GrayAlpha(other.0, 0xFFFF)
     }

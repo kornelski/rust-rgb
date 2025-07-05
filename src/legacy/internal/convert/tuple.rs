@@ -10,6 +10,7 @@ use crate::formats::gray::Gray_v09;
 macro_rules! tuple_conversion {
     ($name:ident, 1, [$($bit:tt:$num:tt),*]) => {
         impl<R, S> From<$name<R>> for (S,) where R: Into<S> {
+            #[allow(deprecated)]
             fn from(value: $name<R>) -> Self {
                 ($(value.$bit.into()),*,)
             }

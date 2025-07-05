@@ -355,6 +355,7 @@ fn rgba_test() {
     assert_eq!(neg, neg.as_slice().iter().copied().collect());
     assert!(neg < RGBA::new(0,0,0,0));
 
+    #[allow(deprecated)]
     let neg = RGBA::new(1u8,2,3,4).map_rgb(|c| -(c as i16));
     assert_eq!(-1i16, neg.r);
     assert_eq!(4i16, neg.a);

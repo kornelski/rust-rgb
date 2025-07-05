@@ -6,6 +6,7 @@
 #[allow(non_camel_case_types)]
 pub struct Gray_v08<T>(
     /// Grayscale Component. This field will be renamed to `v`.
+    #[deprecated(note = "Please use .value() or .value_mut() instead. This field will be renamed to .v in the next major version")]
     pub T,
 );
 
@@ -13,6 +14,7 @@ impl<T: Copy> Gray_v08<T> {
     /// Reads the `.0` field
     ///
     /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
+    #[allow(deprecated)]
     pub fn value(self) -> T {
         self.0
     }
@@ -20,6 +22,7 @@ impl<T: Copy> Gray_v08<T> {
     /// Exposes the `.0` field for writing
     ///
     /// This function isn't necessary, but it is forwards-compatible with the next major version of the RGB crate.
+    #[allow(deprecated)]
     pub fn value_mut(&mut self) -> &mut T {
         &mut self.0
     }
