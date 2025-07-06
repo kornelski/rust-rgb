@@ -11,7 +11,7 @@ impl Display for TryFromColorsAlphaError {
     }
 }
 
-/// A Pixel made up of a compile-time known number of color components and optionally an
+/// A pixel made up of a compile-time known number of color components and optionally an
 /// alpha component.
 ///
 /// Unlike [`Pixel`](crate::Pixel) the alpha component does not have to be the same type as the color
@@ -23,6 +23,8 @@ impl Display for TryFromColorsAlphaError {
 ///
 /// Component = An element of a pixel, inclusive of alpha. For example, [`Rgba`](crate::Rgba) is a pixel made up
 /// of four components, three color components and one alpha component.
+///
+/// Heterogeneous = the type of the color and alpha components may be different.
 pub trait HetPixel: Copy {
     /// The component type of the pixel used the color component(s).
     type ColorComponent: Copy + 'static;
