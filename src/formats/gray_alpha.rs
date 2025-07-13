@@ -1,5 +1,5 @@
 use crate::formats::gray_a::GrayA;
-use core::ops::Deref;
+use core::ops::{Deref, DerefMut};
 
 #[repr(C)]
 #[cfg_attr(feature = "unstable-experimental", deprecated(note = "renamed to GrayA"))]
@@ -51,9 +51,22 @@ impl<T, A> Deref for GrayAlpha_v08<T, A> {
     }
 }
 
+impl<T, A> DerefMut for GrayAlpha_v08<T, A> {
+    /// A trick that allows using `.v` and `.a` on the old `GrayAlpha` type.
+    fn deref_mut(&mut self) -> &mut GrayA<T, A> {
+        unsafe {
+            &mut *(self as *mut Self).cast::<GrayA::<T, A>>()
+        }
+    }
+}
+
 #[test]
+#[allow(deprecated)]
 fn swizzle() {
-    let g = GrayAlpha_v08(10u8, 20u8);
+    let mut g = GrayAlpha_v08(10u8, 20u8);
     assert_eq!(10, g.v);
     assert_eq!(20, g.a);
+    g.a = 7;
+    assert_eq!(10, g.v);
+    assert_eq!(7, g.1);
 }
