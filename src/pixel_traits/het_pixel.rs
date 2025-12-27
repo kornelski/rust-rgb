@@ -415,3 +415,33 @@ without_alpha!(Rgbw, 4, [r, g, b, w]);
 
 use crate::formats::gray::Gray_v08;
 without_alpha!(Gray_v08, 1, [0]);
+
+#[test]
+fn grb_het_pixel_field_order() {
+    use crate::Grb;
+
+    // Grb struct has fields in order: g, r, b (green first)
+    let grb = Grb { g: 1_u8, r: 2, b: 3 };
+
+    // to_color_array() should return fields in struct order [g, r, b]
+    assert_eq!(grb.to_color_array(), [1, 2, 3], "to_color_array() should return [g, r, b] order");
+
+    // each_color_mut should return refs in struct order [g, r, b]
+    let mut grb2 = Grb { g: 1_u8, r: 2, b: 3 };
+    let [g_ref, r_ref, b_ref] = grb2.each_color_mut();
+    assert_eq!(*g_ref, 1, "first ref should be g");
+    assert_eq!(*r_ref, 2, "second ref should be r");
+    assert_eq!(*b_ref, 3, "third ref should be b");
+
+    // try_from_colors_alpha should assign in struct order [g, r, b]
+    let grb3 = Grb::try_from_colors_alpha([10_u8, 20, 30], 0).unwrap();
+    assert_eq!(grb3.g, 10, "first component should be g");
+    assert_eq!(grb3.r, 20, "second component should be r");
+    assert_eq!(grb3.b, 30, "third component should be b");
+
+    // map_colors should iterate in struct order [g, r, b]
+    let mapped = grb.map_colors(|c| c * 10);
+    assert_eq!(mapped.g, 10, "g should be mapped");
+    assert_eq!(mapped.r, 20, "r should be mapped");
+    assert_eq!(mapped.b, 30, "b should be mapped");
+}

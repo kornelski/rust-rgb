@@ -313,3 +313,33 @@ fn as_refs() {
     assert_eq!([1, 4], *AsMut::<[u8; 2]>::as_mut(&mut r));
     assert_eq!([1, 4], *r.as_mut());
 }
+
+#[test]
+fn grb_field_order() {
+    use crate::Grb;
+
+    // Grb struct has fields in order: g, r, b (green first)
+    let grb = Grb { g: 1_u8, r: 2, b: 3 };
+
+    // to_array() should return fields in struct order [g, r, b]
+    assert_eq!(grb.to_array(), [1, 2, 3], "to_array() should return [g, r, b] order");
+
+    // as_array() returns pointer cast, so it's in memory/struct order
+    assert_eq!(grb.as_array(), &[1, 2, 3], "as_array() should return [g, r, b] order");
+
+    // These two methods should be consistent
+    assert_eq!(grb.to_array().as_slice(), grb.as_array(), "to_array() and as_array() should be consistent");
+
+    // try_from_components should assign in struct order [g, r, b]
+    let grb2 = Grb::try_from_components([10_u8, 20, 30]).unwrap();
+    assert_eq!(grb2.g, 10, "first component should be g");
+    assert_eq!(grb2.r, 20, "second component should be r");
+    assert_eq!(grb2.b, 30, "third component should be b");
+
+    // each_mut should return refs in struct order [g, r, b]
+    let mut grb3 = Grb { g: 1_u8, r: 2, b: 3 };
+    let [g_ref, r_ref, b_ref] = grb3.each_mut();
+    assert_eq!(*g_ref, 1, "first ref should be g");
+    assert_eq!(*r_ref, 2, "second ref should be r");
+    assert_eq!(*b_ref, 3, "third ref should be b");
+}
