@@ -1,6 +1,6 @@
-use core::fmt::Display;
 use crate::HetPixel;
-use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, Gray_v09, GrayA, Grb,Rgb, Rgba, Rgbw};
+use crate::{Abgr, Argb, ArrayLike, Bgr, Bgra, GrayA, Gray_v09, Grb, Rgb, Rgba, Rgbw};
+use core::fmt::Display;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 /// Error returned from the [`Pixel::try_from_components()`] function.
@@ -53,7 +53,8 @@ pub trait Pixel:
     #[doc(alias = "into_array")]
     #[doc(alias = "component_array")]
     fn to_array(&self) -> Self::ComponentArray<Self::Component>
-    where Self::ComponentArray<Self::Component>: Copy;
+    where
+        Self::ComponentArray<Self::Component>: Copy;
 
     /// Casts a reference of the pixel to an array reference of the pixel's
     /// components.
@@ -153,7 +154,9 @@ pub trait Pixel:
     /// assert_eq!(rgb.map(widen), Rgb { r: 0, g: 2570, b: 25700 });
     /// assert_eq!(rgba.map(widen), Rgba { r: 0, g: 2570, b: 25700, a: 50*256+50 });
     /// ```
-    fn map<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U> where U: Copy;
+    fn map<U>(&self, f: impl FnMut(Self::Component) -> U) -> Self::SelfType<U, U>
+    where
+        U: Copy;
 
     /// Maps each of the pixel's components with a function `f` to the same component type.
     ///
@@ -283,7 +286,7 @@ with_alpha!(GrayA, 2, [v, a]);
 
 without_alpha!(Bgr, 3, [b, g, r]);
 without_alpha!(Rgb, 3, [r, g, b]);
-without_alpha!(Grb, 3, [r, g, b]);
+without_alpha!(Grb, 3, [g, r, b]);
 without_alpha!(Gray_v09, 1, [v]);
 without_alpha!(Rgbw, 4, [r, g, b, w]);
 
@@ -292,7 +295,6 @@ without_alpha!(Gray_v08, 1, [0]);
 
 use crate::formats::gray_alpha::GrayAlpha_v08;
 with_alpha!(GrayAlpha_v08, 2, [0, 1]);
-
 
 #[test]
 fn as_refs() {
@@ -319,16 +321,32 @@ fn grb_field_order() {
     use crate::Grb;
 
     // Grb struct has fields in order: g, r, b (green first)
-    let grb = Grb { g: 1_u8, r: 2, b: 3 };
+    let grb = Grb {
+        g: 1_u8,
+        r: 2,
+        b: 3,
+    };
 
     // to_array() should return fields in struct order [g, r, b]
-    assert_eq!(grb.to_array(), [1, 2, 3], "to_array() should return [g, r, b] order");
+    assert_eq!(
+        grb.to_array(),
+        [1, 2, 3],
+        "to_array() should return [g, r, b] order"
+    );
 
     // as_array() returns pointer cast, so it's in memory/struct order
-    assert_eq!(grb.as_array(), &[1, 2, 3], "as_array() should return [g, r, b] order");
+    assert_eq!(
+        grb.as_array(),
+        &[1, 2, 3],
+        "as_array() should return [g, r, b] order"
+    );
 
     // These two methods should be consistent
-    assert_eq!(grb.to_array().as_slice(), grb.as_array(), "to_array() and as_array() should be consistent");
+    assert_eq!(
+        grb.to_array().as_slice(),
+        grb.as_array(),
+        "to_array() and as_array() should be consistent"
+    );
 
     // try_from_components should assign in struct order [g, r, b]
     let grb2 = Grb::try_from_components([10_u8, 20, 30]).unwrap();
@@ -337,7 +355,11 @@ fn grb_field_order() {
     assert_eq!(grb2.b, 30, "third component should be b");
 
     // each_mut should return refs in struct order [g, r, b]
-    let mut grb3 = Grb { g: 1_u8, r: 2, b: 3 };
+    let mut grb3 = Grb {
+        g: 1_u8,
+        r: 2,
+        b: 3,
+    };
     let [g_ref, r_ref, b_ref] = grb3.each_mut();
     assert_eq!(*g_ref, 1, "first ref should be g");
     assert_eq!(*r_ref, 2, "second ref should be r");

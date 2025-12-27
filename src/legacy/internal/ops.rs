@@ -92,11 +92,23 @@ mod test {
     fn test_add() {
         use crate::*;
 
-        assert_eq!(RGB::new(2,4,6), RGB::new(1,2,3) + RGB{r:1,g:2,b:3});
-        assert_eq!(RGB::new(2.,4.,6.), RGB::new(1.,3.,5.) + 1.);
+        assert_eq!(
+            RGB::new(2, 4, 6),
+            RGB::new(1, 2, 3) + RGB { r: 1, g: 2, b: 3 }
+        );
+        assert_eq!(RGB::new(2., 4., 6.), RGB::new(1., 3., 5.) + 1.);
 
-        assert_eq!(RGBA::new_alpha(2f32,4.,6.,8u32), RGBA::new_alpha(1f32,2.,3.,4u32) + RGBA{r:1f32,g:2.0,b:3.0,a:4u32});
-        assert_eq!(RGBA::new(2i16,4,6,8), RGBA::new(1,3,5,7) + 1);
+        assert_eq!(
+            RGBA::new_alpha(2f32, 4., 6., 8u32),
+            RGBA::new_alpha(1f32, 2., 3., 4u32)
+                + RGBA {
+                    r: 1f32,
+                    g: 2.0,
+                    b: 3.0,
+                    a: 4u32
+                }
+        );
+        assert_eq!(RGBA::new(2i16, 4, 6, 8), RGBA::new(1, 3, 5, 7) + 1);
 
         assert_eq!(RGB::new(255, 255, 0), RED_RGB + GREEN_RGB);
         assert_eq!(RGB::new(255, 0, 0), RED_RGB + RGB::new(0, 0, 0));
@@ -112,15 +124,36 @@ mod test {
     #[allow(deprecated)]
     fn test_checked_add() {
         assert_eq!(WHITE_RGB.checked_add(WHITE_RGB), None);
-        assert_eq!(RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(255, 0, 0)), None);
-        assert_eq!(RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(0, 255, 0)), None);
-        assert_eq!(RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(0, 0, 255)), None);
+        assert_eq!(
+            RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(255, 0, 0)),
+            None
+        );
+        assert_eq!(
+            RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(0, 255, 0)),
+            None
+        );
+        assert_eq!(
+            RGB::<u8>::new(255, 255, 255).checked_add(RGB::<u8>::new(0, 0, 255)),
+            None
+        );
         assert_eq!(WHITE_RGBA.checked_add(BLACK_RGBA), Some(WHITE_RGBA));
 
-        assert_eq!(RGB::<i8>::new(-128, 2, 3).checked_add(RGB::<i8>::new(-1, 0, 0)), None);
-        assert_eq!(RGB::<i8>::new(2, -128, 3).checked_add(RGB::<i8>::new(0, -1, 0)), None);
-        assert_eq!(RGB::<i8>::new(2, 2, -128).checked_add(RGB::<i8>::new(0, 0, -1)), None);
-        assert_eq!(RGB::<i8>::new(2, 2, -128).checked_add(RGB::<i8>::new(0, 0, 1)), Some(RGB::<i8>::new(2, 2, -127)));
+        assert_eq!(
+            RGB::<i8>::new(-128, 2, 3).checked_add(RGB::<i8>::new(-1, 0, 0)),
+            None
+        );
+        assert_eq!(
+            RGB::<i8>::new(2, -128, 3).checked_add(RGB::<i8>::new(0, -1, 0)),
+            None
+        );
+        assert_eq!(
+            RGB::<i8>::new(2, 2, -128).checked_add(RGB::<i8>::new(0, 0, -1)),
+            None
+        );
+        assert_eq!(
+            RGB::<i8>::new(2, 2, -128).checked_add(RGB::<i8>::new(0, 0, 1)),
+            Some(RGB::<i8>::new(2, 2, -127))
+        );
     }
 
     #[test]
@@ -142,15 +175,39 @@ mod test {
     #[test]
     #[cfg(feature = "checked_fns")]
     fn test_checked_sub() {
-        assert_eq!(RGBA::<u8>::new(2,4,6,111).checked_sub(RGBA::<u8>::new(3,4,6,0)), None);
-        assert_eq!(RGB::<u8>::new(2,4,6).checked_sub(RGB::<u8>::new(2,5,6)), None);
-        assert_eq!(RGB::<u8>::new(2,4,6).checked_sub(RGB::<u8>::new(2,4,7)), None);
-        assert_eq!(RGB::<u8>::new(2,4,6).checked_sub(RGB::<u8>::new(2,4,6)), Some(BLACK_RGB));
+        assert_eq!(
+            RGBA::<u8>::new(2, 4, 6, 111).checked_sub(RGBA::<u8>::new(3, 4, 6, 0)),
+            None
+        );
+        assert_eq!(
+            RGB::<u8>::new(2, 4, 6).checked_sub(RGB::<u8>::new(2, 5, 6)),
+            None
+        );
+        assert_eq!(
+            RGB::<u8>::new(2, 4, 6).checked_sub(RGB::<u8>::new(2, 4, 7)),
+            None
+        );
+        assert_eq!(
+            RGB::<u8>::new(2, 4, 6).checked_sub(RGB::<u8>::new(2, 4, 6)),
+            Some(BLACK_RGB)
+        );
 
-        assert_eq!(RGB::<i8>::new(-128,4,6).checked_sub(RGB::<i8>::new(1,4,7)), None);
-        assert_eq!(RGB::<i8>::new(2,-128,6).checked_sub(RGB::<i8>::new(2,1,7)), None);
-        assert_eq!(RGB::<i8>::new(2,4,-128).checked_sub(RGB::<i8>::new(2,4,1)), None);
-        assert_eq!(RGB::<i8>::new(2,4,6).checked_sub(RGB::<i8>::new(-2,4,6)), Some(RGB::<i8>::new(4,0,0)));
+        assert_eq!(
+            RGB::<i8>::new(-128, 4, 6).checked_sub(RGB::<i8>::new(1, 4, 7)),
+            None
+        );
+        assert_eq!(
+            RGB::<i8>::new(2, -128, 6).checked_sub(RGB::<i8>::new(2, 1, 7)),
+            None
+        );
+        assert_eq!(
+            RGB::<i8>::new(2, 4, -128).checked_sub(RGB::<i8>::new(2, 4, 1)),
+            None
+        );
+        assert_eq!(
+            RGB::<i8>::new(2, 4, 6).checked_sub(RGB::<i8>::new(-2, 4, 6)),
+            Some(RGB::<i8>::new(4, 0, 0))
+        );
     }
 
     #[test]
@@ -193,10 +250,12 @@ mod test {
 
     #[test]
     fn test_mult() {
-        assert_eq!(RGB::new(0.5,1.5,2.5), RGB::new(1.,3.,5.) * 0.5);
-        assert_eq!(RGBA::new(2,4,6,8), RGBA::new(1,2,3,4) * 2);
-        assert_eq!(RGB::new(0.5,1.5,2.5) * RGB::new(1.,3.,5.),
-        RGB::new(0.5,4.5,12.5));
+        assert_eq!(RGB::new(0.5, 1.5, 2.5), RGB::new(1., 3., 5.) * 0.5);
+        assert_eq!(RGBA::new(2, 4, 6, 8), RGBA::new(1, 2, 3, 4) * 2);
+        assert_eq!(
+            RGB::new(0.5, 1.5, 2.5) * RGB::new(1., 3., 5.),
+            RGB::new(0.5, 4.5, 12.5)
+        );
     }
 
     #[test]
@@ -205,28 +264,45 @@ mod test {
         green_rgb *= 1;
         assert_eq!(RGB::new(0, 255, 0), green_rgb);
         green_rgb *= 2;
-        assert_eq!(RGB::new(0, 255*2, 0), green_rgb);
+        assert_eq!(RGB::new(0, 255 * 2, 0), green_rgb);
 
-        let mut rgb = RGB::new(0.5,1.5,2.5);
-        rgb *= RGB::new(1.,3.,5.);
-        assert_eq!(rgb, RGB::new(0.5,4.5,12.5));
+        let mut rgb = RGB::new(0.5, 1.5, 2.5);
+        rgb *= RGB::new(1., 3., 5.);
+        assert_eq!(rgb, RGB::new(0.5, 4.5, 12.5));
 
         let mut green_rgba = RGBA::new(0_u16, 255, 0, 0);
         green_rgba *= 1;
         assert_eq!(RGBA::new(0, 255, 0, 0), green_rgba);
         green_rgba *= 2;
-        assert_eq!(RGBA::new(0, 255*2, 0, 0), green_rgba);
+        assert_eq!(RGBA::new(0, 255 * 2, 0, 0), green_rgba);
     }
 
     #[test]
     fn sum() {
         use crate::*;
 
-        let s1 = [RGB::new(1_u8, 1, 1), RGB::new(2, 3, 4)].iter().copied().sum::<RGB<u8>>();
-        let s2 = [RGB::new(1_u16, 1, 1), RGB::new(2, 3, 4)].iter().copied().sum::<RGB<u16>>();
-        let s3 = [RGBA::new_alpha(1_u16, 1, 1, Wrapping(1_u16)), RGBA::new_alpha(2, 3, 4, Wrapping(5))]
-            .iter().copied().sum::<RGBA<u16, Wrapping<u16>>>();
-        let s4 = [RGBA::new_alpha(1_u16, 1, 1, 1_u16), RGBA::new_alpha(2, 3, 4, 5)].iter().copied().sum::<RGBA<u16, u16>>();
+        let s1 = [RGB::new(1_u8, 1, 1), RGB::new(2, 3, 4)]
+            .iter()
+            .copied()
+            .sum::<RGB<u8>>();
+        let s2 = [RGB::new(1_u16, 1, 1), RGB::new(2, 3, 4)]
+            .iter()
+            .copied()
+            .sum::<RGB<u16>>();
+        let s3 = [
+            RGBA::new_alpha(1_u16, 1, 1, Wrapping(1_u16)),
+            RGBA::new_alpha(2, 3, 4, Wrapping(5)),
+        ]
+        .iter()
+        .copied()
+        .sum::<RGBA<u16, Wrapping<u16>>>();
+        let s4 = [
+            RGBA::new_alpha(1_u16, 1, 1, 1_u16),
+            RGBA::new_alpha(2, 3, 4, 5),
+        ]
+        .iter()
+        .copied()
+        .sum::<RGBA<u16, u16>>();
         assert_eq!(s1, RGB::new(3, 4, 5));
         assert_eq!(s2, RGB::new(3, 4, 5));
         assert_eq!(s3, RGBA::new_alpha(3, 4, 5, Wrapping(6)));

@@ -63,13 +63,32 @@ pub type GRAYA8 = GrayAlpha<u8>;
 /// 16-bit gray with alpha in machine's native endian
 pub type GRAYA16 = GrayAlpha<u16>;
 
-
 /// These are deprecated, use `[val; 1]` as the source if you must
-impl From<u8> for Gray<u8> { fn from(v: u8) -> Self { Self(v) } }
-impl From<u16> for Gray<u16> { fn from(v: u16) -> Self { Self(v) } }
-impl From<u32> for Gray<u32> { fn from(v: u32) -> Self { Self(v) } }
-impl From<i32> for Gray<i32> { fn from(v: i32) -> Self { Self(v) } }
-impl From<f32> for Gray<f32> { fn from(v: f32) -> Self { Self(v) } }
+impl From<u8> for Gray<u8> {
+    fn from(v: u8) -> Self {
+        Self(v)
+    }
+}
+impl From<u16> for Gray<u16> {
+    fn from(v: u16) -> Self {
+        Self(v)
+    }
+}
+impl From<u32> for Gray<u32> {
+    fn from(v: u32) -> Self {
+        Self(v)
+    }
+}
+impl From<i32> for Gray<i32> {
+    fn from(v: i32) -> Self {
+        Self(v)
+    }
+}
+impl From<f32> for Gray<f32> {
+    fn from(v: f32) -> Self {
+        Self(v)
+    }
+}
 
 impl<T: Clone, A> GrayAlpha<T, A> {
     /// Copy `Gray` component out of the `GrayAlpha` struct
@@ -104,7 +123,8 @@ impl<T: Copy, A: Clone> GrayAlpha<T, A> {
     /// Create a new `GrayAlpha` with a new alpha value created by the callback.
     #[inline(always)]
     pub fn map_alpha<F, B>(&self, f: F) -> GrayAlpha<T, B>
-        where F: FnOnce(A) -> B
+    where
+        F: FnOnce(A) -> B,
     {
         GrayAlpha(self.0, f(self.1.clone()))
     }
@@ -112,14 +132,21 @@ impl<T: Copy, A: Clone> GrayAlpha<T, A> {
     /// Create new `GrayAlpha` with the same alpha value, but different `Gray` value
     #[inline(always)]
     pub fn map_gray<F, U, B>(&self, f: F) -> GrayAlpha<U, B>
-        where F: FnOnce(T) -> U, U: Clone, B: From<A> + Clone {
+    where
+        F: FnOnce(T) -> U,
+        U: Clone,
+        B: From<A> + Clone,
+    {
         GrayAlpha(f(self.0), self.1.clone().into())
     }
 }
 
 impl<T: Copy, B> ColorComponentMap<Gray<B>, T, B> for Gray<T> {
     #[inline(always)]
-    fn map_c<F>(&self, mut f: F) -> Gray<B> where F: FnMut(T) -> B {
+    fn map_c<F>(&self, mut f: F) -> Gray<B>
+    where
+        F: FnMut(T) -> B,
+    {
         Gray(f(self.0))
     }
 }
@@ -127,7 +154,9 @@ impl<T: Copy, B> ColorComponentMap<Gray<B>, T, B> for Gray<T> {
 impl<T: Copy, A: Copy, B> ColorComponentMap<GrayAlpha<B, A>, T, B> for GrayAlpha<T, A> {
     #[inline(always)]
     fn map_c<F>(&self, mut f: F) -> GrayAlpha<B, A>
-    where F: FnMut(T) -> B {
+    where
+        F: FnMut(T) -> B,
+    {
         GrayAlpha(f(self.0), self.1)
     }
 }
@@ -135,32 +164,24 @@ impl<T: Copy, A: Copy, B> ColorComponentMap<GrayAlpha<B, A>, T, B> for GrayAlpha
 impl<T> ComponentSlice<T> for GrayAlpha<T> {
     #[inline(always)]
     fn as_slice(&self) -> &[T] {
-        unsafe {
-            slice::from_raw_parts((self as *const Self).cast::<T>(), 2)
-        }
+        unsafe { slice::from_raw_parts((self as *const Self).cast::<T>(), 2) }
     }
 
     #[inline(always)]
     fn as_mut_slice(&mut self) -> &mut [T] {
-        unsafe {
-            slice::from_raw_parts_mut((self as *mut Self).cast::<T>(), 2)
-        }
+        unsafe { slice::from_raw_parts_mut((self as *mut Self).cast::<T>(), 2) }
     }
 }
 
 impl<T> ComponentSlice<T> for [GrayAlpha<T>] {
     #[inline]
     fn as_slice(&self) -> &[T] {
-        unsafe {
-            slice::from_raw_parts(self.as_ptr().cast(), self.len() * 2)
-        }
+        unsafe { slice::from_raw_parts(self.as_ptr().cast(), self.len() * 2) }
     }
 
     #[inline]
     fn as_mut_slice(&mut self) -> &mut [T] {
-        unsafe {
-            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * 2)
-        }
+        unsafe { slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len() * 2) }
     }
 }
 
@@ -179,16 +200,12 @@ impl<T> ComponentSlice<T> for Gray<T> {
 impl<T> ComponentSlice<T> for [Gray<T>] {
     #[inline]
     fn as_slice(&self) -> &[T] {
-        unsafe {
-            slice::from_raw_parts(self.as_ptr().cast(), self.len())
-        }
+        unsafe { slice::from_raw_parts(self.as_ptr().cast(), self.len()) }
     }
 
     #[inline]
     fn as_mut_slice(&mut self) -> &mut [T] {
-        unsafe {
-            slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len())
-        }
+        unsafe { slice::from_raw_parts_mut(self.as_ptr() as *mut _, self.len()) }
     }
 }
 
@@ -242,7 +259,10 @@ fn gray() {
     assert_eq!(g2.map_alpha(|x| x + 3), GrayAlpha(3, 5));
 
     assert_eq!((&[Gray(1_u16), Gray(2)][..]).as_slice(), &[1, 2]);
-    assert_eq!((&[GrayAlpha(1_u16, 2), GrayAlpha(3, 4)][..]).as_slice(), &[1, 2, 3, 4]);
+    assert_eq!(
+        (&[GrayAlpha(1_u16, 2), GrayAlpha(3, 4)][..]).as_slice(),
+        &[1, 2, 3, 4]
+    );
 
     let rgba: crate::RGBA<_> = ga.into();
     assert_eq!(rgba.r, 1);

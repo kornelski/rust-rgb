@@ -53,8 +53,9 @@ pub trait HetPixel: Copy {
     ///
     /// For example, [`Rgb`] has `SelfType<U, V> = Rgb<U>` whereas
     /// [`Rgba`] has `SelfType<U, V> = Rgba<U, V>`.
-    type SelfType<U: Copy + 'static, V: Copy + 'static>:
-        HetPixel<SelfType<Self::ColorComponent, Self::AlphaComponent> = Self>;
+    type SelfType<U: Copy + 'static, V: Copy + 'static>: HetPixel<
+        SelfType<Self::ColorComponent, Self::AlphaComponent> = Self,
+    >;
 
     /// A generic associated type used to return the array of color
     /// components despite rust's lack of const generic expressions.
@@ -82,7 +83,9 @@ pub trait HetPixel: Copy {
     #[doc(alias = "rgb")]
     #[doc(alias = "to_rgb")]
     #[doc(alias = "as_rgb")]
-    fn to_color_array(&self) -> Self::ColorArray<Self::ColorComponent> where Self::ColorArray<Self::ColorComponent>: Copy;
+    fn to_color_array(&self) -> Self::ColorArray<Self::ColorComponent>
+    where
+        Self::ColorArray<Self::ColorComponent>: Copy;
 
     /// Returns an owned array of the pixel's mutably borrowed color components.
     ///
@@ -409,7 +412,7 @@ with_alpha!(GrayAlpha_v08, 2, [0], 1);
 
 without_alpha!(Bgr, 3, [b, g, r]);
 without_alpha!(Rgb, 3, [r, g, b]);
-without_alpha!(Grb, 3, [r, g, b]);
+without_alpha!(Grb, 3, [g, r, b]);
 without_alpha!(Gray_v09, 1, [v]);
 without_alpha!(Rgbw, 4, [r, g, b, w]);
 
@@ -421,13 +424,25 @@ fn grb_het_pixel_field_order() {
     use crate::Grb;
 
     // Grb struct has fields in order: g, r, b (green first)
-    let grb = Grb { g: 1_u8, r: 2, b: 3 };
+    let grb = Grb {
+        g: 1_u8,
+        r: 2,
+        b: 3,
+    };
 
     // to_color_array() should return fields in struct order [g, r, b]
-    assert_eq!(grb.to_color_array(), [1, 2, 3], "to_color_array() should return [g, r, b] order");
+    assert_eq!(
+        grb.to_color_array(),
+        [1, 2, 3],
+        "to_color_array() should return [g, r, b] order"
+    );
 
     // each_color_mut should return refs in struct order [g, r, b]
-    let mut grb2 = Grb { g: 1_u8, r: 2, b: 3 };
+    let mut grb2 = Grb {
+        g: 1_u8,
+        r: 2,
+        b: 3,
+    };
     let [g_ref, r_ref, b_ref] = grb2.each_color_mut();
     assert_eq!(*g_ref, 1, "first ref should be g");
     assert_eq!(*r_ref, 2, "second ref should be r");

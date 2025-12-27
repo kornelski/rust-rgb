@@ -47,7 +47,8 @@ pub trait ColorComponentMap<DestPixel, SrcComponent, DestComponent> {
     ///
     /// Note that it returns the pixel directly, not an Iterator.
     fn map_c<Callback>(&self, f: Callback) -> DestPixel
-        where Callback: FnMut(SrcComponent) -> DestComponent;
+    where
+        Callback: FnMut(SrcComponent) -> DestComponent;
 }
 
 #[test]
@@ -59,7 +60,8 @@ fn shared_impl() {
     }
 
     impl<Pixel: Clone + crate::Pod> SharedPixelBuffer<Pixel>
-    where [Pixel]: crate::ComponentBytes<u8>
+    where
+        [Pixel]: crate::ComponentBytes<u8>,
     {
         pub fn as_bytes(&self) -> &[u8] {
             self.data.as_slice().as_bytes()

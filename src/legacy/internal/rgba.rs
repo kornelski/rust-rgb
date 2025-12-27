@@ -1,6 +1,6 @@
+use super::pixel::{ColorComponentMap, ComponentSlice};
 use crate::alt::*;
 use crate::*;
-use super::pixel::{ColorComponentMap, ComponentSlice};
 
 impl<T, A> Rgba<T, A> {
     #[inline(always)]
@@ -15,7 +15,9 @@ impl<T> BGRA<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B,A
-    #[deprecated(note = "This function has a misleading order of arguments. Use BGRA{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use BGRA{} literal instead"
+    )]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
         Self { b, g, r, a }
     }
@@ -28,7 +30,9 @@ impl<T, A> BGRA<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B,A
-    #[deprecated(note = "This function has a misleading order of arguments. Use BGRA{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use BGRA{} literal instead"
+    )]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
         Self { b, g, r, a }
     }
@@ -38,7 +42,9 @@ impl<T> Argb<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
-    #[deprecated(note = "This function has a misleading order of arguments. Use ARGB{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use ARGB{} literal instead"
+    )]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
         Self { a, r, g, b }
     }
@@ -48,7 +54,9 @@ impl<T, A> Argb<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
-    #[deprecated(note = "This function has a misleading order of arguments. Use ARGB{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use ARGB{} literal instead"
+    )]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
         Self { a, r, g, b }
     }
@@ -58,7 +66,9 @@ impl<T> Abgr<T> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
-    #[deprecated(note = "This function has a misleading order of arguments. Use ABGR{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use ABGR{} literal instead"
+    )]
     pub const fn new(r: T, g: T, b: T, a: T) -> Self {
         Self { a, b, g, r }
     }
@@ -68,7 +78,9 @@ impl<T, A> Abgr<T, A> {
     #[inline(always)]
     /// Convenience function for creating a new pixel
     /// The order of arguments is R,G,B,A
-    #[deprecated(note = "This function has a misleading order of arguments. Use ABGR{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use ABGR{} literal instead"
+    )]
     pub const fn new_alpha(r: T, g: T, b: T, a: A) -> Self {
         Self { a, b, g, r }
     }
@@ -102,7 +114,10 @@ macro_rules! impl_rgba {
             /// Create new RGBA with the same alpha value, but different RGB values
             #[inline(always)]
             pub fn map_rgb<F, U, B>(&self, mut f: F) -> $RGBA<U, B>
-                where F: FnMut(T) -> U, U: Clone, B: From<A> + Clone
+            where
+                F: FnMut(T) -> U,
+                U: Clone,
+                B: From<A> + Clone,
             {
                 $RGBA {
                     r: f(self.r),
@@ -117,20 +132,32 @@ macro_rules! impl_rgba {
             #[deprecated(note = "use .with_alpha(a) instead")]
             #[inline(always)]
             pub fn alpha(&self, a: A) -> Self {
-                Self { r: self.r, g: self.g, b: self.b, a }
+                Self {
+                    r: self.r,
+                    g: self.g,
+                    b: self.b,
+                    a,
+                }
             }
 
             /// Create a new RGBA with the new alpha value, but same RGB values
             #[inline(always)]
             pub const fn with_alpha(&self, a: A) -> Self {
-                Self { r: self.r, g: self.g, b: self.b, a }
+                Self {
+                    r: self.r,
+                    g: self.g,
+                    b: self.b,
+                    a,
+                }
             }
 
             /// Create a new RGBA with a new alpha value created by the callback.
             /// Allows changing of the type used for the alpha channel.
             #[inline]
             pub fn map_alpha<F, B>(&self, f: F) -> $RGBA<T, B>
-                where F: FnOnce(A) -> B {
+            where
+                F: FnOnce(A) -> B,
+            {
                 $RGBA {
                     r: self.r,
                     g: self.g,
@@ -143,7 +170,9 @@ macro_rules! impl_rgba {
         impl<T: Copy, A: Copy, B> ColorComponentMap<$RGBA<B, A>, T, B> for $RGBA<T, A> {
             #[inline(always)]
             fn map_c<F>(&self, mut f: F) -> $RGBA<B, A>
-            where F: FnMut(T) -> B {
+            where
+                F: FnMut(T) -> B,
+            {
                 $RGBA {
                     r: f(self.r),
                     g: f(self.g),
@@ -156,25 +185,19 @@ macro_rules! impl_rgba {
         impl<T> ComponentSlice<T> for $RGBA<T> {
             #[inline(always)]
             fn as_slice(&self) -> &[T] {
-                unsafe {
-                    core::slice::from_raw_parts(self as *const Self as *const T, 4)
-                }
+                unsafe { core::slice::from_raw_parts(self as *const Self as *const T, 4) }
             }
 
             #[inline(always)]
             fn as_mut_slice(&mut self) -> &mut [T] {
-                unsafe {
-                    core::slice::from_raw_parts_mut(self as *mut Self as *mut T, 4)
-                }
+                unsafe { core::slice::from_raw_parts_mut(self as *mut Self as *mut T, 4) }
             }
         }
 
         impl<T> ComponentSlice<T> for [$RGBA<T>] {
             #[inline]
             fn as_slice(&self) -> &[T] {
-                unsafe {
-                    core::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 4)
-                }
+                unsafe { core::slice::from_raw_parts(self.as_ptr() as *const _, self.len() * 4) }
             }
 
             #[inline]
@@ -333,7 +356,7 @@ impl_alpha_conv! {Rgb, Argb}
 fn rgba_test() {
     use crate::Pixel;
 
-    let neg = Rgba::new(1,2,3i32,1000).map(|x| -x);
+    let neg = Rgba::new(1, 2, 3i32, 1000).map(|x| -x);
     assert_eq!(neg.r, -1);
     assert_eq!(neg.rgb().r, -1);
     assert_eq!(neg.g, -2);
@@ -341,9 +364,9 @@ fn rgba_test() {
     assert_eq!(neg.b, -3);
     assert_eq!(neg.rgb().b, -3);
     assert_eq!(neg.a, -1000);
-    assert_eq!(neg.map_alpha(|x| x+1).a, -999);
+    assert_eq!(neg.map_alpha(|x| x + 1).a, -999);
     assert_eq!(neg, neg.as_slice().iter().copied().collect());
-    assert!(neg < Rgba::new(0,0,0,0));
+    assert!(neg < Rgba::new(0, 0, 0, 0));
 
     let neg = Rgba::new(1_u8, 2, 3, 4).map_rgb(|c| -i16::from(c));
     assert_eq!(-1i16, neg.r);
@@ -352,7 +375,12 @@ fn rgba_test() {
     assert_eq!(-1i16, neg.r);
     assert_eq!(4u8, neg.a);
 
-    let mut px = Rgba{r:1,g:2,b:3,a:4};
+    let mut px = Rgba {
+        r: 1,
+        g: 2,
+        b: 3,
+        a: 4,
+    };
     px.as_mut_slice()[3] = 100;
     assert_eq!(1, px.rgb_mut().r);
     assert_eq!(2, px.rgb_mut().g);
@@ -370,7 +398,12 @@ fn rgba_test() {
 #[test]
 #[cfg(feature = "as-bytes")]
 fn abgr_test() {
-    let abgr = ABGR {r:1,g:2,b:3,a:4};
+    let abgr = ABGR {
+        r: 1,
+        g: 2,
+        b: 3,
+        a: 4,
+    };
     assert_eq!(4, abgr.as_slice()[0]);
     use crate::AsPixels;
     assert_eq!(abgr, [abgr].as_bytes().as_pixels()[0]);
@@ -405,7 +438,13 @@ fn bgra_test() {
     assert_eq!(-1i16, neg.r);
     assert_eq!(4u8, neg.a);
 
-    let mut px = Bgra{r:1,g:2,b:3,a:-9}.with_alpha(4);
+    let mut px = Bgra {
+        r: 1,
+        g: 2,
+        b: 3,
+        a: -9,
+    }
+    .with_alpha(4);
     px.as_mut_slice()[3] = 100;
     assert_eq!(1, px.bgr_mut().r);
     assert_eq!(2, px.bgr_mut().g);

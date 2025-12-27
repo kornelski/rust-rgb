@@ -489,5 +489,8 @@ fn convert_array() {
     assert_eq!(BGR8::from([3, 2, 1]), BGR8::new_bgr(3, 2, 1));
     assert_eq!(Into::<[u8; 3]>::into(BGR8::new_bgr(3, 2, 1)), [3, 2, 1]);
     assert_eq!(BGRA8::from([4, 3, 2, 1]), BGRA8::new_bgra(4, 3, 2, 1));
-    assert_eq!(Into::<[u8; 4]>::into(BGRA8::new_bgra(4, 3, 2, 1)), [4, 3, 2, 1]);
+    assert_eq!(
+        Into::<[u8; 4]>::into(BGRA8::new_bgra(4, 3, 2, 1)),
+        [4, 3, 2, 1]
+    );
 }

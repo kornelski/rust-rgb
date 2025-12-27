@@ -1,8 +1,8 @@
+use crate::formats::gray::{Gray_v08, Gray_v09};
+use crate::formats::gray_alpha::GrayAlpha_v08;
 use crate::HasAlpha;
 use crate::HetPixel;
 use crate::{Abgr, Argb, Bgr, Bgra, GrayA, Rgb, Rgba};
-use crate::formats::gray::{Gray_v08, Gray_v09};
-use crate::formats::gray_alpha::GrayAlpha_v08;
 
 /// A pixel which can gain an alpha component.
 ///
@@ -80,7 +80,10 @@ macro_rules! lower_upper {
 
 macro_rules! gain_already_alpha {
     ($original:ident, $alpha_bit: tt) => {
-        impl<T> GainAlpha for $original<T> where T: Copy + 'static {
+        impl<T> GainAlpha for $original<T>
+        where
+            T: Copy + 'static,
+        {
             type GainAlpha = $original<T>;
 
             #[inline]

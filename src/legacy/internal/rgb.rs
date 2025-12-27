@@ -1,11 +1,13 @@
+use super::pixel::{ColorComponentMap, ComponentSlice};
 use crate::alt::*;
 use crate::*;
-use super::pixel::{ColorComponentMap, ComponentSlice};
 
 impl<T> BGR<T> {
     /// Convenience function for creating a new pixel
     /// Warning: The order of arguments is R,G,B
-    #[deprecated(note = "This function has a misleading order of arguments. Use BGR{} literal instead")]
+    #[deprecated(
+        note = "This function has a misleading order of arguments. Use BGR{} literal instead"
+    )]
     #[inline(always)]
     pub const fn new(r: T, g: T, b: T) -> Self {
         Self { b, g, r }
@@ -167,8 +169,21 @@ mod rgb_test {
             RGB::new(250, 251, 252).with_alpha(253)
         );
 
-        assert_eq!(RGB { r: 1_u8, g: 2, b: 3 }, RGB::new(1_u8, 2, 3));
-        assert!(RGB { r: 1_u8, g: 1, b: 2 } < RGB::new(2, 1, 1));
+        assert_eq!(
+            RGB {
+                r: 1_u8,
+                g: 2,
+                b: 3
+            },
+            RGB::new(1_u8, 2, 3)
+        );
+        assert!(
+            RGB {
+                r: 1_u8,
+                g: 1,
+                b: 2
+            } < RGB::new(2, 1, 1)
+        );
 
         let mut h = std::collections::HashSet::new();
         h.insert(px);

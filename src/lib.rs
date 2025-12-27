@@ -15,8 +15,8 @@ mod formats {
     pub mod bgra;
     pub mod gray;
     pub mod gray_a;
-    pub mod gray_alpha;
     pub mod gray_a44;
+    pub mod gray_alpha;
     pub mod grb;
     pub mod rgb;
     pub mod rgba;
@@ -69,8 +69,8 @@ pub use formats::bgra::Bgra;
 pub use formats::gray::Gray_v08 as Gray;
 pub use formats::gray::Gray_v09;
 pub use formats::gray_a::GrayA;
-pub use formats::gray_alpha::GrayAlpha_v08 as GrayAlpha;
 pub use formats::gray_a44::GrayA44;
+pub use formats::gray_alpha::GrayAlpha_v08 as GrayAlpha;
 pub use formats::grb::Grb;
 pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
@@ -100,9 +100,9 @@ pub mod prelude {
 
 /// `TryFrom` errors
 pub mod error {
+    pub use crate::formats::gray_a44::OutOfRangeError;
     pub use crate::pixel_traits::het_pixel::TryFromColorsAlphaError;
     pub use crate::pixel_traits::pixel::TryFromComponentsError;
-    pub use crate::formats::gray_a44::OutOfRangeError;
 }
 
 /// [`Abgr<u8>`]

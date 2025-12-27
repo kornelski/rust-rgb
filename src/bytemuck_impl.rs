@@ -92,8 +92,5 @@ impl crate::ComponentBytes<u8> for [GrayA44] {
 
 #[test]
 fn test_component_bytes_capable() {
-    assert_eq!(
-        core::mem::size_of::<GrayA44>(),
-        core::mem::size_of::<u8>()
-    );
+    assert_eq!(core::mem::size_of::<GrayA44>(), core::mem::size_of::<u8>());
 }
