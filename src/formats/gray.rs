@@ -48,3 +48,30 @@ impl<T> core::ops::Deref for Gray_v08<T> {
         &self.0
     }
 }
+
+impl<T: Copy> Gray_v08<T> {
+    /// Reads the `.0` field
+    ///
+    /// This is a compatibility shim. Migrate to `Gray_v09` and use `.v` directly.
+    #[deprecated(since = "0.8.91", note = "Use Gray_v09 with .v field instead")]
+    pub fn value(self) -> T {
+        self.0
+    }
+
+    /// Exposes the `.0` field for writing
+    ///
+    /// This is a compatibility shim. Migrate to `Gray_v09` and use `.v` directly.
+    #[deprecated(since = "0.8.91", note = "Use Gray_v09 with .v field instead")]
+    pub fn value_mut(&mut self) -> &mut T {
+        &mut self.0
+    }
+
+    /// Add alpha component to this pixel
+    ///
+    /// This is a compatibility shim. Migrate to `Gray_v09` and use `GrayA` instead.
+    #[deprecated(since = "0.8.91", note = "Use Gray_v09::with_alpha() or GrayA instead")]
+    #[allow(deprecated)]
+    pub fn with_alpha(self, add_alpha_value: T) -> crate::formats::gray_alpha::GrayAlpha_v08<T> {
+        crate::formats::gray_alpha::GrayAlpha_v08(self.0, add_alpha_value)
+    }
+}

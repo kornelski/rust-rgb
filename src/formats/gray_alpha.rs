@@ -1,5 +1,5 @@
 use crate::formats::gray_a::GrayA;
-use core::ops::Deref;
+use core::ops::{Deref, DerefMut};
 
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -34,12 +34,30 @@ impl<T, A> Deref for GrayAlpha_v08<T, A> {
     }
 }
 
+impl<T, A> DerefMut for GrayAlpha_v08<T, A> {
+    /// Compatibility shim - allows mutable access to `.v` and `.a` on the old `GrayAlpha` type.
+    ///
+    /// **Deprecated:** Migrate to `GrayA` instead of `GrayAlpha_v08`.
+    fn deref_mut(&mut self) -> &mut GrayA<T, A> {
+        unsafe { &mut *(self as *mut Self).cast::<GrayA<T, A>>() }
+    }
+}
+
 impl<T: Copy, A> GrayAlpha_v08<T, A> {
     /// Value - the brightness component. May be luma or luminance.
     ///
-    /// Backwards-compatible getter for `self.v`
+    /// This is a compatibility shim. Migrate to `GrayA` and use `.v` directly.
+    #[deprecated(since = "0.8.91", note = "Use GrayA with .v field instead")]
     pub fn value(&self) -> T {
         self.0
+    }
+
+    /// Exposes the `.0` field for writing
+    ///
+    /// This is a compatibility shim. Migrate to `GrayA` and use `.v` directly.
+    #[deprecated(since = "0.8.91", note = "Use GrayA with .v field instead")]
+    pub fn value_mut(&mut self) -> &mut T {
+        &mut self.0
     }
 }
 
