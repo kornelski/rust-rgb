@@ -77,13 +77,13 @@ pub trait FromSlice<T: Copy> {
     #[deprecated(note = "use bytemuck::cast_slice()")]
     fn as_gray(&self) -> &[Gray_v08<T>];
     /// Reinterpert mutable slice as grayscale pixels with alpha
-    #[deprecated(note = "use bytemuck::cast_slice()")]
+    #[deprecated(note = "use bytemuck::cast_slice::<_, GrayAlpha<_>>()")]
     fn as_gray_alpha(&self) -> &[GrayAlpha<T>];
     /// Reinterpert mutable slice as grayscale pixels
-    #[deprecated(note = "use bytemuck::cast_slice()")]
+    #[deprecated(note = "use bytemuck::cast_slice_mut()")]
     fn as_gray_mut(&mut self) -> &mut [Gray_v08<T>];
     /// Reinterpert mutable slice as grayscale pixels with alpha
-    #[deprecated(note = "use bytemuck::cast_slice()")]
+    #[deprecated(note = "use bytemuck::cast_slice_mut::<_, GrayAlpha<_>>()")]
     fn as_gray_alpha_mut(&mut self) -> &mut [GrayAlpha<T>];
 
     /// Reinterpert slice as reverse-order BGR pixels

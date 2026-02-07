@@ -30,26 +30,24 @@ impl<T, A> Deref for GrayAlpha_v08<T, A> {
 
     /// A trick that allows using `.v` and `.a` on the old `GrayAlpha` type.
     fn deref(&self) -> &GrayA<T, A> {
-        unsafe { &*(self as *const Self).cast::<GrayA<T, A>>() }
+        unsafe { &*core::ptr::from_ref(self).cast::<GrayA<T, A>>() }
     }
 }
 
 impl<T, A> DerefMut for GrayAlpha_v08<T, A> {
-    /// Compatibility shim - allows mutable access to `.v` and `.a` on the old `GrayAlpha` type.
-    ///
-    /// **Deprecated:** Migrate to `GrayA` instead of `GrayAlpha_v08`.
+    /// A trick that allows using `.v` and `.a` on the old `GrayAlpha` type.
     fn deref_mut(&mut self) -> &mut GrayA<T, A> {
-        unsafe { &mut *(self as *mut Self).cast::<GrayA<T, A>>() }
+        unsafe { &mut *core::ptr::from_mut(self).cast::<GrayA<T, A>>() }
     }
 }
 
-impl<T: Copy, A> GrayAlpha_v08<T, A> {
+impl<T: Clone, A> GrayAlpha_v08<T, A> {
     /// Value - the brightness component. May be luma or luminance.
     ///
     /// This is a compatibility shim. Migrate to `GrayA` and use `.v` directly.
     #[deprecated(since = "0.8.91", note = "Use GrayA with .v field instead")]
     pub fn value(&self) -> T {
-        self.0
+        self.0.clone()
     }
 
     /// Exposes the `.0` field for writing
