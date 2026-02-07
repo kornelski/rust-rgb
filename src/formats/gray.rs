@@ -49,6 +49,12 @@ impl<T: Copy> Gray_v09<T> {
     pub fn value(&self) -> T {
         self.v
     }
+
+    /// Backwards-compatible getter for `self.v`. Do not use unless necessary.
+    #[doc(hidden)]
+    pub fn value_mut(&mut self) -> &mut T {
+        &mut self.v
+    }
 }
 
 impl<T: Copy> Gray_v08<T> {
@@ -58,6 +64,13 @@ impl<T: Copy> Gray_v08<T> {
     #[doc(alias = "v")]
     pub fn value(&self) -> T {
         self.0
+    }
+
+    /// Value - the brightness component. May be luma or luminance.
+    ///
+    /// Backwards-compatible getter for the missing `self.v`.
+    pub fn value_mut(&mut self) -> &mut T {
+        &mut self.0
     }
 }
 
