@@ -1,5 +1,6 @@
 use crate::formats::gray_a::GrayA;
 use core::ops::Deref;
+use core::ops::DerefMut;
 
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -30,16 +31,23 @@ impl<T, A> Deref for GrayAlpha_v08<T, A> {
 
     /// A trick that allows using `.v` and `.a` on the old `GrayAlpha` type.
     fn deref(&self) -> &GrayA<T, A> {
-        unsafe { &*(self as *const Self).cast::<GrayA<T, A>>() }
+        unsafe { &*core::ptr::from_ref(self).cast::<GrayA<T, A>>() }
     }
 }
 
-impl<T: Copy, A> GrayAlpha_v08<T, A> {
+impl<T, A> DerefMut for GrayAlpha_v08<T, A> {
+    /// A trick that allows using `.v` and `.a` on the old `GrayAlpha` type.
+    fn deref_mut(&mut self) -> &mut GrayA<T, A> {
+        unsafe { &mut *core::ptr::from_mut(self).cast::<GrayA<T, A>>() }
+    }
+}
+
+impl<T: Clone, A> GrayAlpha_v08<T, A> {
     /// Value - the brightness component. May be luma or luminance.
     ///
     /// Backwards-compatible getter for `self.v`
     pub fn value(&self) -> T {
-        self.0
+        self.0.clone()
     }
 }
 

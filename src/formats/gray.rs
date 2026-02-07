@@ -41,9 +41,32 @@ pub struct Gray_v09<T> {
     pub v: T,
 }
 
+impl<T: Copy> Gray_v09<T> {
+    /// Value - the brightness component. May be luma or luminance.
+    ///
+    /// Backwards-compatible getter for `self.v`. Do not use unless necessary.
+    #[doc(hidden)]
+    pub fn value(&self) -> T {
+        self.v
+    }
+}
+
+impl<T: Copy> Gray_v08<T> {
+    /// Value - the brightness component. May be luma or luminance.
+    ///
+    /// Backwards-compatible getter for the missing `self.v`.
+    #[doc(alias = "v")]
+    pub fn value(&self) -> T {
+        self.0
+    }
+}
+
+// Rust can't deprecate trait impls
+/// DO NOT USE IT. Not compatible with 0.9
 impl<T> core::ops::Deref for Gray_v08<T> {
     type Target = T;
 
+    /// DO NOT USE IT. Not compatible with 0.9
     fn deref(&self) -> &T {
         &self.0
     }
