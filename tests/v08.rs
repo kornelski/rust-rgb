@@ -400,13 +400,13 @@ mod rgb_test {
     #[test]
     #[allow(deprecated)]
     fn test_fmt() {
-        let red_rgb = RGB::new(255, 0, 0);
-        let red_bgr = BGR::new(255, 0, 0);
-        assert_eq!("RGB { #FF0000 }", &format!("{red_rgb:X}"));
-        assert_eq!("BGR { #0000FF }", &format!("{red_bgr:X}"));
+        let red_rgb = RGB::new(255u8, 0, 0);
+        let red_bgr = BGR::new(255u8, 0, 0);
+        assert_eq!("#FF0000", &format!("{red_rgb:X}"));
+        assert_eq!("#FF0000", &format!("{red_bgr:X}"));
 
-        assert_eq!("RGB { #ff0000 }", &format!("{red_rgb:x}"));
-        assert_eq!("BGR { #0000ff }", &format!("{red_bgr:x}"));
+        assert_eq!("#ff0000", &format!("{red_rgb:x}"));
+        assert_eq!("#ff0000", &format!("{red_bgr:x}"));
 
         assert_eq!("rgb(255,0,0)", &format!("{red_rgb}"));
         assert_eq!("bgr(0,0,255)", &format!("{red_bgr}"));
