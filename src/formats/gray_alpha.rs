@@ -1,6 +1,5 @@
 use crate::formats::gray_a::GrayA;
-use core::ops::Deref;
-use core::ops::DerefMut;
+use core::ops::{Deref, DerefMut};
 
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -45,9 +44,18 @@ impl<T, A> DerefMut for GrayAlpha_v08<T, A> {
 impl<T: Clone, A> GrayAlpha_v08<T, A> {
     /// Value - the brightness component. May be luma or luminance.
     ///
-    /// Backwards-compatible getter for `self.v`
+    /// This is a compatibility shim. Migrate to `GrayA` and use `.v` directly.
+    #[deprecated(since = "0.8.91", note = "Use GrayA with .v field instead")]
     pub fn value(&self) -> T {
         self.0.clone()
+    }
+
+    /// Exposes the `.0` field for writing
+    ///
+    /// This is a compatibility shim. Migrate to `GrayA` and use `.v` directly.
+    #[deprecated(since = "0.8.91", note = "Use GrayA with .v field instead")]
+    pub fn value_mut(&mut self) -> &mut T {
+        &mut self.0
     }
 }
 
