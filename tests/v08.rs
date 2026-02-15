@@ -411,6 +411,21 @@ mod rgb_test {
         assert_eq!("rgb(255,0,0)", &format!("{red_rgb}"));
         assert_eq!("bgr(0,0,255)", &format!("{red_bgr}"));
     }
+
+    #[test]
+    #[allow(deprecated)]
+    fn test_fmt16() {
+        let red_rgb = RGB::new(0x1a2bi16, 1, 0xf);
+        let red_bgr = BGR::new(0x1a2bi16, 1, 0xf);
+        assert_eq!("#1A2B0001000F", &format!("{red_rgb:X}"));
+        assert_eq!("#1A2B0001000F", &format!("{red_bgr:X}"));
+
+        assert_eq!("#1a2b0001000f", &format!("{red_rgb:x}"));
+        assert_eq!("#1a2b0001000f", &format!("{red_bgr:x}"));
+
+        assert_eq!("rgb(6699,1,15)", &format!("{red_rgb}"));
+        assert_eq!("bgr(15,1,6699)", &format!("{red_bgr}"));
+    }
 }
 
 #[test]
