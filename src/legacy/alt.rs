@@ -241,8 +241,8 @@ fn gray() {
     assert_eq!(g2.with_alpha(13), GrayAlpha(3, 13));
     assert_eq!(g2.map_alpha(|x| x + 3), GrayAlpha(3, 5));
 
-    assert_eq!((&[Gray(1_u16), Gray(2)][..]).as_slice(), &[1, 2]);
-    assert_eq!((&[GrayAlpha(1_u16, 2), GrayAlpha(3, 4)][..]).as_slice(), &[1, 2, 3, 4]);
+    assert_eq!((<_>::as_slice(&[Gray(1_u16), Gray(2)][..])), &[1, 2]);
+    assert_eq!((<_>::as_slice(&[GrayAlpha(1_u16, 2), GrayAlpha(3, 4)][..])), &[1, 2, 3, 4]);
 
     let rgba: crate::RGBA<_> = ga.into();
     assert_eq!(rgba.r, 1);
