@@ -1,4 +1,6 @@
-use super::pixel::{ComponentSlice, ComponentMap};
+#[allow(deprecated)]
+use super::pixel::ComponentSlice;
+use super::pixel::ComponentMap;
 use crate::alt::{BGR, BGRA, GRB, Gray, GrayAlpha, ARGB, ABGR};
 use crate::{RGB, RGBA};
 use core::{mem, slice};
@@ -332,7 +334,8 @@ impl<T> AsRef<T> for Gray<T> {
 impl<T> AsRef<[T]> for RGB<T> {
     #[inline(always)]
     fn as_ref(&self) -> &[T] {
-        self.as_slice()
+        #[allow(deprecated)]
+        ComponentSlice::as_slice(self)
     }
 }
 
@@ -347,7 +350,8 @@ impl<T> AsRef<[T; 3]> for RGB<T> {
 impl<T> AsRef<[T]> for RGBA<T> {
     #[inline(always)]
     fn as_ref(&self) -> &[T] {
-        self.as_slice()
+        #[allow(deprecated)]
+        ComponentSlice::as_slice(self)
     }
 }
 
@@ -405,7 +409,8 @@ impl<T> AsMut<T> for Gray<T> {
 impl<T> AsMut<[T]> for RGB<T> {
     #[inline(always)]
     fn as_mut(&mut self) -> &mut [T] {
-        self.as_mut_slice()
+        #[allow(deprecated)]
+        ComponentSlice::as_mut_slice(self)
     }
 }
 
@@ -420,7 +425,8 @@ impl<T> AsMut<[T; 3]> for RGB<T> {
 impl<T> AsMut<[T]> for RGBA<T> {
     #[inline(always)]
     fn as_mut(&mut self) -> &mut [T] {
-        self.as_mut_slice()
+        #[allow(deprecated)]
+        ComponentSlice::as_mut_slice(self)
     }
 }
 

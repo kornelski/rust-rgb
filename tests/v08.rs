@@ -4,11 +4,14 @@ use rgb::Bgra;
 use rgb::Bgr;
 #[cfg(feature = "as-bytes")]
 use rgb::ComponentBytes;
+#[allow(deprecated)]
+use rgb::ComponentSlice;
 use rgb::alt::{ABGR, ARGB, BGR, BGRA};
-use rgb::{AsPixels, ComponentSlice, FromSlice, RGB, RGB16, RGB8, RGBA, RGBA16, RGBA8, Rgb, Rgba};
+use rgb::{AsPixels, FromSlice, RGB, RGB16, RGB8, RGBA, RGBA16, RGBA8, Rgb, Rgba};
 use rgb::prelude::*;
 
 #[test]
+#[allow(deprecated)]
 fn rgb_works() {
     let rgb = RGB{r:0u8,g:128,b:255}.clone();
     assert_eq!(rgb.b, 255);
@@ -25,7 +28,7 @@ fn rgb_works() {
 
     let rgb = RGB16{r:0u16,g:0x7F7F,b:65535};
     assert_eq!(rgb.b, 65535);
-    assert_eq!(rgb.as_slice()[1], 0x7F7F);
+    assert_eq!(ComponentSlice::as_slice(&rgb)[1], 0x7F7F);
 
     #[cfg(feature = "as-bytes")]
     {
@@ -69,6 +72,7 @@ fn rgba_works() {
 }
 
 #[test]
+#[allow(deprecated)]
 fn bytes() {
     let rgb = RGB8::new(1,2,3);
 
@@ -102,7 +106,8 @@ fn bytes() {
     }
 
     let rgb = RGB16::new(1,2,3);
-    let rgb_slice = rgb.as_slice();
+    #[allow(deprecated)]
+    let rgb_slice = ComponentSlice::as_slice(&rgb);
     assert_eq!(&[1,2,3], rgb_slice);
     assert_eq!(rgb_slice.as_rgba(), &[]);
     assert_eq!(&[rgb], rgb_slice.as_rgb());
@@ -110,7 +115,7 @@ fn bytes() {
     assert_eq!(rgb, rgb_slice.iter().copied().collect());
 
     let rgba = RGBA16::new(1,2,3,4);
-    let rgba_slice = rgba.as_slice();
+    let rgba_slice = ComponentSlice::as_slice(&rgba);
     assert_eq!(&[1,2,3,4], rgba_slice);
     assert_eq!(&[1,2,3], rgba_slice.as_rgb()[0].as_slice());
     assert_eq!(&[rgba], rgba_slice.as_rgba());
@@ -368,6 +373,7 @@ mod rgb_test {
     }
 
     #[test]
+    #[allow(deprecated)]
     fn sanity_check() {
         let neg = RGB::new(1,2,3i32).map(|x| -x);
         assert_eq!(neg.r, -1);
@@ -375,7 +381,7 @@ mod rgb_test {
         assert_eq!(neg.b, -3);
 
         let mut px = RGB::new(3,4,5);
-        px.as_mut_slice()[1] = 111;
+        ComponentSlice::as_mut_slice(&mut px)[1] = 111;
         assert_eq!(111, px.g);
 
         assert_eq!(RGBA::new(250,251,252,253), RGB::new(250,251,252).with_alpha(253));
@@ -415,6 +421,7 @@ mod rgb_test {
 }
 
 #[test]
+#[allow(deprecated)]
 fn rgba_test() {
     let neg = RGBA::new(1,2,3i32,1000).map(|x| -x);
     assert_eq!(neg.r, -1);
@@ -425,7 +432,7 @@ fn rgba_test() {
     assert_eq!(neg.rgb().b, -3);
     assert_eq!(neg.a, -1000);
     assert_eq!(neg.map_alpha(|x| x+1).a, -999);
-    assert_eq!(neg, neg.as_slice().iter().copied().collect());
+    assert_eq!(neg, ComponentSlice::as_slice(&neg).iter().copied().collect());
     assert!(neg < RGBA::new(0,0,0,0));
 
     #[allow(deprecated)]
@@ -437,7 +444,7 @@ fn rgba_test() {
     assert_eq!(4u8, neg.a);
 
     let mut px = RGBA{r:1,g:2,b:3,a:4};
-    px.as_mut_slice()[3] = 100;
+    ComponentSlice::as_mut_slice(&mut px)[3] = 100;
     assert_eq!(1, px.rgb_mut().r);
     assert_eq!(2, px.rgb_mut().g);
     px.rgb_mut().b = 4;
@@ -453,6 +460,7 @@ fn rgba_test() {
 
 #[test]
 #[cfg(feature = "as-bytes")]
+#[allow(deprecated)]
 fn abgr_test() {
     let abgr = ABGR {r:1,g:2,b:3,a:4};
     assert_eq!(4, abgr.as_slice()[0]);
@@ -464,7 +472,7 @@ fn abgr_test() {
 #[allow(deprecated)]
 fn bgra_test() {
     let neg = BGRA::new(1, 2, 3i32, 1000).map(|x| -x);
-    let _ = neg.as_slice();
+    let _ = ComponentSlice::as_slice(&neg);
 
     #[cfg(feature = "as-bytes")]
     {
@@ -477,7 +485,7 @@ fn bgra_test() {
     assert_eq!(neg.b, -3);
     assert_eq!(neg.bgr().b, -3);
     assert_eq!(neg.a, -1000);
-    assert_eq!(&[-3,-2,-1,-1000], neg.as_slice());
+    assert_eq!(&[-3,-2,-1,-1000], ComponentSlice::as_slice(&neg));
     assert!(neg < BGRA::new(0, 0, 0, 0));
 
     let neg = BGRA::new(1u8, 2u8, 3u8, 4u8).map_rgb(|c| -i16::from(c));
@@ -489,7 +497,7 @@ fn bgra_test() {
     assert_eq!(4u8, neg.a);
 
     let mut px = BGRA{r:1,g:2,b:3,a:-9}.alpha(4);
-    px.as_mut_slice()[3] = 100;
+    ComponentSlice::as_mut_slice(&mut px)[3] = 100;
     assert_eq!(1, px.bgr_mut().r);
     assert_eq!(2, px.bgr_mut().g);
     px.bgr_mut().b = 4;
@@ -537,6 +545,7 @@ fn argb_converts() {
 }
 
 #[test]
+#[allow(deprecated)]
 fn converts() {
     assert_eq!([1,2].as_gray(), [Gray::new(1), Gray::new(2)]);
     assert_eq!([3].as_gray_mut(), [Gray::new(3)]);

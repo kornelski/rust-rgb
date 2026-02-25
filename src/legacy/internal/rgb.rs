@@ -1,6 +1,8 @@
-use super::pixel::{ComponentSlice, ComponentMap, ColorComponentMap};
+#[allow(deprecated)]
+use super::pixel::ComponentSlice;
+use super::pixel::{ComponentMap, ColorComponentMap};
 #[cfg(feature = "as-bytes")]
-use super::pixel::{ComponentBytes};
+use super::pixel::ComponentBytes;
 use crate::alt::GRB;
 use crate::alt::{BGR, BGRA};
 use crate::{RGB, RGBA};
@@ -21,7 +23,8 @@ macro_rules! impl_rgb {
             /// Iterate over color components (R, G, and B)
             #[inline(always)]
             pub fn iter(&self) -> core::iter::Cloned<core::slice::Iter<'_, T>> {
-                self.as_slice().iter().cloned()
+                #[allow(deprecated)]
+                ComponentSlice::as_slice(self).iter().cloned()
             }
         }
 
@@ -49,6 +52,7 @@ macro_rules! impl_rgb {
             }
         }
 
+        #[allow(deprecated)]
         impl<T> ComponentSlice<T> for $RGB<T> {
             #[inline(always)]
             fn as_slice(&self) -> &[T] {
@@ -65,6 +69,7 @@ macro_rules! impl_rgb {
             }
         }
 
+        #[allow(deprecated)]
         impl<T> ComponentSlice<T> for [$RGB<T>] {
             #[inline]
             fn as_slice(&self) -> &[T] {

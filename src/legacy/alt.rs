@@ -1,4 +1,6 @@
-use crate::legacy::internal::pixel::{ComponentMap, ColorComponentMap, ComponentSlice};
+use crate::legacy::internal::pixel::{ComponentMap, ColorComponentMap};
+#[allow(deprecated)]
+use crate::legacy::internal::pixel::ComponentSlice;
 use core::slice;
 
 pub use crate::formats::gray::Gray_v08 as Gray;
@@ -170,6 +172,7 @@ impl<T: Copy, A: Copy, B> ColorComponentMap<GrayAlpha<B, A>, T, B> for GrayAlpha
     }
 }
 
+#[allow(deprecated)]
 impl<T> ComponentSlice<T> for GrayAlpha<T> {
     #[inline(always)]
     fn as_slice(&self) -> &[T] {
@@ -186,6 +189,7 @@ impl<T> ComponentSlice<T> for GrayAlpha<T> {
     }
 }
 
+#[allow(deprecated)]
 impl<T> ComponentSlice<T> for [GrayAlpha<T>] {
     #[inline]
     fn as_slice(&self) -> &[T] {
@@ -202,6 +206,7 @@ impl<T> ComponentSlice<T> for [GrayAlpha<T>] {
     }
 }
 
+#[allow(deprecated)]
 impl<T> ComponentSlice<T> for Gray<T> {
     #[inline(always)]
     #[allow(deprecated)]
@@ -216,6 +221,7 @@ impl<T> ComponentSlice<T> for Gray<T> {
     }
 }
 
+#[allow(deprecated)]
 impl<T> ComponentSlice<T> for [Gray<T>] {
     #[inline]
     fn as_slice(&self) -> &[T] {
