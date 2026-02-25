@@ -1,8 +1,8 @@
 #[allow(deprecated)]
 use super::pixel::ComponentSlice;
 use super::pixel::ComponentMap;
-use crate::alt::{BGR, BGRA, GRB, Gray, GrayAlpha, ARGB, ABGR};
-use crate::{RGB, RGBA};
+use crate::alt::{BGR, BGRA, GRB, ARGB, ABGR};
+use crate::{RGB, RGBA, Gray, GrayAlpha};
 use core::{mem, slice};
 
 mod array;
@@ -288,9 +288,9 @@ impl<T: Clone> From<Gray<T>> for RGB<T> {
     #[allow(deprecated)]
     fn from(other: Gray<T>) -> Self {
         Self {
-            r: other.0.clone(),
-            g: other.0.clone(),
-            b: other.0,
+            r: other.clone().value(),
+            g: other.clone().value(),
+            b: other.value(),
         }
     }
 }
@@ -300,23 +300,23 @@ impl<T: Clone> From<Gray<T>> for RGBA<T, u8> {
     #[allow(deprecated)]
     fn from(other: Gray<T>) -> Self {
         Self {
-            r: other.0.clone(),
-            g: other.0.clone(),
-            b: other.0,
+            r: other.clone().value(),
+            g: other.clone().value(),
+            b: other.value(),
             a: 255,
         }
     }
 }
 
-impl<T: Clone, A> From<GrayAlpha<T, A>> for RGBA<T, A> {
+impl<T: Clone, A: Clone> From<GrayAlpha<T, A>> for RGBA<T, A> {
     #[inline(always)]
     #[allow(deprecated)]
     fn from(other: GrayAlpha<T, A>) -> Self {
         Self {
-            r: other.0.clone(),
-            g: other.0.clone(),
-            b: other.0,
-            a: other.1,
+            r: other.v.clone(),
+            g: other.v.clone(),
+            b: other.v.clone(),
+            a: other.a.clone(),
         }
     }
 }

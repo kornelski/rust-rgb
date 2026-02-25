@@ -72,8 +72,13 @@ pub use formats::bgr::Bgr;
 pub use formats::bgra::Bgra;
 #[cfg(not(feature = "unstable-experimental"))]
 pub use formats::gray_alpha::GrayAlpha_v08 as GrayAlpha;
+#[cfg(feature = "unstable-experimental")]
+#[deprecated(note = "Renamed to GrayA")]
+pub use formats::gray_a::GrayA as GrayAlpha;
 #[cfg(not(feature = "unstable-experimental"))]
 pub use formats::gray::Gray_v08 as Gray;
+#[cfg(feature = "unstable-experimental")]
+pub use formats::gray::Gray_v09 as Gray;
 pub use formats::grb::Grb;
 pub use formats::rgb::Rgb;
 pub use formats::rgba::Rgba;
@@ -121,9 +126,6 @@ pub use formats::rgba::Rgba as RGBA;
 #[doc(hidden)]
 /// Incompatible replacement for the `GrayAlpha` type
 pub use formats::gray_a::GrayA;
-
-#[cfg(feature = "unstable-experimental")]
-pub use formats::gray::Gray_v09 as Gray;
 
 /// 8-bit RGB
 ///

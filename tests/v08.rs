@@ -154,8 +154,9 @@ fn shared_impl() {
 
 #[test]
 #[allow(deprecated)]
-fn gray() {
-    use rgb::alt::*;
+#[cfg(not(feature = "unstable-experimental"))]
+fn gray_into() {
+   use rgb::alt::*;
 
     let rgb: rgb::RGB<_> = Gray(1).into();
     assert_eq!(rgb.r, 1);
@@ -167,6 +168,12 @@ fn gray() {
     assert_eq!(rgba.g, 1);
     assert_eq!(rgba.b, 1);
     assert_eq!(rgba.a, 255);
+}
+
+#[test]
+#[allow(deprecated)]
+fn gray() {
+    use rgb::alt::*;
 
     let g: GRAY8 = 200.into();
     let g = g.map(|c| c / 2);
@@ -190,18 +197,22 @@ fn gray() {
     assert_eq!(<_>::as_slice(&[Gray(1u16), Gray(2)][..]), &[1, 2]);
     assert_eq!(<_>::as_slice(&[GrayAlpha(1u16, 2), GrayAlpha(3, 4)][..]), &[1, 2, 3, 4]);
 
-    let rgba: rgb::RGBA<_> = ga.into();
-    assert_eq!(rgba.r, 1);
-    assert_eq!(rgba.g, 1);
-    assert_eq!(rgba.b, 1);
-    assert_eq!(rgba.a, 2);
+    #[cfg(not(feature = "unstable-experimental"))]
+    {
 
-    let ga: GRAYA16 = GrayAlpha(1, 2);
-    let rgba: rgb::RGBA<u16, u16> = ga.into();
-    assert_eq!(rgba.r, 1);
-    assert_eq!(rgba.g, 1);
-    assert_eq!(rgba.b, 1);
-    assert_eq!(rgba.a, 2);
+        let rgba: rgb::RGBA<_> = ga.into();
+        assert_eq!(rgba.r, 1);
+        assert_eq!(rgba.g, 1);
+        assert_eq!(rgba.b, 1);
+        assert_eq!(rgba.a, 2);
+
+        let ga: GRAYA16 = GrayAlpha(1, 2);
+        let rgba: rgb::RGBA<u16, u16> = ga.into();
+        assert_eq!(rgba.r, 1);
+        assert_eq!(rgba.g, 1);
+        assert_eq!(rgba.b, 1);
+        assert_eq!(rgba.a, 2);
+    }
 }
 
 mod ops {
