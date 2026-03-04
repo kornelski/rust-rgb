@@ -4,9 +4,13 @@
 //!
 //! Exercises every public type, trait, method, conversion, and operator.
 //! Goal: 100% of the v0.8 public API surface is tested here.
+//!
+//! Tests are gated on `unstable-experimental` where the Gray/GrayAlpha types
+//! change from tuple structs to named-field structs.
 
 use rgb::alt::{ABGR, ARGB, BGR, BGRA, GRB};
 use rgb::alt::{BGR8, BGR16, BGRA8, BGRA16, ABGR8, ABGR16, ARGB8, ARGB16, GRB8};
+#[cfg(not(feature = "unstable-experimental"))]
 use rgb::alt::{GRAY8, GRAY16, GRAYA8, GRAYA16};
 use rgb::{Gray, GrayAlpha, GrayA};
 use rgb::{Rgb, Rgba, Bgr, Bgra, Argb, Abgr, Grb};
@@ -44,6 +48,7 @@ mod type_aliases {
         let _: ARGB16 = ARGB { a: 0u16, r: 0, g: 0, b: 0 };
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_aliases() {
         let _: GRAY8 = Gray::new(0u8);
@@ -138,21 +143,42 @@ mod construction {
         assert_eq!(a.r, 4);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
-    fn gray_new() {
+    fn gray_new_tuple() {
         let a = Gray(100u8);
         let b = Gray::new(100u8);
         assert_eq!(a, b);
         assert_eq!(a.0, 100);
     }
 
+    #[cfg(feature = "unstable-experimental")]
     #[test]
-    fn gray_alpha_new() {
+    fn gray_new_named() {
+        let a = Gray { v: 100u8 };
+        let b = Gray::new(100u8);
+        assert_eq!(a, b);
+        assert_eq!(a.v, 100);
+    }
+
+    #[cfg(not(feature = "unstable-experimental"))]
+    #[test]
+    fn gray_alpha_new_tuple() {
         let a = GrayAlpha(100u8, 200);
         let b = GrayAlpha::new(100u8, 200);
         assert_eq!(a, b);
         assert_eq!(a.0, 100);
         assert_eq!(a.1, 200);
+    }
+
+    #[cfg(feature = "unstable-experimental")]
+    #[test]
+    fn gray_alpha_new_named() {
+        let a = GrayAlpha { v: 100u8, a: 200 };
+        let b = GrayAlpha::new(100u8, 200);
+        assert_eq!(a, b);
+        assert_eq!(a.v, 100);
+        assert_eq!(a.a, 200);
     }
 
     #[test]
@@ -183,12 +209,14 @@ mod inherent_methods {
         assert_eq!(g.value(), 20);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_deref() {
         let g = Gray::new(42u8);
         assert_eq!(*g, 42);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_with_alpha() {
         let g = Gray::new(42u8);
@@ -196,16 +224,19 @@ mod inherent_methods {
     }
 
     // GrayAlpha
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_value() {
         assert_eq!(GrayAlpha::new(10u8, 20).value(), 10);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_gray() {
         assert_eq!(GrayAlpha::new(10u8, 20).gray(), Gray::new(10));
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_gray_mut() {
         let mut ga = GrayAlpha::new(10u8, 20);
@@ -213,21 +244,25 @@ mod inherent_methods {
         assert_eq!(ga.0, 50);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_with_alpha() {
         assert_eq!(GrayAlpha::new(10u8, 20).with_alpha(99), GrayAlpha(10, 99));
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_map_alpha() {
         assert_eq!(GrayAlpha::new(10u8, 20).map_alpha(|a| a as u16 * 2), GrayAlpha(10u8, 40u16));
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_map_gray() {
         assert_eq!(GrayAlpha::new(10u8, 20).map_gray(|g| g as u16 * 2), GrayAlpha(20u16, 20u8));
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_deref_to_graya() {
         let ga = GrayAlpha::new(10u8, 20);
@@ -235,6 +270,7 @@ mod inherent_methods {
         assert_eq!(ga.a, 20);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_deref_mut() {
         let mut ga = GrayAlpha::new(10u8, 20);
@@ -447,11 +483,14 @@ mod component_map {
         assert_eq!(p.map(|c| c + 10), ABGR { a: 11, b: 12, g: 13, r: 14 });
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_map() {
-        assert_eq!(Gray::new(10u8).map(|c| c as u16 * 2), Gray(20u16));
+        let mapped = Gray::new(10u8).map(|c| c as u16 * 2);
+        assert_eq!(mapped.value(), 20u16);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_map() {
         assert_eq!(GrayAlpha::new(10u8, 20).map(|c| c + 1), GrayAlpha(11, 21));
@@ -503,11 +542,14 @@ mod color_component_map {
         assert_eq!(mapped.a, 100u8);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_map_colors() {
-        assert_eq!(Gray::new(42u8).map_colors(|c| c as u16), Gray(42u16));
+        let mapped = Gray::new(42u8).map_colors(|c| c as u16);
+        assert_eq!(mapped.value(), 42u16);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_map_colors_skips_alpha() {
         let ga = GrayAlpha::new(10u8, 20);
@@ -584,11 +626,13 @@ mod component_slice {
         assert_eq!((GRB { g: 1u8, r: 2, b: 3 }).as_slice(), &[1, 2, 3]);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_as_slice() {
         assert_eq!(Gray::new(42u8).as_slice(), &[42]);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_as_slice() {
         assert_eq!(GrayAlpha::new(10u8, 20).as_slice(), &[10, 20]);
@@ -606,12 +650,14 @@ mod component_slice {
         assert_eq!(<[RGBA<u8>]>::as_slice(&pixels[..]), &[1, 2, 3, 4]);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_slice_as_slice() {
         let pixels = [Gray::new(1u16), Gray::new(2)];
         assert_eq!(<[Gray<u16>]>::as_slice(&pixels[..]), &[1, 2]);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_slice_as_slice() {
         let pixels = [GrayAlpha::new(1u16, 2), GrayAlpha::new(3, 4)];
@@ -662,11 +708,13 @@ mod component_bytes {
         assert_eq!([GRB { g: 1u8, r: 2, b: 3 }].as_bytes(), &[1, 2, 3]);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_as_bytes() {
         assert_eq!([Gray::new(42u8), Gray::new(43)].as_bytes(), &[42, 43]);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_as_bytes() {
         assert_eq!([GrayAlpha::new(10u8, 20)].as_bytes(), &[10, 20]);
@@ -728,6 +776,7 @@ mod from_slice {
         assert_eq!([10u8, 20].as_gray(), &[Gray::new(10), Gray::new(20)]);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn as_gray_alpha() {
         assert_eq!([10u8, 20, 30, 40].as_gray_alpha(), &[GrayAlpha::new(10, 20), GrayAlpha::new(30, 40)]);
@@ -782,6 +831,7 @@ mod from_slice {
         assert_eq!(data[0], 50);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn as_gray_alpha_mut() {
         let mut data = [10u8, 20];
@@ -793,6 +843,11 @@ mod from_slice {
     fn excess_bytes_ignored() {
         assert_eq!([1u8, 2, 3, 4, 5].as_rgb().len(), 1);
         assert_eq!([1u8, 2, 3, 4, 5].as_rgba().len(), 1);
+    }
+
+    #[cfg(not(feature = "unstable-experimental"))]
+    #[test]
+    fn excess_bytes_gray_alpha() {
         assert_eq!([1u8, 2, 3].as_gray_alpha().len(), 1);
     }
 }
@@ -832,6 +887,7 @@ mod as_pixels {
         assert_eq!(pixels, &[Gray::new(10), Gray::new(20)]);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn as_pixels_gray_alpha() {
         let data = [10u8, 20, 30, 40];
@@ -1047,6 +1103,7 @@ mod conversions {
     }
 
     // Gray conversions
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn t_into_gray() {
         let g: Gray<u8> = 42u8.into();
@@ -1059,24 +1116,28 @@ mod conversions {
         assert_eq!(rgb, RGB::new(100, 100, 100));
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_into_rgba() {
         let rgba: RGBA<u8> = Gray::new(100u8).into();
         assert_eq!(rgba, RGBA::new(100, 100, 100, 255));
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_into_gray_alpha_u8() {
         let ga: GrayAlpha<u8, u8> = Gray::new(100u8).into();
         assert_eq!(ga, GrayAlpha::new(100, 255));
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_into_gray_alpha_u16() {
         let ga: GrayAlpha<u8, u16> = Gray::new(100u8).into();
         assert_eq!(ga, GrayAlpha(100u8, 65535u16));
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_into_rgba() {
         let rgba: RGBA<u8> = GrayAlpha::new(100u8, 200).into();
@@ -1167,6 +1228,7 @@ mod conversions {
         assert_eq!(abgr, ABGR { a: 1, b: 2, g: 3, r: 4 });
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn tuple_gray_alpha_bidirectional() {
         let ga: GrayAlpha<u8> = (10u8, 20).into();
@@ -1175,6 +1237,7 @@ mod conversions {
         assert_eq!(tup, (10, 20));
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn tuple_gray_to_tuple() {
         let g = Gray::new(42u8);
@@ -1220,6 +1283,7 @@ mod as_ref_impls {
         assert_eq!(p.a, 99);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_as_ref() {
         let g = Gray::new(42u8);
@@ -1227,14 +1291,16 @@ mod as_ref_impls {
         assert_eq!(*v, 42);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_as_mut() {
         let mut g = Gray::new(42u8);
         let v: &mut u8 = g.as_mut();
         *v = 99;
-        assert_eq!(g.0, 99);
+        assert_eq!(g.value(), 99);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_as_ref() {
         let ga = GrayAlpha::new(10u8, 20);
@@ -1242,6 +1308,7 @@ mod as_ref_impls {
         assert_eq!(*v, 10);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_as_mut() {
         let mut ga = GrayAlpha::new(10u8, 20);
@@ -1292,9 +1359,13 @@ mod operators {
     #[test]
     fn grb_add() { assert_eq!(GRB { g: 1u8, r: 2, b: 3 } + GRB { g: 4, r: 5, b: 6 }, GRB { g: 5, r: 7, b: 9 }); }
     #[test]
+    #[cfg(not(feature = "unstable-experimental"))]
+    #[test]
     fn gray_add() { assert_eq!(Gray::new(10u8) + Gray::new(20), Gray::new(30)); }
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_add_scalar() { assert_eq!(Gray::new(10u8) + 5, Gray::new(15)); }
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_add() { assert_eq!(GrayAlpha::new(10u8, 20) + GrayAlpha::new(5, 10), GrayAlpha::new(15, 30)); }
     #[test]
@@ -1384,11 +1455,13 @@ mod operators {
         let s: GRB<u8> = [GRB { g: 1u8, r: 1, b: 1 }, GRB { g: 2, r: 3, b: 4 }].iter().copied().sum();
         assert_eq!(s, GRB { g: 3, r: 4, b: 5 });
     }
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_sum() {
         let s: Gray<u8> = [Gray::new(10u8), Gray::new(20)].iter().copied().sum();
         assert_eq!(s, Gray::new(30));
     }
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_sum() {
         let s: GrayAlpha<u8> = [GrayAlpha::new(10u8, 20), GrayAlpha::new(5, 10)].iter().copied().sum();
@@ -1572,6 +1645,7 @@ mod bytemuck_tests {
         assert_eq!(back, &pixels);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_pod() {
         let bytes = [42u8];
@@ -1579,6 +1653,7 @@ mod bytemuck_tests {
         assert_eq!(g.0, 42);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_pod() {
         let bytes = [10u8, 20];
@@ -1636,6 +1711,7 @@ mod serde_tests {
         assert_eq!(p, p2);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_round_trip() {
         let p = Gray::new(42u8);
@@ -1644,6 +1720,7 @@ mod serde_tests {
         assert_eq!(p, p2);
     }
 
+    #[cfg(not(feature = "unstable-experimental"))]
     #[test]
     fn gray_alpha_round_trip() {
         let p = GrayAlpha::new(10u8, 20);
