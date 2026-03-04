@@ -96,6 +96,9 @@ pub mod prelude {
     pub use crate::HasAlpha;
     pub use crate::HetPixel;
     pub use crate::Pixel;
+    // Back-compat: these were in the v0.8 prelude
+    pub use crate::ColorComponentMap;
+    pub use crate::ComponentMap;
 }
 
 /// `TryFrom` errors
