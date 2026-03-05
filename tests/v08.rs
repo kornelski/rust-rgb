@@ -605,3 +605,25 @@ fn converts2() {
     assert_eq!(Bgra {r:1u8,g:2,b:3,a:4}, (3,2,1,4).into());
     assert_eq!(Bgr {r:1u8,g:2,b:3}, (3,2,1).into());
 }
+
+#[test]
+#[cfg(feature = "as-bytes")]
+fn graya_bytemuck_with_as_bytes() {
+    use rgb::GrayA;
+    let pixels: [GrayA<u8>; 2] = [GrayA { v: 1, a: 128 }, GrayA { v: 2, a: 255 }];
+    let bytes: &[u8] = rgb::bytemuck::cast_slice(&pixels);
+    assert_eq!(bytes, &[1, 128, 2, 255]);
+    let back: &[GrayA<u8>] = rgb::bytemuck::cast_slice(bytes);
+    assert_eq!(back, &pixels);
+}
+
+#[test]
+#[cfg(all(feature = "as-bytes", feature = "unstable-experimental"))]
+fn gray_v09_bytemuck_with_as_bytes() {
+    type Gray09<T> = rgb::Gray<T>;
+    let pixels = [Gray09 { v: 10u8 }, Gray09 { v: 20 }, Gray09 { v: 30 }];
+    let bytes: &[u8] = rgb::bytemuck::cast_slice(&pixels);
+    assert_eq!(bytes, &[10, 20, 30]);
+    let back: &[Gray09<u8>] = rgb::bytemuck::cast_slice(bytes);
+    assert_eq!(back, &pixels);
+}

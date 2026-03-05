@@ -1,6 +1,9 @@
 use crate::{RGB, RGBA};
 use crate::alt::{Gray, GrayAlpha, BGR, BGRA};
 use crate::alt::{ARGB, ABGR};
+use crate::formats::gray_a::GrayA;
+#[cfg(feature = "unstable-experimental")]
+use crate::formats::gray::Gray_v09;
 use crate::ComponentBytes;
 
 #[cfg(feature = "as-bytes")]
@@ -114,4 +117,16 @@ impl<T: crate::Pod> ComponentBytes<T> for [Gray<T>] {}
 
 #[cfg(feature = "as-bytes")]
 impl<T: crate::Pod> ComponentBytes<T> for [GrayAlpha<T>] {}
+
+// GrayA and Gray_v09 use the sound single-type-parameter impls (T: Pod),
+// not the unsound two-parameter pattern used by the legacy types above.
+#[cfg(feature = "as-bytes")]
+unsafe impl<T: crate::Pod> crate::Pod for GrayA<T> {}
+#[cfg(feature = "as-bytes")]
+unsafe impl<T: crate::Zeroable> crate::Zeroable for GrayA<T> {}
+
+#[cfg(all(feature = "as-bytes", feature = "unstable-experimental"))]
+unsafe impl<T: crate::Pod> crate::Pod for Gray_v09<T> {}
+#[cfg(all(feature = "as-bytes", feature = "unstable-experimental"))]
+unsafe impl<T: crate::Zeroable> crate::Zeroable for Gray_v09<T> {}
 
