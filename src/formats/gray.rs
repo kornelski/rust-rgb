@@ -1,6 +1,7 @@
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt_03::Format), defmt(crate = defmt_03))]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// A `Grayscale` pixel
 ///
@@ -30,7 +31,8 @@ pub struct Gray_v08<T>(
 #[allow(non_camel_case_types)]
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt_03::Format), defmt(crate = defmt_03))]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[doc(alias = "Luma")]
 #[doc(alias = "Mono")]
