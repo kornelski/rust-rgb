@@ -21,7 +21,8 @@ default = ["grb", "argb", "as-bytes"]
 # Implements some of the traits, see `rgb::num_traits` module for details.
 num-traits = ["dep:num-traits"]
 # Support for the `defmt` crate
-defmt-03 = ["dep:defmt"]
+defmt-03 = ["dep:defmt-03"]
+defmt = ["dep:defmt"]
 serde = ["dep:serde"]
 bytemuck = ["dep:bytemuck"]
 
@@ -43,7 +44,8 @@ maintenance = { status = "actively-developed" }
 [dependencies]
 serde = { version = "1.0.200", optional = true, default-features = false, features = ["derive"] }
 bytemuck = { version = "1.17", optional = true, features = ["min_const_generics", "align_offset"] } # these give better code
-defmt = { version = "0.3.8", optional = true, default-features = false }
+defmt-03 = { package = "defmt", version = "0.3.8", optional = true, default-features = false }
+defmt = { version = "1.0.1", optional = true, default-features = false }
 num-traits = { version = "0.2.19", optional = true, default-features = false }
 
 [dev-dependencies]

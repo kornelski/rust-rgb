@@ -212,8 +212,8 @@ assert_eq!(HasAlpha::alpha(&rgba), 205);
 - `num-traits`: Enables various
   [`num_traits`](https://docs.rs/num-traits) traits impls for the
   pixel types such as `CheckedAdd`.
-- `defmt-03` = Enables the `Format` trait impls from
-  [`defmt`](https://docs.rs/defmt) `v0.3` for the pixel types
+- `defmt-03`/`defmt` = Enables the `Format` trait impls from
+  [`defmt`](https://docs.rs/defmt) `v0.3`/`v1` for the pixel types
 - `serde` = Enables `Serializable` and `Deserializable` trait impls
   from [`serde`](https://docs.rs/serde) for the pixel types
 - `bytemuck` = Enables `Pod` and `Zeroable` trait impls from
