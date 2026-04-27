@@ -24,6 +24,7 @@ num-traits = ["dep:num-traits"]
 defmt-03 = ["dep:defmt"]
 serde = ["dep:serde"]
 bytemuck = ["dep:bytemuck"]
+typescript-type-def = ["dep:typescript-type-def"]
 
 # Deprecated: it's always enabled anyway
 argb = []
@@ -45,6 +46,7 @@ serde = { version = "1.0.200", optional = true, default-features = false, featur
 bytemuck = { version = "1.17", optional = true, features = ["min_const_generics", "align_offset"] } # these give better code
 defmt = { version = "0.3.8", optional = true, default-features = false }
 num-traits = { version = "0.2.19", optional = true, default-features = false }
+typescript-type-def = { version = "0.5.13", optional = true, default-features = false }
 
 [dev-dependencies]
 serde_json = "1.0.100"

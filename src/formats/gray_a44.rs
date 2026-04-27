@@ -3,6 +3,7 @@ use core::fmt::Display;
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
+#[cfg_attr(feature = "typescript-type-def", derive(typescript_type_def::TypeDef))]
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
 /// A `Grayscale + Alpha` 8-bit pixel with the first 4 bits used for the value
 /// component the last 4 bits used for the alpha component.
